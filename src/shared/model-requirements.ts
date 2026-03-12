@@ -13,7 +13,7 @@ export type ModelRequirement = {
 };
 
 export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
-  sisyphus: {
+  coder: {
     fallbackChain: [
       {
         providers: ["anthropic", "github-copilot", "opencode"],
@@ -170,7 +170,7 @@ export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
       { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "medium" },
     ],
   },
-  "sisyphus-junior": {
+  "coder-junior": {
     fallbackChain: [
       {
         providers: ["anthropic", "github-copilot", "opencode"],

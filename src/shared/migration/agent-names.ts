@@ -1,9 +1,11 @@
 export const AGENT_NAME_MAP: Record<string, string> = {
-  // Sisyphus variants → "sisyphus"
-  omo: "sisyphus",
-  OmO: "sisyphus",
-  Sisyphus: "sisyphus",
-  sisyphus: "sisyphus",
+  // Coder variants → "coder"
+  omo: "coder",
+  OmO: "coder",
+  Sisyphus: "coder",
+  sisyphus: "coder",
+  Coder: "coder",
+  coder: "coder",
 
   // Prometheus variants → "prometheus"
   "OmO-Plan": "prometheus",
@@ -15,6 +17,7 @@ export const AGENT_NAME_MAP: Record<string, string> = {
 
   // Atlas variants → "atlas"
   "orchestrator-sisyphus": "atlas",
+  "orchestrator-coder": "atlas",
   Atlas: "atlas",
   atlas: "atlas",
 
@@ -27,9 +30,11 @@ export const AGENT_NAME_MAP: Record<string, string> = {
   "Momus (Plan Reviewer)": "momus",
   momus: "momus",
 
-  // Sisyphus-Junior → "sisyphus-junior"
-  "Sisyphus-Junior": "sisyphus-junior",
-  "sisyphus-junior": "sisyphus-junior",
+  // Coder-Junior → "coder-junior"
+  "Sisyphus-Junior": "coder-junior",
+  "sisyphus-junior": "coder-junior",
+  "Coder-Junior": "coder-junior",
+  "coder-junior": "coder-junior",
 
   // Already lowercase - passthrough
   build: "build",
@@ -40,7 +45,7 @@ export const AGENT_NAME_MAP: Record<string, string> = {
 }
 
 export const BUILTIN_AGENT_NAMES = new Set([
-  "sisyphus", // was "Sisyphus"
+  "coder", // was "Sisyphus"
   "oracle",
   "librarian",
   "explore",
