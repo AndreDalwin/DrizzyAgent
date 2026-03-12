@@ -1,11 +1,11 @@
 {
-  "name": "oh-my-opencode-windows-x64-baseline",
-  "version": "3.11.0",
-  "description": "Platform-specific binary for oh-my-opencode (windows-x64-baseline, no AVX2)",
+  "name": "drizzy-agent-windows-x64-baseline",
+  "version": "0.1.0",
+  "description": "Platform-specific binary for DrizzyAgent (windows-x64-baseline, no AVX2)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/code-yeongyu/oh-my-openagent"
+    "url": "https://github.com/yourusername/drizzy-agent"
   },
   "os": [
     "win32"
@@ -17,6 +17,6 @@
     "bin"
   ],
   "bin": {
-    "oh-my-opencode": "./bin/oh-my-opencode.exe"
+    "drizzy-agent": "./bin/oh-my-opencode.exe"
   }
 }

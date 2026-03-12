@@ -1,11 +1,11 @@
 {
-  "name": "oh-my-opencode-darwin-arm64",
-  "version": "3.11.0",
-  "description": "Platform-specific binary for oh-my-opencode (darwin-arm64)",
+  "name": "drizzy-agent-darwin-arm64",
+  "version": "0.1.0",
+  "description": "Platform-specific binary for DrizzyAgent (darwin-arm64)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/code-yeongyu/oh-my-openagent"
+    "url": "https://github.com/yourusername/drizzy-agent"
   },
   "os": [
     "darwin"
@@ -17,6 +17,6 @@
     "bin"
   ],
   "bin": {
-    "oh-my-opencode": "./bin/oh-my-opencode"
+    "drizzy-agent": "./bin/oh-my-opencode"
   }
 }
