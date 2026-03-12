@@ -9,7 +9,7 @@ export function createOhMyOpenCodeJsonSchema(): Record<string, unknown> {
 
   return {
     $schema: "http://json-schema.org/draft-07/schema#",
-    $id: "https://raw.githubusercontent.com/yourusername/drizzy-agent/dev/assets/drizzy-agent.schema.json",
+    $id: "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
     title: "DrizzyAgent Configuration",
     description: "Configuration schema for the drizzy-agent plugin",
     ...jsonSchema,

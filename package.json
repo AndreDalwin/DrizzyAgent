@@ -45,12 +45,12 @@
   "license": "SUL-1.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/drizzy-agent.git"
+    "url": "git+https://github.com/AndreDalwin/DrizzyAgent.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/drizzy-agent/issues"
+    "url": "https://github.com/AndreDalwin/DrizzyAgent/issues"
   },
-  "homepage": "https://github.com/yourusername/drizzy-agent#readme",
+  "homepage": "https://github.com/AndreDalwin/DrizzyAgent#readme",
   "dependencies": {
     "@ast-grep/cli": "^0.41.1",
     "@ast-grep/napi": "^0.41.1",

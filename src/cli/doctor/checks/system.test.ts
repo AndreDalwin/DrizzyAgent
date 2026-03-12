@@ -2,10 +2,10 @@ import { beforeEach, describe, expect, it, mock } from "bun:test"
 
 const mockFindOpenCodeBinary = mock(async () => ({ path: "/usr/local/bin/opencode" }))
 const mockGetOpenCodeVersion = mock(async () => "1.0.200")
-const mockCompareVersions = mock(() => true)
+const mockCompareVersions = mock((..._args: string[]) => true)
 const mockGetPluginInfo = mock(() => ({
   registered: true,
-  entry: "oh-my-opencode",
+  entry: "drizzy-agent",
   isPinned: false,
   pinnedVersion: null,
   configPath: null,
@@ -14,11 +14,11 @@ const mockGetPluginInfo = mock(() => ({
 const mockGetLoadedPluginVersion = mock(() => ({
   cacheDir: "/Users/test/Library/Caches/opencode with spaces",
   cachePackagePath: "/tmp/package.json",
-  installedPackagePath: "/tmp/node_modules/oh-my-opencode/package.json",
+  installedPackagePath: "/tmp/node_modules/drizzy-agent/package.json",
   expectedVersion: "3.0.0",
   loadedVersion: "3.1.0",
 }))
-const mockGetLatestPluginVersion = mock(async () => null)
+const mockGetLatestPluginVersion = mock(async (): Promise<string | null> => null)
 
 mock.module("./system-binary", () => ({
   findOpenCodeBinary: mockFindOpenCodeBinary,
@@ -35,7 +35,7 @@ mock.module("./system-loaded-version", () => ({
   getLatestPluginVersion: mockGetLatestPluginVersion,
 }))
 
-const { checkSystem } = await import("./system?test")
+const { checkSystem } = await import("./system")
 
 describe("system check", () => {
   beforeEach(() => {
@@ -51,7 +51,7 @@ describe("system check", () => {
     mockCompareVersions.mockReturnValue(true)
     mockGetPluginInfo.mockReturnValue({
       registered: true,
-      entry: "oh-my-opencode",
+      entry: "drizzy-agent",
       isPinned: false,
       pinnedVersion: null,
       configPath: null,
@@ -60,7 +60,7 @@ describe("system check", () => {
     mockGetLoadedPluginVersion.mockReturnValue({
       cacheDir: "/Users/test/Library/Caches/opencode with spaces",
       cachePackagePath: "/tmp/package.json",
-      installedPackagePath: "/tmp/node_modules/oh-my-opencode/package.json",
+      installedPackagePath: "/tmp/node_modules/drizzy-agent/package.json",
       expectedVersion: "3.0.0",
       loadedVersion: "3.1.0",
     })
@@ -82,7 +82,7 @@ describe("system check", () => {
       mockGetLoadedPluginVersion.mockReturnValue({
         cacheDir: "/Users/test/Library/Caches/opencode with spaces",
         cachePackagePath: "/tmp/package.json",
-        installedPackagePath: "/tmp/node_modules/oh-my-opencode/package.json",
+        installedPackagePath: "/tmp/node_modules/drizzy-agent/package.json",
         expectedVersion: "3.0.0-canary.1",
         loadedVersion: "3.0.0-canary.1",
       })
@@ -97,7 +97,7 @@ describe("system check", () => {
       //#then
       const outdatedIssue = result.issues.find((issue) => issue.title === "Loaded plugin is outdated")
       expect(outdatedIssue?.fix).toBe(
-        'Update: cd "/Users/test/Library/Caches/opencode with spaces" && bun add oh-my-opencode@canary'
+        'Update: cd "/Users/test/Library/Caches/opencode with spaces" && bun add drizzy-agent@canary'
       )
     })
   })
