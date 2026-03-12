@@ -4,7 +4,7 @@ import { isCallerOrchestrator } from "../../shared/session-utils"
 import type { PluginInput } from "@opencode-ai/plugin"
 import { HOOK_NAME } from "./hook-name"
 import { ORCHESTRATOR_DELEGATION_REQUIRED, SINGLE_TASK_DIRECTIVE } from "./system-reminder-templates"
-import { isSisyphusPath } from "./sisyphus-path"
+import { isSisyphusPath } from "./coder-path"
 import { isWriteOrEditToolName } from "./write-edit-tool-policy"
 
 export function createToolExecuteBeforeHandler(input: {
