@@ -301,7 +301,7 @@ describe("createCoderJuniorAgentWithOverrides", () => {
       expect(result.prompt).toContain("todowrite")
     })
 
-    test("GPT model uses GPT-optimized prompt with Hephaestus-style sections", () => {
+test("GPT model uses GPT-optimized prompt with GPTCoder-style sections", () => {
       // given
       const override = { model: "openai/gpt-5.4" }
 

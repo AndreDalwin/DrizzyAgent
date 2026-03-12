@@ -4,19 +4,23 @@ import { getAgentDisplayName } from "../../shared/agent-display-names"
 import { createNoCoderGptHook } from "./index"
 
 const CODER_DISPLAY = getAgentDisplayName("coder")
-const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
+const GPTCODER_DISPLAY = getAgentDisplayName("gptcoder")
 
 function createOutput() {
   return {
-    message: {},
+    message: {} as { agent?: string; [key: string]: unknown },
     parts: [],
   }
+}
+
+function createToastSpy() {
+  return spyOn({ fn: async () => ({}) }, "fn") as any
 }
 
 describe("no-coder-gpt hook", () => {
   test("shows toast on every chat.message when coder uses gpt model", async () => {
     // given - coder (display name) with gpt model
-    const showToast = spyOn({ fn: async () => ({}) }, "fn")
+    const showToast = createToastSpy()
     const hook = createNoCoderGptHook({
       client: { tui: { showToast } },
     } as any)
@@ -38,12 +42,12 @@ describe("no-coder-gpt hook", () => {
 
     // then - toast is shown for every message
     expect(showToast).toHaveBeenCalledTimes(2)
-    expect(output1.message.agent).toBe(HEPHAESTUS_DISPLAY)
-    expect(output2.message.agent).toBe(HEPHAESTUS_DISPLAY)
+    expect(output1.message.agent).toBe(GPTCODER_DISPLAY)
+    expect(output2.message.agent).toBe(GPTCODER_DISPLAY)
     expect(showToast.mock.calls[0]?.[0]).toMatchObject({
       body: {
         title: "NEVER Use Coder with GPT",
-        message: expect.stringContaining("For GPT models (other than 5.4), always use Hephaestus."),
+        message: expect.stringContaining("For GPT models (other than 5.4), always use GPTCoder."),
         variant: "error",
       },
     })
@@ -51,7 +55,7 @@ describe("no-coder-gpt hook", () => {
 
   test("does not show toast for gpt-5.4 model (Coder has specialized support)", async () => {
     // given - coder with gpt-5.4 model (should be allowed)
-    const showToast = spyOn({ fn: async () => ({}) }, "fn")
+    const showToast = createToastSpy()
     const hook = createNoCoderGptHook({
       client: { tui: { showToast } },
     } as any)
@@ -65,14 +69,14 @@ describe("no-coder-gpt hook", () => {
       model: { providerID: "openai", modelID: "gpt-5.4" },
     }, output)
 
-    // then - no toast, agent NOT switched to Hephaestus
+    // then - no toast, agent NOT switched to GPTCoder
     expect(showToast).toHaveBeenCalledTimes(0)
     expect(output.message.agent).toBeUndefined()
   })
 
   test("does not show toast for non-gpt model", async () => {
     // given - coder with claude model
-    const showToast = spyOn({ fn: async () => ({}) }, "fn")
+    const showToast = createToastSpy()
     const hook = createNoCoderGptHook({
       client: { tui: { showToast } },
     } as any)
@@ -92,8 +96,8 @@ describe("no-coder-gpt hook", () => {
   })
 
   test("does not show toast for non-coder agent", async () => {
-    // given - hephaestus with gpt model
-    const showToast = spyOn({ fn: async () => ({}) }, "fn")
+    // given - gptcoder with gpt model
+    const showToast = createToastSpy()
     const hook = createNoCoderGptHook({
       client: { tui: { showToast } },
     } as any)
@@ -103,7 +107,7 @@ describe("no-coder-gpt hook", () => {
     // when - chat.message runs
     await hook["chat.message"]?.({
       sessionID: "ses_3",
-      agent: HEPHAESTUS_DISPLAY,
+      agent: GPTCODER_DISPLAY,
       model: { providerID: "openai", modelID: "gpt-5.4" },
     }, output)
 
@@ -116,7 +120,7 @@ describe("no-coder-gpt hook", () => {
     // given - session agent saved with display name (as OpenCode stores it)
     _resetForTesting()
     updateSessionAgent("ses_4", CODER_DISPLAY)
-    const showToast = spyOn({ fn: async () => ({}) }, "fn")
+    const showToast = createToastSpy()
     const hook = createNoCoderGptHook({
       client: { tui: { showToast } },
     } as any)
@@ -131,6 +135,6 @@ describe("no-coder-gpt hook", () => {
 
     // then - toast shown via session-agent fallback
     expect(showToast).toHaveBeenCalledTimes(1)
-    expect(output.message.agent).toBe(HEPHAESTUS_DISPLAY)
+    expect(output.message.agent).toBe(GPTCODER_DISPLAY)
   })
 })

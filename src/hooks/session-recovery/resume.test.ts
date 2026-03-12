@@ -9,7 +9,7 @@ describe("session-recovery resume", () => {
     // given
     const userMessage: MessageData = {
       info: {
-        agent: "Hephaestus",
+        agent: "GPTCoder",
         model: { providerID: "openai", modelID: "gpt-5.3-codex" },
         tools: { question: false, bash: true },
       },
@@ -37,7 +37,7 @@ describe("session-recovery resume", () => {
     // when
     const ok = await resumeSession(client as never, {
       sessionID: "ses_resume_prompt",
-      agent: "Hephaestus",
+      agent: "GPTCoder",
       model: { providerID: "openai", modelID: "gpt-5.3-codex" },
       tools: { question: false, bash: true },
     })

@@ -97,7 +97,7 @@ Agent resolution order:
   4) Coder (fallback)
 
 Available core agents:
-  Coder, Hephaestus, Prometheus, Atlas
+  Coder, GPTCoder, Prometheus, Atlas
 
 Unlike 'opencode run', this command waits until:
   - All todos are completed or cancelled

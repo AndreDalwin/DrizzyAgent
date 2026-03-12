@@ -2,7 +2,7 @@ import { getAgentDisplayName } from "../shared/agent-display-names";
 
 const CORE_AGENT_ORDER = [
   getAgentDisplayName("coder"),
-  getAgentDisplayName("hephaestus"),
+  getAgentDisplayName("gptcoder"),
   getAgentDisplayName("prometheus"),
   getAgentDisplayName("atlas"),
 ] as const;

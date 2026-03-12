@@ -881,7 +881,7 @@ describe("atlas hook", () => {
 
     test("should inject when registered boulder session has incomplete tasks even if last agent differs", async () => {
       cleanupMessageStorage(MAIN_SESSION_ID)
-      setupMessageStorage(MAIN_SESSION_ID, "hephaestus")
+      setupMessageStorage(MAIN_SESSION_ID, "gptcoder")
 
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
@@ -1193,7 +1193,7 @@ describe("atlas hook", () => {
        writeBoulderState(TEST_DIR, state)
 
        cleanupMessageStorage(MAIN_SESSION_ID)
-       setupMessageStorage(MAIN_SESSION_ID, "hephaestus")
+       setupMessageStorage(MAIN_SESSION_ID, "gptcoder")
 
        const mockInput = createMockPluginInput()
        const hook = createAtlasHook(mockInput)
@@ -1598,7 +1598,7 @@ describe("atlas hook", () => {
     })
 
     test("should inject when session agent was updated to atlas by start-work even if message storage agent differs", async () => {
-      // given - boulder targets atlas, but nearest stored message still says hephaestus
+      // given - boulder targets atlas, but nearest stored message still says gptcoder
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
@@ -1612,7 +1612,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       cleanupMessageStorage(MAIN_SESSION_ID)
-      setupMessageStorage(MAIN_SESSION_ID, "hephaestus")
+      setupMessageStorage(MAIN_SESSION_ID, "gptcoder")
       updateSessionAgent(MAIN_SESSION_ID, "atlas")
 
       const mockInput = createMockPluginInput()

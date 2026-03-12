@@ -3,9 +3,9 @@
 import { describe, expect, spyOn, test } from "bun:test"
 import { _resetForTesting, updateSessionAgent } from "../../features/claude-code-session-state"
 import { getAgentDisplayName } from "../../shared/agent-display-names"
-import { createNoHephaestusNonGptHook } from "./index"
+import { createNoGptcoderNonGptHook } from "./index"
 
-const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
+const GPTCODER_DISPLAY = getAgentDisplayName("gptcoder")
 const CODER_DISPLAY = getAgentDisplayName("coder")
 
 function createOutput() {
@@ -15,11 +15,11 @@ function createOutput() {
   }
 }
 
-describe("no-hephaestus-non-gpt hook", () => {
-  test("shows toast on every chat.message when hephaestus uses non-gpt model", async () => {
-    // given - hephaestus with claude model
+describe("no-gptcoder-non-gpt hook", () => {
+  test("shows toast on every chat.message when GPTCoder uses non-gpt model", async () => {
+    // given - GPTCoder with claude model
     const showToast = spyOn({ fn: async (_input: unknown) => ({}) }, "fn")
-    const hook = createNoHephaestusNonGptHook({
+    const hook = createNoGptcoderNonGptHook({
       client: { tui: { showToast } },
     } as any)
 
@@ -29,12 +29,12 @@ describe("no-hephaestus-non-gpt hook", () => {
     // when - chat.message is called repeatedly
     await hook["chat.message"]?.({
       sessionID: "ses_1",
-      agent: HEPHAESTUS_DISPLAY,
+      agent: GPTCODER_DISPLAY,
       model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
     }, output1)
     await hook["chat.message"]?.({
       sessionID: "ses_1",
-      agent: HEPHAESTUS_DISPLAY,
+      agent: GPTCODER_DISPLAY,
       model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
     }, output2)
 
@@ -44,17 +44,17 @@ describe("no-hephaestus-non-gpt hook", () => {
     expect(output2.message.agent).toBe(CODER_DISPLAY)
     expect(showToast.mock.calls[0]?.[0]).toMatchObject({
       body: {
-        title: "NEVER Use Hephaestus with Non-GPT",
-        message: expect.stringContaining("Hephaestus is trash without GPT."),
+        title: "NEVER Use GPTCoder with Non-GPT",
+        message: expect.stringContaining("GPTCoder falls apart on non-GPT inputs."),
         variant: "error",
       },
     })
   })
 
   test("shows warning and does not switch agent when allow_non_gpt_model is enabled", async () => {
-    // given - hephaestus with claude model and opt-out enabled
+    // given - GPTCoder with claude model and opt-out enabled
     const showToast = spyOn({ fn: async (_input: unknown) => ({}) }, "fn")
-    const hook = createNoHephaestusNonGptHook({
+    const hook = createNoGptcoderNonGptHook({
       client: { tui: { showToast } },
     } as any, {
       allowNonGptModel: true,
@@ -65,7 +65,7 @@ describe("no-hephaestus-non-gpt hook", () => {
     // when - chat.message runs
     await hook["chat.message"]?.({
       sessionID: "ses_opt_out",
-      agent: HEPHAESTUS_DISPLAY,
+        agent: GPTCODER_DISPLAY,
       model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
     }, output)
 
@@ -74,16 +74,16 @@ describe("no-hephaestus-non-gpt hook", () => {
     expect(output.message.agent).toBeUndefined()
     expect(showToast.mock.calls[0]?.[0]).toMatchObject({
       body: {
-        title: "NEVER Use Hephaestus with Non-GPT",
+      title: "NEVER Use GPTCoder with Non-GPT",
         variant: "warning",
       },
     })
   })
 
-  test("does not show toast when hephaestus uses gpt model", async () => {
-    // given - hephaestus with gpt model
+  test("does not show toast when GPTCoder uses gpt model", async () => {
+    // given - GPTCoder with gpt model
     const showToast = spyOn({ fn: async (_input: unknown) => ({}) }, "fn")
-    const hook = createNoHephaestusNonGptHook({
+    const hook = createNoGptcoderNonGptHook({
       client: { tui: { showToast } },
     } as any)
 
@@ -92,7 +92,7 @@ describe("no-hephaestus-non-gpt hook", () => {
     // when - chat.message runs
     await hook["chat.message"]?.({
       sessionID: "ses_2",
-      agent: HEPHAESTUS_DISPLAY,
+      agent: GPTCODER_DISPLAY,
       model: { providerID: "openai", modelID: "gpt-5.3-codex" },
     }, output)
 
@@ -101,10 +101,10 @@ describe("no-hephaestus-non-gpt hook", () => {
     expect(output.message.agent).toBeUndefined()
   })
 
-  test("does not show toast for non-hephaestus agent", async () => {
+  test("does not show toast for non-gptcoder agent", async () => {
     // given - coder with claude model (non-gpt)
     const showToast = spyOn({ fn: async (_input: unknown) => ({}) }, "fn")
-    const hook = createNoHephaestusNonGptHook({
+    const hook = createNoGptcoderNonGptHook({
       client: { tui: { showToast } },
     } as any)
 
@@ -123,11 +123,11 @@ describe("no-hephaestus-non-gpt hook", () => {
   })
 
   test("uses session agent fallback when input agent is missing", async () => {
-    // given - session agent saved as hephaestus
+    // given - session agent saved as GPTCoder
     _resetForTesting()
-    updateSessionAgent("ses_4", HEPHAESTUS_DISPLAY)
+    updateSessionAgent("ses_4", GPTCODER_DISPLAY)
     const showToast = spyOn({ fn: async (_input: unknown) => ({}) }, "fn")
-    const hook = createNoHephaestusNonGptHook({
+    const hook = createNoGptcoderNonGptHook({
       client: { tui: { showToast } },
     } as any)
 

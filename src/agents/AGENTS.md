@@ -11,7 +11,7 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 | Agent | Model | Temp | Mode | Fallback Chain | Purpose |
 |-------|-------|------|------|----------------|---------|
 | **Coder** | claude-opus-4-6 max | 0.1 | all | k2p5 → kimi-k2.5 → gpt-5.4 medium → glm-5 → big-pickle | Main orchestrator, plans + delegates |
-| **Hephaestus** | gpt-5.3-codex medium | 0.1 | all | gpt-5.4 medium (copilot) | Autonomous deep worker |
+| **GPTCoder** | gpt-5.3-codex medium | 0.1 | all | gpt-5.4 medium (copilot) | Autonomous deep worker |
 | **Oracle** | gpt-5.4 high | 0.1 | subagent | gemini-3.1-pro high → claude-opus-4-6 max | Read-only consultation |
 | **Librarian** | gemini-3-flash | 0.1 | subagent | minimax-m2.5-free → big-pickle | External docs/code search |
 | **Explore** | grok-code-fast-1 | 0.1 | subagent | minimax-m2.5-free → claude-haiku-4-5 → gpt-5-nano | Contextual grep |
@@ -38,7 +38,7 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 ```
 agents/
 ├── coder.ts            # 559 LOC, main orchestrator
-├── hephaestus.ts          # 507 LOC, autonomous worker
+├── gptcoder/              # 507 LOC, autonomous worker
 ├── oracle.ts              # Read-only consultant
 ├── librarian.ts           # External search
 ├── explore.ts             # Codebase grep
@@ -52,7 +52,7 @@ agents/
 ├── builtin-agents.ts      # createBuiltinAgents() registry
 └── builtin-agents/        # maybeCreateXXXConfig conditional factories
     ├── coder-agent.ts
-    ├── hephaestus-agent.ts
+    ├── gptcoder-agent.ts
     ├── atlas-agent.ts
     ├── general-agents.ts  # collectPendingBuiltinAgents
     └── available-skills.ts

@@ -1,4 +1,4 @@
-/** GPT-5.4 optimized Hephaestus prompt */
+/** GPT-5.4 optimized GPTCoder prompt */
 
 import type {
   AvailableAgent,
@@ -65,7 +65,7 @@ Todos prevent drift, enable recovery if interrupted, and make each commitment ex
 **NO TODOS ON MULTI-STEP WORK = INCOMPLETE WORK.**`;
 }
 
-export function buildHephaestusPrompt(
+export function buildGptcoderPrompt(
   availableAgents: AvailableAgent[] = [],
   availableTools: AvailableTool[] = [],
   availableSkills: AvailableSkill[] = [],
@@ -90,7 +90,7 @@ export function buildHephaestusPrompt(
   const antiPatterns = buildAntiPatternsSection();
   const todoDiscipline = buildTodoDisciplineSection(useTaskSystem);
 
-  return `You are Hephaestus, an autonomous deep worker for software engineering.
+  return `You are GPTCoder, an autonomous deep worker for software engineering.
 
 ## Identity
 

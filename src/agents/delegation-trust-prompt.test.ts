@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { createCoderAgent } from "./coder"
-import { createHephaestusAgent } from "./hephaestus"
+import { createGptcoderAgent } from "./gptcoder"
 import { buildCoderJuniorPrompt } from "./coder-junior/agent"
 import {
   buildAntiDuplicationSection,
@@ -56,9 +56,9 @@ describe("delegation trust prompt rules", () => {
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Hephaestus prompt forbids duplicate delegated exploration", () => {
+  test("GPTCoder prompt forbids duplicate delegated exploration", () => {
     // given
-    const agent = createHephaestusAgent("openai/gpt-5.2", [exploreAgent])
+    const agent = createGptcoderAgent("openai/gpt-5.2", [exploreAgent])
 
     // when
     const prompt = agent.prompt
@@ -68,9 +68,9 @@ describe("delegation trust prompt rules", () => {
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Hephaestus GPT-5.4 prompt forbids duplicate delegated exploration", () => {
+  test("GPTCoder GPT-5.4 prompt forbids duplicate delegated exploration", () => {
     // given
-    const agent = createHephaestusAgent("openai/gpt-5.4", [exploreAgent])
+    const agent = createGptcoderAgent("openai/gpt-5.4", [exploreAgent])
 
     // when
     const prompt = agent.prompt
@@ -81,9 +81,9 @@ describe("delegation trust prompt rules", () => {
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Hephaestus GPT-5.3 Codex prompt forbids duplicate delegated exploration", () => {
+  test("GPTCoder GPT-5.3 Codex prompt forbids duplicate delegated exploration", () => {
     // given
-    const agent = createHephaestusAgent("openai/gpt-5.3-codex", [exploreAgent])
+    const agent = createGptcoderAgent("openai/gpt-5.3-codex", [exploreAgent])
 
     // when
     const prompt = agent.prompt

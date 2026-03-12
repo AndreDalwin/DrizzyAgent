@@ -35,7 +35,7 @@ describe("remapAgentKeysToDisplayNames", () => {
     // given all core agents
     const agents = {
       coder: {},
-      hephaestus: {},
+      gptcoder: {},
       prometheus: {},
       atlas: {},
       metis: {},
@@ -49,8 +49,8 @@ describe("remapAgentKeysToDisplayNames", () => {
     // then all get display name keys without lowercase duplicates
     expect(result["Coder (Ultraworker)"]).toBeDefined()
     expect(result["coder"]).toBeUndefined()
-    expect(result["Hephaestus (Deep Agent)"]).toBeDefined()
-    expect(result["hephaestus"]).toBeUndefined()
+    expect(result["GPTCoder"]).toBeDefined()
+    expect(result["gptcoder"]).toBeUndefined()
     expect(result["Prometheus (Plan Builder)"]).toBeDefined()
     expect(result["prometheus"]).toBeUndefined()
     expect(result["Atlas (Plan Executor)"]).toBeDefined()

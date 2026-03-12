@@ -410,8 +410,8 @@ describe("generateModelConfig", () => {
     })
   })
 
-  describe("Hephaestus agent special cases", () => {
-    test("Hephaestus is created when OpenAI is available (openai provider connected)", () => {
+  describe("GPTCoder agent special cases", () => {
+    test("GPTCoder is created when OpenAI is available (openai provider connected)", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 
@@ -419,22 +419,22 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus?.model).toBe("openai/gpt-5.3-codex")
-      expect(result.agents?.hephaestus?.variant).toBe("medium")
+      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
-    test("Hephaestus is NOT created when only Copilot is available (gpt-5.3-codex unavailable on github-copilot)", () => {
+    test("GPTCoder is NOT created when only Copilot is available (gpt-5.3-codex unavailable on github-copilot)", () => {
       // #given
       const config = createConfig({ hasCopilot: true })
 
       // #when
       const result = generateModelConfig(config)
 
-      // #then - hephaestus is omitted because gpt-5.3-codex is not available on github-copilot
-      expect(result.agents?.hephaestus).toBeUndefined()
+      // #then - gptcoder is omitted because gpt-5.3-codex is not available on github-copilot
+      expect(result.agents?.gptcoder).toBeUndefined()
     })
 
-    test("Hephaestus is created when OpenCode Zen is available (opencode provider connected)", () => {
+    test("GPTCoder is created when OpenCode Zen is available (opencode provider connected)", () => {
       // #given
       const config = createConfig({ hasOpencodeZen: true })
 
@@ -442,11 +442,11 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus?.model).toBe("opencode/gpt-5.3-codex")
-      expect(result.agents?.hephaestus?.variant).toBe("medium")
+      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
-    test("Hephaestus is omitted when only Claude is available (no required provider connected)", () => {
+    test("GPTCoder is omitted when only Claude is available (no required provider connected)", () => {
       // #given
       const config = createConfig({ hasClaude: true })
 
@@ -454,10 +454,10 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toBeUndefined()
+      expect(result.agents?.gptcoder).toBeUndefined()
     })
 
-    test("Hephaestus is omitted when only Gemini is available (no required provider connected)", () => {
+    test("GPTCoder is omitted when only Gemini is available (no required provider connected)", () => {
       // #given
       const config = createConfig({ hasGemini: true })
 
@@ -465,10 +465,10 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toBeUndefined()
+      expect(result.agents?.gptcoder).toBeUndefined()
     })
 
-    test("Hephaestus is omitted when only ZAI is available (no required provider connected)", () => {
+    test("GPTCoder is omitted when only ZAI is available (no required provider connected)", () => {
       // #given
       const config = createConfig({ hasZaiCodingPlan: true })
 
@@ -476,7 +476,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.hephaestus).toBeUndefined()
+      expect(result.agents?.gptcoder).toBeUndefined()
     })
   })
 

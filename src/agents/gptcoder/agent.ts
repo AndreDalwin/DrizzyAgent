@@ -9,17 +9,17 @@ import type {
 } from "../dynamic-agent-prompt-builder";
 import { categorizeTools } from "../dynamic-agent-prompt-builder";
 
-import { buildHephaestusPrompt as buildGptPrompt } from "./gpt";
-import { buildHephaestusPrompt as buildGpt53CodexPrompt } from "./gpt-5-3-codex";
-import { buildHephaestusPrompt as buildGpt54Prompt } from "./gpt-5-4";
+import { buildGptcoderPrompt as buildGptPrompt } from "./gpt";
+import { buildGptcoderPrompt as buildGpt53CodexPrompt } from "./gpt-5-3-codex";
+import { buildGptcoderPrompt as buildGpt54Prompt } from "./gpt-5-4";
 
 const MODE: AgentMode = "all";
 
-export type HephaestusPromptSource = "gpt-5-4" | "gpt-5-3-codex" | "gpt";
+export type GptcoderPromptSource = "gpt-5-4" | "gpt-5-3-codex" | "gpt";
 
-export function getHephaestusPromptSource(
+export function getGptcoderPromptSource(
   model?: string,
-): HephaestusPromptSource {
+): GptcoderPromptSource {
   if (model && isGpt5_4Model(model)) {
     return "gpt-5-4";
   }
@@ -29,7 +29,7 @@ export function getHephaestusPromptSource(
   return "gpt";
 }
 
-export interface HephaestusContext {
+export interface GptcoderContext {
   model?: string;
   availableAgents?: AvailableAgent[];
   availableTools?: AvailableTool[];
@@ -38,14 +38,14 @@ export interface HephaestusContext {
   useTaskSystem?: boolean;
 }
 
-export function getHephaestusPrompt(
+export function getGptcoderPrompt(
   model?: string,
   useTaskSystem = false,
 ): string {
-  return buildDynamicHephaestusPrompt({ model, useTaskSystem });
+  return buildDynamicGptcoderPrompt({ model, useTaskSystem });
 }
 
-function buildDynamicHephaestusPrompt(ctx?: HephaestusContext): string {
+function buildDynamicGptcoderPrompt(ctx?: GptcoderContext): string {
   const agents = ctx?.availableAgents ?? [];
   const tools = ctx?.availableTools ?? [];
   const skills = ctx?.availableSkills ?? [];
@@ -53,7 +53,7 @@ function buildDynamicHephaestusPrompt(ctx?: HephaestusContext): string {
   const useTaskSystem = ctx?.useTaskSystem ?? false;
   const model = ctx?.model;
 
-  const source = getHephaestusPromptSource(model);
+  const source = getGptcoderPromptSource(model);
 
   let basePrompt: string;
   switch (source) {
@@ -90,7 +90,7 @@ function buildDynamicHephaestusPrompt(ctx?: HephaestusContext): string {
   return basePrompt;
 }
 
-export function createHephaestusAgent(
+export function createGptcoderAgent(
   model: string,
   availableAgents?: AvailableAgent[],
   availableToolNames?: string[],
@@ -100,7 +100,7 @@ export function createHephaestusAgent(
 ): AgentConfig {
   const tools = availableToolNames ? categorizeTools(availableToolNames) : [];
 
-  const prompt = buildDynamicHephaestusPrompt({
+  const prompt = buildDynamicGptcoderPrompt({
     model,
     availableAgents,
     availableTools: tools,
@@ -111,7 +111,7 @@ export function createHephaestusAgent(
 
   return {
     description:
-      "Autonomous Deep Worker - goal-oriented execution with GPT Codex. Explores thoroughly before acting, uses explore/librarian agents for comprehensive context, completes tasks end-to-end. Inspired by AmpCode deep mode. (Hephaestus - OhMyOpenCode)",
+      "Autonomous Deep Worker - goal-oriented execution with GPT Codex. Explores thoroughly before acting, uses explore/librarian agents for comprehensive context, completes tasks end-to-end. Inspired by AmpCode deep mode. (GPTCoder - DrizzyAgent)",
     mode: MODE,
     model,
     maxTokens: 32000,
@@ -124,12 +124,12 @@ export function createHephaestusAgent(
     reasoningEffort: "medium",
   };
 }
-createHephaestusAgent.mode = MODE;
+createGptcoderAgent.mode = MODE;
 
-export const hephaestusPromptMetadata: AgentPromptMetadata = {
+export const gptcoderPromptMetadata: AgentPromptMetadata = {
   category: "specialist",
   cost: "EXPENSIVE",
-  promptAlias: "Hephaestus",
+  promptAlias: "GPTCoder",
   triggers: [
     {
       domain: "Autonomous deep work",

@@ -2,7 +2,7 @@ export const ALLOWED_AGENTS = [
   "explore",
   "librarian",
   "oracle",
-  "hephaestus",
+  "gptcoder",
   "metis",
   "momus",
   "multimodal-looker",

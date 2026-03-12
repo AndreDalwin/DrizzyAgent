@@ -80,10 +80,10 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const hephaestus = agentByKey(params.agentResult, "hephaestus");
-  if (hephaestus) {
-    hephaestus.permission = {
-      ...hephaestus.permission,
+  const gptcoder = agentByKey(params.agentResult, "gptcoder");
+  if (gptcoder) {
+    gptcoder.permission = {
+      ...gptcoder.permission,
       call_omo_agent: "deny",
       task: "allow",
       question: questionPermission,

@@ -16,13 +16,13 @@ describe("resolveRunAgent", () => {
 
     // when
     const agent = resolveRunAgent(
-      { message: "test", agent: "Hephaestus" },
+  { message: "test", agent: "GPTCoder" },
       config,
       env
     )
 
     // then
-    expect(agent).toBe("Hephaestus (Deep Agent)")
+    expect(agent).toBe("GPTCoder (Deep Agent)")
   })
 
   it("uses env agent over config", () => {
@@ -67,7 +67,7 @@ describe("resolveRunAgent", () => {
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("Hephaestus (Deep Agent)")
+    expect(agent).toBe("GPTCoder (Deep Agent)")
   })
 
   it("maps display-name style default_run_agent values to canonical display names", () => {

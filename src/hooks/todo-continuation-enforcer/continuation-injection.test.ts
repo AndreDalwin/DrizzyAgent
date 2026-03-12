@@ -36,7 +36,7 @@ describe("injectContinuation", () => {
       ctx: ctx as never,
       sessionID: "ses_continuation_tools",
       resolvedInfo: {
-        agent: "Hephaestus",
+        agent: "GPTCoder",
         model: { providerID: "openai", modelID: "gpt-5.3-codex" },
         tools: { question: "deny", bash: "allow" },
       },

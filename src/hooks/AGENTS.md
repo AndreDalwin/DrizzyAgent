@@ -35,7 +35,7 @@ hooks/
 ├── json-error-recovery/        # JSON parse error correction
 ├── keyword-detector/           # ultrawork/search/analyze modes
 ├── model-fallback/             # Provider-level model fallback
-├── no-hephaestus-non-gpt/      # Block Hephaestus from non-GPT
+├── no-gptcoder-non-gpt/      # Block GPTCoder from non-GPT
 ├── no-coder-gpt/            # Block Coder from GPT
 ├── non-interactive-env/        # Non-TTY environment handling
 ├── prometheus-md-only/         # Planner read-only mode
@@ -82,7 +82,7 @@ hooks/
 | anthropicEffort | chat.params | Adjust reasoning effort level |
 | modelFallback | chat.params | Provider-level model fallback on errors |
 | noCoderGpt | chat.message | Block Coder from using GPT models (toast warning) |
-| noHephaestusNonGpt | chat.message | Block Hephaestus from using non-GPT models |
+| noGptcoderNonGpt | chat.message | Block GPTCoder from using non-GPT models |
 | runtimeFallback | event | Auto-switch models on API provider errors |
 
 ### Tier 2: Tool Guard Hooks (10) — `create-tool-guard-hooks.ts`

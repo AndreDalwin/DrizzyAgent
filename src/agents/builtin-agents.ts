@@ -11,7 +11,7 @@ import { createMultimodalLookerAgent, MULTIMODAL_LOOKER_PROMPT_METADATA } from "
 import { createMetisAgent, metisPromptMetadata } from "./metis"
 import { createAtlasAgent, atlasPromptMetadata } from "./atlas"
 import { createMomusAgent, momusPromptMetadata } from "./momus"
-import { createHephaestusAgent } from "./hephaestus"
+import { createGptcoderAgent } from "./gptcoder"
 import { createCoderJuniorAgentWithOverrides } from "./coder-junior"
 import type { AvailableCategory } from "./dynamic-agent-prompt-builder"
 import {
@@ -24,7 +24,7 @@ import { mergeCategories } from "../shared/merge-categories"
 import { buildAvailableSkills } from "./builtin-agents/available-skills"
 import { collectPendingBuiltinAgents } from "./builtin-agents/general-agents"
 import { maybeCreateCoderConfig } from "./builtin-agents/coder-agent"
-import { maybeCreateHephaestusConfig } from "./builtin-agents/hephaestus-agent"
+import { maybeCreateGptcoderConfig } from "./builtin-agents/gptcoder-agent"
 import { maybeCreateAtlasConfig } from "./builtin-agents/atlas-agent"
 import { buildCustomAgentMetadata, parseRegisteredAgentSummaries } from "./custom-agent-summaries"
 
@@ -32,7 +32,7 @@ type AgentSource = AgentFactory | AgentConfig
 
 const agentSources: Record<BuiltinAgentName, AgentSource> = {
   coder: createCoderAgent,
-  hephaestus: createHephaestusAgent,
+  gptcoder: createGptcoderAgent,
   oracle: createOracleAgent,
   librarian: createLibrarianAgent,
   explore: createExploreAgent,
@@ -157,7 +157,7 @@ export async function createBuiltinAgents(
     result["coder"] = coderConfig
   }
 
-  const hephaestusConfig = maybeCreateHephaestusConfig({
+  const gptcoderConfig = maybeCreateGptcoderConfig({
     disabledAgents,
     agentOverrides,
     availableModels,
@@ -171,11 +171,11 @@ export async function createBuiltinAgents(
     useTaskSystem,
     disableOmoEnv,
   })
-  if (hephaestusConfig) {
-    result["hephaestus"] = hephaestusConfig
+  if (gptcoderConfig) {
+    result["gptcoder"] = gptcoderConfig
   }
 
-  // Add pending agents after coder and hephaestus to maintain order
+  // Add pending agents after coder and gptcoder to maintain order
   for (const [name, config] of pendingAgentConfigs) {
     result[name] = config
   }

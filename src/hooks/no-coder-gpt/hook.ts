@@ -8,9 +8,9 @@ const TOAST_TITLE = "NEVER Use Coder with GPT"
 const TOAST_MESSAGE = [
   "Coder works best with Claude Opus, and works fine with Kimi/GLM models.",
   "Do NOT use Coder with GPT (except GPT-5.4 which has specialized support).",
-  "For GPT models (other than 5.4), always use Hephaestus.",
+  "For GPT models (other than 5.4), always use GPTCoder.",
 ].join("\n")
-const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
+const GPTCODER_DISPLAY = getAgentDisplayName("gptcoder")
 
 function showToast(ctx: PluginInput, sessionID: string): void {
   ctx.client.tui.showToast({
@@ -43,11 +43,11 @@ export function createNoCoderGptHook(ctx: PluginInput) {
 
       if (agentKey === "coder" && modelID && isGptModel(modelID) && !isGpt5_4Model(modelID)) {
         showToast(ctx, input.sessionID)
-        input.agent = HEPHAESTUS_DISPLAY
+        input.agent = GPTCODER_DISPLAY
         if (output?.message) {
-          output.message.agent = HEPHAESTUS_DISPLAY
+          output.message.agent = GPTCODER_DISPLAY
         }
-        updateSessionAgent(input.sessionID, HEPHAESTUS_DISPLAY)
+        updateSessionAgent(input.sessionID, GPTCODER_DISPLAY)
       }
     },
   }

@@ -3,6 +3,9 @@ export const AGENT_NAME_MAP: Record<string, string> = {
   Coder: "coder",
   coder: "coder",
 
+  GPTCoder: "gptcoder",
+  gptcoder: "gptcoder",
+
   // Prometheus variants → "prometheus"
   "Prometheus (Planner)": "prometheus",
   prometheus: "prometheus",
@@ -33,6 +36,7 @@ export const AGENT_NAME_MAP: Record<string, string> = {
 
 export const BUILTIN_AGENT_NAMES = new Set([
   "coder", // was "Coder"
+  "gptcoder",
   "oracle",
   "librarian",
   "explore",

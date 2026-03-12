@@ -288,7 +288,7 @@ describe("createBuiltinAgents with model overrides", () => {
 
       // #then
       expect(agents.drizzy.prompt).toContain("researcher")
-      expect(agents.hephaestus.prompt).toContain("researcher")
+      expect(agents.gptcoder.prompt).toContain("researcher")
       expect(agents.atlas.prompt).toContain("researcher")
     } finally {
       fetchSpy.mockRestore()
@@ -324,7 +324,7 @@ describe("createBuiltinAgents with model overrides", () => {
 
       // #then
       expect(agents.drizzy.prompt).not.toContain("hidden-agent")
-      expect(agents.hephaestus.prompt).not.toContain("hidden-agent")
+      expect(agents.gptcoder.prompt).not.toContain("hidden-agent")
       expect(agents.atlas.prompt).not.toContain("hidden-agent")
     } finally {
       fetchSpy.mockRestore()
@@ -360,7 +360,7 @@ describe("createBuiltinAgents with model overrides", () => {
 
       // #then
       expect(agents.drizzy.prompt).not.toContain("disabled-agent")
-      expect(agents.hephaestus.prompt).not.toContain("disabled-agent")
+      expect(agents.gptcoder.prompt).not.toContain("disabled-agent")
       expect(agents.atlas.prompt).not.toContain("disabled-agent")
     } finally {
       fetchSpy.mockRestore()
@@ -396,7 +396,7 @@ describe("createBuiltinAgents with model overrides", () => {
 
       // #then
       expect(agents.drizzy.prompt).not.toContain("researcher")
-      expect(agents.hephaestus.prompt).not.toContain("researcher")
+      expect(agents.gptcoder.prompt).not.toContain("researcher")
       expect(agents.atlas.prompt).not.toContain("researcher")
     } finally {
       fetchSpy.mockRestore()
@@ -530,8 +530,8 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
   })
 })
 
-describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => {
-  test("hephaestus is created when provider-models cache connected list includes required provider", async () => {
+describe("createBuiltinAgents with requiresProvider gating (gptcoder)", () => {
+  test("gptcoder is created when provider-models cache connected list includes required provider", async () => {
     // #given
     const connectedCacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(["anthropic"])
     const providerModelsSpy = spyOn(connectedProvidersCache, "readProviderModelsCache").mockReturnValue({
@@ -551,7 +551,7 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.hephaestus).toBeDefined()
+      expect(agents.gptcoder).toBeDefined()
     } finally {
       connectedCacheSpy.mockRestore()
       providerModelsSpy.mockRestore()
@@ -559,8 +559,8 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
     }
   })
 
-  test("hephaestus is not created when no required provider is connected", async () => {
-    // #given - only anthropic models available, not in hephaestus requiresProvider
+  test("gptcoder is not created when no required provider is connected", async () => {
+    // #given - only anthropic models available, not in gptcoder requiresProvider
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["anthropic/claude-opus-4-6"])
     )
@@ -571,14 +571,14 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.hephaestus).toBeUndefined()
+      expect(agents.gptcoder).toBeUndefined()
     } finally {
       fetchSpy.mockRestore()
       cacheSpy.mockRestore()
     }
   })
 
-  test("hephaestus is created when openai provider is connected", async () => {
+  test("gptcoder is created when openai provider is connected", async () => {
     // #given - openai provider has models available
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["openai/gpt-5.3-codex"])
@@ -589,13 +589,13 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.hephaestus).toBeDefined()
+      expect(agents.gptcoder).toBeDefined()
     } finally {
       fetchSpy.mockRestore()
     }
   })
 
-  test("hephaestus IS created when github-copilot is connected with a GPT model", async () => {
+  test("gptcoder IS created when github-copilot is connected with a GPT model", async () => {
     // #given - github-copilot provider has gpt-5.3-codex available
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["github-copilot/gpt-5.3-codex"])
@@ -606,15 +606,15 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       // #when
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
-      // #then - github-copilot is now a valid provider for hephaestus
-      expect(agents.hephaestus).toBeDefined()
+      // #then - github-copilot is now a valid provider for gptcoder
+      expect(agents.gptcoder).toBeDefined()
     } finally {
       fetchSpy.mockRestore()
       cacheSpy.mockRestore()
     }
   })
 
-  test("hephaestus is created when opencode provider is connected", async () => {
+  test("gptcoder is created when opencode provider is connected", async () => {
     // #given - opencode provider has models available
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["opencode/gpt-5.3-codex"])
@@ -625,13 +625,13 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.hephaestus).toBeDefined()
+      expect(agents.gptcoder).toBeDefined()
     } finally {
       fetchSpy.mockRestore()
     }
   })
 
-  test("hephaestus is created on first run when no availableModels or cache exist", async () => {
+  test("gptcoder is created on first run when no availableModels or cache exist", async () => {
     // #given
     const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(null)
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(new Set())
@@ -641,21 +641,21 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.hephaestus).toBeDefined()
-      expect(agents.hephaestus.model).toBe("openai/gpt-5.3-codex")
+      expect(agents.gptcoder).toBeDefined()
+      expect(agents.gptcoder.model).toBe("openai/gpt-5.3-codex")
     } finally {
       cacheSpy.mockRestore()
       fetchSpy.mockRestore()
     }
   })
 
-  test("hephaestus is created when explicit config provided even if provider unavailable", async () => {
+  test("gptcoder is created when explicit config provided even if provider unavailable", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["anthropic/claude-opus-4-6"])
     )
     const overrides = {
-      hephaestus: { model: "anthropic/claude-opus-4-6" },
+      gptcoder: { model: "anthropic/claude-opus-4-6" },
     }
 
     try {
@@ -663,14 +663,14 @@ describe("createBuiltinAgents with requiresProvider gating (hephaestus)", () => 
       const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.hephaestus).toBeDefined()
+      expect(agents.gptcoder).toBeDefined()
     } finally {
       fetchSpy.mockRestore()
     }
   })
 })
 
-describe("Hephaestus environment context toggle", () => {
+describe("GPTCoder environment context toggle", () => {
   let fetchSpy: ReturnType<typeof spyOn>
 
   beforeEach(() => {
@@ -706,8 +706,8 @@ describe("Hephaestus environment context toggle", () => {
     const agents = await buildAgents(undefined)
 
     // #then
-    expect(agents.hephaestus).toBeDefined()
-    expect(agents.hephaestus.prompt).toContain("<omo-env>")
+    expect(agents.gptcoder).toBeDefined()
+    expect(agents.gptcoder.prompt).toContain("<omo-env>")
   })
 
   test("includes <omo-env> tag when disable flag is false", async () => {
@@ -715,8 +715,8 @@ describe("Hephaestus environment context toggle", () => {
     const agents = await buildAgents(false)
 
     // #then
-    expect(agents.hephaestus).toBeDefined()
-    expect(agents.hephaestus.prompt).toContain("<omo-env>")
+    expect(agents.gptcoder).toBeDefined()
+    expect(agents.gptcoder.prompt).toContain("<omo-env>")
   })
 
   test("omits <omo-env> tag when disable flag is true", async () => {
@@ -724,8 +724,8 @@ describe("Hephaestus environment context toggle", () => {
     const agents = await buildAgents(true)
 
     // #then
-    expect(agents.hephaestus).toBeDefined()
-    expect(agents.hephaestus.prompt).not.toContain("<omo-env>")
+    expect(agents.gptcoder).toBeDefined()
+    expect(agents.gptcoder.prompt).not.toContain("<omo-env>")
   })
 })
 
@@ -1417,21 +1417,21 @@ describe("Deadlock prevention - fetchAvailableModels must not receive client", (
      fetchSpy.mockRestore?.()
      cacheSpy.mockRestore?.()
    })
-  test("Hephaestus variant override respects user config over hardcoded default", async () => {
+test("GPTCoder variant override respects user config over hardcoded default", async () => {
     // #given - user provides variant in config
     const overrides = {
-      hephaestus: { variant: "high" },
+      gptcoder: { variant: "high" },
     }
 
     // #when
     const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL)
 
     // #then - user variant takes precedence over hardcoded "medium"
-    expect(agents.hephaestus).toBeDefined()
-    expect(agents.hephaestus.variant).toBe("high")
+    expect(agents.gptcoder).toBeDefined()
+    expect(agents.gptcoder.variant).toBe("high")
   })
 
-  test("Hephaestus uses default variant when no user override provided", async () => {
+test("GPTCoder uses default variant when no user override provided", async () => {
     // #given - no variant override in config
     const overrides = {}
 
@@ -1439,7 +1439,7 @@ describe("Deadlock prevention - fetchAvailableModels must not receive client", (
     const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL)
 
     // #then - default "medium" variant is applied
-    expect(agents.hephaestus).toBeDefined()
-    expect(agents.hephaestus.variant).toBe("medium")
+    expect(agents.gptcoder).toBeDefined()
+    expect(agents.gptcoder.variant).toBe("medium")
   })
 })

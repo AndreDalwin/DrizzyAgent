@@ -119,7 +119,7 @@ describe("findNearestMessageExcludingCompaction", () => {
     test("falls back to partial agent/model match", () => {
       // given
       const messageWithAgentOnly = {
-        agent: "hephaestus",
+        agent: "gptcoder",
       }
       const messageWithModelOnly = {
         model: { providerID: "openai", modelID: "gpt-5.3" },
@@ -133,7 +133,7 @@ describe("findNearestMessageExcludingCompaction", () => {
       // then
       expect(result).not.toBeNull()
       // Should find the one with agent first (sorted reverse, so 002 is checked first)
-      expect(result?.agent).toBe("hephaestus")
+      expect(result?.agent).toBe("gptcoder")
     })
 
     test("returns null for empty directory", () => {

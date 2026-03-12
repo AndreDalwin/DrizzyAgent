@@ -167,7 +167,7 @@ describe("getAgentConfigKey", () => {
   it("resolves all core agent display names", () => {
     // given all core display names
     // when/then each resolves to its config key
-    expect(getAgentConfigKey("Hephaestus (Deep Agent)")).toBe("hephaestus")
+    expect(getAgentConfigKey("GPTCoder")).toBe("gptcoder")
     expect(getAgentConfigKey("Prometheus (Plan Builder)")).toBe("prometheus")
     expect(getAgentConfigKey("Atlas (Plan Executor)")).toBe("atlas")
     expect(getAgentConfigKey("Metis (Plan Consultant)")).toBe("metis")
@@ -181,7 +181,7 @@ describe("AGENT_DISPLAY_NAMES", () => {
     // given expected mappings
     const expectedMappings = {
       coder: "Coder (Ultraworker)",
-      hephaestus: "Hephaestus (Deep Agent)",
+      gptcoder: "GPTCoder",
       prometheus: "Prometheus (Plan Builder)",
       atlas: "Atlas (Plan Executor)",
       "coder-junior": "Coder-Junior",

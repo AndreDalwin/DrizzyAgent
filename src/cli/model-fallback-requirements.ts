@@ -18,7 +18,7 @@ export const CLI_AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
     ],
     requiresAnyModel: true,
   },
-  hephaestus: {
+  gptcoder: {
     fallbackChain: [
       {
         providers: ["openai", "opencode"],

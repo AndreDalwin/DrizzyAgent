@@ -30,7 +30,7 @@
 | `provider-config-handler.ts` | ~80 | Provider config + model cache |
 | `prometheus-agent-config-builder.ts` | ~100 | Prometheus config with model resolution |
 | `plan-model-inheritance.ts` | 28 | Plan demotion logic |
-| `agent-priority-order.ts` | ~30 | coder, hephaestus, prometheus, atlas first |
+| `agent-priority-order.ts` | ~30 | coder, GPTCoder, prometheus, atlas first |
 | `agent-key-remapper.ts` | ~30 | Agent key → display name |
 | `category-config-resolver.ts` | ~40 | User vs default category lookup |
 | `index.ts` | ~10 | Barrel exports |
@@ -41,7 +41,7 @@
 |-------|---------|--------|
 | Librarian | grep_app_* | — |
 | Atlas, Coder, Prometheus | task, task_*, teammate | — |
-| Hephaestus | task | — |
+| GPTCoder | task | — |
 | Default (all others) | — | grep_app_*, task_*, teammate, LSP |
 
 ## MULTI-LEVEL CONFIG MERGE

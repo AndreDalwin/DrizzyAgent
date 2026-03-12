@@ -163,14 +163,14 @@ describe("Coder-Junior model inheritance", () => {
 })
 
 describe("Plan agent demote behavior", () => {
-  test("orders core agents as coder -> hephaestus -> prometheus -> atlas", async () => {
+  test("orders core agents as coder -> gptcoder -> prometheus -> atlas", async () => {
     // #given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
       coder: { name: "coder", prompt: "test", mode: "primary" },
-      hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
+      gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
     })
@@ -199,7 +199,7 @@ describe("Plan agent demote behavior", () => {
     const keys = Object.keys(config.agent as Record<string, unknown>)
     const coreAgents = [
       getAgentDisplayName("coder"),
-      getAgentDisplayName("hephaestus"),
+      getAgentDisplayName("gptcoder"),
       getAgentDisplayName("prometheus"),
       getAgentDisplayName("atlas"),
     ]
@@ -314,14 +314,14 @@ describe("Plan agent demote behavior", () => {
 })
 
 describe("Agent permission defaults", () => {
-  test("hephaestus should allow task", async () => {
+  test("gptcoder should allow task", async () => {
     // #given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
       coder: { name: "coder", prompt: "test", mode: "primary" },
-      hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
+      gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
     })
     const pluginConfig: OhMyOpenCodeConfig = {}
@@ -343,9 +343,9 @@ describe("Agent permission defaults", () => {
 
     // #then
     const agentConfig = config.agent as Record<string, { permission?: Record<string, string> }>
-    const hephaestusKey = getAgentDisplayName("hephaestus")
-    expect(agentConfig[hephaestusKey]).toBeDefined()
-    expect(agentConfig[hephaestusKey].permission?.task).toBe("allow")
+    const gptcoderKey = getAgentDisplayName("gptcoder")
+    expect(agentConfig[gptcoderKey]).toBeDefined()
+    expect(agentConfig[gptcoderKey].permission?.task).toBe("allow")
   })
 })
 
@@ -355,7 +355,7 @@ describe("default_agent behavior with Coder orchestration", () => {
     const pluginConfig: OhMyOpenCodeConfig = {}
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
-      default_agent: "  hephaestus  ",
+      default_agent: "  gptcoder  ",
       agent: {},
     }
     const handler = createConfigHandler({
@@ -371,7 +371,7 @@ describe("default_agent behavior with Coder orchestration", () => {
     await handler(config)
 
     // then
-    expect(config.default_agent).toBe(getAgentDisplayName("hephaestus"))
+    expect(config.default_agent).toBe(getAgentDisplayName("gptcoder"))
   })
 
   test("canonicalizes configured default_agent when key uses mixed case", async () => {
@@ -395,7 +395,7 @@ describe("default_agent behavior with Coder orchestration", () => {
     await handler(config)
 
     // then
-    expect(config.default_agent).toBe(getAgentDisplayName("hephaestus"))
+    expect(config.default_agent).toBe(getAgentDisplayName("gptcoder"))
   })
 
   test("canonicalizes configured default_agent key to display name", async () => {
@@ -403,7 +403,7 @@ describe("default_agent behavior with Coder orchestration", () => {
     const pluginConfig: OhMyOpenCodeConfig = {}
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
-      default_agent: "hephaestus",
+      default_agent: "gptcoder",
       agent: {},
     }
     const handler = createConfigHandler({
@@ -419,13 +419,13 @@ describe("default_agent behavior with Coder orchestration", () => {
     await handler(config)
 
     // #then
-    expect(config.default_agent).toBe(getAgentDisplayName("hephaestus"))
+    expect(config.default_agent).toBe(getAgentDisplayName("gptcoder"))
   })
 
   test("preserves existing display-name default_agent", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {}
-    const displayName = getAgentDisplayName("hephaestus")
+    const displayName = getAgentDisplayName("gptcoder")
     const config: Record<string, unknown> = {
       model: "anthropic/claude-opus-4-6",
       default_agent: displayName,
@@ -1159,7 +1159,7 @@ describe("config-handler plugin loading error boundary (#1559)", () => {
 describe("per-agent todowrite/todoread deny when task_system enabled", () => {
   const AGENTS_WITH_TODO_DENY = new Set([
     getAgentDisplayName("coder"),
-    getAgentDisplayName("hephaestus"),
+    getAgentDisplayName("gptcoder"),
     getAgentDisplayName("atlas"),
     getAgentDisplayName("prometheus"),
     getAgentDisplayName("coder-junior"),
@@ -1172,7 +1172,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
     }
     createBuiltinAgentsMock.mockResolvedValue({
       coder: { name: "coder", prompt: "test", mode: "primary" },
-      hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
+      gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
       prometheus: { name: "prometheus", prompt: "test", mode: "primary" },
       "coder-junior": { name: "coder-junior", prompt: "test", mode: "subagent" },
@@ -1213,7 +1213,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
     }
     createBuiltinAgentsMock.mockResolvedValue({
       coder: { name: "coder", prompt: "test", mode: "primary" },
-      hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
+      gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {
@@ -1239,8 +1239,8 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
     const agentResult = config.agent as Record<string, { permission?: Record<string, unknown> }>
     expect(agentResult[getAgentDisplayName("coder")]?.permission?.todowrite).toBeUndefined()
     expect(agentResult[getAgentDisplayName("coder")]?.permission?.todoread).toBeUndefined()
-    expect(agentResult[getAgentDisplayName("hephaestus")]?.permission?.todowrite).toBeUndefined()
-    expect(agentResult[getAgentDisplayName("hephaestus")]?.permission?.todoread).toBeUndefined()
+    expect(agentResult[getAgentDisplayName("gptcoder")]?.permission?.todowrite).toBeUndefined()
+    expect(agentResult[getAgentDisplayName("gptcoder")]?.permission?.todoread).toBeUndefined()
   })
 
   test("does not deny todowrite/todoread when task_system is undefined", async () => {

@@ -1,7 +1,7 @@
 /**
  * GPT-5.3-Codex Optimized Coder-Junior System Prompt
  *
- * Hephaestus-style prompt adapted for a focused executor:
+* GPTCoder-style prompt adapted for a focused executor:
  * - Same autonomy, reporting, parallelism, and tool usage patterns
  * - CAN spawn explore/librarian via call_omo_agent for research
  */

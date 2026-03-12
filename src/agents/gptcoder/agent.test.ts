@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import {
-  getHephaestusPromptSource,
-  getHephaestusPrompt,
-  createHephaestusAgent,
+  getGptcoderPromptSource,
+  getGptcoderPrompt,
+  createGptcoderAgent,
 } from "./index";
 
-describe("getHephaestusPromptSource", () => {
+describe("getGptcoderPromptSource", () => {
   test("returns 'gpt-5-4' for gpt-5.4 models", () => {
     // given
     const model1 = "openai/gpt-5.4";
@@ -13,9 +13,9 @@ describe("getHephaestusPromptSource", () => {
     const model3 = "github-copilot/gpt-5.4";
 
     // when
-    const source1 = getHephaestusPromptSource(model1);
-    const source2 = getHephaestusPromptSource(model2);
-    const source3 = getHephaestusPromptSource(model3);
+    const source1 = getGptcoderPromptSource(model1);
+    const source2 = getGptcoderPromptSource(model2);
+    const source3 = getGptcoderPromptSource(model3);
 
     // then
     expect(source1).toBe("gpt-5-4");
@@ -29,8 +29,8 @@ describe("getHephaestusPromptSource", () => {
     const model2 = "github-copilot/gpt-5.3-codex";
 
     // when
-    const source1 = getHephaestusPromptSource(model1);
-    const source2 = getHephaestusPromptSource(model2);
+    const source1 = getGptcoderPromptSource(model1);
+    const source2 = getGptcoderPromptSource(model2);
 
     // then
     expect(source1).toBe("gpt-5-3-codex");
@@ -44,9 +44,9 @@ describe("getHephaestusPromptSource", () => {
     const model3 = "openai/gpt-4o";
 
     // when
-    const source1 = getHephaestusPromptSource(model1);
-    const source2 = getHephaestusPromptSource(model2);
-    const source3 = getHephaestusPromptSource(model3);
+    const source1 = getGptcoderPromptSource(model1);
+    const source2 = getGptcoderPromptSource(model2);
+    const source3 = getGptcoderPromptSource(model3);
 
     // then
     expect(source1).toBe("gpt");
@@ -60,8 +60,8 @@ describe("getHephaestusPromptSource", () => {
     const model2 = undefined;
 
     // when
-    const source1 = getHephaestusPromptSource(model1);
-    const source2 = getHephaestusPromptSource(model2);
+    const source1 = getGptcoderPromptSource(model1);
+    const source2 = getGptcoderPromptSource(model2);
 
     // then
     expect(source1).toBe("gpt");
@@ -69,13 +69,13 @@ describe("getHephaestusPromptSource", () => {
   });
 });
 
-describe("getHephaestusPrompt", () => {
+describe("getGptcoderPrompt", () => {
   test("GPT 5.4 model returns GPT-5.4 optimized prompt", () => {
     // given
     const model = "openai/gpt-5.4";
 
     // when
-    const prompt = getHephaestusPrompt(model);
+    const prompt = getGptcoderPrompt(model);
 
     // then
     expect(prompt).toContain("You build context by examining");
@@ -88,7 +88,7 @@ describe("getHephaestusPrompt", () => {
     const model = "openai/gpt-5.4-codex";
 
     // when
-    const prompt = getHephaestusPrompt(model);
+    const prompt = getGptcoderPrompt(model);
 
     // then
     expect(prompt).toContain("You build context by examining");
@@ -101,7 +101,7 @@ describe("getHephaestusPrompt", () => {
     const model = "openai/gpt-5.3-codex";
 
     // when
-    const prompt = getHephaestusPrompt(model);
+    const prompt = getGptcoderPrompt(model);
 
     // then
     expect(prompt).toContain("Senior Staff Engineer");
@@ -114,7 +114,7 @@ describe("getHephaestusPrompt", () => {
     const model = "openai/gpt-4o";
 
     // when
-    const prompt = getHephaestusPrompt(model);
+    const prompt = getGptcoderPrompt(model);
 
     // then
     expect(prompt).toContain("Senior Staff Engineer");
@@ -122,16 +122,16 @@ describe("getHephaestusPrompt", () => {
     expect(prompt).not.toContain("intent_extraction");
   });
 
-  test("Claude model returns generic GPT prompt (Hephaestus default)", () => {
+  test("Claude model returns generic GPT prompt (GPTCoder default)", () => {
     // given
     const model = "anthropic/claude-opus-4-6";
 
     // when
-    const prompt = getHephaestusPrompt(model);
+    const prompt = getGptcoderPrompt(model);
 
     // then
     expect(prompt).toContain("autonomous deep worker");
-    expect(prompt).toContain("Hephaestus");
+    expect(prompt).toContain("GPTCoder");
   });
 
   test("useTaskSystem=true includes Task Discipline for GPT models", () => {
@@ -139,7 +139,7 @@ describe("getHephaestusPrompt", () => {
     const model = "openai/gpt-5.4";
 
     // when
-    const prompt = getHephaestusPrompt(model, true);
+    const prompt = getGptcoderPrompt(model, true);
 
     // then
     expect(prompt).toContain("Task Discipline");
@@ -152,7 +152,7 @@ describe("getHephaestusPrompt", () => {
     const model = "anthropic/claude-opus-4-6";
 
     // when
-    const prompt = getHephaestusPrompt(model, false);
+    const prompt = getGptcoderPrompt(model, false);
 
     // then
     expect(prompt).toContain("Todo Discipline");
@@ -160,13 +160,13 @@ describe("getHephaestusPrompt", () => {
   });
 });
 
-describe("createHephaestusAgent", () => {
+describe("createGptcoderAgent", () => {
   test("returns AgentConfig with required fields", () => {
     // given
     const model = "openai/gpt-5.4";
 
     // when
-    const config = createHephaestusAgent(model);
+    const config = createGptcoderAgent(model);
 
     // then
     expect(config).toHaveProperty("description");
@@ -186,7 +186,7 @@ describe("createHephaestusAgent", () => {
     const model = "openai/gpt-5.4";
 
     // when
-    const config = createHephaestusAgent(model);
+    const config = createGptcoderAgent(model);
 
     // then
     expect(config.prompt).toContain("You build context by examining");
@@ -199,7 +199,7 @@ describe("createHephaestusAgent", () => {
     const model = "openai/gpt-5.3-codex";
 
     // when
-    const config = createHephaestusAgent(model);
+    const config = createGptcoderAgent(model);
 
     // then
     expect(config.prompt).toContain("Senior Staff Engineer");
@@ -207,15 +207,15 @@ describe("createHephaestusAgent", () => {
     expect(config.prompt).toContain("<tool_usage_rules>");
   });
 
-  test("includes Hephaestus identity in prompt", () => {
+  test("includes GPTCoder identity in prompt", () => {
     // given
     const model = "openai/gpt-5.4";
 
     // when
-    const config = createHephaestusAgent(model);
+    const config = createGptcoderAgent(model);
 
     // then
-    expect(config.prompt).toContain("Hephaestus");
+    expect(config.prompt).toContain("GPTCoder");
     expect(config.prompt).toContain("autonomous deep worker");
   });
 
@@ -224,7 +224,7 @@ describe("createHephaestusAgent", () => {
     const model = "openai/gpt-5.4";
 
     // when
-    const config = createHephaestusAgent(model, [], [], [], [], true);
+    const config = createGptcoderAgent(model, [], [], [], [], true);
 
     // then
     expect(config.prompt).toContain("task_create");
@@ -237,7 +237,7 @@ describe("createHephaestusAgent", () => {
     const model = "openai/gpt-5.4";
 
     // when
-    const config = createHephaestusAgent(model, [], [], [], [], false);
+    const config = createGptcoderAgent(model, [], [], [], [], false);
 
     // then
     expect(config.prompt).toContain("todowrite");

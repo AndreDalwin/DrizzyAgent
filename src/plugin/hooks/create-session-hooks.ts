@@ -21,7 +21,7 @@ import {
   createPrometheusMdOnlyHook,
   createCoderJuniorNotepadHook,
   createNoCoderGptHook,
-  createNoHephaestusNonGptHook,
+  createNoGptcoderNonGptHook,
   createQuestionLabelTruncatorHook,
   createPreemptiveCompactionHook,
   createRuntimeFallbackHook,
@@ -55,7 +55,7 @@ export type SessionHooks = {
   prometheusMdOnly: ReturnType<typeof createPrometheusMdOnlyHook> | null
   coderJuniorNotepad: ReturnType<typeof createCoderJuniorNotepadHook> | null
   noCoderGpt: ReturnType<typeof createNoCoderGptHook> | null
-  noHephaestusNonGpt: ReturnType<typeof createNoHephaestusNonGptHook> | null
+  noGptcoderNonGpt: ReturnType<typeof createNoGptcoderNonGptHook> | null
   questionLabelTruncator: ReturnType<typeof createQuestionLabelTruncatorHook> | null
   taskResumeInfo: ReturnType<typeof createTaskResumeInfoHook> | null
   anthropicEffort: ReturnType<typeof createAnthropicEffortHook> | null
@@ -231,11 +231,11 @@ export function createSessionHooks(args: {
     ? safeHook("no-coder-gpt", () => createNoCoderGptHook(ctx))
     : null
 
-  const noHephaestusNonGpt = isHookEnabled("no-hephaestus-non-gpt")
-    ? safeHook("no-hephaestus-non-gpt", () =>
-      createNoHephaestusNonGptHook(ctx, {
-        allowNonGptModel: pluginConfig.agents?.hephaestus?.allow_non_gpt_model,
-      }))
+  const noGptcoderNonGpt = isHookEnabled("no-gptcoder-non-gpt")
+    ? safeHook("no-gptcoder-non-gpt", () =>
+        createNoGptcoderNonGptHook(ctx, {
+          allowNonGptModel: pluginConfig.agents?.gptcoder?.allow_non_gpt_model,
+        }))
     : null
 
   const questionLabelTruncator = isHookEnabled("question-label-truncator")
@@ -280,7 +280,7 @@ export function createSessionHooks(args: {
     prometheusMdOnly,
     coderJuniorNotepad,
     noCoderGpt,
-    noHephaestusNonGpt,
+    noGptcoderNonGpt,
     questionLabelTruncator,
     taskResumeInfo,
     anthropicEffort,

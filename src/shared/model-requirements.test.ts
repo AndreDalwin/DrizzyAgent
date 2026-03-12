@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { describe, expect, test } from "bun:test"
 import {
   AGENT_MODEL_REQUIREMENTS,
@@ -190,22 +191,19 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(secondary.variant).toBe("medium")
   })
 
-  test("hephaestus supports openai, github-copilot, venice, and opencode providers", () => {
-    // #given - hephaestus agent requirement
-    const hephaestus = AGENT_MODEL_REQUIREMENTS["hephaestus"]
+  test("gptcoder supports openai, github-copilot, venice, and opencode providers", () => {
+    const gptcoder = AGENT_MODEL_REQUIREMENTS["gptcoder"]
 
-    // #when - accessing hephaestus requirement
-    // #then - requiresProvider includes openai, github-copilot, venice, and opencode
-    expect(hephaestus).toBeDefined()
-    expect(hephaestus.requiresProvider).toEqual(["openai", "github-copilot", "venice", "opencode"])
-    expect(hephaestus.requiresModel).toBeUndefined()
+    expect(gptcoder).toBeDefined()
+    expect(gptcoder.requiresProvider).toEqual(["openai", "github-copilot", "venice", "opencode"])
+    expect(gptcoder.requiresModel).toBeUndefined()
   })
 
   test("all 11 builtin agents have valid fallbackChain arrays", () => {
     // #given - list of 11 agent names
     const expectedAgents = [
       "coder",
-      "hephaestus",
+      "gptcoder",
       "oracle",
       "librarian",
       "explore",

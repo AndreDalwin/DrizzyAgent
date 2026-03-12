@@ -4,15 +4,15 @@ import { getSessionAgent, updateSessionAgent } from "../../features/claude-code-
 import { log } from "../../shared"
 import { getAgentConfigKey, getAgentDisplayName } from "../../shared/agent-display-names"
 
-const TOAST_TITLE = "NEVER Use Hephaestus with Non-GPT"
+const TOAST_TITLE = "NEVER Use GPTCoder with Non-GPT"
 const TOAST_MESSAGE = [
-  "Hephaestus is designed exclusively for GPT models.",
-  "Hephaestus is trash without GPT.",
+  "GPTCoder is designed exclusively for GPT models.",
+  "GPTCoder falls apart on non-GPT inputs.",
   "For Claude/Kimi/GLM models, always use Coder.",
 ].join("\n")
 const CODER_DISPLAY = getAgentDisplayName("coder")
 
-type NoHephaestusNonGptHookOptions = {
+type NoGptcoderNonGptHookOptions = {
   allowNonGptModel?: boolean
 }
 
@@ -25,16 +25,16 @@ function showToast(ctx: PluginInput, sessionID: string, variant: "error" | "warn
       duration: 10000,
     },
   }).catch((error) => {
-    log("[no-hephaestus-non-gpt] Failed to show toast", {
+    log("[no-gptcoder-non-gpt] Failed to show toast", {
       sessionID,
       error,
     })
   })
 }
 
-export function createNoHephaestusNonGptHook(
+export function createNoGptcoderNonGptHook(
   ctx: PluginInput,
-  options?: NoHephaestusNonGptHookOptions,
+  options?: NoGptcoderNonGptHookOptions,
 ) {
   return {
     "chat.message": async (input: {
@@ -49,7 +49,7 @@ export function createNoHephaestusNonGptHook(
       const modelID = input.model?.modelID
       const allowNonGptModel = options?.allowNonGptModel === true
 
-      if (agentKey === "hephaestus" && modelID && !isGptModel(modelID)) {
+      if (agentKey === "gptcoder" && modelID && !isGptModel(modelID)) {
         showToast(ctx, input.sessionID, allowNonGptModel ? "warning" : "error")
         if (allowNonGptModel) {
           return

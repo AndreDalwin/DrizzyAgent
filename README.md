@@ -11,7 +11,7 @@ DrizzyAgent provides **discipline agents** that work together to complete coding
 | Agent | Purpose | Model |
 |-------|---------|-------|
 | **Coder** | Main orchestrator - plans, delegates, drives to completion | Claude Opus / Kimi K2.5 / GLM-5 |
-| **Hephaestus** | Deep autonomous worker - explores, researches, executes end-to-end | GPT-5.3 Codex |
+| **GPTCoder** | Deep autonomous worker - explores, researches, executes end-to-end | GPT-5.3 Codex |
 | **Prometheus** | Strategic planner - interviews, identifies scope, builds plans | Claude Opus / Kimi K2.5 / GLM-5 |
 | **Oracle** | Architecture consultant - debugging, complex logic decisions | High-IQ reasoning models |
 | **Librarian** | Documentation/code search - external references, OSS examples | Research models |

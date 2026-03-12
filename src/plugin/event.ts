@@ -379,7 +379,7 @@ export function createEventHandler(args: {
                 if (errorMessage.includes("claude-opus") || errorMessage.includes("opus")) {
                   agentName = "coder";
                 } else if (errorMessage.includes("gpt-5")) {
-                  agentName = "hephaestus";
+                  agentName = "gptcoder";
                 } else {
                   agentName = "coder";
                 }
@@ -437,7 +437,7 @@ export function createEventHandler(args: {
               if (retryMessage.includes("claude-opus") || retryMessage.includes("opus")) {
                 agentName = "coder";
               } else if (retryMessage.includes("gpt-5")) {
-                agentName = "hephaestus";
+                agentName = "gptcoder";
               } else {
                 agentName = "coder";
               }
@@ -510,7 +510,7 @@ export function createEventHandler(args: {
             if (errorMessage.includes("claude-opus") || errorMessage.includes("opus")) {
               agentName = "coder";
             } else if (errorMessage.includes("gpt-5")) {
-              agentName = "hephaestus";
+              agentName = "gptcoder";
             } else {
               agentName = "coder";
             }
