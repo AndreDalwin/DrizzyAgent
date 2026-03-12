@@ -1662,7 +1662,7 @@
           },
           "additionalProperties": false
         },
-        "metis": {
+        "planConsultant": {
           "type": "object",
           "properties": {
             "model": {
@@ -1881,7 +1881,7 @@
           },
           "additionalProperties": false
         },
-        "momus": {
+        "planReviewer": {
           "type": "object",
           "properties": {
             "model": {

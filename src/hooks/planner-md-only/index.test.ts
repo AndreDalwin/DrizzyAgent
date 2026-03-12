@@ -224,8 +224,8 @@ describe("planner-md-only", () => {
       // then
       expect(output.message).toContain("PLANNER MANDATORY WORKFLOW REMINDER")
       expect(output.message).toContain("INTERVIEW")
-      expect(output.message).toContain("METIS CONSULTATION")
-      expect(output.message).toContain("MOMUS REVIEW")
+      expect(output.message).toContain("PLAN CONSULTANT")
+      expect(output.message).toContain("PLAN REVIEWER")
     })
 
     test("should NOT inject workflow reminder for .drizzy/drafts/", async () => {

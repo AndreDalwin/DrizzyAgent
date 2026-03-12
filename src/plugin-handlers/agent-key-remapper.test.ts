@@ -38,8 +38,8 @@ describe("remapAgentKeysToDisplayNames", () => {
       gptcoder: {},
       planner: {},
       atlas: {},
-      metis: {},
-      momus: {},
+      planConsultant: {},
+      planReviewer: {},
       "coder-junior": {},
     }
 
@@ -55,10 +55,10 @@ describe("remapAgentKeysToDisplayNames", () => {
     expect(result["planner"]).toBeUndefined()
     expect(result["Atlas (Plan Executor)"]).toBeDefined()
     expect(result["atlas"]).toBeUndefined()
-    expect(result["Metis (Plan Consultant)"]).toBeDefined()
-    expect(result["metis"]).toBeUndefined()
-    expect(result["Momus (Plan Critic)"]).toBeDefined()
-    expect(result["momus"]).toBeUndefined()
+    expect(result["Plan Consultant"]).toBeDefined()
+    expect(result["planConsultant"]).toBeUndefined()
+    expect(result["Plan Reviewer"]).toBeDefined()
+    expect(result["planReviewer"]).toBeUndefined()
     expect(result["Coder-Junior"]).toBeDefined()
     expect(result["coder-junior"]).toBeUndefined()
   })

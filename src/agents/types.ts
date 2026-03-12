@@ -111,8 +111,8 @@ export type BuiltinAgentName =
   | "librarian"
   | "explore"
   | "multimodal-looker"
-  | "metis"
-  | "momus"
+  | "plan-consultant"
+  | "plan-reviewer"
   | "atlas"
   | "coder-junior";
 

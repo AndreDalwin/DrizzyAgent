@@ -23,13 +23,13 @@ const AGENT_RESTRICTIONS: Record<string, Record<string, boolean>> = {
     call_omo_agent: false,
   },
 
-  metis: {
+  planConsultant: {
     write: false,
     edit: false,
     task: false,
   },
 
-  momus: {
+  planReviewer: {
     write: false,
     edit: false,
     task: false,
@@ -44,14 +44,22 @@ const AGENT_RESTRICTIONS: Record<string, Record<string, boolean>> = {
   },
 }
 
+function normalizeAgentRestrictionKey(agentName: string): string {
+  return agentName.toLowerCase().replace(/[-\s]/g, "")
+}
+
 export function getAgentToolRestrictions(agentName: string): Record<string, boolean> {
   return AGENT_RESTRICTIONS[agentName]
-    ?? Object.entries(AGENT_RESTRICTIONS).find(([key]) => key.toLowerCase() === agentName.toLowerCase())?.[1]
+    ?? Object.entries(AGENT_RESTRICTIONS).find(
+      ([key]) => normalizeAgentRestrictionKey(key) === normalizeAgentRestrictionKey(agentName)
+    )?.[1]
     ?? {}
 }
 
 export function hasAgentToolRestrictions(agentName: string): boolean {
   const restrictions = AGENT_RESTRICTIONS[agentName]
-    ?? Object.entries(AGENT_RESTRICTIONS).find(([key]) => key.toLowerCase() === agentName.toLowerCase())?.[1]
+    ?? Object.entries(AGENT_RESTRICTIONS).find(
+      ([key]) => normalizeAgentRestrictionKey(key) === normalizeAgentRestrictionKey(agentName)
+    )?.[1]
   return restrictions !== undefined && Object.keys(restrictions).length > 0
 }

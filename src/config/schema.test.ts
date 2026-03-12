@@ -509,14 +509,14 @@ describe("Coder-Junior agent override", () => {
     }
   })
 
-  test("schema accepts lowercase metis and momus agent names", () => {
+  test("schema accepts lowercase planConsultant and planReviewer agent names", () => {
     // given
     const config = {
       agents: {
-        metis: {
+        planConsultant: {
           category: "ultrabrain",
         },
-        momus: {
+        planReviewer: {
           category: "quick",
         },
       },
@@ -528,8 +528,8 @@ describe("Coder-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.metis?.category).toBe("ultrabrain")
-      expect(result.data.agents?.momus?.category).toBe("quick")
+        expect(result.data.agents?.planConsultant?.category).toBe("ultrabrain")
+      expect(result.data.agents?.planReviewer?.category).toBe("quick")
     }
   })
 })

@@ -40,7 +40,7 @@ Generate plan to: \`.drizzy/plans/{name}.md\`
 - [Finding 1]: [Implication]
 - [Finding 2]: [Recommendation]
 
-### Metis Review
+### Plan Consultant Review
 **Identified Gaps** (addressed):
 - [Gap 1]: [How resolved]
 - [Gap 2]: [How resolved]
@@ -62,7 +62,7 @@ Generate plan to: \`.drizzy/plans/{name}.md\`
 - [Non-negotiable requirement]
 
 ### Must NOT Have (Guardrails)
-- [Explicit exclusion from Metis review]
+- [Explicit exclusion from Plan Consultant review]
 - [AI slop pattern to avoid]
 - [Scope boundary]
 

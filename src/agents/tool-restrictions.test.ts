@@ -2,8 +2,8 @@ import { describe, test, expect } from "bun:test"
 import { createOracleAgent } from "./oracle"
 import { createLibrarianAgent } from "./librarian"
 import { createExploreAgent } from "./explore"
-import { createMomusAgent } from "./momus"
-import { createMetisAgent } from "./metis"
+import { createPlanReviewerAgent } from "./plan-reviewer"
+import { createPlanConsultantAgent } from "./plan-consultant"
 import { createAtlasAgent } from "./atlas"
 
 const TEST_MODEL = "anthropic/claude-sonnet-4-5"
@@ -68,10 +68,10 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Momus", () => {
+  describe("Plan Reviewer", () => {
     test("denies all file-writing tools", () => {
       // given
-      const agent = createMomusAgent(TEST_MODEL)
+      const agent = createPlanReviewerAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>
@@ -83,10 +83,10 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Metis", () => {
+  describe("Plan Consultant", () => {
     test("denies all file-writing tools", () => {
       // given
-      const agent = createMetisAgent(TEST_MODEL)
+      const agent = createPlanConsultantAgent(TEST_MODEL)
 
       // when
       const permission = agent.permission as Record<string, string>

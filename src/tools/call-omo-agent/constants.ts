@@ -3,8 +3,8 @@ export const ALLOWED_AGENTS = [
   "librarian",
   "oracle",
   "gptcoder",
-  "metis",
-  "momus",
+  "plan-consultant",
+  "plan-reviewer",
   "multimodal-looker",
 ] as const
 

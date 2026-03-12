@@ -1,14 +1,14 @@
 import { describe, test, expect } from "bun:test"
-import { MOMUS_SYSTEM_PROMPT } from "./momus"
+import { PLAN_REVIEWER_SYSTEM_PROMPT } from "./plan-reviewer"
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
 
-describe("MOMUS_SYSTEM_PROMPT policy requirements", () => {
+describe("PLAN_REVIEWER_SYSTEM_PROMPT policy requirements", () => {
   test("should treat SYSTEM DIRECTIVE as ignorable/stripped", () => {
     // given
-    const prompt = MOMUS_SYSTEM_PROMPT
+    const prompt = PLAN_REVIEWER_SYSTEM_PROMPT
     
     // when / #then
     // Should mention that system directives are ignored
@@ -19,7 +19,7 @@ describe("MOMUS_SYSTEM_PROMPT policy requirements", () => {
 
   test("should extract paths containing .drizzy/plans/ and ending in .md", () => {
     // given
-    const prompt = MOMUS_SYSTEM_PROMPT
+    const prompt = PLAN_REVIEWER_SYSTEM_PROMPT
 
     // when / #then
     expect(prompt).toContain(".drizzy/plans/")
@@ -30,7 +30,7 @@ describe("MOMUS_SYSTEM_PROMPT policy requirements", () => {
 
   test("should NOT teach that 'Please review' is INVALID (conversational wrapper allowed)", () => {
     // given
-    const prompt = MOMUS_SYSTEM_PROMPT
+    const prompt = PLAN_REVIEWER_SYSTEM_PROMPT
 
     // when / #then
     // In RED phase, this will FAIL because current prompt explicitly lists this as INVALID
@@ -47,7 +47,7 @@ describe("MOMUS_SYSTEM_PROMPT policy requirements", () => {
 
   test("should handle ambiguity (2+ paths) and 'no path found' rejection", () => {
     // given
-    const prompt = MOMUS_SYSTEM_PROMPT
+    const prompt = PLAN_REVIEWER_SYSTEM_PROMPT
 
     // when / #then
     // Should mention what happens when multiple paths are found

@@ -3,16 +3,16 @@ import { PLANNER_SYSTEM_PROMPT } from "./planner"
 import { PLANNER_GPT_SYSTEM_PROMPT } from "./planner/gpt"
 import { PLANNER_GEMINI_SYSTEM_PROMPT } from "./planner/gemini"
 
-describe("PLANNER_SYSTEM_PROMPT Momus invocation policy", () => {
-  test("should direct providing ONLY the file path string when invoking Momus", () => {
+describe("PLANNER_SYSTEM_PROMPT Plan Reviewer invocation policy", () => {
+  test("should direct providing ONLY the file path string when invoking Plan Reviewer", () => {
     //#given
     const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when / #then
-    expect(prompt.toLowerCase()).toMatch(/momus.*only.*path|path.*only.*momus/)
+    expect(prompt.toLowerCase()).toMatch(/plan.reviewer.*only.*path|path.*only.*plan.reviewer/)
   })
 
-  test("should forbid wrapping Momus invocation in explanations or markdown", () => {
+  test("should forbid wrapping Plan Reviewer invocation in explanations or markdown", () => {
     //#given
     const prompt = PLANNER_SYSTEM_PROMPT
 

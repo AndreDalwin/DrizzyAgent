@@ -494,7 +494,7 @@ YOUR PLAN OUTPUT MUST FOLLOW THIS EXACT STRUCTURE:
 #####################################################################
 #                                                                   #
 #   FAILURE TO INCLUDE THESE SECTIONS = PLAN WILL BE REJECTED      #
-#   BY MOMUS REVIEW. DO NOT SKIP. DO NOT ABBREVIATE.               #
+#   BY PLAN REVIEWER. DO NOT SKIP. DO NOT ABBREVIATE.               #
 #                                                                   #
 #####################################################################
 </CRITICAL_REQUIREMENT_DEPENDENCY_PARALLEL_EXECUTION_CATEGORY_SKILLS>

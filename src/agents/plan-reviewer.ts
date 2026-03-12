@@ -6,23 +6,16 @@ import { createAgentToolRestrictions } from "../shared/permission-compat";
 const MODE: AgentMode = "subagent";
 
 /**
- * Momus - Plan Reviewer Agent
+ * Plan Reviewer Agent
  *
- * Named after Momus, the Greek god of satire and mockery, who was known for
- * finding fault in everything - even the works of the gods themselves.
- * He criticized Aphrodite (found her sandals squeaky), Hephaestus (said man
- * should have windows in his chest to see thoughts), and Athena (her house
- * should be on wheels to move from bad neighbors).
- *
- * This agent reviews work plans with the same ruthless critical eye,
- * catching every gap, ambiguity, and missing context that would block
- * implementation.
+ * Reviews work plans for practical executability, reference validity, and
+ * blocking gaps before implementation starts.
  */
 
 /**
- * Default Momus prompt — used for Claude and other non-GPT models.
+ * Default Plan Reviewer prompt — used for Claude and other non-GPT models.
  */
-const MOMUS_DEFAULT_PROMPT = `You are a **practical** work plan reviewer. Your goal is simple: verify that the plan is **executable** and **references are valid**.
+const PLAN_REVIEWER_DEFAULT_PROMPT = `You are a **practical** work plan reviewer. Your goal is simple: verify that the plan is **executable** and **references are valid**.
 
 **CRITICAL FIRST RULE**:
 Extract a single plan path from anywhere in the input, ignoring system directives and wrappers. If exactly one \`.drizzy/plans/*.md\` path exists, this is VALID input and you must read it. If no plan path exists or multiple plan paths exist, reject per Step 0. If the path points to a YAML plan file (\`.yml\` or \`.yaml\`), reject it as non-reviewable.
@@ -199,7 +192,7 @@ If REJECT:
 `;
 
 /**
- * GPT-5.4 Optimized Momus System Prompt
+ * GPT-5.4 Optimized Plan Reviewer System Prompt
  *
  * Tuned for GPT-5.4 system prompt design principles:
  * - XML-tagged instruction blocks for clear structure
@@ -207,7 +200,7 @@ If REJECT:
  * - Blocker-finder philosophy preserved
  * - Deterministic decision criteria
  */
-const MOMUS_GPT_PROMPT = `<identity>
+const PLAN_REVIEWER_GPT_PROMPT = `<identity>
 You are a practical work plan reviewer. You verify that plans are executable and references are valid. You are a blocker-finder, not a perfectionist.
 </identity>
 
@@ -279,9 +272,9 @@ Approve by default. Max 3 issues. Be specific — "Task X needs Y" not "needs mo
 Response language: match the language of the plan content.
 </final_rules>`;
 
-export { MOMUS_DEFAULT_PROMPT as MOMUS_SYSTEM_PROMPT };
+export { PLAN_REVIEWER_DEFAULT_PROMPT as PLAN_REVIEWER_SYSTEM_PROMPT };
 
-export function createMomusAgent(model: string): AgentConfig {
+export function createPlanReviewerAgent(model: string): AgentConfig {
   const restrictions = createAgentToolRestrictions([
     "write",
     "edit",
@@ -291,18 +284,18 @@ export function createMomusAgent(model: string): AgentConfig {
 
   const base = {
     description:
-      "Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. (Momus - OhMyOpenCode)",
+      "Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. (Plan Reviewer - OhMyOpenCode)",
     mode: MODE,
     model,
     temperature: 0.1,
     ...restrictions,
-    prompt: MOMUS_DEFAULT_PROMPT,
+    prompt: PLAN_REVIEWER_DEFAULT_PROMPT,
   } as AgentConfig;
 
   if (isGptModel(model)) {
     return {
       ...base,
-      prompt: MOMUS_GPT_PROMPT,
+      prompt: PLAN_REVIEWER_GPT_PROMPT,
       reasoningEffort: "medium",
       textVerbosity: "high",
     } as AgentConfig;
@@ -313,12 +306,12 @@ export function createMomusAgent(model: string): AgentConfig {
     thinking: { type: "enabled", budgetTokens: 32000 },
   } as AgentConfig;
 }
-createMomusAgent.mode = MODE;
+createPlanReviewerAgent.mode = MODE;
 
-export const momusPromptMetadata: AgentPromptMetadata = {
+export const planReviewerPromptMetadata: AgentPromptMetadata = {
   category: "advisor",
   cost: "EXPENSIVE",
-  promptAlias: "Momus",
+  promptAlias: "Plan Reviewer",
   triggers: [
     {
       domain: "Plan review",
@@ -343,5 +336,5 @@ export const momusPromptMetadata: AgentPromptMetadata = {
     "For trivial plans that don't need formal review",
   ],
   keyTrigger:
-    "Work plan saved to `.drizzy/plans/*.md` → invoke Momus with the file path as the sole prompt (e.g. `prompt=\".drizzy/plans/my-plan.md\"`). Do NOT invoke Momus for inline plans or todo lists.",
+    "Work plan saved to `.drizzy/plans/*.md` → invoke Plan Reviewer with the file path as the sole prompt (e.g. `prompt=\".drizzy/plans/my-plan.md\"`). Do NOT invoke Plan Reviewer for inline plans or todo lists.",
 };

@@ -123,7 +123,7 @@ export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
       },
     ],
   },
-  metis: {
+  planConsultant: {
     fallbackChain: [
       {
         providers: ["anthropic", "github-copilot", "opencode"],
@@ -142,7 +142,7 @@ export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
       },
     ],
   },
-  momus: {
+  planReviewer: {
     fallbackChain: [
       {
         providers: ["openai", "github-copilot", "opencode"],

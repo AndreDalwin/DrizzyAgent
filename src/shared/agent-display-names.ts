@@ -1,16 +1,11 @@
-/**
- * Agent config keys to display names mapping.
- * Config keys are lowercase (e.g., "coder", "atlas").
- * Display names include suffixes for UI/logs (e.g., "Coder (Ultraworker)").
- */
 export const AGENT_DISPLAY_NAMES: Record<string, string> = {
   coder: "Coder",
   gptcoder: "GPTCoder",
   planner: "Planner",
   atlas: "Atlas (Plan Executor)",
   "coder-junior": "Coder Junior",
-  metis: "Metis (Plan Consultant)",
-  momus: "Momus (Plan Critic)",
+  planConsultant: "Plan Consultant",
+  planReviewer: "Plan Reviewer",
   oracle: "oracle",
   librarian: "librarian",
   explore: "explore",
@@ -46,9 +41,11 @@ const REVERSE_DISPLAY_NAMES: Record<string, string> = Object.fromEntries(
  * "Atlas (Plan Executor)" → "atlas", "atlas" → "atlas", "unknown" → "unknown"
  */
 export function getAgentConfigKey(agentName: string): string {
+  if (AGENT_DISPLAY_NAMES[agentName] !== undefined) return agentName
   const lower = agentName.toLowerCase()
   const reversed = REVERSE_DISPLAY_NAMES[lower]
   if (reversed !== undefined) return reversed
+  if (lower === "plan-consultant") return "planConsultant"
   if (AGENT_DISPLAY_NAMES[lower] !== undefined) return lower
   return lower
 }

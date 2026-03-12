@@ -18,13 +18,15 @@ export const AGENT_NAME_MAP: Record<string, string> = {
   Atlas: "atlas",
   atlas: "atlas",
 
-  // Metis variants → "metis"
-  "Metis (Plan Consultant)": "metis",
-  metis: "metis",
+  // Plan Consultant variants → "plan-consultant"
+  "Plan Consultant": "plan-consultant",
+  metis: "plan-consultant",
+  "plan-consultant": "plan-consultant",
 
-  // Momus variants → "momus"
-  "Momus (Plan Reviewer)": "momus",
-  momus: "momus",
+  // Plan Reviewer variants
+  "Plan Reviewer": "plan-reviewer",
+  momus: "plan-reviewer",
+  "plan-reviewer": "plan-reviewer",
 
   // Coder-Junior → "coder-junior"
   "Coder-Junior": "coder-junior",
@@ -45,8 +47,8 @@ export const BUILTIN_AGENT_NAMES = new Set([
   "librarian",
   "explore",
   "multimodal-looker",
-  "metis", // was "Metis (Plan Consultant)"
-  "momus", // was "Momus (Plan Reviewer)"
+  "plan-consultant", // was "Metis (Plan Consultant)"
+  "plan-reviewer", // was "Plan Reviewer"
   "planner",
   "prometheus", // was "Prometheus (Planner)"
   "atlas", // was "Atlas"

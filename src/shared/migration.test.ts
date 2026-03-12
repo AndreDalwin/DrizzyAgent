@@ -156,26 +156,26 @@ describe("migrateAgentNames", () => {
     expect(migrated["Prometheus (Planner)"]).toBeUndefined()
   })
 
-  test("migrates Metis variants to lowercase", () => {
-    // given agents config with "Metis (Plan Consultant)" key
+  test("migrates Plan Consultant variants to kebab-case", () => {
+    // given agents config with "Plan Consultant" key
     // when migrateAgentNames called
-    // then key becomes "metis"
-    const agents = { "Metis (Plan Consultant)": { model: "test" } }
+    // then key becomes "plan-consultant"
+    const agents = { "Plan Consultant": { model: "test" } }
     const { migrated, changed } = migrateAgentNames(agents)
     expect(changed).toBe(true)
-    expect(migrated["metis"]).toEqual({ model: "test" })
-    expect(migrated["Metis (Plan Consultant)"]).toBeUndefined()
+    expect(migrated["plan-consultant"]).toEqual({ model: "test" })
+    expect(migrated["Plan Consultant"]).toBeUndefined()
   })
 
-  test("migrates Momus variants to lowercase", () => {
-    // given agents config with "Momus (Plan Reviewer)" key
+  test("migrates Plan Reviewer variants to plan-reviewer", () => {
+    // given agents config with "Plan Reviewer" key
     // when migrateAgentNames called
-    // then key becomes "momus"
-    const agents = { "Momus (Plan Reviewer)": { model: "test" } }
+    // then key becomes "plan-reviewer"
+    const agents = { "Plan Reviewer": { model: "test" } }
     const { migrated, changed } = migrateAgentNames(agents)
     expect(changed).toBe(true)
-    expect(migrated["momus"]).toEqual({ model: "test" })
-    expect(migrated["Momus (Plan Reviewer)"]).toBeUndefined()
+    expect(migrated["plan-reviewer"]).toEqual({ model: "test" })
+    expect(migrated["Plan Reviewer"]).toBeUndefined()
   })
 
   test("migrates Coder-Junior to lowercase", () => {
@@ -503,7 +503,7 @@ describe("migration maps", () => {
     expect(AGENT_NAME_MAP["OmO-Plan"]).toBe("prometheus")
     expect(AGENT_NAME_MAP["omo-plan"]).toBe("prometheus")
     expect(AGENT_NAME_MAP["Planner-Coder"]).toBe("prometheus")
-    expect(AGENT_NAME_MAP["plan-consultant"]).toBe("metis")
+    expect(AGENT_NAME_MAP["metis"]).toBe("plan-consultant")
   })
 
   test("HOOK_NAME_MAP contains anthropic-auto-compact migration", () => {

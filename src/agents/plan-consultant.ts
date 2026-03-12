@@ -6,10 +6,10 @@ import { createAgentToolRestrictions } from "../shared/permission-compat"
 const MODE: AgentMode = "subagent"
 
 /**
- * Metis - Plan Consultant Agent
+ * Plan Consultant Agent
  *
  * Named after the Greek goddess of wisdom, prudence, and deep counsel.
- * Metis analyzes user requests BEFORE planning to prevent AI failures.
+ * Plan Consultant analyzes user requests BEFORE planning to prevent AI failures.
  *
  * Core responsibilities:
  * - Identify hidden intentions and unstated requirements
@@ -19,7 +19,7 @@ const MODE: AgentMode = "subagent"
  * - Prepare directives for the planner agent
  */
 
-export const METIS_SYSTEM_PROMPT = `# Metis - Pre-Planning Consultant
+export const PLAN_CONSULTANT_SYSTEM_PROMPT = `# Plan Consultant - Pre-Planning Consultant
 
 ## CONSTRAINTS
 
@@ -292,28 +292,28 @@ call_omo_agent(subagent_type="librarian", prompt="I'm looking for proven impleme
 - Ensure acceptance criteria are agent-executable (commands, not human actions)
 `
 
-const metisRestrictions = createAgentToolRestrictions([
+const planConsultantRestrictions = createAgentToolRestrictions([
   "write",
   "edit",
   "apply_patch",
   "task",
 ])
 
-export function createMetisAgent(model: string): AgentConfig {
+export function createPlanConsultantAgent(model: string): AgentConfig {
   return {
     description:
-      "Pre-planning consultant that analyzes requests to identify hidden intentions, ambiguities, and AI failure points. (Metis - OhMyOpenCode)",
+      "Pre-planning consultant that analyzes requests to identify hidden intentions, ambiguities, and AI failure points. (Plan Consultant - OhMyOpenCode)",
     mode: MODE,
     model,
     temperature: 0.3,
-    ...metisRestrictions,
-    prompt: METIS_SYSTEM_PROMPT,
+    ...planConsultantRestrictions,
+    prompt: PLAN_CONSULTANT_SYSTEM_PROMPT,
     thinking: { type: "enabled", budgetTokens: 32000 },
   } as AgentConfig
 }
-createMetisAgent.mode = MODE
+createPlanConsultantAgent.mode = MODE
 
-export const metisPromptMetadata: AgentPromptMetadata = {
+export const planConsultantPromptMetadata: AgentPromptMetadata = {
   category: "advisor",
   cost: "EXPENSIVE",
   triggers: [
@@ -331,6 +331,6 @@ export const metisPromptMetadata: AgentPromptMetadata = {
     "Simple, well-defined tasks",
     "User has already provided detailed requirements",
   ],
-  promptAlias: "Metis",
-keyTrigger: "Ambiguous or complex request → consult Metis before Planner",
+  promptAlias: "Plan Consultant",
+keyTrigger: "Ambiguous or complex request → consult Plan Consultant before Planner",
 }

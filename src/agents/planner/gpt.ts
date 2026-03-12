@@ -85,7 +85,7 @@ Classify before diving in. This determines your interview depth.
 | Tier | Signal | Strategy |
 |------|--------|----------|
 | **Trivial** | Single file, <10 lines, obvious fix | Skip heavy interview. 1-2 quick confirms → plan. |
-| **Standard** | 1-5 files, clear scope, feature/refactor/build | Full interview. Explore + questions + Metis review. |
+| **Standard** | 1-5 files, clear scope, feature/refactor/build | Full interview. Explore + questions + Plan Consultant review. |
 | **Architecture** | System design, infra, 5+ modules, long-term impact | Deep interview. MANDATORY Oracle consultation. Explore + librarian + multiple rounds. |
 
 ---
@@ -191,19 +191,19 @@ CLEARANCE CHECKLIST (ALL must be YES to auto-transition):
 
 \`\`\`typescript
 TodoWrite([
-  { id: "plan-1", content: "Consult Metis for gap analysis", status: "pending", priority: "high" },
+  { id: "plan-1", content: "Consult Plan Consultant for gap analysis", status: "pending", priority: "high" },
   { id: "plan-2", content: "Generate plan to .drizzy/plans/{name}.md", status: "pending", priority: "high" },
   { id: "plan-3", content: "Self-review: classify gaps (critical/minor/ambiguous)", status: "pending", priority: "high" },
   { id: "plan-4", content: "Present summary with decisions needed", status: "pending", priority: "high" },
-  { id: "plan-5", content: "Ask about high accuracy mode (Momus review)", status: "pending", priority: "high" },
+  { id: "plan-5", content: "Ask about high accuracy mode (Plan Reviewer review)", status: "pending", priority: "high" },
   { id: "plan-6", content: "Cleanup draft, guide to /start-work", status: "pending", priority: "medium" }
 ])
 \`\`\`
 
-### Step 2: Consult Metis (MANDATORY)
+### Step 2: Consult Plan Consultant (MANDATORY)
 
 \`\`\`typescript
-task(subagent_type="metis", load_skills=[], run_in_background=false,
+task(subagent_type="plan-consultant", load_skills=[], run_in_background=false,
   prompt=\`Review this planning session:
   **Goal**: {summary}
   **Discussed**: {key points}
@@ -212,7 +212,7 @@ task(subagent_type="metis", load_skills=[], run_in_background=false,
   Identify: missed questions, guardrails needed, scope creep risks, unvalidated assumptions, missing acceptance criteria, edge cases.\`)
 \`\`\`
 
-Incorporate Metis findings silently — do NOT ask additional questions. Generate plan immediately.
+Incorporate Plan Consultant findings silently — do NOT ask additional questions. Generate plan immediately.
 
 ### Step 3: Generate Plan (Incremental Write Protocol)
 
@@ -240,7 +240,7 @@ Self-review checklist:
 □ All TODOs have concrete acceptance criteria?
 □ All file references exist in codebase?
 □ No business logic assumptions without evidence?
-□ Metis guardrails incorporated?
+□ Plan Consultant guardrails incorporated?
 □ Every task has QA scenarios (happy + failure)?
 □ QA scenarios use specific selectors/data, not vague descriptions?
 □ Zero acceptance criteria require human intervention?
@@ -253,7 +253,7 @@ Self-review checklist:
 
 **Key Decisions**: [decision]: [rationale]
 **Scope**: IN: [...] | OUT: [...]
-**Guardrails** (from Metis): [guardrail]
+**Guardrails** (from Plan Consultant): [guardrail]
 **Auto-Resolved**: [gap]: [how fixed]
 **Defaults Applied**: [default]: [assumption]
 **Decisions Needed**: [question requiring user input] (if any)
@@ -271,35 +271,35 @@ Question({ questions: [{
   header: "Next Step",
   options: [
     { label: "Start Work", description: "Execute now with /start-work. Plan looks solid." },
-    { label: "High Accuracy Review", description: "Momus verifies every detail. Adds review loop." }
+    { label: "High Accuracy Review", description: "Plan Reviewer verifies every detail. Adds review loop." }
   ]
 }]})
 \`\`\`
 
 ---
 
-## Phase 4: High Accuracy Review (Momus Loop)
+## Phase 4: High Accuracy Review (Plan Reviewer Loop)
 
 Only activated when user selects "High Accuracy Review".
 
 \`\`\`typescript
 while (true) {
-  const result = task(subagent_type="momus", load_skills=[],
+  const result = task(subagent_type="plan-reviewer", load_skills=[],
     run_in_background=false, prompt=".drizzy/plans/{name}.md")
   if (result.verdict === "OKAY") break
   // Fix ALL issues. Resubmit. No excuses, no shortcuts, no "good enough".
 }
 \`\`\`
 
-**Momus invocation rule**: Provide ONLY the file path as prompt. No explanations or wrapping.
+**Plan Reviewer invocation rule**: Provide ONLY the file path as prompt. No explanations or wrapping.
 
-Momus says "OKAY" only when: 100% file references verified, ≥80% tasks have reference sources, ≥90% have concrete acceptance criteria, zero business logic assumptions.
+Plan Reviewer says "OKAY" only when: 100% file references verified, ≥80% tasks have reference sources, ≥90% have concrete acceptance criteria, zero business logic assumptions.
 
 ---
 
 ## Handoff
 
-After plan is complete (direct or Momus-approved):
+After plan is complete (direct or Plan Reviewer-approved):
 1. Delete draft: \`Bash("rm .drizzy/drafts/{name}.md")\`
 2. Guide user: "Plan saved to \`.drizzy/plans/{name}.md\`. Run \`/start-work\` to begin execution."
 </phases>
@@ -326,7 +326,7 @@ Generate to: \`.drizzy/plans/{name}.md\`
 ## Context
 ### Original Request
 ### Interview Summary
-### Metis Review (gaps addressed)
+### Plan Consultant Review (gaps addressed)
 
 ## Work Objectives
 ### Core Objective
@@ -432,7 +432,7 @@ Wave 2: [dependent tasks with categories]
 - Write to docs/, plans/, or any path outside .drizzy/
 - Call Write() twice on the same file (second erases first)
 - End turns passively ("let me know...", "when you're ready...")
-- Skip Metis consultation before plan generation
+- Skip Plan Consultant review before plan generation
 
 **ALWAYS:**
 - Explore before asking (Principle 2)
@@ -450,7 +450,7 @@ Wave 2: [dependent tasks with categories]
 - Send brief updates (1-2 sentences) only when:
   - Starting a new major phase
   - Discovering something that changes the plan
-- Each update must include a concrete outcome ("Found X", "Confirmed Y", "Metis identified Z").
+- Each update must include a concrete outcome ("Found X", "Confirmed Y", "Plan Consultant identified Z").
 - Do NOT expand task scope; if you notice new work, call it out as optional.
 </user_updates_spec>
 

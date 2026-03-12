@@ -8,9 +8,12 @@ import { createOracleAgent, ORACLE_PROMPT_METADATA } from "./oracle"
 import { createLibrarianAgent, LIBRARIAN_PROMPT_METADATA } from "./librarian"
 import { createExploreAgent, EXPLORE_PROMPT_METADATA } from "./explore"
 import { createMultimodalLookerAgent, MULTIMODAL_LOOKER_PROMPT_METADATA } from "./multimodal-looker"
-import { createMetisAgent, metisPromptMetadata } from "./metis"
+import { createPlanConsultantAgent, planConsultantPromptMetadata } from "./plan-consultant"
 import { createAtlasAgent, atlasPromptMetadata } from "./atlas"
-import { createMomusAgent, momusPromptMetadata } from "./momus"
+import {
+  createPlanReviewerAgent,
+  planReviewerPromptMetadata,
+} from "./plan-reviewer"
 import { createGptcoderAgent } from "./gptcoder"
 import { createCoderJuniorAgentWithOverrides } from "./coder-junior"
 import type { AvailableCategory } from "./dynamic-agent-prompt-builder"
@@ -37,8 +40,8 @@ const agentSources: Record<BuiltinAgentName, AgentSource> = {
   librarian: createLibrarianAgent,
   explore: createExploreAgent,
   "multimodal-looker": createMultimodalLookerAgent,
-  metis: createMetisAgent,
-  momus: createMomusAgent,
+  "plan-consultant": createPlanConsultantAgent,
+  "plan-reviewer": createPlanReviewerAgent,
   // Note: Atlas is handled specially in createBuiltinAgents()
   // because it needs OrchestratorContext, not just a model string
   atlas: createAtlasAgent as AgentFactory,
@@ -54,8 +57,8 @@ const agentMetadata: Partial<Record<BuiltinAgentName, AgentPromptMetadata>> = {
   librarian: LIBRARIAN_PROMPT_METADATA,
   explore: EXPLORE_PROMPT_METADATA,
   "multimodal-looker": MULTIMODAL_LOOKER_PROMPT_METADATA,
-  metis: metisPromptMetadata,
-  momus: momusPromptMetadata,
+  "plan-consultant": planConsultantPromptMetadata,
+  "plan-reviewer": planReviewerPromptMetadata,
   atlas: atlasPromptMetadata,
 }
 

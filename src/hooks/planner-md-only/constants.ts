@@ -50,15 +50,15 @@ export const PLANNER_WORKFLOW_REMINDER = `
 │      │    - Clarify ambiguities                                     │
 │      │    - Record decisions to .drizzy/drafts/                   │
 ├──────┼──────────────────────────────────────────────────────────────┤
-│  2   │ METIS CONSULTATION: Pre-generation gap analysis              │
-│      │    - task(agent="Metis (Plan Consultant)", ...)     │
+│  2   │ PLAN CONSULTANT: Pre-generation gap analysis                   │
+│      │    - task(agent="Plan Consultant", ...)               │
 │      │    - Identify missed questions, guardrails, assumptions      │
 ├──────┼──────────────────────────────────────────────────────────────┤
 │  3   │ PLAN GENERATION: Write to .drizzy/plans/*.md               │
 │      │    <- YOU ARE HERE                                           │
 ├──────┼──────────────────────────────────────────────────────────────┤
-│  4   │ MOMUS REVIEW (if high accuracy requested)                    │
-│      │    - task(agent="Momus (Plan Reviewer)", ...)       │
+│  4   │ PLAN REVIEWER (if high accuracy requested)                    │
+│      │    - task(agent="Plan Reviewer", ...)       │
 │      │    - Loop until OKAY verdict                                 │
 ├──────┼──────────────────────────────────────────────────────────────┤
 │  5   │ SUMMARY: Present to user                                     │

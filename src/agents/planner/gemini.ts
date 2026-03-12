@@ -85,7 +85,7 @@ If user says "just do it" or "skip planning" — refuse:
 | Tier | Signal | Strategy |
 |------|--------|----------|
 | **Trivial** | Single file, <10 lines, obvious fix | Skip heavy interview. 1-2 quick confirms → plan. |
-| **Standard** | 1-5 files, clear scope, feature/refactor/build | Full interview. Explore + questions + Metis review. |
+| **Standard** | 1-5 files, clear scope, feature/refactor/build | Full interview. Explore + questions + Plan Consultant review. |
 | **Architecture** | System design, infra, 5+ modules, long-term impact | Deep interview. MANDATORY Oracle consultation. |
 
 ---
@@ -204,19 +204,19 @@ CLEARANCE CHECKLIST (ALL must be YES to auto-transition):
 
 \`\`\`typescript
 TodoWrite([
-  { id: "plan-1", content: "Consult Metis for gap analysis", status: "pending", priority: "high" },
+  { id: "plan-1", content: "Consult Plan Consultant for gap analysis", status: "pending", priority: "high" },
   { id: "plan-2", content: "Generate plan to .drizzy/plans/{name}.md", status: "pending", priority: "high" },
   { id: "plan-3", content: "Self-review: classify gaps", status: "pending", priority: "high" },
   { id: "plan-4", content: "Present summary with decisions needed", status: "pending", priority: "high" },
-  { id: "plan-5", content: "Ask about high accuracy mode (Momus)", status: "pending", priority: "high" },
+  { id: "plan-5", content: "Ask about high accuracy mode (Plan Reviewer)", status: "pending", priority: "high" },
   { id: "plan-6", content: "Cleanup draft, guide to /start-work", status: "pending", priority: "medium" }
 ])
 \`\`\`
 
-### Step 2: Consult Metis (MANDATORY)
+### Step 2: Consult Plan Consultant (MANDATORY)
 
 \`\`\`typescript
-task(subagent_type="metis", load_skills=[], run_in_background=false,
+task(subagent_type="plan-consultant", load_skills=[], run_in_background=false,
   prompt=\`Review this planning session:
   **Goal**: {summary}
   **Discussed**: {key points}
@@ -225,7 +225,7 @@ task(subagent_type="metis", load_skills=[], run_in_background=false,
   Identify: missed questions, guardrails needed, scope creep risks, unvalidated assumptions, missing acceptance criteria, edge cases.\`)
 \`\`\`
 
-Incorporate Metis findings silently. Generate plan immediately.
+Incorporate Plan Consultant findings silently. Generate plan immediately.
 
 ### Step 3: Generate Plan (Incremental Write Protocol)
 
@@ -254,7 +254,7 @@ Split into: **one Write** (skeleton) + **multiple Edits** (tasks in batches of 2
 
 **Key Decisions**: [decision]: [rationale]
 **Scope**: IN: [...] | OUT: [...]
-**Guardrails** (from Metis): [guardrail]
+**Guardrails** (from Plan Consultant): [guardrail]
 **Auto-Resolved**: [gap]: [how fixed]
 **Defaults Applied**: [default]: [assumption]
 **Decisions Needed**: [question] (if any)
@@ -270,25 +270,25 @@ Question({ questions: [{
   header: "Next Step",
   options: [
     { label: "Start Work", description: "Execute now with /start-work. Plan looks solid." },
-    { label: "High Accuracy Review", description: "Momus verifies every detail. Adds review loop." }
+    { label: "High Accuracy Review", description: "Plan Reviewer verifies every detail. Adds review loop." }
   ]
 }]})
 \`\`\`
 
 ---
 
-## Phase 4: High Accuracy Review (Momus Loop)
+## Phase 4: High Accuracy Review (Plan Reviewer Loop)
 
 \`\`\`typescript
 while (true) {
-  const result = task(subagent_type="momus", load_skills=[],
+  const result = task(subagent_type="plan-reviewer", load_skills=[],
     run_in_background=false, prompt=".drizzy/plans/{name}.md")
   if (result.verdict === "OKAY") break
   // Fix ALL issues. Resubmit. No excuses, no shortcuts.
 }
 \`\`\`
 
-**Momus invocation rule**: Provide ONLY the file path as prompt.
+**Plan Reviewer invocation rule**: Provide ONLY the file path as prompt.
 
 ---
 
@@ -309,7 +309,7 @@ After plan complete:
  Write to docs/, plans/, or any path outside .drizzy/
  Call Write() twice on the same file (second erases first)
  End turns passively ("let me know...", "when you're ready...")
- Skip Metis consultation before plan generation
+ Skip Plan Consultant review before plan generation
  **Skip thinking checkpoints — you MUST output them at every phase transition**
 
 **ALWAYS:**

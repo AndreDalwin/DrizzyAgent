@@ -69,26 +69,26 @@ describe("getAgentDisplayName", () => {
     expect(result).toBe("Coder-Junior")
   })
 
-  it("returns display name for metis", () => {
-    // given config key "metis"
-    const configKey = "metis"
+  it("returns display name for planConsultant", () => {
+    // given config key "planConsultant"
+    const configKey = "planConsultant"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Metis (Plan Consultant)"
-    expect(result).toBe("Metis (Plan Consultant)")
+    // then returns "Plan Consultant"
+    expect(result).toBe("Plan Consultant")
   })
 
-  it("returns display name for momus", () => {
-    // given config key "momus"
-    const configKey = "momus"
+  it("returns display name for planReviewer", () => {
+    // given config key "planReviewer"
+    const configKey = "planReviewer"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-     // then returns "Momus (Plan Critic)"
-    expect(result).toBe("Momus (Plan Critic)")
+     // then returns "Plan Reviewer"
+    expect(result).toBe("Plan Reviewer")
   })
 
   it("returns display name for oracle", () => {
@@ -171,8 +171,8 @@ describe("getAgentConfigKey", () => {
     expect(getAgentConfigKey("GPTCoder")).toBe("gptcoder")
     expect(getAgentConfigKey("Planner")).toBe("planner")
     expect(getAgentConfigKey("Atlas (Plan Executor)")).toBe("atlas")
-    expect(getAgentConfigKey("Metis (Plan Consultant)")).toBe("metis")
-    expect(getAgentConfigKey("Momus (Plan Critic)")).toBe("momus")
+    expect(getAgentConfigKey("Plan Consultant")).toBe("planConsultant")
+    expect(getAgentConfigKey("Plan Reviewer")).toBe("planreviewer")
     expect(getAgentConfigKey("Coder-Junior")).toBe("coder-junior")
   })
 })
@@ -186,8 +186,8 @@ describe("AGENT_DISPLAY_NAMES", () => {
       planner: "Planner",
       atlas: "Atlas (Plan Executor)",
       "coder-junior": "Coder-Junior",
-      metis: "Metis (Plan Consultant)",
-      momus: "Momus (Plan Critic)",
+      planConsultant: "Plan Consultant",
+      planReviewer: "Plan Reviewer",
       oracle: "oracle",
       librarian: "librarian",
       explore: "explore",

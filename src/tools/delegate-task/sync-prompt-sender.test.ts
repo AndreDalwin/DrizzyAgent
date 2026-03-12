@@ -216,7 +216,7 @@ bunDescribe("sendSyncPrompt", () => {
 
     const input = {
       sessionID: "test-session",
-      agentToUse: "metis",
+        agentToUse: "plan-consultant",
       args: {
         description: "test task",
         prompt: "test prompt",

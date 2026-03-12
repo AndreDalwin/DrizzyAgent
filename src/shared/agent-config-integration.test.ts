@@ -12,8 +12,8 @@ describe("Agent Config Integration", () => {
         Coder: { model: "anthropic/claude-opus-4-6" },
         Atlas: { model: "anthropic/claude-opus-4-6" },
         "Prometheus (Planner)": { model: "anthropic/claude-opus-4-6" },
-        "Metis (Plan Consultant)": { model: "anthropic/claude-sonnet-4-6" },
-        "Momus (Plan Reviewer)": { model: "anthropic/claude-sonnet-4-6" },
+        "Plan Consultant": { model: "anthropic/claude-sonnet-4-6" },
+        "Plan Reviewer": { model: "anthropic/claude-sonnet-4-6" },
       }
 
       // when - migration is applied
@@ -23,15 +23,15 @@ describe("Agent Config Integration", () => {
       expect(result.migrated).toHaveProperty("coder")
       expect(result.migrated).toHaveProperty("atlas")
       expect(result.migrated).toHaveProperty("planner")
-      expect(result.migrated).toHaveProperty("metis")
-      expect(result.migrated).toHaveProperty("momus")
+      expect(result.migrated).toHaveProperty("plan-consultant")
+      expect(result.migrated).toHaveProperty("plan-reviewer")
 
       // then - old keys are removed
       expect(result.migrated).not.toHaveProperty("Coder")
       expect(result.migrated).not.toHaveProperty("Atlas")
       expect(result.migrated).not.toHaveProperty("Prometheus (Planner)")
-      expect(result.migrated).not.toHaveProperty("Metis (Plan Consultant)")
-      expect(result.migrated).not.toHaveProperty("Momus (Plan Reviewer)")
+      expect(result.migrated).not.toHaveProperty("Plan Consultant")
+      expect(result.migrated).not.toHaveProperty("Plan Reviewer")
 
       // then - values are preserved
       expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6" })
@@ -87,7 +87,7 @@ describe("Agent Config Integration", () => {
   describe("Display name resolution", () => {
     test("returns correct display names for all builtin agents", () => {
       // given - lowercase config keys
-      const agents = ["coder", "atlas", "planner", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
+      const agents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - display names are requested
       const displayNames = agents.map((agent) => getAgentDisplayName(agent))
@@ -96,8 +96,8 @@ describe("Agent Config Integration", () => {
       expect(displayNames).toContain("Coder (Ultraworker)")
       expect(displayNames).toContain("Atlas (Plan Executor)")
       expect(displayNames).toContain("Planner")
-      expect(displayNames).toContain("Metis (Plan Consultant)")
-      expect(displayNames).toContain("Momus (Plan Critic)")
+      expect(displayNames).toContain("Plan Consultant")
+      expect(displayNames).toContain("Plan Reviewer")
       expect(displayNames).toContain("oracle")
       expect(displayNames).toContain("librarian")
       expect(displayNames).toContain("explore")
@@ -146,7 +146,7 @@ describe("Agent Config Integration", () => {
 
     test("model requirements include all builtin agents", () => {
       // given - expected builtin agents
-      const expectedAgents = ["coder", "atlas", "planner", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
+      const expectedAgents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - checking AGENT_MODEL_REQUIREMENTS
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)

@@ -301,7 +301,7 @@ CLEARANCE CHECKLIST:
 - **Question to user** — "Which auth provider do you prefer: OAuth, JWT, or session-based?"
 - **Draft update + next question** — "I've recorded this in the draft. Now, about error handling..."
 - **Waiting for background agents** — "I've launched explore agents. Once results come back, I'll have more informed questions."
-- **Auto-transition to plan** — "All requirements clear. Consulting Metis and generating plan..."
+- **Auto-transition to plan** — "All requirements clear. Consulting Plan Consultant and generating plan..."
 
 **NEVER end with:**
 - "Let me know if you have questions" (passive)
@@ -311,10 +311,10 @@ CLEARANCE CHECKLIST:
 
 ### In Plan Generation Mode
 
-- **Metis consultation in progress** — "Consulting Metis for gap analysis..."
-- **Presenting Metis findings + questions** — "Metis identified these gaps. [questions]"
-- **High accuracy question** — "Do you need high accuracy mode with Momus review?"
-- **Momus loop in progress** — "Momus rejected. Fixing issues and resubmitting..."
+- **Plan Consultant review in progress** — "Consulting Plan Consultant for gap analysis..."
+- **Presenting Plan Consultant findings + questions** — "Plan Consultant identified these gaps. [questions]"
+- **High accuracy question** — "Do you need high accuracy mode with Plan Reviewer review?"
+- **Plan Reviewer loop in progress** — "Plan Reviewer rejected. Fixing issues and resubmitting..."
 - **Plan complete + /start-work guidance** — "Plan saved. Run \`/start-work\` to begin execution."
 
 ### Enforcement Checklist (MANDATORY)

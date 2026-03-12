@@ -129,7 +129,7 @@ describe("parseConfigPartially", () => {
     const rawConfig: Record<string, unknown> = {
         agents: {
           oracle: { model: "openai/gpt-5.4" },
-          momus: { model: "openai/gpt-5.4" },
+          planReviewer: { model: "openai/gpt-5.4" },
         },
         disabled_hooks: ["comment-checker"],
       };
@@ -138,7 +138,7 @@ describe("parseConfigPartially", () => {
 
       expect(result).not.toBeNull();
       expect(result!.agents?.oracle?.model).toBe("openai/gpt-5.4");
-      expect(result!.agents?.momus?.model).toBe("openai/gpt-5.4");
+      expect(result!.agents?.planReviewer?.model).toBe("openai/gpt-5.4");
       expect(result!.disabled_hooks).toEqual(["comment-checker"]);
     });
   });
@@ -152,7 +152,7 @@ describe("parseConfigPartially", () => {
     const rawConfig: Record<string, unknown> = {
         agents: {
           oracle: { model: "openai/gpt-5.4" },
-          momus: { model: "openai/gpt-5.4" },
+          planReviewer: { model: "openai/gpt-5.4" },
           planner: {
             permission: {
               edit: { "*": "ask", ".drizzy/**": "allow" },

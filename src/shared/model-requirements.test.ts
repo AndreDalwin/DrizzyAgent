@@ -140,33 +140,33 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(primary.variant).toBe("max")
   })
 
-  test("metis has claude-opus-4-6 as primary", () => {
-    // #given - metis agent requirement
-    const metis = AGENT_MODEL_REQUIREMENTS["metis"]
+  test("planConsultant has claude-opus-4-6 as primary", () => {
+    // #given - planConsultant agent requirement
+    const planConsultant = AGENT_MODEL_REQUIREMENTS["planConsultant"]
 
-    // #when - accessing Metis requirement
+    // #when - accessing Plan Consultant requirement
     // #then - claude-opus-4-6 is first
-    expect(metis).toBeDefined()
-    expect(metis.fallbackChain).toBeArray()
-    expect(metis.fallbackChain.length).toBeGreaterThan(1)
+    expect(planConsultant).toBeDefined()
+    expect(planConsultant.fallbackChain).toBeArray()
+    expect(planConsultant.fallbackChain.length).toBeGreaterThan(1)
 
-    const primary = metis.fallbackChain[0]
+    const primary = planConsultant.fallbackChain[0]
     expect(primary.model).toBe("claude-opus-4-6")
     expect(primary.providers).toEqual(["anthropic", "github-copilot", "opencode"])
     expect(primary.variant).toBe("max")
   })
 
-  test("momus has valid fallbackChain with gpt-5.4 as primary", () => {
-    // given - momus agent requirement
-    const momus = AGENT_MODEL_REQUIREMENTS["momus"]
+  test("planReviewer has valid fallbackChain with gpt-5.4 as primary", () => {
+    // given - planReviewer agent requirement
+    const planReviewer = AGENT_MODEL_REQUIREMENTS["planReviewer"]
 
-    // when - accessing Momus requirement
+    // when - accessing Plan Reviewer requirement
     // then - fallbackChain exists with gpt-5.4 as first entry, variant xhigh
-    expect(momus).toBeDefined()
-    expect(momus.fallbackChain).toBeArray()
-    expect(momus.fallbackChain.length).toBeGreaterThan(0)
+    expect(planReviewer).toBeDefined()
+    expect(planReviewer.fallbackChain).toBeArray()
+    expect(planReviewer.fallbackChain.length).toBeGreaterThan(0)
 
-    const primary = momus.fallbackChain[0]
+    const primary = planReviewer.fallbackChain[0]
     expect(primary.model).toBe("gpt-5.4")
     expect(primary.variant).toBe("xhigh")
     expect(primary.providers[0]).toBe("openai")
@@ -209,8 +209,8 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
       "explore",
       "multimodal-looker",
       "planner",
-      "metis",
-      "momus",
+      "planConsultant",
+      "planReviewer",
       "atlas",
       "coder-junior",
     ]
