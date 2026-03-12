@@ -3,8 +3,8 @@ import { AGENT_DISPLAY_NAMES, getAgentDisplayName, getAgentConfigKey } from "./a
 
 describe("getAgentDisplayName", () => {
   it("returns display name for lowercase config key (new format)", () => {
-    // given config key "sisyphus"
-    const configKey = "sisyphus"
+    // given config key "coder"
+    const configKey = "coder"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
@@ -139,8 +139,8 @@ describe("getAgentConfigKey", () => {
   it("resolves display name to config key", () => {
     // given display name "Sisyphus (Ultraworker)"
     // when getAgentConfigKey called
-    // then returns "sisyphus"
-    expect(getAgentConfigKey("Sisyphus (Ultraworker)")).toBe("sisyphus")
+    // then returns "coder"
+    expect(getAgentConfigKey("Sisyphus (Ultraworker)")).toBe("coder")
   })
 
   it("resolves display name case-insensitively", () => {

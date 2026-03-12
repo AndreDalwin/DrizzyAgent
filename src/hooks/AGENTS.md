@@ -36,7 +36,7 @@ hooks/
 ├── keyword-detector/           # ultrawork/search/analyze modes
 ├── model-fallback/             # Provider-level model fallback
 ├── no-hephaestus-non-gpt/      # Block Hephaestus from non-GPT
-├── no-sisyphus-gpt/            # Block Sisyphus from GPT
+├── no-coder-gpt/            # Block Coder from GPT
 ├── non-interactive-env/        # Non-TTY environment handling
 ├── prometheus-md-only/         # Planner read-only mode
 ├── question-label-truncator/   # Auto-truncates question labels
@@ -45,8 +45,8 @@ hooks/
 ├── rules-injector/             # Conditional rules
 ├── runtime-fallback/           # Auto-switch models on API errors
 ├── session-recovery/           # Auto-recovers from crashes
-├── sisyphus-junior-notepad/    # Sisyphus Junior notepad
-├── start-work/                 # Sisyphus work session starter
+├── coder-junior-notepad/    # Coder Junior notepad
+├── start-work/                 # Coder work session starter
 ├── stop-continuation-guard/    # Guards stop continuation
 ├── task-reminder/              # Task system usage reminders
 ├── task-resume-info/           # Resume info for cancelled tasks
@@ -76,12 +76,12 @@ hooks/
 | delegateTaskRetry | tool.execute.after | Retry failed task delegations |
 | startWork | chat.message | `/start-work` command handler |
 | prometheusMdOnly | tool.execute.before | Enforce .md-only writes for Prometheus |
-| sisyphusJuniorNotepad | chat.message | Notepad injection for subagents |
+| coderJuniorNotepad | chat.message | Notepad injection for subagents |
 | questionLabelTruncator | tool.execute.before | Truncate long question labels |
 | taskResumeInfo | chat.message | Inject task context on resume |
 | anthropicEffort | chat.params | Adjust reasoning effort level |
 | modelFallback | chat.params | Provider-level model fallback on errors |
-| noSisyphusGpt | chat.message | Block Sisyphus from using GPT models (toast warning) |
+| noCoderGpt | chat.message | Block Coder from using GPT models (toast warning) |
 | noHephaestusNonGpt | chat.message | Block Hephaestus from using non-GPT models |
 | runtimeFallback | event | Auto-switch models on API provider errors |
 

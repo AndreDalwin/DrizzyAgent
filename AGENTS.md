@@ -13,7 +13,7 @@ oh-my-opencode/
 ├── src/
 │   ├── index.ts              # Plugin entry: loadConfig → createManagers → createTools → createHooks → createPluginInterface
 │   ├── plugin-config.ts      # JSONC multi-level config: user → project → defaults (Zod v4)
-│   ├── agents/               # 11 agents (Sisyphus, Hephaestus, Oracle, Librarian, Explore, Atlas, Prometheus, Metis, Momus, Multimodal-Looker, Sisyphus-Junior)
+│   ├── agents/               # 11 agents (Coder, Hephaestus, Oracle, Librarian, Explore, Atlas, Prometheus, Metis, Momus, Multimodal-Looker, Coder-Junior)
 │   ├── hooks/                # 46 hooks across 45 directories + 11 standalone files
 │   ├── tools/                # 26 tools across 15 directories
 │   ├── features/             # 19 feature modules (background-agent, skill-loader, tmux, MCP-OAuth, etc.)
@@ -140,7 +140,7 @@ bunx oh-my-opencode run     # Non-interactive session
 | ci.yml | push/PR to master/dev | Tests (split: mock-heavy isolated + batch), typecheck, build, schema auto-commit |
 | publish.yml | manual dispatch | Version bump, npm publish, platform binaries, GitHub release, merge to master |
 | publish-platform.yml | called by publish | 12 platform binaries via bun compile (darwin/linux/windows) |
-| sisyphus-agent.yml | @mention / dispatch | AI agent handles issues/PRs |
+| coder-agent.yml | @mention / dispatch | AI agent handles issues/PRs |
 | cla.yml | issue_comment/PR | CLA assistant for contributors |
 | lint-workflows.yml | push to .github/ | actionlint + shellcheck on workflow files |
 
@@ -154,4 +154,4 @@ bunx oh-my-opencode run     # Non-interactive session
 - Build: bun build (ESM) + tsc --emitDeclarationOnly, externals: @ast-grep/napi
 - Test setup: `test-setup.ts` preloaded via bunfig.toml, mock-heavy tests run in isolation in CI
 - 98 barrel export files (index.ts) establish module boundaries
-- Architecture rules enforced via `.sisyphus/rules/modular-code-enforcement.md`
+- Architecture rules enforced via `.coder/rules/modular-code-enforcement.md`

@@ -3,7 +3,7 @@ import { _resetForTesting, updateSessionAgent } from "../../features/claude-code
 import { getAgentDisplayName } from "../../shared/agent-display-names"
 import { createNoSisyphusGptHook } from "./index"
 
-const SISYPHUS_DISPLAY = getAgentDisplayName("sisyphus")
+const SISYPHUS_DISPLAY = getAgentDisplayName("coder")
 const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
 
 function createOutput() {

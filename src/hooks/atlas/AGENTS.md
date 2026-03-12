@@ -42,7 +42,7 @@ session.idle event
 | `session-last-agent.ts` | Determine which agent owns the session |
 | `recent-model-resolver.ts` | Resolve model used in recent messages |
 | `subagent-session-id.ts` | Detect if session is a subagent session |
-| `sisyphus-path.ts` | Resolve `.drizzy/` directory path |
+| `coder-path.ts` | Resolve `.drizzy/` directory path |
 | `is-abort-error.ts` | Detect abort signals in session output |
 | `types.ts` | `SessionState`, `AtlasHookOptions`, `AtlasContext` |
 
@@ -60,5 +60,5 @@ Max consecutive failures before 5min pause: 5 (exponential backoff in todo-conti
 ## RELATIONSHIP TO OTHER HOOKS
 
 - **atlasHook** (Continuation Tier): Master orchestrator, handles boulder sessions
-- **todoContinuationEnforcer** (Continuation Tier): "Boulder" mechanism for main Sisyphus sessions
+- **todoContinuationEnforcer** (Continuation Tier): "Boulder" mechanism for main Coder sessions
 - Both inject into session.idle but serve different session types

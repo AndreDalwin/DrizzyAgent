@@ -29,7 +29,7 @@ describe("executeUnstableAgentTask session permission", () => {
     const toolContext = {
       sessionID: "parent-session",
       messageID: "msg_parent",
-      agent: "sisyphus",
+      agent: "coder",
       metadata: () => {},
       abort: new AbortController().signal,
     } satisfies Parameters<typeof executeUnstableAgentTask>[1]

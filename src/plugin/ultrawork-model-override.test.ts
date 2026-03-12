@@ -60,11 +60,11 @@ describe("resolveUltraworkOverride", () => {
 
   test("should resolve override when ultrawork keyword detected", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ultrawork do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6", variant: "max" })
@@ -72,11 +72,11 @@ describe("resolveUltraworkOverride", () => {
 
   test("should return null when no keyword detected", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const output = createOutput("just do something normal")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toBeNull()
@@ -84,7 +84,7 @@ describe("resolveUltraworkOverride", () => {
 
   test("should return null when agent name is undefined", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const output = createOutput("ultrawork do something")
 
     //#when
@@ -96,8 +96,8 @@ describe("resolveUltraworkOverride", () => {
 
   test("should use message.agent when input agent is undefined", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
-    const output = createOutput("ultrawork do something", "sisyphus")
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
+    const output = createOutput("ultrawork do something", "coder")
 
     //#when
     const result = resolveUltraworkOverride(config, undefined, output)
@@ -112,7 +112,7 @@ describe("resolveUltraworkOverride", () => {
     const output = createOutput("ultrawork do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toBeNull()
@@ -126,7 +126,7 @@ describe("resolveUltraworkOverride", () => {
     const output = createOutput("ultrawork do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toBeNull()
@@ -134,11 +134,11 @@ describe("resolveUltraworkOverride", () => {
 
   test("should resolve variant-only override when ultrawork.model is not set", () => {
     //#given
-    const config = createConfig("sisyphus", { variant: "max" })
+    const config = createConfig("coder", { variant: "max" })
     const output = createOutput("ultrawork do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toEqual({ variant: "max" })
@@ -146,11 +146,11 @@ describe("resolveUltraworkOverride", () => {
 
   test("should handle model string with multiple slashes", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "openai/gpt-5.3/codex" })
+    const config = createConfig("coder", { model: "openai/gpt-5.3/codex" })
     const output = createOutput("ultrawork do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toEqual({ providerID: "openai", modelID: "gpt-5.3/codex", variant: undefined })
@@ -158,11 +158,11 @@ describe("resolveUltraworkOverride", () => {
 
   test("should return null when model string has no slash", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "just-a-model" })
+    const config = createConfig("coder", { model: "just-a-model" })
     const output = createOutput("ultrawork do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toBeNull()
@@ -170,7 +170,7 @@ describe("resolveUltraworkOverride", () => {
 
   test("should resolve display name to config key", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ulw do something")
 
     //#when
@@ -182,7 +182,7 @@ describe("resolveUltraworkOverride", () => {
 
   test("should handle multiple text parts by joining them", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const output = {
       message: {} as Record<string, unknown>,
       parts: [
@@ -193,7 +193,7 @@ describe("resolveUltraworkOverride", () => {
     }
 
     //#when
-    const result = resolveUltraworkOverride(config, "sisyphus", output)
+    const result = resolveUltraworkOverride(config, "coder", output)
 
     //#then
     expect(result).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6", variant: undefined })
@@ -201,9 +201,9 @@ describe("resolveUltraworkOverride", () => {
 
   test("should use session agent when input and message agents are undefined", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ultrawork do something")
-    const getSessionAgentSpy = spyOn(sessionStateModule, "getSessionAgent").mockReturnValue("sisyphus")
+    const getSessionAgentSpy = spyOn(sessionStateModule, "getSessionAgent").mockReturnValue("coder")
 
     //#when
     const result = resolveUltraworkOverride(config, undefined, output, "ses_test")
@@ -264,12 +264,12 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should schedule deferred DB override when message ID present", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ultrawork do something", { messageId: "msg_123" })
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(dbOverrideSpy).toHaveBeenCalledWith(
@@ -281,7 +281,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should override keyword-detector variant with configured ultrawork variant on deferred path", () => {
     //#given
-    const config = createConfig("sisyphus", {
+    const config = createConfig("coder", {
       model: "anthropic/claude-opus-4-6",
       variant: "extended",
     })
@@ -291,7 +291,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(dbOverrideSpy).toHaveBeenCalledWith(
@@ -306,7 +306,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
   test("should NOT mutate output.message.model when message ID present", () => {
     //#given
     const sonnetModel = { providerID: "anthropic", modelID: "claude-sonnet-4-6" }
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const output = createOutput("ultrawork do something", {
       existingModel: sonnetModel,
       messageId: "msg_123",
@@ -314,7 +314,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(output.message.model).toEqual(sonnetModel)
@@ -322,12 +322,12 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should fall back to direct mutation when no message ID", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ultrawork do something")
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(output.message.model).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6" })
@@ -337,12 +337,12 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should apply variant-only override when no message ID", () => {
     //#given
-    const config = createConfig("sisyphus", { variant: "high" })
+    const config = createConfig("coder", { variant: "high" })
     const output = createOutput("ultrawork do something")
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(output.message.model).toBeUndefined()
@@ -352,12 +352,12 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should not apply override when no keyword detected", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const output = createOutput("just do something normal", { messageId: "msg_123" })
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(dbOverrideSpy).not.toHaveBeenCalled()
@@ -365,7 +365,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should log the model transition with deferred DB tag", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const existingModel = { providerID: "anthropic", modelID: "claude-sonnet-4-6" }
     const output = createOutput("ultrawork do something", {
       existingModel,
@@ -374,18 +374,18 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(logSpy).toHaveBeenCalledWith(
       expect.stringContaining("deferred DB"),
-      expect.objectContaining({ agent: "sisyphus" }),
+      expect.objectContaining({ agent: "coder" }),
     )
   })
 
   test("should call showToast on override", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6" })
     const output = createOutput("ultrawork do something", { messageId: "msg_123" })
     let toastCalled = false
     const tui = {
@@ -395,7 +395,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     }
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(toastCalled).toBe(true)
@@ -403,7 +403,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should resolve display name to config key with deferred path", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ulw do something", { messageId: "msg_123" })
     const tui = createMockTui()
 
@@ -420,7 +420,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
 
   test("should skip override trigger when current model already matches ultrawork model", () => {
     //#given
-    const config = createConfig("sisyphus", { model: "anthropic/claude-opus-4-6", variant: "max" })
+    const config = createConfig("coder", { model: "anthropic/claude-opus-4-6", variant: "max" })
     const output = createOutput("ultrawork do something", {
       existingModel: { providerID: "anthropic", modelID: "claude-opus-4-6" },
       messageId: "msg_123",
@@ -433,7 +433,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     }
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "sisyphus", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
     expect(dbOverrideSpy).not.toHaveBeenCalled()

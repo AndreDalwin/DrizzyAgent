@@ -22,7 +22,7 @@ import * as modelResolver from "../shared/model-resolver"
 
 beforeEach(() => {
   spyOn(agents, "createBuiltinAgents" as any).mockResolvedValue({
-    sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
+    sisyphus: { name: "coder", prompt: "test", mode: "primary" },
     oracle: { name: "oracle", prompt: "test", mode: "subagent" },
   })
 
@@ -169,7 +169,7 @@ describe("Plan agent demote behavior", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
@@ -198,7 +198,7 @@ describe("Plan agent demote behavior", () => {
     // #then
     const keys = Object.keys(config.agent as Record<string, unknown>)
     const coreAgents = [
-      getAgentDisplayName("sisyphus"),
+      getAgentDisplayName("coder"),
       getAgentDisplayName("hephaestus"),
       getAgentDisplayName("prometheus"),
       getAgentDisplayName("atlas"),
@@ -320,7 +320,7 @@ describe("Agent permission defaults", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
     })
@@ -467,7 +467,7 @@ describe("default_agent behavior with Sisyphus orchestration", () => {
     await handler(config)
 
     // #then
-    expect(config.default_agent).toBe(getAgentDisplayName("sisyphus"))
+    expect(config.default_agent).toBe(getAgentDisplayName("coder"))
   })
 
   test("sets default_agent to sisyphus when configured default_agent is empty after trim", async () => {
@@ -491,7 +491,7 @@ describe("default_agent behavior with Sisyphus orchestration", () => {
     await handler(config)
 
     // then
-    expect(config.default_agent).toBe(getAgentDisplayName("sisyphus"))
+    expect(config.default_agent).toBe(getAgentDisplayName("coder"))
   })
 
   test("preserves custom default_agent names while trimming whitespace", async () => {
@@ -1158,7 +1158,7 @@ describe("config-handler plugin loading error boundary (#1559)", () => {
 
 describe("per-agent todowrite/todoread deny when task_system enabled", () => {
   const AGENTS_WITH_TODO_DENY = new Set([
-    getAgentDisplayName("sisyphus"),
+    getAgentDisplayName("coder"),
     getAgentDisplayName("hephaestus"),
     getAgentDisplayName("atlas"),
     getAgentDisplayName("prometheus"),
@@ -1171,7 +1171,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
       prometheus: { name: "prometheus", prompt: "test", mode: "primary" },
@@ -1212,7 +1212,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
     })
 
@@ -1237,8 +1237,8 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
 
     //#then
     const agentResult = config.agent as Record<string, { permission?: Record<string, unknown> }>
-    expect(agentResult[getAgentDisplayName("sisyphus")]?.permission?.todowrite).toBeUndefined()
-    expect(agentResult[getAgentDisplayName("sisyphus")]?.permission?.todoread).toBeUndefined()
+    expect(agentResult[getAgentDisplayName("coder")]?.permission?.todowrite).toBeUndefined()
+    expect(agentResult[getAgentDisplayName("coder")]?.permission?.todoread).toBeUndefined()
     expect(agentResult[getAgentDisplayName("hephaestus")]?.permission?.todowrite).toBeUndefined()
     expect(agentResult[getAgentDisplayName("hephaestus")]?.permission?.todoread).toBeUndefined()
   })
@@ -1249,7 +1249,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "test", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {}
@@ -1271,8 +1271,8 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
 
     //#then
     const agentResult = config.agent as Record<string, { permission?: Record<string, unknown> }>
-    expect(agentResult[getAgentDisplayName("sisyphus")]?.permission?.todowrite).toBeUndefined()
-    expect(agentResult[getAgentDisplayName("sisyphus")]?.permission?.todoread).toBeUndefined()
+    expect(agentResult[getAgentDisplayName("coder")]?.permission?.todowrite).toBeUndefined()
+    expect(agentResult[getAgentDisplayName("coder")]?.permission?.todoread).toBeUndefined()
   })
 })
 
@@ -1284,7 +1284,7 @@ describe("disable_omo_env pass-through", () => {
       mock: { calls: unknown[][] }
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "without-env", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "without-env", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {
@@ -1320,7 +1320,7 @@ describe("disable_omo_env pass-through", () => {
       mock: { calls: unknown[][] }
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "sisyphus", prompt: "with-env", mode: "primary" },
+      sisyphus: { name: "coder", prompt: "with-env", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {}

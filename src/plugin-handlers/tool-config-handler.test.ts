@@ -35,7 +35,7 @@ describe("applyToolConfig", () => {
 
       it.each([
         "atlas",
-        "sisyphus",
+        "coder",
         "hephaestus",
         "prometheus",
         "sisyphus-junior",
@@ -79,7 +79,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when config explicitly denies question permission", () => {
-      it.each(["sisyphus", "hephaestus", "prometheus"])(
+      it.each(["coder", "hephaestus", "prometheus"])(
         "#then should deny question for %s even without CLI_RUN_MODE",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -99,7 +99,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when config does not deny question permission", () => {
-      it.each(["sisyphus", "hephaestus", "prometheus"])(
+      it.each(["coder", "hephaestus", "prometheus"])(
         "#then should allow question for %s in interactive mode",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -119,7 +119,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when CLI_RUN_MODE is true and config does not deny", () => {
-      it.each(["sisyphus", "hephaestus", "prometheus"])(
+      it.each(["coder", "hephaestus", "prometheus"])(
         "#then should deny question for %s via CLI_RUN_MODE",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -139,7 +139,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when config deny overrides CLI_RUN_MODE allow", () => {
-      it.each(["sisyphus", "hephaestus", "prometheus"])(
+      it.each(["coder", "hephaestus", "prometheus"])(
         "#then should deny question for %s when config says deny regardless of CLI_RUN_MODE",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -163,7 +163,7 @@ describe("applyToolConfig", () => {
     describe("#when applying tool config", () => {
       it.each([
         "atlas",
-        "sisyphus",
+        "coder",
         "hephaestus",
         "prometheus",
         "sisyphus-junior",

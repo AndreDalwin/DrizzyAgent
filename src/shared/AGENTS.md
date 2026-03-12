@@ -38,7 +38,7 @@ Key files: `model-resolver.ts` (entry), `model-resolution-pipeline.ts` (orchestr
 ## MIGRATION SYSTEM
 
 Automatically transforms legacy config on load:
-- `agent-names.ts`: Old agent names → new (e.g., `junior` → `sisyphus-junior`)
+- `agent-names.ts`: Old agent names → new (e.g., `junior` → `coder-junior`)
 - `hook-names.ts`: Old hook names → new
 - `model-versions.ts`: Old model IDs → current
 - `agent-category.ts`: Legacy agent configs → category system

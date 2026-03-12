@@ -9,14 +9,14 @@ describe("createChatParamsHandler", () => {
     const handler = createChatParamsHandler({
       anthropicEffort: {
         "chat.params": async (input) => {
-          called = input.agent.name === "sisyphus"
+          called = input.agent.name === "coder"
         },
       },
     })
 
     const input = {
       sessionID: "ses_chat_params",
-      agent: { name: "sisyphus" },
+      agent: { name: "coder" },
       model: { providerID: "opencode", modelID: "claude-opus-4-6" },
       provider: { id: "opencode" },
       message: {},

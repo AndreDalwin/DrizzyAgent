@@ -118,7 +118,7 @@ describe("applyUltraworkModelOverrideOnMessage variant guard", () => {
     // when
     await applyUltraworkModelOverrideOnMessage(
       config,
-      "sisyphus",
+      "coder",
       output,
       { showToast: async () => {} },
       undefined,
@@ -169,7 +169,7 @@ describe("applyUltraworkModelOverrideOnMessage variant guard", () => {
     // when
     await applyUltraworkModelOverrideOnMessage(
       config,
-      "sisyphus",
+      "coder",
       output,
       { showToast: async () => {} },
       undefined,

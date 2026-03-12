@@ -1162,7 +1162,7 @@ describe("atlas hook", () => {
 
        // given - last agent is sisyphus (typical state right after /start-work)
        cleanupMessageStorage(MAIN_SESSION_ID)
-       setupMessageStorage(MAIN_SESSION_ID, "sisyphus")
+       setupMessageStorage(MAIN_SESSION_ID, "coder")
 
        const mockInput = createMockPluginInput()
        const hook = createAtlasHook(mockInput)
@@ -1218,12 +1218,12 @@ describe("atlas hook", () => {
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
-         agent: "sisyphus",
+         agent: "coder",
        }
        writeBoulderState(TEST_DIR, state)
 
        cleanupMessageStorage(MAIN_SESSION_ID)
-       setupMessageStorage(MAIN_SESSION_ID, "sisyphus")
+       setupMessageStorage(MAIN_SESSION_ID, "coder")
 
        const mockInput = createMockPluginInput()
        const hook = createAtlasHook(mockInput)
@@ -1239,7 +1239,7 @@ describe("atlas hook", () => {
        // then - should call prompt for sisyphus
        expect(mockInput._promptMock).toHaveBeenCalled()
        const callArgs = mockInput._promptMock.mock.calls[0][0]
-       expect(callArgs.body.agent).toBe("sisyphus")
+       expect(callArgs.body.agent).toBe("coder")
      })
 
     test("should debounce rapid continuation injections (prevent infinite loop)", async () => {

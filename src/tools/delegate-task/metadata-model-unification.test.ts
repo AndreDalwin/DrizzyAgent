@@ -10,7 +10,7 @@ function makeMockCtx(): ToolContextWithMetadata & { captured: any[] } {
   return {
     sessionID: "ses_parent",
     messageID: "msg_parent",
-    agent: "sisyphus",
+    agent: "coder",
     abort: new AbortController().signal,
     callID: "call_001",
     metadata: async (input: any) => { captured.push(input) },
@@ -21,7 +21,7 @@ function makeMockCtx(): ToolContextWithMetadata & { captured: any[] } {
 const parentContext: ParentContext = {
   sessionID: "ses_parent",
   messageID: "msg_parent",
-  agent: "sisyphus",
+  agent: "coder",
   model: MODEL,
 }
 

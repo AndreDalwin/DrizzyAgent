@@ -56,7 +56,7 @@ describe("isCompactionAgent", () => {
 
     test("returns false for non-compaction agent like 'sisyphus'", () => {
       // when
-      const result = isCompactionAgent("sisyphus")
+      const result = isCompactionAgent("coder")
 
       // then
       expect(result).toBe(false)
@@ -80,7 +80,7 @@ describe("findNearestMessageExcludingCompaction", () => {
     test("finds message with full agent and model", () => {
       // given
       const message = {
-        agent: "sisyphus",
+        agent: "coder",
         model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
       }
       writeFileSync(join(tempDir, "001.json"), JSON.stringify(message))
@@ -90,7 +90,7 @@ describe("findNearestMessageExcludingCompaction", () => {
 
       // then
       expect(result).not.toBeNull()
-      expect(result?.agent).toBe("sisyphus")
+      expect(result?.agent).toBe("coder")
       expect(result?.model?.providerID).toBe("anthropic")
       expect(result?.model?.modelID).toBe("claude-opus-4-6")
     })
@@ -102,7 +102,7 @@ describe("findNearestMessageExcludingCompaction", () => {
         model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
       }
       const validMessage = {
-        agent: "sisyphus",
+        agent: "coder",
         model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
       }
       writeFileSync(join(tempDir, "002.json"), JSON.stringify(compactionMessage))
@@ -113,7 +113,7 @@ describe("findNearestMessageExcludingCompaction", () => {
 
       // then
       expect(result).not.toBeNull()
-      expect(result?.agent).toBe("sisyphus")
+      expect(result?.agent).toBe("coder")
     })
 
     test("falls back to partial agent/model match", () => {
@@ -219,7 +219,7 @@ describe("findNearestMessageExcludingCompaction", () => {
     test("fills missing metadata from compaction checkpoint", () => {
       // given
       setCompactionAgentConfigCheckpoint("ses_checkpoint", {
-        agent: "sisyphus",
+        agent: "coder",
         model: { providerID: "openai", modelID: "gpt-5" },
       })
       writeFileSync(join(tempDir, "001.json"), JSON.stringify({ tools: { bash: true } }))
@@ -229,7 +229,7 @@ describe("findNearestMessageExcludingCompaction", () => {
 
       // then
       expect(result).toEqual({
-        agent: "sisyphus",
+        agent: "coder",
         model: { providerID: "openai", modelID: "gpt-5" },
         tools: { bash: true },
       })

@@ -19,7 +19,7 @@ describe("Agent Config Integration", () => {
       const result = migrateAgentNames(oldConfig)
 
       // then - keys are lowercase
-      expect(result.migrated).toHaveProperty("sisyphus")
+      expect(result.migrated).toHaveProperty("coder")
       expect(result.migrated).toHaveProperty("atlas")
       expect(result.migrated).toHaveProperty("prometheus")
       expect(result.migrated).toHaveProperty("metis")
@@ -72,7 +72,7 @@ describe("Agent Config Integration", () => {
       const result = migrateAgentNames(mixedConfig)
 
       // then - all keys are lowercase
-      expect(result.migrated).toHaveProperty("sisyphus")
+      expect(result.migrated).toHaveProperty("coder")
       expect(result.migrated).toHaveProperty("oracle")
       expect(result.migrated).toHaveProperty("prometheus")
       expect(result.migrated).toHaveProperty("librarian")
@@ -86,7 +86,7 @@ describe("Agent Config Integration", () => {
   describe("Display name resolution", () => {
     test("returns correct display names for all builtin agents", () => {
       // given - lowercase config keys
-      const agents = ["sisyphus", "atlas", "prometheus", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
+      const agents = ["coder", "atlas", "prometheus", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - display names are requested
       const displayNames = agents.map((agent) => getAgentDisplayName(agent))
@@ -145,7 +145,7 @@ describe("Agent Config Integration", () => {
 
     test("model requirements include all builtin agents", () => {
       // given - expected builtin agents
-      const expectedAgents = ["sisyphus", "atlas", "prometheus", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
+      const expectedAgents = ["coder", "atlas", "prometheus", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - checking AGENT_MODEL_REQUIREMENTS
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
@@ -180,11 +180,11 @@ describe("Agent Config Integration", () => {
       const result = migrateAgentNames(oldConfig)
 
       // then - keys are lowercase
-      expect(result.migrated).toHaveProperty("sisyphus")
+      expect(result.migrated).toHaveProperty("coder")
       expect(result.migrated).toHaveProperty("prometheus")
 
       // when - display names are retrieved
-      const sisyphusDisplay = getAgentDisplayName("sisyphus")
+      const sisyphusDisplay = getAgentDisplayName("coder")
       const prometheusDisplay = getAgentDisplayName("prometheus")
 
       // then - display names are correct
@@ -213,7 +213,7 @@ describe("Agent Config Integration", () => {
       expect(result.changed).toBe(false)
 
       // when - display names are retrieved
-      const sisyphusDisplay = getAgentDisplayName("sisyphus")
+      const sisyphusDisplay = getAgentDisplayName("coder")
       const atlasDisplay = getAgentDisplayName("atlas")
 
       // then - display names are correct

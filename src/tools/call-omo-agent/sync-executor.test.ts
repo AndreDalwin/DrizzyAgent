@@ -67,7 +67,7 @@ function createToolContext(): ToolContext {
   return {
     sessionID: "parent-session",
     messageID: "msg-1",
-    agent: "sisyphus",
+    agent: "coder",
     abort: new AbortController().signal,
     metadata: mock(async () => {}),
   }
@@ -278,7 +278,7 @@ describe("executeSync", () => {
     const toolContext = {
       sessionID: "parent-session",
       messageID: "msg-4",
-      agent: "sisyphus",
+      agent: "coder",
       abort: new AbortController().signal,
       metadata: mock(async () => {}),
     }

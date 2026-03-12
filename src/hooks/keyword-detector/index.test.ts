@@ -629,7 +629,7 @@ describe("keyword-detector agent-specific ultrawork messages", () => {
     }
 
     // when - ultrawork keyword detected with Sisyphus agent
-    await hook["chat.message"]({ sessionID, agent: "sisyphus" }, output)
+    await hook["chat.message"]({ sessionID, agent: "coder" }, output)
 
     // then - should use normal ultrawork message with agent utilization instructions
     const textPart = output.parts.find(p => p.type === "text")
@@ -681,7 +681,7 @@ describe("keyword-detector agent-specific ultrawork messages", () => {
       message: {} as Record<string, unknown>,
       parts: [{ type: "text", text: "ultrawork implement" }],
     }
-    await hook["chat.message"]({ sessionID: sisyphusSessionID, agent: "sisyphus" }, sisyphusOutput)
+    await hook["chat.message"]({ sessionID: sisyphusSessionID, agent: "coder" }, sisyphusOutput)
 
     // then - prometheus should have no injection, sisyphus should have normal ultrawork
     const prometheusTextPart = prometheusOutput.parts.find(p => p.type === "text")
@@ -700,7 +700,7 @@ describe("keyword-detector agent-specific ultrawork messages", () => {
     const sessionID = "same-session-agent-switch"
 
     // Simulate: session state was updated to sisyphus (by index.ts updateSessionAgent)
-    updateSessionAgent(sessionID, "sisyphus")
+    updateSessionAgent(sessionID, "coder")
 
     const output = {
       message: {} as Record<string, unknown>,

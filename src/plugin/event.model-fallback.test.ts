@@ -202,7 +202,7 @@ describe("createEventHandler - model fallback", () => {
     await chatMessageHandler(
       {
         sessionID,
-        agent: "sisyphus",
+        agent: "coder",
         model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
       },
       output,
@@ -413,7 +413,7 @@ describe("createEventHandler - model fallback", () => {
     await chatMessageHandler(
       {
         sessionID,
-        agent: "sisyphus",
+        agent: "coder",
         model: { providerID: "quotio", modelID: "claude-opus-4-6" },
       },
       output,
@@ -527,7 +527,7 @@ describe("createEventHandler - model fallback", () => {
       await chatMessageHandler(
         {
           sessionID,
-          agent: "sisyphus",
+          agent: "coder",
           model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
         },
         output,

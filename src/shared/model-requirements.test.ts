@@ -25,7 +25,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
 
   test("sisyphus has claude-opus-4-6 as primary with k2p5, kimi-k2.5, gpt-5.4 medium fallbacks", () => {
     // #given - sisyphus agent requirement
-    const sisyphus = AGENT_MODEL_REQUIREMENTS["sisyphus"]
+    const sisyphus = AGENT_MODEL_REQUIREMENTS["coder"]
 
     // #when - accessing Sisyphus requirement
     // #then - fallbackChain has 6 entries with correct ordering
@@ -204,7 +204,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
   test("all 11 builtin agents have valid fallbackChain arrays", () => {
     // #given - list of 11 agent names
     const expectedAgents = [
-      "sisyphus",
+      "coder",
       "hephaestus",
       "oracle",
       "librarian",

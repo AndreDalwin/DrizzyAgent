@@ -79,8 +79,8 @@
           "json-error-recovery",
           "delegate-task-retry",
           "prometheus-md-only",
-          "sisyphus-junior-notepad",
-          "no-sisyphus-gpt",
+          "coder-junior-notepad",
+          "no-coder-gpt",
           "no-hephaestus-non-gpt",
           "start-work",
           "atlas",
@@ -3337,7 +3337,7 @@
       },
       "additionalProperties": false
     },
-    "sisyphus_agent": {
+    "coder_agent": {
       "type": "object",
       "properties": {
         "disabled": {
@@ -3881,7 +3881,7 @@
       ],
       "additionalProperties": false
     },
-    "sisyphus": {
+    "coder": {
       "type": "object",
       "properties": {
         "tasks": {

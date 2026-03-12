@@ -10,7 +10,7 @@ DrizzyAgent provides **discipline agents** that work together to complete coding
 
 | Agent | Purpose | Model |
 |-------|---------|-------|
-| **Sisyphus** | Main orchestrator - plans, delegates, drives to completion | Claude Opus / Kimi K2.5 / GLM-5 |
+| **Coder** | Main orchestrator - plans, delegates, drives to completion | Claude Opus / Kimi K2.5 / GLM-5 |
 | **Hephaestus** | Deep autonomous worker - explores, researches, executes end-to-end | GPT-5.3 Codex |
 | **Prometheus** | Strategic planner - interviews, identifies scope, builds plans | Claude Opus / Kimi K2.5 / GLM-5 |
 | **Oracle** | Architecture consultant - debugging, complex logic decisions | High-IQ reasoning models |
@@ -25,7 +25,7 @@ Type `ultrawork` (or `ulw`). Every agent activates. Doesn't stop until done.
 
 ### Agent Categories
 
-When Sisyphus delegates, it picks a **category**, not a model:
+When Coder delegates, it picks a **category**, not a model:
 
 | Category | For |
 |----------|-----|
@@ -91,7 +91,7 @@ Create `.opencode/drizzy-agent.jsonc` or `~/.config/opencode/drizzy-agent.jsonc`
 ```jsonc
 {
   "agents": {
-    "sisyphus": {
+    "coder": {
       "model": "claude-opus-4"
     }
   },

@@ -61,7 +61,7 @@ describe("resolveRunAgent", () => {
 
   it("skips disabled sisyphus for next available core agent", () => {
     // given
-    const config = createConfig({ disabled_agents: ["sisyphus"] })
+    const config = createConfig({ disabled_agents: ["coder"] })
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, {})

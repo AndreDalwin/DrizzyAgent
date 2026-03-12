@@ -6,7 +6,7 @@ import { getAgentDisplayName } from "../../shared/agent-display-names"
 import { createNoHephaestusNonGptHook } from "./index"
 
 const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
-const SISYPHUS_DISPLAY = getAgentDisplayName("sisyphus")
+const SISYPHUS_DISPLAY = getAgentDisplayName("coder")
 
 function createOutput() {
   return {

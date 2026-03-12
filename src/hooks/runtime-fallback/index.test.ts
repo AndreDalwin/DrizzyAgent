@@ -2158,7 +2158,7 @@ describe("runtime-fallback", () => {
     test("should detect agent from sessionID pattern", async () => {
       const hook = createRuntimeFallbackHook(createMockPluginInput(), {
         config: createMockConfig({ notify_on_fallback: false }),
-        pluginConfig: createMockPluginConfigWithAgentFallback("sisyphus", ["openai/gpt-5.4"]),
+        pluginConfig: createMockPluginConfigWithAgentFallback("coder", ["openai/gpt-5.4"]),
       })
       const sessionID = "sisyphus-session-123"
 

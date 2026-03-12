@@ -15,7 +15,7 @@ describe("remapAgentKeysToDisplayNames", () => {
     // then known agents get display name keys only
     expect(result["Sisyphus (Ultraworker)"]).toBeDefined()
     expect(result["oracle"]).toBeDefined()
-    expect(result["sisyphus"]).toBeUndefined()
+    expect(result["coder"]).toBeUndefined()
   })
 
   it("preserves unknown agent keys unchanged", () => {
@@ -48,7 +48,7 @@ describe("remapAgentKeysToDisplayNames", () => {
 
     // then all get display name keys without lowercase duplicates
     expect(result["Sisyphus (Ultraworker)"]).toBeDefined()
-    expect(result["sisyphus"]).toBeUndefined()
+    expect(result["coder"]).toBeUndefined()
     expect(result["Hephaestus (Deep Agent)"]).toBeDefined()
     expect(result["hephaestus"]).toBeUndefined()
     expect(result["Prometheus (Plan Builder)"]).toBeDefined()

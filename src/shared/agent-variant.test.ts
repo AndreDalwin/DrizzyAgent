@@ -23,7 +23,7 @@ describe("resolveAgentVariant", () => {
     } as OhMyOpenCodeConfig
 
     // when
-    const variant = resolveAgentVariant(config, "sisyphus")
+    const variant = resolveAgentVariant(config, "coder")
 
     // then
     expect(variant).toBe("low")
@@ -41,7 +41,7 @@ describe("resolveAgentVariant", () => {
     } as OhMyOpenCodeConfig
 
     // when
-    const variant = resolveAgentVariant(config, "sisyphus")
+    const variant = resolveAgentVariant(config, "coder")
 
     // then
     expect(variant).toBe("xhigh")
@@ -59,7 +59,7 @@ describe("applyAgentVariant", () => {
     const message: { variant?: string } = {}
 
     // when
-    applyAgentVariant(config, "sisyphus", message)
+    applyAgentVariant(config, "coder", message)
 
     // then
     expect(message.variant).toBe("low")
@@ -75,7 +75,7 @@ describe("applyAgentVariant", () => {
     const message = { variant: "max" }
 
     // when
-    applyAgentVariant(config, "sisyphus", message)
+    applyAgentVariant(config, "coder", message)
 
     // then
     expect(message.variant).toBe("max")
@@ -94,7 +94,7 @@ describe("resolveVariantForModel", () => {
     const model = { providerID: "anthropic", modelID: "claude-opus-4-6" }
 
     // when
-    const variant = resolveVariantForModel(config, "sisyphus", model)
+    const variant = resolveVariantForModel(config, "coder", model)
 
     // then
     expect(variant).toBe("high")
@@ -106,7 +106,7 @@ describe("resolveVariantForModel", () => {
     const model = { providerID: "anthropic", modelID: "claude-opus-4-6" }
 
     // when
-    const variant = resolveVariantForModel(config, "sisyphus", model)
+    const variant = resolveVariantForModel(config, "coder", model)
 
     // then
     expect(variant).toBe("max")
@@ -130,7 +130,7 @@ describe("resolveVariantForModel", () => {
     const model = { providerID: "openai", modelID: "gpt-5.4" }
 
     // when
-    const variant = resolveVariantForModel(config, "sisyphus", model)
+    const variant = resolveVariantForModel(config, "coder", model)
 
     // then
     expect(variant).toBe("medium")
@@ -142,7 +142,7 @@ describe("resolveVariantForModel", () => {
     const model = { providerID: "unknown-provider", modelID: "some-model" }
 
     // when
-    const variant = resolveVariantForModel(config, "sisyphus", model)
+    const variant = resolveVariantForModel(config, "coder", model)
 
     // then
     expect(variant).toBeUndefined()
@@ -166,7 +166,7 @@ describe("resolveVariantForModel", () => {
     const model = { providerID: "zai-coding-plan", modelID: "glm-5" }
 
     // when
-    const variant = resolveVariantForModel(config, "sisyphus", model)
+    const variant = resolveVariantForModel(config, "coder", model)
 
     // then
     expect(variant).toBeUndefined()

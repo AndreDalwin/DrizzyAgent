@@ -11,7 +11,7 @@ Commander.js CLI with 5 commands. Entry: `index.ts` → `runCli()` in `cli-progr
 | Command | Purpose | Key Logic |
 |---------|---------|-----------|
 | `install` | Interactive/non-interactive setup | Provider selection → config gen → plugin registration |
-| `run <message>` | Non-interactive session launcher | Agent resolution (flag → env → config → Sisyphus) |
+| `run <message>` | Non-interactive session launcher | Agent resolution (flag → env → config → Coder) |
 | `doctor` | 4-category health checks | System, Config, Tools, Models |
 | `get-local-version` | Version detection | Installed vs npm latest |
 | `mcp-oauth` | OAuth token management | login (PKCE), logout, status |
@@ -42,7 +42,7 @@ cli/
 │       └── model-resolution.ts  # Cache, resolution, overrides (6 sub-files)
 ├── run/                         # Session launcher
 │   ├── runner.ts                # Main orchestration
-│   ├── agent-resolver.ts        # Flag → env → config → Sisyphus
+│   ├── agent-resolver.ts        # Flag → env → config → Coder
 │   ├── session-resolver.ts      # Create/resume sessions
 │   ├── event-handlers.ts        # Event processing
 │   └── poll-for-completion.ts   # Wait for todos/background tasks
@@ -53,7 +53,7 @@ cli/
 
 No single global priority. CLI install-time resolution uses per-agent fallback chains from `model-fallback-requirements.ts`.
 
-Common patterns: Claude/OpenAI/Gemini are preferred when an agent chain includes them, `librarian` prefers ZAI, `sisyphus` falls back through Kimi then GLM-5, and `hephaestus` requires OpenAI-compatible providers.
+Common patterns: Claude/OpenAI/Gemini are preferred when an agent chain includes them, `librarian` prefers ZAI, `coder` falls back through Kimi then GLM-5, and `hephaestus` requires OpenAI-compatible providers.
 
 ## DOCTOR CHECKS
 
