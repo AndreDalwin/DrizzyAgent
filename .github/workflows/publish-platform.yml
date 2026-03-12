@@ -73,9 +73,65 @@ jobs:
 
       - name: Sync release version
         if: steps.check.outputs.skip != 'true'
-        run: bun run script/publish.ts --prepare-only
+        run: |
+          node - <<'NODE'
+          const fs = require('fs')
+          const path = require('path')
+          const version = process.env.VERSION
+          const platform = process.env.PLATFORM
+
+          const updateVersion = (filePath) => {
+            const pkg = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+            pkg.version = version
+            fs.writeFileSync(filePath, JSON.stringify(pkg, null, 2) + '\n')
+          }
+
+          updateVersion(path.join(process.cwd(), 'package.json'))
+          updateVersion(path.join(process.cwd(), 'packages', platform, 'package.json'))
+          NODE
         env:
           VERSION: ${{ inputs.version }}
+          PLATFORM: ${{ matrix.platform }}
+
+      - name: Pre-download baseline compile target
+        if: steps.check.outputs.skip != 'true' && endsWith(matrix.platform, '-baseline')
+        run: |
+          BUN_VERSION=$(bun --version)
+          PLATFORM="${{ matrix.platform }}"
+          PKG_NAME="bun-${PLATFORM}"
+          CACHE_DIR=$(bun pm cache)
+          CACHE_DEST="${CACHE_DIR}/${PKG_NAME}-v${BUN_VERSION}"
+
+          if [[ -f "$CACHE_DEST" ]]; then
+            echo "Compile target already cached at ${CACHE_DEST}"
+            exit 0
+          fi
+
+          TARBALL_URL="https://registry.npmjs.org/@oven/bun-${PLATFORM}/-/bun-${PLATFORM}-${BUN_VERSION}.tgz"
+          echo "Pre-downloading ${PKG_NAME} from ${TARBALL_URL}"
+
+          mkdir -p "$(dirname "$CACHE_DEST")"
+          TMP_DIR=$(mktemp -d)
+          curl -fsSL --retry 5 --retry-delay 5 "${TARBALL_URL}" | tar -xzf - -C "${TMP_DIR}"
+
+          if [[ "$PLATFORM" == windows-* ]]; then
+            BIN_NAME="bun.exe"
+          else
+            BIN_NAME="bun"
+          fi
+
+          if [[ -f "${TMP_DIR}/package/bin/${BIN_NAME}" ]]; then
+            cp "${TMP_DIR}/package/bin/${BIN_NAME}" "${CACHE_DEST}"
+          elif [[ -f "${TMP_DIR}/package/${BIN_NAME}" ]]; then
+            cp "${TMP_DIR}/package/${BIN_NAME}" "${CACHE_DEST}"
+          else
+            echo "Could not find ${BIN_NAME} in tarball"
+            find "${TMP_DIR}" -type f
+            exit 1
+          fi
+
+          chmod +x "${CACHE_DEST}" 2>/dev/null || true
+          ls -lh "${CACHE_DEST}"
 
       - name: Build binary
         if: steps.check.outputs.skip != 'true'
