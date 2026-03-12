@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
+import { join } from "node:path"
 import { parseJsonc } from "../../shared"
 import type { ConfigMergeResult, InstallConfig } from "../types"
 import { getConfigDir, getOmoConfigPath } from "./config-context"
@@ -23,14 +24,20 @@ export function writeOmoConfig(installConfig: InstallConfig): ConfigMergeResult 
   }
 
   const omoConfigPath = getOmoConfigPath()
+  const legacyConfigPath = join(getConfigDir(), "oh-my-opencode.json")
+  const existingConfigPath = existsSync(omoConfigPath)
+    ? omoConfigPath
+    : existsSync(legacyConfigPath)
+      ? legacyConfigPath
+      : omoConfigPath
 
   try {
     const newConfig = generateOmoConfig(installConfig)
 
-    if (existsSync(omoConfigPath)) {
+    if (existsSync(existingConfigPath)) {
       try {
-        const stat = statSync(omoConfigPath)
-        const content = readFileSync(omoConfigPath, "utf-8")
+        const stat = statSync(existingConfigPath)
+        const content = readFileSync(existingConfigPath, "utf-8")
 
         if (stat.size === 0 || isEmptyOrWhitespace(content)) {
           writeFileSync(omoConfigPath, JSON.stringify(newConfig, null, 2) + "\n")
@@ -61,7 +68,7 @@ export function writeOmoConfig(installConfig: InstallConfig): ConfigMergeResult 
     return {
       success: false,
       configPath: omoConfigPath,
-      error: formatErrorWithSuggestion(err, "write oh-my-opencode config"),
+      error: formatErrorWithSuggestion(err, "write drizzy-agent config"),
     }
   }
 }

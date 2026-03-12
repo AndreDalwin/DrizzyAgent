@@ -154,28 +154,32 @@ export function loadPluginConfig(
   directory: string,
   ctx: unknown
 ): OhMyOpenCodeConfig {
-  // User-level config path - prefer .jsonc over .json
   const configDir = getOpenCodeConfigDir({ binary: "opencode" });
-  const userBasePath = path.join(configDir, "oh-my-opencode");
+  const userBasePath = path.join(configDir, "drizzy-agent");
+  const legacyUserBasePath = path.join(configDir, "oh-my-opencode");
   const userDetected = detectConfigFile(userBasePath);
+  const legacyUserDetected = detectConfigFile(legacyUserBasePath);
   const userConfigPath =
     userDetected.format !== "none"
       ? userDetected.path
-      : userBasePath + ".json";
+      : legacyUserDetected.format !== "none"
+        ? legacyUserDetected.path
+        : userBasePath + ".json";
 
-  // Project-level config path - prefer .jsonc over .json
-  const projectBasePath = path.join(directory, ".opencode", "oh-my-opencode");
+  const projectBasePath = path.join(directory, ".opencode", "drizzy-agent");
+  const legacyProjectBasePath = path.join(directory, ".opencode", "oh-my-opencode");
   const projectDetected = detectConfigFile(projectBasePath);
+  const legacyProjectDetected = detectConfigFile(legacyProjectBasePath);
   const projectConfigPath =
     projectDetected.format !== "none"
       ? projectDetected.path
-      : projectBasePath + ".json";
+      : legacyProjectDetected.format !== "none"
+        ? legacyProjectDetected.path
+        : projectBasePath + ".json";
 
-  // Load user config first (base)
   let config: OhMyOpenCodeConfig =
     loadConfigFromPath(userConfigPath, ctx) ?? {};
 
-  // Override with project config
   const projectConfig = loadConfigFromPath(projectConfigPath, ctx);
   if (projectConfig) {
     config = mergeConfigs(config, projectConfig);

@@ -284,7 +284,7 @@ export function createPlanReviewerAgent(model: string): AgentConfig {
 
   const base = {
     description:
-      "Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. (Plan Reviewer - OhMyOpenCode)",
+      "Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. (Plan Reviewer - DrizzyAgent)",
     mode: MODE,
     model,
     temperature: 0.1,

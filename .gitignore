@@ -1,14 +1,15 @@
 # Dependencies
-.sisyphus/*
-!.sisyphus/rules/
+.drizzy/*
+!.drizzy/rules/
 node_modules/
 
 # Build output
 dist/
 
 # Platform binaries (built, not committed)
-packages/*/bin/oh-my-opencode
-packages/*/bin/oh-my-opencode.exe
+packages/*/bin/drizzy-agent
+packages/*/bin/drizzy-agent.exe
+packages/*/bin/index.js.map
 
 # IDE
 .idea/
@@ -35,3 +36,4 @@ test-injection/
 notepad.md
 oauth-success.html
 *.bun-build
+.npmrc

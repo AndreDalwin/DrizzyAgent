@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from "node:fs"
+import { join } from "node:path"
 import { parseJsonc } from "../../shared"
 import type { DetectedConfig } from "../types"
-import { getOmoConfigPath } from "./config-context"
+import { getConfigDir, getOmoConfigPath } from "./config-context"
 import { detectConfigFormat } from "./opencode-config-format"
 import { parseOpenCodeConfigFileWithError } from "./parse-opencode-config-file"
 
@@ -12,12 +13,14 @@ function detectProvidersFromOmoConfig(): {
   hasKimiForCoding: boolean
 } {
   const omoConfigPath = getOmoConfigPath()
-  if (!existsSync(omoConfigPath)) {
+  const legacyConfigPath = join(getConfigDir(), "oh-my-opencode.json")
+  const configPath = existsSync(omoConfigPath) ? omoConfigPath : legacyConfigPath
+  if (!existsSync(configPath)) {
     return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
   }
 
   try {
-    const content = readFileSync(omoConfigPath, "utf-8")
+    const content = readFileSync(configPath, "utf-8")
     const omoConfig = parseJsonc<Record<string, unknown>>(content)
     if (!omoConfig || typeof omoConfig !== "object") {
       return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
@@ -60,7 +63,7 @@ export function detectCurrentConfig(): DetectedConfig {
 
   const openCodeConfig = parseResult.config
   const plugins = openCodeConfig.plugin ?? []
-  result.isInstalled = plugins.some((p) => p.startsWith("oh-my-opencode"))
+  result.isInstalled = plugins.some((p) => p.startsWith("drizzy-agent"))
 
   if (!result.isInstalled) {
     return result

@@ -71,7 +71,7 @@ export async function buildPlannerAgentConfig(params: {
     mode: "all",
     prompt: getPlannerPrompt(resolvedModel),
     permission: PLANNER_PERMISSION,
-    description: `${(params.configAgentPlan?.description as string) ?? "Plan agent"} (Planner - OhMyOpenCode)`,
+    description: `${(params.configAgentPlan?.description as string) ?? "Plan agent"} (Planner - DrizzyAgent)`,
     color: (params.configAgentPlan?.color as string) ?? "#FF5722",
     ...(temperatureToUse !== undefined ? { temperature: temperatureToUse } : {}),
     ...(topPToUse !== undefined ? { top_p: topPToUse } : {}),

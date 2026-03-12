@@ -17,6 +17,19 @@ export const SYMBOLS = {
   star: color.yellow("*"),
 }
 
+export const DRIZZY_AGENT_BANNER = [
+  "____       _                _         _             _   ",
+  "|  _ \\ _ __(_)________ _   / \\   __ _| |__  _ __ | |_ ",
+  "| | | | '__| |_  /_  /| | | |/ _` | '_ \\| '_ \\| __|",
+  "| |_| | |  | |/ / / / | |_| | (_| | |_) | | | | |_ ",
+  "|____/|_|  |_/___/___| \\__, |\\__,_|_.__/|_| |_|\\__|",
+  "                        |___/                          ",
+].join("\n")
+
+export function formatBanner(mode?: string): string {
+  return `${color.magenta(DRIZZY_AGENT_BANNER)}${mode ? `\n${color.bold(mode)}` : ""}`
+}
+
 function formatProvider(name: string, enabled: boolean, detail?: string): string {
   const status = enabled ? SYMBOLS.check : color.dim("○")
   const label = enabled ? color.white(name) : color.dim(name)
@@ -54,7 +67,7 @@ export function formatConfigSummary(config: InstallConfig): string {
 export function printHeader(isUpdate: boolean): void {
   const mode = isUpdate ? "Update" : "Install"
   console.log()
-  console.log(color.bgMagenta(color.white(` oMoMoMoMo... ${mode} `)))
+  console.log(formatBanner(mode))
   console.log()
 }
 
@@ -80,10 +93,11 @@ export function printWarning(message: string): void {
 }
 
 export function printBox(content: string, title?: string): void {
+  const ansiPattern = new RegExp("\\x1b\\[[0-9;]*m", "g")
   const lines = content.split("\n")
   const maxWidth =
     Math.max(
-      ...lines.map((line) => line.replace(/\x1b\[[0-9;]*m/g, "").length),
+      ...lines.map((line) => line.replace(ansiPattern, "").length),
       title?.length ?? 0,
     ) + 4
   const border = color.dim("─".repeat(maxWidth))
@@ -101,7 +115,7 @@ export function printBox(content: string, title?: string): void {
   }
 
   for (const line of lines) {
-    const stripped = line.replace(/\x1b\[[0-9;]*m/g, "")
+    const stripped = line.replace(ansiPattern, "")
     const padding = maxWidth - stripped.length
     console.log(color.dim("│") + ` ${line}${" ".repeat(padding - 1)}` + color.dim("│"))
   }

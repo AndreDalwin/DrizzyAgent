@@ -302,7 +302,7 @@ const planConsultantRestrictions = createAgentToolRestrictions([
 export function createPlanConsultantAgent(model: string): AgentConfig {
   return {
     description:
-      "Pre-planning consultant that analyzes requests to identify hidden intentions, ambiguities, and AI failure points. (Plan Consultant - OhMyOpenCode)",
+      "Pre-planning consultant that analyzes requests to identify hidden intentions, ambiguities, and AI failure points. (Plan Consultant - DrizzyAgent)",
     mode: MODE,
     model,
     temperature: 0.3,

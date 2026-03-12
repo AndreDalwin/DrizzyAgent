@@ -16,7 +16,7 @@ export async function showLocalDevToast(
   const displayVersion = version ?? "dev"
   const message = isCoderEnabled
     ? "Coder running in local development mode."
-    : "Running in local development mode. oMoMoMo..."
+    : "DrizzyAgent running in local development mode."
   await showSpinnerToast(ctx, `${displayVersion} (dev)`, message)
   log(`[auto-update-checker] Local dev toast shown: v${displayVersion}`)
 }

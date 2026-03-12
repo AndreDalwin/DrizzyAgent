@@ -8,7 +8,7 @@ import {
   isOpenCodeInstalled,
   writeOmoConfig,
 } from "./config-manager"
-import { detectedToInitialValues, formatConfigSummary, SYMBOLS } from "./install-validators"
+import { detectedToInitialValues, formatBanner, formatConfigSummary, SYMBOLS } from "./install-validators"
 import { promptInstallConfig } from "./tui-install-prompts"
 
 export async function runTuiInstaller(args: InstallArgs, version: string): Promise<number> {
@@ -20,7 +20,7 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
   const detected = detectCurrentConfig()
   const isUpdate = detected.isInstalled
 
-  p.intro(color.bgMagenta(color.white(isUpdate ? " oMoMoMoMo... Update " : " oMoMoMoMo... ")))
+  p.intro(formatBanner(isUpdate ? "Update" : "Install"))
 
   if (isUpdate) {
     const initial = detectedToInitialValues(detected)
@@ -43,7 +43,7 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
   const config = await promptInstallConfig(detected)
   if (!config) return 1
 
-  spinner.start("Adding oh-my-opencode to OpenCode config")
+  spinner.start("Adding drizzy-agent to OpenCode config")
   const pluginResult = await addPluginToOpenCodeConfig(version)
   if (!pluginResult.success) {
     spinner.stop(`Failed to add plugin: ${pluginResult.error}`)
@@ -52,7 +52,7 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
   }
   spinner.stop(`Plugin added to ${color.cyan(pluginResult.configPath)}`)
 
-  spinner.start("Writing oh-my-opencode configuration")
+  spinner.start("Writing drizzy-agent configuration")
   const omoResult = writeOmoConfig(config)
   if (!omoResult.success) {
     spinner.stop(`Failed to write config: ${omoResult.error}`)
@@ -93,10 +93,10 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
 
   p.log.message(`${color.yellow("★")} If you found this helpful, consider starring the repo!`)
   p.log.message(
-    `  ${color.dim("gh api --silent --method PUT /user/starred/code-yeongyu/oh-my-openagent >/dev/null 2>&1 || true")}`,
+    `  ${color.dim("gh api --silent --method PUT /user/starred/yourusername/drizzy-agent >/dev/null 2>&1 || true")}`,
   )
 
-  p.outro(color.green("oMoMoMoMo... Enjoy!"))
+  p.outro(color.green("DrizzyAgent is ready."))
 
   if ((config.hasClaude || config.hasGemini || config.hasCopilot) && !args.skipAuth) {
     const providers: string[] = []

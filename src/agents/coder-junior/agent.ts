@@ -105,7 +105,7 @@ export function createCoderJuniorAgentWithOverrides(
 
   const base: AgentConfig = {
     description: override?.description ??
-      "Focused task executor. Same discipline, no delegation. (Coder-Junior - OhMyOpenCode)",
+      "Focused task executor. Same discipline, no delegation. (Coder-Junior - DrizzyAgent)",
     mode: MODE,
     model,
     temperature,

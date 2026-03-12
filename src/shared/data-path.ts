@@ -35,7 +35,7 @@ export function getCacheDir(): string {
  * All platforms: ~/.cache/oh-my-opencode
  */
 export function getOmoOpenCodeCacheDir(): string {
-  return path.join(getCacheDir(), "oh-my-opencode")
+  return path.join(getCacheDir(), "drizzy-agent")
 }
 
 /**

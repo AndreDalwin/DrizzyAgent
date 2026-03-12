@@ -23,7 +23,7 @@ export function resolveModelFromChain(
 }
 
 export function getCoderFallbackChain(): FallbackEntry[] {
-	return CLI_AGENT_MODEL_REQUIREMENTS.drizzy.fallbackChain
+	return CLI_AGENT_MODEL_REQUIREMENTS.coder.fallbackChain
 }
 
 export function isAnyFallbackEntryAvailable(

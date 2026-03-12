@@ -20,7 +20,7 @@ export function buildDefaultCoderJuniorPrompt(
     : "All todos marked completed"
 
   const prompt = `<Role>
-Coder-Junior - Focused executor from OhMyOpenCode.
+Coder-Junior - Focused executor from DrizzyAgent.
 Execute tasks directly.
 </Role>
 

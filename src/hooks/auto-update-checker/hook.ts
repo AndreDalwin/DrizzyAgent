@@ -19,8 +19,8 @@ export function createAutoUpdateCheckerHook(ctx: PluginInput, options: AutoUpdat
         : "Coder on steroids is steering OpenCode."
     }
     return isUpdate
-      ? `OpenCode is now on Steroids. oMoMoMoMo...\nv${latestVersion} available. Restart OpenCode to apply.`
-      : "OpenCode is now on Steroids. oMoMoMoMo..."
+      ? `DrizzyAgent is active.\nv${latestVersion} available. Restart OpenCode to apply.`
+      : "DrizzyAgent is active."
   }
 
   let hasChecked = false

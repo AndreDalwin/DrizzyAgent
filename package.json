@@ -1,12 +1,12 @@
 {
   "name": "drizzy-agent",
-  "version": "0.1.0",
-  "description": "DrizzyAgent - AI Agent Harness built on Oh My OpenCode",
+  "version": "0.1.2",
+  "description": "DrizzyAgent - AI agent plugin for OpenCode",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "drizzy-agent": "bin/oh-my-opencode.js"
+    "drizzy-agent": "bin/drizzy-agent.js"
   },
   "files": [
     "dist",
@@ -18,7 +18,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./schema.json": "./dist/oh-my-opencode.schema.json"
+    "./schema.json": "./dist/drizzy-agent.schema.json"
   },
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target bun --format esm --external @ast-grep/napi && tsc --emitDeclarationOnly && bun build src/cli/index.ts --outdir dist/cli --target bun --format esm --external @ast-grep/napi && bun run build:schema",
@@ -76,17 +76,17 @@
     "typescript": "^5.7.3"
   },
   "optionalDependencies": {
-    "drizzy-agent-darwin-arm64": "0.1.0",
-    "drizzy-agent-darwin-x64": "0.1.0",
-    "drizzy-agent-darwin-x64-baseline": "0.1.0",
-    "drizzy-agent-linux-arm64": "0.1.0",
-    "drizzy-agent-linux-arm64-musl": "0.1.0",
-    "drizzy-agent-linux-x64": "0.1.0",
-    "drizzy-agent-linux-x64-baseline": "0.1.0",
-    "drizzy-agent-linux-x64-musl": "0.1.0",
-    "drizzy-agent-linux-x64-musl-baseline": "0.1.0",
-    "drizzy-agent-windows-x64": "0.1.0",
-    "drizzy-agent-windows-x64-baseline": "0.1.0"
+    "drizzy-agent-darwin-arm64": "0.1.2",
+    "drizzy-agent-darwin-x64": "0.1.2",
+    "drizzy-agent-darwin-x64-baseline": "0.1.2",
+    "drizzy-agent-linux-arm64": "0.1.2",
+    "drizzy-agent-linux-arm64-musl": "0.1.2",
+    "drizzy-agent-linux-x64": "0.1.2",
+    "drizzy-agent-linux-x64-baseline": "0.1.2",
+    "drizzy-agent-linux-x64-musl": "0.1.2",
+    "drizzy-agent-linux-x64-musl-baseline": "0.1.2",
+    "drizzy-agent-windows-x64": "0.1.2",
+    "drizzy-agent-windows-x64-baseline": "0.1.2"
   },
   "overrides": {
     "@opencode-ai/sdk": "^1.2.24"
