@@ -16,7 +16,7 @@ import type { BoulderState } from "./types"
 
 describe("boulder-state", () => {
   const TEST_DIR = join(tmpdir(), "boulder-state-test-" + Date.now())
-  const SISYPHUS_DIR = join(TEST_DIR, ".sisyphus")
+  const SISYPHUS_DIR = join(TEST_DIR, ".drizzy")
 
   beforeEach(() => {
     if (!existsSync(TEST_DIR)) {
@@ -137,7 +137,7 @@ describe("boulder-state", () => {
   })
 
   describe("writeBoulderState", () => {
-    test("should write state and create .sisyphus directory if needed", () => {
+    test("should write state and create .drizzy directory if needed", () => {
       // given - state to write
       const state: BoulderState = {
         active_plan: "/test/plan.md",
@@ -377,7 +377,7 @@ describe("boulder-state", () => {
   describe("getPlanName", () => {
     test("should extract plan name from path", () => {
       // given
-      const path = "/home/user/.sisyphus/plans/project/my-feature.md"
+      const path = "/home/user/.drizzy/plans/project/my-feature.md"
       // when
       const name = getPlanName(path)
       // then

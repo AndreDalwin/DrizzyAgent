@@ -154,7 +154,7 @@ describe("parseConfigPartially", () => {
           momus: { model: "openai/gpt-5.4" },
           prometheus: {
             permission: {
-              edit: { "*": "ask", ".sisyphus/**": "allow" },
+              edit: { "*": "ask", ".drizzy/**": "allow" },
             },
           },
         },

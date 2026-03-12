@@ -198,9 +198,9 @@ export function createWriteExistingFileGuardHook(ctx: PluginInput): Hooks {
         return
       }
 
-      const isSisyphusPath = canonicalPath.includes("/.sisyphus/")
+      const isSisyphusPath = canonicalPath.includes("/.drizzy/")
       if (isSisyphusPath) {
-        log("[write-existing-file-guard] Allowing .sisyphus/** overwrite", {
+        log("[write-existing-file-guard] Allowing .drizzy/** overwrite", {
           sessionID: input.sessionID,
           filePath,
         })

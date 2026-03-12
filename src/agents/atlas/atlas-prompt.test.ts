@@ -93,32 +93,32 @@ describe("Atlas prompts anti-duplication coverage", () => {
 })
 
 describe("Atlas prompts plan path consistency", () => {
-  test("default variant should use .sisyphus/plans/{plan-name}.md path", () => {
+  test("default variant should use .drizzy/plans/{plan-name}.md path", () => {
     // given
     const prompt = ATLAS_SYSTEM_PROMPT
 
     // when / then
-    expect(prompt).toContain(".sisyphus/plans/{plan-name}.md")
-    expect(prompt).not.toContain(".sisyphus/tasks/{plan-name}.yaml")
-    expect(prompt).not.toContain(".sisyphus/tasks/")
+    expect(prompt).toContain(".drizzy/plans/{plan-name}.md")
+    expect(prompt).not.toContain(".drizzy/tasks/{plan-name}.yaml")
+    expect(prompt).not.toContain(".drizzy/tasks/")
   })
 
-  test("gpt variant should use .sisyphus/plans/{plan-name}.md path", () => {
+  test("gpt variant should use .drizzy/plans/{plan-name}.md path", () => {
     // given
     const prompt = ATLAS_GPT_SYSTEM_PROMPT
 
     // when / then
-    expect(prompt).toContain(".sisyphus/plans/{plan-name}.md")
-    expect(prompt).not.toContain(".sisyphus/tasks/")
+    expect(prompt).toContain(".drizzy/plans/{plan-name}.md")
+    expect(prompt).not.toContain(".drizzy/tasks/")
   })
 
-  test("gemini variant should use .sisyphus/plans/{plan-name}.md path", () => {
+  test("gemini variant should use .drizzy/plans/{plan-name}.md path", () => {
     // given
     const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
 
     // when / then
-    expect(prompt).toContain(".sisyphus/plans/{plan-name}.md")
-    expect(prompt).not.toContain(".sisyphus/tasks/")
+    expect(prompt).toContain(".drizzy/plans/{plan-name}.md")
+    expect(prompt).not.toContain(".drizzy/tasks/")
   })
 
   test("all variants should read plan file after verification", () => {
@@ -127,7 +127,7 @@ describe("Atlas prompts plan path consistency", () => {
 
     // when / then
     for (const prompt of prompts) {
-      expect(prompt).toMatch(/read[\s\S]*?\.sisyphus\/plans\//)
+      expect(prompt).toMatch(/read[\s\S]*?\.drizzy\/plans\//)
     }
   })
 })

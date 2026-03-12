@@ -363,7 +363,7 @@ describe("migrateConfigFile", () => {
 
     // then: omo_agent should be migrated to sisyphus_agent
     expect(needsWrite).toBe(true)
-    expect(rawConfig.sisyphus_agent).toEqual({ disabled: false })
+    expect(rawConfig.drizzy_agent).toEqual({ disabled: false })
     expect(rawConfig.omo_agent).toBeUndefined()
   })
 
@@ -433,7 +433,7 @@ describe("migrateConfigFile", () => {
 
      // then: All legacy items should be migrated
      expect(needsWrite).toBe(true)
-     expect(rawConfig.sisyphus_agent).toEqual({ disabled: false })
+     expect(rawConfig.drizzy_agent).toEqual({ disabled: false })
      expect(rawConfig.omo_agent).toBeUndefined()
      const agents = rawConfig.agents as Record<string, unknown>
      expect(agents["sisyphus"]).toBeDefined()
@@ -737,7 +737,7 @@ describe("migrateConfigFile _migrations tracking", () => {
 
     // then: Should NOT rewrite (model stays as user set it)
     // Note: result may be true due to other migrations, but model should NOT change
-    const sisyphus = (rawConfig.agents as Record<string, Record<string, unknown>>).sisyphus
+    const sisyphus = (rawConfig.agents as Record<string, Record<string, unknown>>).drizzy
     expect(sisyphus.model).toBe("openai/gpt-5.4-codex")
 
     // cleanup
@@ -1150,7 +1150,7 @@ describe("migrateModelVersions with applied migrations", () => {
     // then: Migration should be skipped (user reverted)
     expect(changed).toBe(false)
     expect(newMigrations).toEqual([])
-    expect((migrated.sisyphus as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
+    expect((migrated.drizzy as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
   })
 
   test("applies new migrations not in history", () => {
@@ -1166,7 +1166,7 @@ describe("migrateModelVersions with applied migrations", () => {
     // then: gpt-5.4-codex should not be migrated
     expect(changed).toBe(false)
     expect(newMigrations).toEqual([])
-    expect((migrated.sisyphus as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
+    expect((migrated.drizzy as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
   })
 
   test("handles mixed: skip applied, apply new", () => {
@@ -1183,7 +1183,7 @@ describe("migrateModelVersions with applied migrations", () => {
     // then: Skip sisyphus (already applied), apply oracle
     expect(changed).toBe(true)
     expect(newMigrations).toEqual(["model-version:anthropic/claude-opus-4-5->anthropic/claude-opus-4-6"])
-    expect((migrated.sisyphus as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
+    expect((migrated.drizzy as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
     expect((migrated.oracle as Record<string, unknown>).model).toBe("anthropic/claude-opus-4-6")
   })
 
@@ -1199,7 +1199,7 @@ describe("migrateModelVersions with applied migrations", () => {
     // then: gpt-5.4-codex remains unchanged
     expect(changed).toBe(false)
     expect(newMigrations).toEqual([])
-    expect((migrated.sisyphus as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
+    expect((migrated.drizzy as Record<string, unknown>).model).toBe("openai/gpt-5.4-codex")
   })
 
   test("returns empty newMigrations when no migrations applied", () => {
@@ -1247,7 +1247,7 @@ describe("migrateConfigFile with _migrations tracking", () => {
     // then: gpt-5.4-codex should not create migration history
     expect(needsWrite).toBe(false)
     expect(rawConfig._migrations).toBeUndefined()
-    expect((rawConfig.agents as Record<string, Record<string, unknown>>).sisyphus.model).toBe("openai/gpt-5.4-codex")
+    expect((rawConfig.agents as Record<string, Record<string, unknown>>).drizzy.model).toBe("openai/gpt-5.4-codex")
   })
 
   test("skips re-applying already-recorded migrations", () => {
@@ -1267,7 +1267,7 @@ describe("migrateConfigFile with _migrations tracking", () => {
 
     // then: Should not migrate (user reverted)
     expect(needsWrite).toBe(false)
-    expect((rawConfig.agents as Record<string, Record<string, unknown>>).sisyphus.model).toBe("openai/gpt-5.4-codex")
+    expect((rawConfig.agents as Record<string, Record<string, unknown>>).drizzy.model).toBe("openai/gpt-5.4-codex")
     expect(rawConfig._migrations).toEqual(["model-version:openai/gpt-5.4-codex->openai/gpt-5.3-codex"])
   })
 
@@ -1289,7 +1289,7 @@ describe("migrateConfigFile with _migrations tracking", () => {
 
     // then: Should skip sisyphus, migrate oracle, append to _migrations
     expect(needsWrite).toBe(true)
-    expect((rawConfig.agents as Record<string, Record<string, unknown>>).sisyphus.model).toBe("openai/gpt-5.4-codex")
+    expect((rawConfig.agents as Record<string, Record<string, unknown>>).drizzy.model).toBe("openai/gpt-5.4-codex")
     expect((rawConfig.agents as Record<string, Record<string, unknown>>).oracle.model).toBe("anthropic/claude-opus-4-6")
     expect(rawConfig._migrations).toEqual([
       "model-version:openai/gpt-5.4-codex->openai/gpt-5.3-codex",

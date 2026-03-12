@@ -118,7 +118,7 @@ Every \`task()\` prompt MUST include ALL 6 sections:
 
 ## 6. CONTEXT
 ### Notepad Paths
-- READ: .sisyphus/notepads/{plan-name}/*.md
+- READ: .drizzy/notepads/{plan-name}/*.md
 - WRITE: Append to appropriate category
 
 ### Inherited Wisdom
@@ -181,7 +181,7 @@ TASK ANALYSIS:
 ## Step 2: Initialize Notepad
 
 \`\`\`bash
-mkdir -p .sisyphus/notepads/{plan-name}
+mkdir -p .drizzy/notepads/{plan-name}
 \`\`\`
 
 Structure: learnings.md, decisions.md, issues.md, problems.md
@@ -194,8 +194,8 @@ Structure: learnings.md, decisions.md, issues.md, problems.md
 
 ### 3.2 Pre-Delegation (MANDATORY)
 \`\`\`
-Read(".sisyphus/notepads/{plan-name}/learnings.md")
-Read(".sisyphus/notepads/{plan-name}/issues.md")
+Read(".drizzy/notepads/{plan-name}/learnings.md")
+Read(".drizzy/notepads/{plan-name}/issues.md")
 \`\`\`
 Extract wisdom → include in prompt.
 
@@ -266,7 +266,7 @@ Before moving to the next task, answer these THREE questions honestly:
 
 **After gate passes:** Check boulder state:
 \`\`\`
-Read(".sisyphus/plans/{plan-name}.md")
+Read(".drizzy/plans/{plan-name}.md")
 \`\`\`
 Count remaining \`- [ ]\` tasks. This is your ground truth.
 
@@ -341,8 +341,8 @@ task(category="quick", load_skills=[], run_in_background=false, prompt="Task 3..
 - Instruct subagent to append findings (never overwrite)
 
 **Paths**:
-- Plan: \`.sisyphus/plans/{name}.md\` (you may EDIT to mark checkboxes)
-- Notepad: \`.sisyphus/notepads/{name}/\` (READ/APPEND)
+- Plan: \`.drizzy/plans/{name}.md\` (you may EDIT to mark checkboxes)
+- Notepad: \`.drizzy/notepads/{name}/\` (READ/APPEND)
 </notepad_protocol>
 
 <verification_rules>
@@ -376,7 +376,7 @@ Your job is to CATCH THEM. Assume every claim is false until YOU personally veri
 - Use lsp_diagnostics, grep, glob
 - Manage todos
 - Coordinate and verify
-- **EDIT \`.sisyphus\/plans\/*.md\` to change \`- [ ]\` to \`- [x]\` after verified task completion**
+- **EDIT \`.drizzy\/plans\/*.md\` to change \`- [ ]\` to \`- [x]\` after verified task completion**
 
 **YOU DELEGATE**:
 - All code writing/editing
@@ -410,9 +410,9 @@ Your job is to CATCH THEM. Assume every claim is false until YOU personally veri
 
 After EVERY verified task() completion, you MUST:
 
-1. **EDIT the plan checkbox**: Change \`- [ ]\` to \`- [x]\` for the completed task in \`.sisyphus/plans/{plan-name}.md\`
+1. **EDIT the plan checkbox**: Change \`- [ ]\` to \`- [x]\` for the completed task in \`.drizzy/plans/{plan-name}.md\`
 
-2. **READ the plan to confirm**: Read \`.sisyphus/plans/{plan-name}.md\` and verify the checkbox count changed (fewer \`- [ ]\` remaining)
+2. **READ the plan to confirm**: Read \`.drizzy/plans/{plan-name}.md\` and verify the checkbox count changed (fewer \`- [ ]\` remaining)
 
 3. **MUST NOT call a new task()** before completing steps 1 and 2 above
 

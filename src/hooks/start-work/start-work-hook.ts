@@ -202,7 +202,7 @@ Looking for new plans...`
           contextInfo += `
 ## No Plans Found
 
-No Prometheus plan files found at .sisyphus/plans/
+No Prometheus plan files found at .drizzy/plans/
 Use Prometheus to create a work plan first: /plan "your task"`
         } else if (incompletePlans.length === 0) {
           contextInfo += `

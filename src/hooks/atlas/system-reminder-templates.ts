@@ -6,7 +6,7 @@ export const DIRECT_WORK_REMINDER = `
 
 ${createSystemDirective(SystemDirectiveTypes.DELEGATION_REQUIRED)}
 
-You just performed direct file modifications outside \`.sisyphus/\`.
+You just performed direct file modifications outside \`.drizzy/\`.
 
 **You are an ORCHESTRATOR, not an IMPLEMENTER.**
 
@@ -16,8 +16,8 @@ As an orchestrator, you should:
 - **COORDINATE** multiple tasks and ensure completion
 
 You should NOT:
-- Write code directly (except for \`.sisyphus/\` files like plans and notepads)
-- Make direct file edits outside \`.sisyphus/\`
+- Write code directly (except for \`.drizzy/\` files like plans and notepads)
+- Make direct file edits outside \`.drizzy/\`
 - Implement features yourself
 
 **If you need to make changes:**
@@ -35,7 +35,7 @@ You have an active work plan with incomplete tasks. Continue working.
 RULES:
 - **FIRST**: Read the plan file NOW. If the last completed task is still unchecked, mark it \`- [x]\` IMMEDIATELY before anything else
 - Proceed without asking for permission
-- Use the notepad at .sisyphus/notepads/{PLAN_NAME}/ to record learnings
+- Use the notepad at .drizzy/notepads/{PLAN_NAME}/ to record learnings
 - Do not stop until all tasks are complete
 - If blocked, document the blocker and move to the next task`
 
@@ -170,7 +170,7 @@ ${createSystemDirective(SystemDirectiveTypes.DELEGATION_REQUIRED)}
 
 **STOP. YOU ARE VIOLATING ORCHESTRATOR PROTOCOL.**
 
-You (Atlas) are attempting to directly modify a file outside \`.sisyphus/\`.
+You (Atlas) are attempting to directly modify a file outside \`.drizzy/\`.
 
 **Path attempted:** $FILE_PATH
 
@@ -184,13 +184,13 @@ As an ORCHESTRATOR, you MUST:
 3. **COORDINATE** - you orchestrate, you don't implement
 
 **ALLOWED direct file operations:**
-- Files inside \`.sisyphus/\` (plans, notepads, drafts)
+- Files inside \`.drizzy/\` (plans, notepads, drafts)
 - Reading files for verification
 - Running diagnostics/tests
 
 **FORBIDDEN direct file operations:**
 - Writing/editing source code
-- Creating new files outside \`.sisyphus/\`
+- Creating new files outside \`.drizzy/\`
 - Any implementation work
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

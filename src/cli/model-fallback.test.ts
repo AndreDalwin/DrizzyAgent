@@ -377,7 +377,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.sisyphus?.model).toBe("anthropic/claude-opus-4-6")
+      expect(result.agents?.drizzy?.model).toBe("anthropic/claude-opus-4-6")
     })
 
     test("Sisyphus is created when multiple fallback providers are available", () => {
@@ -394,7 +394,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.sisyphus?.model).toBe("anthropic/claude-opus-4-6")
+      expect(result.agents?.drizzy?.model).toBe("anthropic/claude-opus-4-6")
     })
 
     test("Sisyphus resolves to gpt-5.4 medium when only OpenAI is available", () => {
@@ -405,8 +405,8 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.sisyphus?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.sisyphus?.variant).toBe("medium")
+      expect(result.agents?.drizzy?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.drizzy?.variant).toBe("medium")
     })
   })
 

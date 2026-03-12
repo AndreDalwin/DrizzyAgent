@@ -137,7 +137,7 @@ Multi-strategy recovery when hitting context limits. Strategies: truncation, com
 Master orchestrator for boulder sessions. Decision gates: session type → abort check → failure count → background tasks → agent match → plan completeness → cooldown (5s). Injects continuation prompts on session.idle.
 
 ### ralph-loop (14 files, ~1687 LOC)
-Self-referential dev loop via `/ralph-loop` command. State persisted in `.sisyphus/ralph-loop.local.md`. Detects `<promise>DONE</promise>` in AI output. Max 100 iterations default.
+Self-referential dev loop via `/ralph-loop` command. State persisted in `.drizzy/ralph-loop.local.md`. Detects `<promise>DONE</promise>` in AI output. Max 100 iterations default.
 
 ### todo-continuation-enforcer (13 files, ~2061 LOC)
 "Boulder" mechanism. Forces agent to continue when todos remain incomplete. 2s countdown toast → continuation injection. Exponential backoff: 30s base, ×2 per failure, max 5 consecutive failures then 5min pause.

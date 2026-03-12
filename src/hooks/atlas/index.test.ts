@@ -74,7 +74,7 @@ describe("atlas hook", () => {
 
   beforeEach(() => {
     TEST_DIR = join(tmpdir(), `atlas-test-${randomUUID()}`)
-    SISYPHUS_DIR = join(TEST_DIR, ".sisyphus")
+    SISYPHUS_DIR = join(TEST_DIR, ".drizzy")
     if (!existsSync(TEST_DIR)) {
       mkdirSync(TEST_DIR, { recursive: true })
     }
@@ -537,7 +537,7 @@ describe("atlas hook", () => {
         cleanupMessageStorage(ORCHESTRATOR_SESSION)
       })
 
-      test("should append delegation reminder when orchestrator writes outside .sisyphus/", async () => {
+      test("should append delegation reminder when orchestrator writes outside .drizzy/", async () => {
         // given
         const hook = createAtlasHook(createMockPluginInput())
         const output = {
@@ -558,7 +558,7 @@ describe("atlas hook", () => {
         expect(output.output).toContain("task")
       })
 
-      test("should append delegation reminder when orchestrator edits outside .sisyphus/", async () => {
+      test("should append delegation reminder when orchestrator edits outside .drizzy/", async () => {
         // given
         const hook = createAtlasHook(createMockPluginInput())
         const output = {
@@ -577,14 +577,14 @@ describe("atlas hook", () => {
         expect(output.output).toContain("ORCHESTRATOR, not an IMPLEMENTER")
       })
 
-      test("should NOT append reminder when orchestrator writes inside .sisyphus/", async () => {
+      test("should NOT append reminder when orchestrator writes inside .drizzy/", async () => {
         // given
         const hook = createAtlasHook(createMockPluginInput())
         const originalOutput = "File written successfully"
         const output = {
           title: "Write",
           output: originalOutput,
-          metadata: { filePath: "/project/.sisyphus/plans/work-plan.md" },
+          metadata: { filePath: "/project/.drizzy/plans/work-plan.md" },
         }
 
         // when
@@ -598,7 +598,7 @@ describe("atlas hook", () => {
         expect(output.output).not.toContain("ORCHESTRATOR, not an IMPLEMENTER")
       })
 
-      test("should NOT append reminder when non-orchestrator writes outside .sisyphus/", async () => {
+      test("should NOT append reminder when non-orchestrator writes outside .drizzy/", async () => {
         // given
         const nonOrchestratorSession = "non-orchestrator-session"
         setupMessageStorage(nonOrchestratorSession, "sisyphus-junior")
@@ -665,14 +665,14 @@ describe("atlas hook", () => {
       })
 
       describe("cross-platform path validation (Windows support)", () => {
-        test("should NOT append reminder when orchestrator writes inside .sisyphus\\ (Windows backslash)", async () => {
+        test("should NOT append reminder when orchestrator writes inside .drizzy\\ (Windows backslash)", async () => {
           // given
           const hook = createAtlasHook(createMockPluginInput())
           const originalOutput = "File written successfully"
           const output = {
             title: "Write",
             output: originalOutput,
-            metadata: { filePath: ".sisyphus\\plans\\work-plan.md" },
+            metadata: { filePath: ".drizzy\\plans\\work-plan.md" },
           }
 
           // when
@@ -686,14 +686,14 @@ describe("atlas hook", () => {
           expect(output.output).not.toContain("ORCHESTRATOR, not an IMPLEMENTER")
         })
 
-        test("should NOT append reminder when orchestrator writes inside .sisyphus with mixed separators", async () => {
+        test("should NOT append reminder when orchestrator writes inside .drizzy with mixed separators", async () => {
           // given
           const hook = createAtlasHook(createMockPluginInput())
           const originalOutput = "File written successfully"
           const output = {
             title: "Write",
             output: originalOutput,
-            metadata: { filePath: ".sisyphus\\plans/work-plan.md" },
+            metadata: { filePath: ".drizzy\\plans/work-plan.md" },
           }
 
           // when
@@ -707,14 +707,14 @@ describe("atlas hook", () => {
           expect(output.output).not.toContain("ORCHESTRATOR, not an IMPLEMENTER")
         })
 
-        test("should NOT append reminder for absolute Windows path inside .sisyphus\\", async () => {
+        test("should NOT append reminder for absolute Windows path inside .drizzy\\", async () => {
           // given
           const hook = createAtlasHook(createMockPluginInput())
           const originalOutput = "File written successfully"
           const output = {
             title: "Write",
             output: originalOutput,
-            metadata: { filePath: "C:\\Users\\test\\project\\.sisyphus\\plans\\x.md" },
+            metadata: { filePath: "C:\\Users\\test\\project\\.drizzy\\plans\\x.md" },
           }
 
           // when
@@ -728,7 +728,7 @@ describe("atlas hook", () => {
           expect(output.output).not.toContain("ORCHESTRATOR, not an IMPLEMENTER")
         })
 
-        test("should append reminder for Windows path outside .sisyphus\\", async () => {
+        test("should append reminder for Windows path outside .drizzy\\", async () => {
           // given
           const hook = createAtlasHook(createMockPluginInput())
           const output = {

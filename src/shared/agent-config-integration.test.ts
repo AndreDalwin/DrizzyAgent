@@ -33,7 +33,7 @@ describe("Agent Config Integration", () => {
       expect(result.migrated).not.toHaveProperty("Momus (Plan Reviewer)")
 
       // then - values are preserved
-      expect(result.migrated.sisyphus).toEqual({ model: "anthropic/claude-opus-4-6" })
+      expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6" })
       expect(result.migrated.atlas).toEqual({ model: "anthropic/claude-opus-4-6" })
       expect(result.migrated.prometheus).toEqual({ model: "anthropic/claude-opus-4-6" })
       
@@ -192,7 +192,7 @@ describe("Agent Config Integration", () => {
       expect(prometheusDisplay).toBe("Prometheus (Plan Builder)")
 
       // then - config values are preserved
-      expect(result.migrated.sisyphus).toEqual({ model: "anthropic/claude-opus-4-6", temperature: 0.1 })
+      expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6", temperature: 0.1 })
       expect(result.migrated.prometheus).toEqual({ model: "anthropic/claude-opus-4-6" })
     })
 

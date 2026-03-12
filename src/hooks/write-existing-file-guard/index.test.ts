@@ -245,8 +245,8 @@ describe("createWriteExistingFileGuardHook", () => {
     ).rejects.toThrow(BLOCK_MESSAGE)
   })
 
-  test("#given existing file under .sisyphus #when write executes #then always allows", async () => {
-    const existingFile = createFile(".sisyphus/plans/plan.txt")
+  test("#given existing file under .drizzy #when write executes #then always allows", async () => {
+    const existingFile = createFile(".drizzy/plans/plan.txt")
 
     await expect(
       invoke({

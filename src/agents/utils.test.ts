@@ -28,9 +28,9 @@ describe("createBuiltinAgents with model overrides", () => {
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus.model).toBe("anthropic/claude-opus-4-6")
-      expect(agents.sisyphus.thinking).toEqual({ type: "enabled", budgetTokens: 32000 })
-      expect(agents.sisyphus.reasoningEffort).toBeUndefined()
+      expect(agents.drizzy.model).toBe("anthropic/claude-opus-4-6")
+      expect(agents.drizzy.thinking).toEqual({ type: "enabled", budgetTokens: 32000 })
+      expect(agents.drizzy.reasoningEffort).toBeUndefined()
     } finally {
       fetchSpy.mockRestore()
     }
@@ -46,9 +46,9 @@ describe("createBuiltinAgents with model overrides", () => {
     const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], undefined, undefined)
 
     // #then
-    expect(agents.sisyphus.model).toBe("github-copilot/gpt-5.4")
-    expect(agents.sisyphus.reasoningEffort).toBe("medium")
-    expect(agents.sisyphus.thinking).toBeUndefined()
+    expect(agents.drizzy.model).toBe("github-copilot/gpt-5.4")
+    expect(agents.drizzy.reasoningEffort).toBe("medium")
+    expect(agents.drizzy.thinking).toBeUndefined()
   })
 
   test("Atlas uses uiSelectedModel", async () => {
@@ -107,8 +107,8 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
-      expect(agents.sisyphus.model).toBe("google/antigravity-claude-opus-4-5-thinking")
+      expect(agents.drizzy).toBeDefined()
+      expect(agents.drizzy.model).toBe("google/antigravity-claude-opus-4-5-thinking")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -158,8 +158,8 @@ describe("createBuiltinAgents with model overrides", () => {
       const agents = await createBuiltinAgents([], {}, undefined, systemDefaultModel, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
-      expect(agents.sisyphus.model).toBe("anthropic/claude-opus-4-6")
+      expect(agents.drizzy).toBeDefined()
+      expect(agents.drizzy.model).toBe("anthropic/claude-opus-4-6")
     } finally {
       cacheSpy.mockRestore()
       fetchSpy.mockRestore()
@@ -235,8 +235,8 @@ describe("createBuiltinAgents with model overrides", () => {
      const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], undefined, undefined)
 
      // #then
-     expect(agents.sisyphus.model).toBe("github-copilot/gpt-5.4")
-     expect(agents.sisyphus.temperature).toBe(0.5)
+     expect(agents.drizzy.model).toBe("github-copilot/gpt-5.4")
+     expect(agents.drizzy.temperature).toBe(0.5)
    })
 
   test("createBuiltinAgents excludes disabled skills from availableSkills", async () => {
@@ -247,9 +247,9 @@ describe("createBuiltinAgents with model overrides", () => {
     const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], undefined, undefined, undefined, disabledSkills)
 
     // #then
-    expect(agents.sisyphus.prompt).not.toContain("playwright")
-    expect(agents.sisyphus.prompt).toContain("frontend-ui-ux")
-    expect(agents.sisyphus.prompt).toContain("git-master")
+    expect(agents.drizzy.prompt).not.toContain("playwright")
+    expect(agents.drizzy.prompt).toContain("frontend-ui-ux")
+    expect(agents.drizzy.prompt).toContain("git-master")
   })
 
   test("includes custom agents in orchestrator prompts when provided via config", async () => {
@@ -287,7 +287,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.sisyphus.prompt).toContain("researcher")
+      expect(agents.drizzy.prompt).toContain("researcher")
       expect(agents.hephaestus.prompt).toContain("researcher")
       expect(agents.atlas.prompt).toContain("researcher")
     } finally {
@@ -323,7 +323,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.sisyphus.prompt).not.toContain("hidden-agent")
+      expect(agents.drizzy.prompt).not.toContain("hidden-agent")
       expect(agents.hephaestus.prompt).not.toContain("hidden-agent")
       expect(agents.atlas.prompt).not.toContain("hidden-agent")
     } finally {
@@ -359,7 +359,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.sisyphus.prompt).not.toContain("disabled-agent")
+      expect(agents.drizzy.prompt).not.toContain("disabled-agent")
       expect(agents.hephaestus.prompt).not.toContain("disabled-agent")
       expect(agents.atlas.prompt).not.toContain("disabled-agent")
     } finally {
@@ -395,7 +395,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.sisyphus.prompt).not.toContain("researcher")
+      expect(agents.drizzy.prompt).not.toContain("researcher")
       expect(agents.hephaestus.prompt).not.toContain("researcher")
       expect(agents.atlas.prompt).not.toContain("researcher")
     } finally {
@@ -428,7 +428,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      const matches = (agents.sisyphus?.prompt ?? "").match(/Custom agent: researcher/gi) ?? []
+      const matches = (agents.drizzy?.prompt ?? "").match(/Custom agent: researcher/gi) ?? []
       expect(matches.length).toBe(1)
     } finally {
       fetchSpy.mockRestore()
@@ -462,7 +462,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.sisyphus.prompt).toContain("Line1 Alpha \\| Beta")
+      expect(agents.drizzy.prompt).toContain("Line1 Alpha \\| Beta")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -521,8 +521,8 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
       const agents = await createBuiltinAgents([], {}, undefined, undefined, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
-      expect(agents.sisyphus.model).toBe("anthropic/claude-opus-4-6")
+      expect(agents.drizzy).toBeDefined()
+      expect(agents.drizzy.model).toBe("anthropic/claude-opus-4-6")
     } finally {
       cacheSpy.mockRestore()
       fetchSpy.mockRestore()
@@ -763,27 +763,27 @@ describe("Sisyphus and Librarian environment context toggle", () => {
   test("includes <omo-env> for sisyphus and librarian when disable flag is unset", async () => {
     const agents = await buildAgents(undefined)
 
-    expect(agents.sisyphus).toBeDefined()
+    expect(agents.drizzy).toBeDefined()
     expect(agents.librarian).toBeDefined()
-    expect(agents.sisyphus.prompt).toContain("<omo-env>")
+    expect(agents.drizzy.prompt).toContain("<omo-env>")
     expect(agents.librarian.prompt).toContain("<omo-env>")
   })
 
   test("includes <omo-env> for sisyphus and librarian when disable flag is false", async () => {
     const agents = await buildAgents(false)
 
-    expect(agents.sisyphus).toBeDefined()
+    expect(agents.drizzy).toBeDefined()
     expect(agents.librarian).toBeDefined()
-    expect(agents.sisyphus.prompt).toContain("<omo-env>")
+    expect(agents.drizzy.prompt).toContain("<omo-env>")
     expect(agents.librarian.prompt).toContain("<omo-env>")
   })
 
   test("omits <omo-env> for sisyphus and librarian when disable flag is true", async () => {
     const agents = await buildAgents(true)
 
-    expect(agents.sisyphus).toBeDefined()
+    expect(agents.drizzy).toBeDefined()
     expect(agents.librarian).toBeDefined()
-    expect(agents.sisyphus.prompt).not.toContain("<omo-env>")
+    expect(agents.drizzy.prompt).not.toContain("<omo-env>")
     expect(agents.librarian.prompt).not.toContain("<omo-env>")
   })
 })
@@ -854,7 +854,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
+      expect(agents.drizzy).toBeDefined()
     } finally {
       fetchSpy.mockRestore()
     }
@@ -870,8 +870,8 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
-      expect(agents.sisyphus.model).toBe("anthropic/claude-opus-4-6")
+      expect(agents.drizzy).toBeDefined()
+      expect(agents.drizzy.model).toBe("anthropic/claude-opus-4-6")
     } finally {
       cacheSpy.mockRestore()
       fetchSpy.mockRestore()
@@ -890,7 +890,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
+      expect(agents.drizzy).toBeDefined()
     } finally {
       fetchSpy.mockRestore()
     }
@@ -908,7 +908,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       const agents = await createBuiltinAgents([], {}, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeUndefined()
+      expect(agents.drizzy).toBeUndefined()
     } finally {
       fetchSpy.mockRestore()
       cacheSpy.mockRestore()
@@ -933,8 +933,8 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
-      expect(agents.sisyphus.model).toBe("google/antigravity-claude-opus-4-5-thinking")
+      expect(agents.drizzy).toBeDefined()
+      expect(agents.drizzy.model).toBe("google/antigravity-claude-opus-4-5-thinking")
     } finally {
       fetchSpy.mockRestore()
       cacheSpy.mockRestore()
@@ -959,8 +959,8 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL, undefined, undefined, [], {})
 
       // #then
-      expect(agents.sisyphus).toBeDefined()
-      expect(agents.sisyphus.model).toBe("google/antigravity-claude-opus-4-5-thinking")
+      expect(agents.drizzy).toBeDefined()
+      expect(agents.drizzy.model).toBe("google/antigravity-claude-opus-4-5-thinking")
     } finally {
       fetchSpy.mockRestore()
       cacheSpy.mockRestore()
@@ -1299,9 +1299,9 @@ describe("override.category expansion in createBuiltinAgents", () => {
     const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL)
 
     // #then - ultrabrain category: model=openai/gpt-5.4, variant=xhigh
-    expect(agents.sisyphus).toBeDefined()
-    expect(agents.sisyphus.model).toBe("openai/gpt-5.4")
-    expect(agents.sisyphus.variant).toBe("xhigh")
+    expect(agents.drizzy).toBeDefined()
+    expect(agents.drizzy.model).toBe("openai/gpt-5.4")
+    expect(agents.drizzy.variant).toBe("xhigh")
   })
 
   test("atlas override with category expands category properties", async () => {

@@ -136,7 +136,7 @@ export async function applyAgentConfig(params: {
 
   const configAgent = params.config.agent as AgentConfigRecord | undefined;
 
-  if (isSisyphusEnabled && builtinAgents.sisyphus) {
+  if (isSisyphusEnabled && builtinAgents.drizzy) {
     if (configuredDefaultAgent) {
       (params.config as { default_agent?: string }).default_agent =
         getAgentDisplayName(configuredDefaultAgent);
@@ -146,7 +146,7 @@ export async function applyAgentConfig(params: {
     }
 
     const agentConfig: Record<string, unknown> = {
-      sisyphus: builtinAgents.sisyphus,
+      sisyphus: builtinAgents.drizzy,
     };
 
     agentConfig["sisyphus-junior"] = createSisyphusJuniorAgentWithOverrides(
