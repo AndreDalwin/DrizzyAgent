@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const SisyphusTasksConfigSchema = z.object({
+export const CoderTasksConfigSchema = z.object({
   /** Absolute or relative storage path override. When set, bypasses global config dir. */
   storage_path: z.string().optional(),
   /** Force task list ID (alternative to env ULTRAWORK_TASK_LIST_ID) */
@@ -9,9 +9,9 @@ export const SisyphusTasksConfigSchema = z.object({
   claude_code_compat: z.boolean().default(false),
 })
 
-export const SisyphusConfigSchema = z.object({
-  tasks: SisyphusTasksConfigSchema.optional(),
+export const CoderConfigSchema = z.object({
+  tasks: CoderTasksConfigSchema.optional(),
 })
 
-export type SisyphusTasksConfig = z.infer<typeof SisyphusTasksConfigSchema>
-export type SisyphusConfig = z.infer<typeof SisyphusConfigSchema>
+export type CoderTasksConfig = z.infer<typeof CoderTasksConfigSchema>
+export type CoderConfig = z.infer<typeof CoderConfigSchema>
