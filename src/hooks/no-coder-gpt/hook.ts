@@ -4,10 +4,10 @@ import { getSessionAgent, updateSessionAgent } from "../../features/claude-code-
 import { log } from "../../shared"
 import { getAgentConfigKey, getAgentDisplayName } from "../../shared/agent-display-names"
 
-const TOAST_TITLE = "NEVER Use Sisyphus with GPT"
+const TOAST_TITLE = "NEVER Use Coder with GPT"
 const TOAST_MESSAGE = [
-  "Sisyphus works best with Claude Opus, and works fine with Kimi/GLM models.",
-  "Do NOT use Sisyphus with GPT (except GPT-5.4 which has specialized support).",
+  "Coder works best with Claude Opus, and works fine with Kimi/GLM models.",
+  "Do NOT use Coder with GPT (except GPT-5.4 which has specialized support).",
   "For GPT models (other than 5.4), always use Hephaestus.",
 ].join("\n")
 const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
@@ -28,7 +28,7 @@ function showToast(ctx: PluginInput, sessionID: string): void {
   })
 }
 
-export function createNoSisyphusGptHook(ctx: PluginInput) {
+export function createNoCoderGptHook(ctx: PluginInput) {
   return {
     "chat.message": async (input: {
       sessionID: string
@@ -41,7 +41,7 @@ export function createNoSisyphusGptHook(ctx: PluginInput) {
       const agentKey = getAgentConfigKey(rawAgent)
       const modelID = input.model?.modelID
 
-      if (agentKey === "sisyphus" && modelID && isGptModel(modelID) && !isGpt5_4Model(modelID)) {
+      if (agentKey === "coder" && modelID && isGptModel(modelID) && !isGpt5_4Model(modelID)) {
         showToast(ctx, input.sessionID)
         input.agent = HEPHAESTUS_DISPLAY
         if (output?.message) {

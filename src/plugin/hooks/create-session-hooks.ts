@@ -19,8 +19,8 @@ import {
   createTaskResumeInfoHook,
   createStartWorkHook,
   createPrometheusMdOnlyHook,
-  createSisyphusJuniorNotepadHook,
-  createNoSisyphusGptHook,
+  createCoderJuniorNotepadHook,
+  createNoCoderGptHook,
   createNoHephaestusNonGptHook,
   createQuestionLabelTruncatorHook,
   createPreemptiveCompactionHook,
@@ -53,8 +53,8 @@ export type SessionHooks = {
   delegateTaskRetry: ReturnType<typeof createDelegateTaskRetryHook> | null
   startWork: ReturnType<typeof createStartWorkHook> | null
   prometheusMdOnly: ReturnType<typeof createPrometheusMdOnlyHook> | null
-  sisyphusJuniorNotepad: ReturnType<typeof createSisyphusJuniorNotepadHook> | null
-  noSisyphusGpt: ReturnType<typeof createNoSisyphusGptHook> | null
+  coderJuniorNotepad: ReturnType<typeof createCoderJuniorNotepadHook> | null
+  noCoderGpt: ReturnType<typeof createNoCoderGptHook> | null
   noHephaestusNonGpt: ReturnType<typeof createNoHephaestusNonGptHook> | null
   questionLabelTruncator: ReturnType<typeof createQuestionLabelTruncatorHook> | null
   taskResumeInfo: ReturnType<typeof createTaskResumeInfoHook> | null
@@ -223,12 +223,12 @@ export function createSessionHooks(args: {
     ? safeHook("prometheus-md-only", () => createPrometheusMdOnlyHook(ctx))
     : null
 
-  const sisyphusJuniorNotepad = isHookEnabled("sisyphus-junior-notepad")
-    ? safeHook("sisyphus-junior-notepad", () => createSisyphusJuniorNotepadHook(ctx))
+  const coderJuniorNotepad = isHookEnabled("coder-junior-notepad")
+    ? safeHook("coder-junior-notepad", () => createCoderJuniorNotepadHook(ctx))
     : null
 
-  const noSisyphusGpt = isHookEnabled("no-sisyphus-gpt")
-    ? safeHook("no-sisyphus-gpt", () => createNoSisyphusGptHook(ctx))
+  const noCoderGpt = isHookEnabled("no-coder-gpt")
+    ? safeHook("no-coder-gpt", () => createNoCoderGptHook(ctx))
     : null
 
   const noHephaestusNonGpt = isHookEnabled("no-hephaestus-non-gpt")
@@ -278,8 +278,8 @@ export function createSessionHooks(args: {
     delegateTaskRetry,
     startWork,
     prometheusMdOnly,
-    sisyphusJuniorNotepad,
-    noSisyphusGpt,
+    coderJuniorNotepad,
+    noCoderGpt,
     noHephaestusNonGpt,
     questionLabelTruncator,
     taskResumeInfo,

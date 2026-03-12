@@ -1,1 +1,1 @@
-export { createNoSisyphusGptHook } from "./hook"
+export { createNoCoderGptHook } from "./hook"
