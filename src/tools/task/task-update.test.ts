@@ -7,7 +7,7 @@ import { createTaskUpdateTool } from "./task-update"
 const TEST_STORAGE = ".test-task-update-tool"
 const TEST_DIR = join(process.cwd(), TEST_STORAGE)
 const TEST_CONFIG = {
-  sisyphus: {
+  coder: {
     tasks: {
       storage_path: TEST_STORAGE,
     },

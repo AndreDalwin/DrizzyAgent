@@ -9,14 +9,14 @@ import { showModelCacheWarningIfNeeded } from "./hook/model-cache-warning"
 import { showLocalDevToast, showVersionToast } from "./hook/startup-toasts"
 
 export function createAutoUpdateCheckerHook(ctx: PluginInput, options: AutoUpdateCheckerOptions = {}) {
-  const { showStartupToast = true, isSisyphusEnabled = false, autoUpdate = true } = options
+  const { showStartupToast = true, isCoderEnabled = false, autoUpdate = true } = options
   const isCliRunMode = process.env.OPENCODE_CLI_RUN_MODE === "true"
 
   const getToastMessage = (isUpdate: boolean, latestVersion?: string): string => {
-    if (isSisyphusEnabled) {
+    if (isCoderEnabled) {
       return isUpdate
-        ? `Sisyphus on steroids is steering OpenCode.\nv${latestVersion} available. Restart to apply.`
-        : "Sisyphus on steroids is steering OpenCode."
+        ? `Coder on steroids is steering OpenCode.\nv${latestVersion} available. Restart to apply.`
+        : "Coder on steroids is steering OpenCode."
     }
     return isUpdate
       ? `OpenCode is now on Steroids. oMoMoMoMo...\nv${latestVersion} available. Restart OpenCode to apply.`
@@ -47,7 +47,7 @@ export function createAutoUpdateCheckerHook(ctx: PluginInput, options: AutoUpdat
 
         if (localDevVersion) {
           if (showStartupToast) {
-            showLocalDevToast(ctx, displayVersion, isSisyphusEnabled).catch(() => {})
+            showLocalDevToast(ctx, displayVersion, isCoderEnabled).catch(() => {})
           }
           log("[auto-update-checker] Local development mode")
           return

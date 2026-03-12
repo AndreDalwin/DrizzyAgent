@@ -50,7 +50,7 @@ describe("generateModelConfig", () => {
       // #when generateModelConfig is called
       const result = generateModelConfig(config)
 
-      // #then should use higher capability models for Sisyphus
+      // #then should use higher capability models for Coder
       expect(result).toMatchSnapshot()
     })
 
@@ -368,8 +368,8 @@ describe("generateModelConfig", () => {
     })
   })
 
-  describe("Sisyphus agent special cases", () => {
-    test("Sisyphus is created when at least one fallback provider is available (Claude)", () => {
+  describe("Coder agent special cases", () => {
+    test("Coder is created when at least one fallback provider is available (Claude)", () => {
       // #given
       const config = createConfig({ hasClaude: true, isMax20: true })
 
@@ -380,7 +380,7 @@ describe("generateModelConfig", () => {
       expect(result.agents?.drizzy?.model).toBe("anthropic/claude-opus-4-6")
     })
 
-    test("Sisyphus is created when multiple fallback providers are available", () => {
+    test("Coder is created when multiple fallback providers are available", () => {
       // #given
       const config = createConfig({
         hasClaude: true,
@@ -397,7 +397,7 @@ describe("generateModelConfig", () => {
       expect(result.agents?.drizzy?.model).toBe("anthropic/claude-opus-4-6")
     })
 
-    test("Sisyphus resolves to gpt-5.4 medium when only OpenAI is available", () => {
+    test("Coder resolves to gpt-5.4 medium when only OpenAI is available", () => {
       // #given
       const config = createConfig({ hasOpenAI: true })
 

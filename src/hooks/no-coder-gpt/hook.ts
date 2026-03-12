@@ -21,7 +21,7 @@ function showToast(ctx: PluginInput, sessionID: string): void {
       duration: 10000,
     },
   }).catch((error) => {
-    log("[no-sisyphus-gpt] Failed to show toast", {
+    log("[no-coder-gpt] Failed to show toast", {
       sessionID,
       error,
     })

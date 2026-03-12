@@ -8,7 +8,7 @@ import type { AgentConfig, CategoryConfig, GeneratedOmoConfig } from "./model-fa
 import { applyOpenAiOnlyModelCatalog, isOpenAiOnlyAvailability } from "./openai-only-model-catalog"
 import { toProviderAvailability } from "./provider-availability"
 import {
-	getSisyphusFallbackChain,
+	getCoderFallbackChain,
 	isAnyFallbackEntryAvailable,
 	isRequiredModelAvailable,
 	isRequiredProviderAvailable,
@@ -40,7 +40,7 @@ export function generateModelConfig(config: InstallConfig): GeneratedOmoConfig {
       $schema: SCHEMA_URL,
       agents: Object.fromEntries(
         Object.entries(CLI_AGENT_MODEL_REQUIREMENTS)
-          .filter(([role, req]) => !(role === "sisyphus" && req.requiresAnyModel))
+          .filter(([role, req]) => !(role === "coder" && req.requiresAnyModel))
           .map(([role]) => [role, { model: ULTIMATE_FALLBACK }])
       ),
       categories: Object.fromEntries(
@@ -71,8 +71,8 @@ export function generateModelConfig(config: InstallConfig): GeneratedOmoConfig {
       continue
     }
 
-    if (role === "sisyphus") {
-      const fallbackChain = getSisyphusFallbackChain()
+    if (role === "coder") {
+      const fallbackChain = getCoderFallbackChain()
       if (req.requiresAnyModel && !isAnyFallbackEntryAvailable(fallbackChain, avail)) {
         continue
       }

@@ -122,7 +122,7 @@ Each TODO item MUST include:
 | 3 | 6 | \`task(...)\` final integration |
 
 **WHY PARALLEL TASK GRAPH IS MANDATORY:**
-- Orchestrator (Sisyphus) executes tasks in parallel waves
+- Orchestrator (Coder) executes tasks in parallel waves
 - Independent tasks run simultaneously via background agents
 - Proper dependency tracking prevents race conditions
 - Category + skills ensure optimal model routing per task`

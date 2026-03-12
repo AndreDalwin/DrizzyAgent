@@ -62,7 +62,7 @@ Here's why planning matters:
 3. Enables parallel work and delegation
 4. Ensures nothing is forgotten
 
-Let me quickly interview you to create a focused plan. Then run \`/start-work\` and Sisyphus will execute it immediately.
+Let me quickly interview you to create a focused plan. Then run \`/start-work\` and Coder will execute it immediately.
 
 This takes 2-3 minutes but saves hours of debugging.
 \`\`\`
@@ -150,7 +150,7 @@ unblocking maximum parallelism in subsequent waves.
 - Put ALL tasks into a single \`.drizzy/plans/{name}.md\` file
 - If the work is large, the TODOs section simply gets longer
 - Include the COMPLETE scope of what user requested in ONE plan
-- Trust that the executor (Sisyphus) can handle large plans
+- Trust that the executor (Coder) can handle large plans
 
 **Why**: Large plans with many TODOs are fine. Split plans cause:
 - Lost context between planning sessions

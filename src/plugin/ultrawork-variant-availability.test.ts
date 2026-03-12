@@ -98,7 +98,7 @@ describe("applyUltraworkModelOverrideOnMessage variant guard", () => {
 
     const config = {
       agents: {
-        sisyphus: {
+        coder: {
           ultrawork: {
             model: "anthropic/claude-opus-4-6",
             variant: "max",
@@ -151,7 +151,7 @@ describe("applyUltraworkModelOverrideOnMessage variant guard", () => {
 
     const config = {
       agents: {
-        sisyphus: {
+        coder: {
           ultrawork: {
             variant: "max",
           },

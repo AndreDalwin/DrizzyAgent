@@ -6,7 +6,7 @@ import { getAgentDisplayName } from "../../shared/agent-display-names"
 import { createNoHephaestusNonGptHook } from "./index"
 
 const HEPHAESTUS_DISPLAY = getAgentDisplayName("hephaestus")
-const SISYPHUS_DISPLAY = getAgentDisplayName("coder")
+const CODER_DISPLAY = getAgentDisplayName("coder")
 
 function createOutput() {
   return {
@@ -38,10 +38,10 @@ describe("no-hephaestus-non-gpt hook", () => {
       model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
     }, output2)
 
-    // then - toast is shown and agent is switched to sisyphus
+    // then - toast is shown and agent is switched to coder
     expect(showToast).toHaveBeenCalledTimes(2)
-    expect(output1.message.agent).toBe(SISYPHUS_DISPLAY)
-    expect(output2.message.agent).toBe(SISYPHUS_DISPLAY)
+    expect(output1.message.agent).toBe(CODER_DISPLAY)
+    expect(output2.message.agent).toBe(CODER_DISPLAY)
     expect(showToast.mock.calls[0]?.[0]).toMatchObject({
       body: {
         title: "NEVER Use Hephaestus with Non-GPT",
@@ -102,7 +102,7 @@ describe("no-hephaestus-non-gpt hook", () => {
   })
 
   test("does not show toast for non-hephaestus agent", async () => {
-    // given - sisyphus with claude model (non-gpt)
+    // given - coder with claude model (non-gpt)
     const showToast = spyOn({ fn: async (_input: unknown) => ({}) }, "fn")
     const hook = createNoHephaestusNonGptHook({
       client: { tui: { showToast } },
@@ -113,7 +113,7 @@ describe("no-hephaestus-non-gpt hook", () => {
     // when - chat.message runs
     await hook["chat.message"]?.({
       sessionID: "ses_3",
-      agent: SISYPHUS_DISPLAY,
+      agent: CODER_DISPLAY,
       model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
     }, output)
 
@@ -139,8 +139,8 @@ describe("no-hephaestus-non-gpt hook", () => {
       model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
     }, output)
 
-    // then - toast shown via session-agent fallback, switched to sisyphus
+    // then - toast shown via session-agent fallback, switched to coder
     expect(showToast).toHaveBeenCalledTimes(1)
-    expect(output.message.agent).toBe(SISYPHUS_DISPLAY)
+    expect(output.message.agent).toBe(CODER_DISPLAY)
   })
 })

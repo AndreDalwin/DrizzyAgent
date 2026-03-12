@@ -18,7 +18,7 @@ describe("resolveAgentVariant", () => {
     // given
     const config = {
       agents: {
-        sisyphus: { variant: "low" },
+        coder: { variant: "low" },
       },
     } as OhMyOpenCodeConfig
 
@@ -33,7 +33,7 @@ describe("resolveAgentVariant", () => {
     // given
     const config = {
       agents: {
-        sisyphus: { category: "ultrabrain" },
+        coder: { category: "ultrabrain" },
       },
       categories: {
         ultrabrain: { model: "openai/gpt-5.4", variant: "xhigh" },
@@ -53,7 +53,7 @@ describe("applyAgentVariant", () => {
     // given
     const config = {
       agents: {
-        sisyphus: { variant: "low" },
+        coder: { variant: "low" },
       },
     } as OhMyOpenCodeConfig
     const message: { variant?: string } = {}
@@ -69,7 +69,7 @@ describe("applyAgentVariant", () => {
     // given
     const config = {
       agents: {
-        sisyphus: { variant: "low" },
+        coder: { variant: "low" },
       },
     } as OhMyOpenCodeConfig
     const message = { variant: "max" }
@@ -84,11 +84,11 @@ describe("applyAgentVariant", () => {
 
 describe("resolveVariantForModel", () => {
   test("returns agent override variant when configured", () => {
-    // given - use a model in sisyphus chain (claude-opus-4-6 has default variant "max")
+    // given - use a model in coder chain (claude-opus-4-6 has default variant "max")
     // to verify override takes precedence over fallback chain
     const config = {
       agents: {
-        sisyphus: { variant: "high" },
+        coder: { variant: "high" },
       },
     } as OhMyOpenCodeConfig
     const model = { providerID: "anthropic", modelID: "claude-opus-4-6" }
@@ -124,8 +124,8 @@ describe("resolveVariantForModel", () => {
     expect(variant).toBe("medium")
   })
 
-  test("returns medium for openai/gpt-5.4 in sisyphus chain", () => {
-    // #given openai/gpt-5.4 is now in sisyphus fallback chain with variant medium
+  test("returns medium for openai/gpt-5.4 in coder chain", () => {
+    // #given openai/gpt-5.4 is now in coder fallback chain with variant medium
     const config = {} as OhMyOpenCodeConfig
     const model = { providerID: "openai", modelID: "gpt-5.4" }
 

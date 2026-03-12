@@ -716,7 +716,7 @@ describe("prometheus-md-only", () => {
        ).rejects.toThrow("can only write/edit .md files inside .drizzy/")
      })
 
-     test("should allow case-insensitive .SISYPHUS directory", async () => {
+     test("should allow case-insensitive .drizzy directory", async () => {
        // given
        setupMessageStorage(TEST_SESSION_ID, "prometheus")
        const hook = createPrometheusMdOnlyHook(createMockPluginInput())
@@ -726,7 +726,7 @@ describe("prometheus-md-only", () => {
          callID: "call-1",
        }
        const output = {
-         args: { filePath: ".SISYPHUS/plans/work-plan.md" },
+         args: { filePath: ".drizzy/plans/work-plan.md" },
        }
 
        // when / #then

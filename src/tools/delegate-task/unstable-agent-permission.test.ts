@@ -13,7 +13,7 @@ describe("executeUnstableAgentTask session permission", () => {
           id: "bg_unstable_permission",
           sessionID: "ses_unstable_permission",
           description: "test task",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           status: "running",
         }
       },
@@ -22,7 +22,7 @@ describe("executeUnstableAgentTask session permission", () => {
         sessionID: "ses_unstable_permission",
         status: "interrupt",
         description: "test task",
-        agent: "sisyphus-junior",
+        agent: "coder-junior",
         error: "stop after launch",
       }),
     }
@@ -59,7 +59,7 @@ describe("executeUnstableAgentTask session permission", () => {
       toolContext,
       executorContext,
       parentContext,
-      "sisyphus-junior",
+      "coder-junior",
       undefined,
       undefined,
       "test-model",

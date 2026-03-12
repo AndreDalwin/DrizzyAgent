@@ -39,7 +39,7 @@ const AGENT_RESTRICTIONS: Record<string, Record<string, boolean>> = {
     read: true,
   },
 
-  "sisyphus-junior": {
+  "coder-junior": {
     task: false,
   },
 }

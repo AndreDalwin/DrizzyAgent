@@ -240,7 +240,7 @@ describe("resolveMultipleSkillsAsync", () => {
 		expect(result.notFound).toEqual([])
 		const gitMasterContent = result.resolved.get("git-master")
 		expect(gitMasterContent).not.toContain("Ultraworked with")
-		expect(gitMasterContent).not.toContain("Co-authored-by: Sisyphus")
+		expect(gitMasterContent).not.toContain("Co-authored-by: Coder")
 	})
 
 	it("should inject watermark when enabled (default)", async () => {
@@ -260,8 +260,8 @@ describe("resolveMultipleSkillsAsync", () => {
 		// then: watermark section is injected
 		expect(result.resolved.size).toBe(1)
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [Sisyphus]")
-		expect(gitMasterContent).toContain("Co-authored-by: Sisyphus")
+		expect(gitMasterContent).toContain("Ultraworked with [Coder]")
+		expect(gitMasterContent).toContain("Co-authored-by: Coder")
 	})
 
 	it("should inject only footer when co-author is disabled", async () => {
@@ -280,8 +280,8 @@ describe("resolveMultipleSkillsAsync", () => {
 
 		// then: only footer is injected
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [Sisyphus]")
-		expect(gitMasterContent).not.toContain("Co-authored-by: Sisyphus")
+		expect(gitMasterContent).toContain("Ultraworked with [Coder]")
+		expect(gitMasterContent).not.toContain("Co-authored-by: Coder")
 	})
 
 	it("should inject watermark by default when no config provided", async () => {
@@ -294,8 +294,8 @@ describe("resolveMultipleSkillsAsync", () => {
 		// then: watermark is injected (default is ON)
 		expect(result.resolved.size).toBe(1)
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [Sisyphus]")
-		expect(gitMasterContent).toContain("Co-authored-by: Sisyphus")
+		expect(gitMasterContent).toContain("Ultraworked with [Coder]")
+		expect(gitMasterContent).toContain("Co-authored-by: Coder")
 	})
 
 	it("should inject only co-author when footer is disabled", async () => {
@@ -314,8 +314,8 @@ describe("resolveMultipleSkillsAsync", () => {
 
 		// then: only co-author is injected
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).not.toContain("Ultraworked with [Sisyphus]")
-		expect(gitMasterContent).toContain("Co-authored-by: Sisyphus")
+		expect(gitMasterContent).not.toContain("Ultraworked with [Coder]")
+		expect(gitMasterContent).toContain("Co-authored-by: Coder")
 	})
 
 	it("should inject custom string footer when commit_footer is a string", async () => {
@@ -336,10 +336,10 @@ describe("resolveMultipleSkillsAsync", () => {
 		// then: custom footer is injected instead of default
 		const gitMasterContent = result.resolved.get("git-master")
 		expect(gitMasterContent).toContain(customFooter)
-		expect(gitMasterContent).not.toContain("Ultraworked with [Sisyphus]")
+		expect(gitMasterContent).not.toContain("Ultraworked with [Coder]")
 	})
 
-	it("should use default Sisyphus footer when commit_footer is boolean true", async () => {
+	it("should use default Coder footer when commit_footer is boolean true", async () => {
 		// given: git-master skill with boolean true footer
 		const skillNames = ["git-master"]
 		const options = {
@@ -353,9 +353,9 @@ describe("resolveMultipleSkillsAsync", () => {
 		// when: resolving with boolean true footer config
 		const result = await resolveMultipleSkillsAsync(skillNames, options)
 
-		// then: default Sisyphus footer is injected
+		// then: default Coder footer is injected
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [Sisyphus]")
+		expect(gitMasterContent).toContain("Ultraworked with [Coder]")
 	})
 
 	it("should handle empty array", async () => {

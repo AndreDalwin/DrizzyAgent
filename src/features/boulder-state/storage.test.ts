@@ -16,14 +16,14 @@ import type { BoulderState } from "./types"
 
 describe("boulder-state", () => {
   const TEST_DIR = join(tmpdir(), "boulder-state-test-" + Date.now())
-  const SISYPHUS_DIR = join(TEST_DIR, ".drizzy")
+  const CODER_DIR = join(TEST_DIR, ".drizzy")
 
   beforeEach(() => {
     if (!existsSync(TEST_DIR)) {
       mkdirSync(TEST_DIR, { recursive: true })
     }
-    if (!existsSync(SISYPHUS_DIR)) {
-      mkdirSync(SISYPHUS_DIR, { recursive: true })
+    if (!existsSync(CODER_DIR)) {
+      mkdirSync(CODER_DIR, { recursive: true })
     }
     clearBoulderState(TEST_DIR)
   })
@@ -45,7 +45,7 @@ describe("boulder-state", () => {
 
     test("should return null for JSON null value", () => {
       //#given - boulder.json containing null
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(CODER_DIR, "boulder.json")
       writeFileSync(boulderFile, "null")
 
       //#when
@@ -57,7 +57,7 @@ describe("boulder-state", () => {
 
     test("should return null for JSON primitive value", () => {
       //#given - boulder.json containing a string
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(CODER_DIR, "boulder.json")
       writeFileSync(boulderFile, '"just a string"')
 
       //#when
@@ -69,7 +69,7 @@ describe("boulder-state", () => {
 
     test("should default session_ids to [] when missing from JSON", () => {
       //#given - boulder.json without session_ids field
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(CODER_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -86,7 +86,7 @@ describe("boulder-state", () => {
 
     test("should default session_ids to [] when not an array", () => {
       //#given - boulder.json with session_ids as a string
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(CODER_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/path/to/plan.md",
         started_at: "2026-01-01T00:00:00Z",
@@ -104,7 +104,7 @@ describe("boulder-state", () => {
 
     test("should default session_ids to [] for empty object", () => {
       //#given - boulder.json with empty object
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(CODER_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({}))
 
       //#when
@@ -204,7 +204,7 @@ describe("boulder-state", () => {
 
     test("should not crash when boulder.json has no session_ids field", () => {
       //#given - boulder.json without session_ids
-      const boulderFile = join(SISYPHUS_DIR, "boulder.json")
+      const boulderFile = join(CODER_DIR, "boulder.json")
       writeFileSync(boulderFile, JSON.stringify({
         active_plan: "/plan.md",
         started_at: "2026-01-01T00:00:00Z",

@@ -8,9 +8,9 @@ const TOAST_TITLE = "NEVER Use Hephaestus with Non-GPT"
 const TOAST_MESSAGE = [
   "Hephaestus is designed exclusively for GPT models.",
   "Hephaestus is trash without GPT.",
-  "For Claude/Kimi/GLM models, always use Sisyphus.",
+  "For Claude/Kimi/GLM models, always use Coder.",
 ].join("\n")
-const SISYPHUS_DISPLAY = getAgentDisplayName("sisyphus")
+const CODER_DISPLAY = getAgentDisplayName("coder")
 
 type NoHephaestusNonGptHookOptions = {
   allowNonGptModel?: boolean
@@ -54,11 +54,11 @@ export function createNoHephaestusNonGptHook(
         if (allowNonGptModel) {
           return
         }
-        input.agent = SISYPHUS_DISPLAY
+        input.agent = CODER_DISPLAY
         if (output?.message) {
-          output.message.agent = SISYPHUS_DISPLAY
+          output.message.agent = CODER_DISPLAY
         }
-        updateSessionAgent(input.sessionID, SISYPHUS_DISPLAY)
+        updateSessionAgent(input.sessionID, CODER_DISPLAY)
       }
     },
   }

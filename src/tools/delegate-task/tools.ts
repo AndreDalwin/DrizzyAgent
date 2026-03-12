@@ -1,7 +1,7 @@
 import { tool, type ToolDefinition } from "@opencode-ai/plugin"
 import type { DelegateTaskArgs, ToolContextWithMetadata, DelegateTaskToolOptions } from "./types"
 import { CATEGORY_DESCRIPTIONS } from "./constants"
-import { SISYPHUS_JUNIOR_AGENT } from "./coder-junior-agent"
+import { CODER_JUNIOR_AGENT } from "./coder-junior-agent"
 import { mergeCategories } from "../../shared/merge-categories"
 import { log } from "../../shared/logger"
 import { buildSystemContent } from "./prompt-builder"
@@ -73,13 +73,13 @@ export function createDelegateTask(options: DelegateTaskToolOptions): ToolDefini
   \`\`\`
   
   REQUIRED: Provide ONE of:
-  - category: For task delegation (uses Sisyphus-Junior with category-optimized model)
+  - category: For task delegation (uses Coder-Junior with category-optimized model)
   - subagent_type: For direct agent invocation (explore, librarian, oracle, etc.)
   
   **DO NOT provide both.** If category is provided, subagent_type is ignored.
   
   - load_skills: ALWAYS REQUIRED. Pass [] if no skills needed, or ["skill-1", "skill-2"] for category tasks.
-  - category: Use predefined category → Spawns Sisyphus-Junior with category config
+  - category: Use predefined category → Spawns Coder-Junior with category config
     Available categories:
   ${categoryList}
   - subagent_type: Use specific agent directly (explore, librarian, oracle, metis, momus)
@@ -110,13 +110,13 @@ export function createDelegateTask(options: DelegateTaskToolOptions): ToolDefini
       const ctx = toolContext as ToolContextWithMetadata
 
       if (args.category) {
-        if (args.subagent_type && args.subagent_type !== SISYPHUS_JUNIOR_AGENT) {
-          log("[task] category provided - overriding subagent_type to sisyphus-junior", {
+        if (args.subagent_type && args.subagent_type !== CODER_JUNIOR_AGENT) {
+          log("[task] category provided - overriding subagent_type to coder-junior", {
             category: args.category,
             subagent_type: args.subagent_type,
           })
         }
-        args.subagent_type = SISYPHUS_JUNIOR_AGENT
+        args.subagent_type = CODER_JUNIOR_AGENT
       }
       await ctx.metadata?.({
         title: args.description,

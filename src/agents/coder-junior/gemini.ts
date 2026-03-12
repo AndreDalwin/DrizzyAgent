@@ -1,5 +1,5 @@
 /**
- * Gemini-optimized Sisyphus-Junior System Prompt
+ * Gemini-optimized Coder-Junior System Prompt
  *
  * Key differences from Claude/GPT variants:
  * - Aggressive tool-call enforcement (Gemini skips tools in favor of reasoning)
@@ -11,7 +11,7 @@
 import { resolvePromptAppend } from "../builtin-agents/resolve-file-uri"
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export function buildGeminiSisyphusJuniorPrompt(
+export function buildGeminiCoderJuniorPrompt(
   useTaskSystem: boolean,
   promptAppend?: string
 ): string {

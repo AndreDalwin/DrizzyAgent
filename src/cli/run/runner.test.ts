@@ -48,7 +48,7 @@ describe("resolveRunAgent", () => {
     expect(agent).toBe("Prometheus (Plan Builder)")
   })
 
-  it("falls back to sisyphus when none set", () => {
+  it("falls back to coder when none set", () => {
     // given
     const config = createConfig()
 
@@ -56,10 +56,10 @@ describe("resolveRunAgent", () => {
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("Sisyphus (Ultraworker)")
+    expect(agent).toBe("Coder (Ultraworker)")
   })
 
-  it("skips disabled sisyphus for next available core agent", () => {
+  it("skips disabled coder for next available core agent", () => {
     // given
     const config = createConfig({ disabled_agents: ["coder"] })
 
@@ -72,13 +72,13 @@ describe("resolveRunAgent", () => {
 
   it("maps display-name style default_run_agent values to canonical display names", () => {
     // given
-    const config = createConfig({ default_run_agent: "Sisyphus (Ultraworker)" })
+    const config = createConfig({ default_run_agent: "Coder (Ultraworker)" })
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("Sisyphus (Ultraworker)")
+    expect(agent).toBe("Coder (Ultraworker)")
   })
 })
 

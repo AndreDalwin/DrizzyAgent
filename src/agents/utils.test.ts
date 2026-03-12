@@ -11,7 +11,7 @@ import * as shared from "../shared"
 const TEST_DEFAULT_MODEL = "anthropic/claude-opus-4-6"
 
 describe("createBuiltinAgents with model overrides", () => {
-  test("Sisyphus with default model has thinking config when all models available", async () => {
+  test("Coder with default model has thinking config when all models available", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set([
@@ -36,10 +36,10 @@ describe("createBuiltinAgents with model overrides", () => {
     }
   })
 
-  test("Sisyphus with GPT model override has reasoningEffort, no thinking", async () => {
+  test("Coder with GPT model override has reasoningEffort, no thinking", async () => {
     // #given
     const overrides = {
-      sisyphus: { model: "github-copilot/gpt-5.4" },
+      coder: { model: "github-copilot/gpt-5.4" },
     }
 
     // #when
@@ -81,14 +81,14 @@ describe("createBuiltinAgents with model overrides", () => {
     }
   })
 
-  test("user config model takes priority over uiSelectedModel for sisyphus", async () => {
+  test("user config model takes priority over uiSelectedModel for coder", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["openai/gpt-5.4", "anthropic/claude-sonnet-4-6"])
     )
     const uiSelectedModel = "openai/gpt-5.4"
     const overrides = {
-      sisyphus: { model: "google/antigravity-claude-opus-4-5-thinking" },
+      coder: { model: "google/antigravity-claude-opus-4-5-thinking" },
     }
 
     try {
@@ -147,7 +147,7 @@ describe("createBuiltinAgents with model overrides", () => {
     }
   })
 
-  test("Sisyphus is created on first run when no availableModels or cache exist", async () => {
+  test("Coder is created on first run when no availableModels or cache exist", async () => {
     // #given
     const systemDefaultModel = "anthropic/claude-opus-4-6"
     const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(null)
@@ -228,7 +228,7 @@ describe("createBuiltinAgents with model overrides", () => {
    test("non-model overrides are still applied after factory rebuild", async () => {
      // #given
      const overrides = {
-       sisyphus: { model: "github-copilot/gpt-5.4", temperature: 0.5 },
+       coder: { model: "github-copilot/gpt-5.4", temperature: 0.5 },
      }
 
      // #when
@@ -501,7 +501,7 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
     }
   })
 
-  test("sisyphus created via connected cache fallback when all providers available", async () => {
+  test("coder created via connected cache fallback when all providers available", async () => {
     // #given
     const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue([
       "anthropic", "kimi-for-coding", "opencode", "zai-coding-plan"
@@ -729,7 +729,7 @@ describe("Hephaestus environment context toggle", () => {
   })
 })
 
-describe("Sisyphus and Librarian environment context toggle", () => {
+describe("Coder and Librarian environment context toggle", () => {
   let fetchSpy: ReturnType<typeof spyOn>
 
   beforeEach(() => {
@@ -760,7 +760,7 @@ describe("Sisyphus and Librarian environment context toggle", () => {
     )
   }
 
-  test("includes <omo-env> for sisyphus and librarian when disable flag is unset", async () => {
+  test("includes <omo-env> for coder and librarian when disable flag is unset", async () => {
     const agents = await buildAgents(undefined)
 
     expect(agents.drizzy).toBeDefined()
@@ -769,7 +769,7 @@ describe("Sisyphus and Librarian environment context toggle", () => {
     expect(agents.librarian.prompt).toContain("<omo-env>")
   })
 
-  test("includes <omo-env> for sisyphus and librarian when disable flag is false", async () => {
+  test("includes <omo-env> for coder and librarian when disable flag is false", async () => {
     const agents = await buildAgents(false)
 
     expect(agents.drizzy).toBeDefined()
@@ -778,7 +778,7 @@ describe("Sisyphus and Librarian environment context toggle", () => {
     expect(agents.librarian.prompt).toContain("<omo-env>")
   })
 
-  test("omits <omo-env> for sisyphus and librarian when disable flag is true", async () => {
+  test("omits <omo-env> for coder and librarian when disable flag is true", async () => {
     const agents = await buildAgents(true)
 
     expect(agents.drizzy).toBeDefined()
@@ -842,8 +842,8 @@ describe("Atlas is unaffected by environment context toggle", () => {
   })
 })
 
-describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
-  test("sisyphus is created when at least one fallback model is available", async () => {
+describe("createBuiltinAgents with requiresAnyModel gating (coder)", () => {
+  test("coder is created when at least one fallback model is available", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["anthropic/claude-opus-4-6"])
@@ -860,7 +860,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
     }
   })
 
-  test("sisyphus is created on first run when no availableModels or cache exist", async () => {
+  test("coder is created on first run when no availableModels or cache exist", async () => {
     // #given
     const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(null)
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(new Set())
@@ -878,11 +878,11 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
     }
   })
 
-  test("sisyphus is created when explicit config provided even if no models available", async () => {
+  test("coder is created when explicit config provided even if no models available", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(new Set())
     const overrides = {
-      sisyphus: { model: "anthropic/claude-opus-4-6" },
+      coder: { model: "anthropic/claude-opus-4-6" },
     }
 
     try {
@@ -896,8 +896,8 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
     }
   })
 
-  test("sisyphus is not created when no fallback model is available and provider not connected", async () => {
-    // #given - only venice/deepseek-v3.2 available, not in sisyphus fallback chain
+  test("coder is not created when no fallback model is available and provider not connected", async () => {
+    // #given - only venice/deepseek-v3.2 available, not in coder fallback chain
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["venice/deepseek-v3.2"])
     )
@@ -915,7 +915,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
     }
   })
 
-  test("sisyphus uses user-configured plugin model even when not in cache or fallback chain", async () => {
+  test("coder uses user-configured plugin model even when not in cache or fallback chain", async () => {
     // #given - user configures a model from a plugin provider (like antigravity)
     // that is NOT in the availableModels cache and NOT in the fallback chain
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
@@ -925,7 +925,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       ["openai"]
     )
     const overrides = {
-      sisyphus: { model: "google/antigravity-claude-opus-4-5-thinking" },
+      coder: { model: "google/antigravity-claude-opus-4-5-thinking" },
     }
 
     try {
@@ -941,7 +941,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
     }
   })
 
-  test("sisyphus uses user-configured plugin model when availableModels is empty but cache exists", async () => {
+  test("coder uses user-configured plugin model when availableModels is empty but cache exists", async () => {
     // #given - connected providers cache exists but models cache is empty
     // This reproduces the exact scenario where provider-models.json has models: {}
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
@@ -951,7 +951,7 @@ describe("createBuiltinAgents with requiresAnyModel gating (sisyphus)", () => {
       ["google", "openai", "opencode"]
     )
     const overrides = {
-      sisyphus: { model: "google/antigravity-claude-opus-4-5-thinking" },
+      coder: { model: "google/antigravity-claude-opus-4-5-thinking" },
     }
 
     try {
@@ -1289,10 +1289,10 @@ describe("override.category expansion in createBuiltinAgents", () => {
     expect(agents.oracle.reasoningEffort).toBe("high")
   })
 
-  test("sisyphus override with category expands category properties", async () => {
+  test("coder override with category expands category properties", async () => {
     // #given
     const overrides = {
-      sisyphus: { category: "ultrabrain" } as any,
+      coder: { category: "ultrabrain" } as any,
     }
 
     // #when

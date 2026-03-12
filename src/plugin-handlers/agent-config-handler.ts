@@ -1,5 +1,5 @@
 import { createBuiltinAgents } from "../agents";
-import { createSisyphusJuniorAgentWithOverrides } from "../agents/coder-junior";
+import { createCoderJuniorAgentWithOverrides } from "../agents/coder-junior";
 import type { OhMyOpenCodeConfig } from "../config";
 import { log, migrateAgentConfig } from "../shared";
 import { AGENT_NAME_MAP } from "../shared/migration";
@@ -126,7 +126,7 @@ export async function applyAgentConfig(params: {
       Object.entries(agents).filter(([name]) => !disabledAgentNames.has(name.toLowerCase()))
     );
 
-  const isSisyphusEnabled = params.pluginConfig.coder_agent?.disabled !== true;
+  const isCoderEnabled = params.pluginConfig.coder_agent?.disabled !== true;
   const builderEnabled =
     params.pluginConfig.coder_agent?.default_builder_enabled ?? false;
   const plannerEnabled = params.pluginConfig.coder_agent?.planner_enabled ?? true;
@@ -136,21 +136,21 @@ export async function applyAgentConfig(params: {
 
   const configAgent = params.config.agent as AgentConfigRecord | undefined;
 
-  if (isSisyphusEnabled && builtinAgents.drizzy) {
+  if (isCoderEnabled && builtinAgents.drizzy) {
     if (configuredDefaultAgent) {
       (params.config as { default_agent?: string }).default_agent =
         getAgentDisplayName(configuredDefaultAgent);
     } else {
       (params.config as { default_agent?: string }).default_agent =
-        getAgentDisplayName("sisyphus");
+        getAgentDisplayName("coder");
     }
 
     const agentConfig: Record<string, unknown> = {
-      sisyphus: builtinAgents.drizzy,
+      coder: builtinAgents.drizzy,
     };
 
-    agentConfig["sisyphus-junior"] = createSisyphusJuniorAgentWithOverrides(
-      params.pluginConfig.agents?.["sisyphus-junior"],
+    agentConfig["coder-junior"] = createCoderJuniorAgentWithOverrides(
+      params.pluginConfig.agents?.["coder-junior"],
       undefined,
       useTaskSystem,
     );
@@ -227,7 +227,7 @@ export async function applyAgentConfig(params: {
     params.config.agent = {
       ...agentConfig,
       ...Object.fromEntries(
-        Object.entries(builtinAgents).filter(([key]) => key !== "sisyphus"),
+        Object.entries(builtinAgents).filter(([key]) => key !== "coder"),
       ),
       ...filterDisabledAgents(filteredUserAgents),
       ...filterDisabledAgents(filteredProjectAgents),

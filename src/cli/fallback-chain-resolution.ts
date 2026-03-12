@@ -22,7 +22,7 @@ export function resolveModelFromChain(
 	return null
 }
 
-export function getSisyphusFallbackChain(): FallbackEntry[] {
+export function getCoderFallbackChain(): FallbackEntry[] {
 	return CLI_AGENT_MODEL_REQUIREMENTS.drizzy.fallbackChain
 }
 

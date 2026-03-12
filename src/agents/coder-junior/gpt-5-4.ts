@@ -1,5 +1,5 @@
 /**
- * GPT-5.4 Optimized Sisyphus-Junior System Prompt
+ * GPT-5.4 Optimized Coder-Junior System Prompt
  *
  * Tuned for GPT-5.4 system prompt design principles:
  * - Expert coding agent framing with approach-first mentality
@@ -12,7 +12,7 @@
 import { resolvePromptAppend } from "../builtin-agents/resolve-file-uri";
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder";
 
-export function buildGpt54SisyphusJuniorPrompt(
+export function buildGpt54CoderJuniorPrompt(
   useTaskSystem: boolean,
   promptAppend?: string,
 ): string {

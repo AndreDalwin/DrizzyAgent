@@ -1,28 +1,17 @@
 export const AGENT_NAME_MAP: Record<string, string> = {
   // Coder variants → "coder"
-  omo: "coder",
-  OmO: "coder",
-  Sisyphus: "coder",
-  sisyphus: "coder",
   Coder: "coder",
   coder: "coder",
 
   // Prometheus variants → "prometheus"
-  "OmO-Plan": "prometheus",
-  "omo-plan": "prometheus",
-  "Planner-Sisyphus": "prometheus",
-  "planner-sisyphus": "prometheus",
   "Prometheus (Planner)": "prometheus",
   prometheus: "prometheus",
 
   // Atlas variants → "atlas"
-  "orchestrator-sisyphus": "atlas",
-  "orchestrator-coder": "atlas",
   Atlas: "atlas",
   atlas: "atlas",
 
   // Metis variants → "metis"
-  "plan-consultant": "metis",
   "Metis (Plan Consultant)": "metis",
   metis: "metis",
 
@@ -31,8 +20,6 @@ export const AGENT_NAME_MAP: Record<string, string> = {
   momus: "momus",
 
   // Coder-Junior → "coder-junior"
-  "Sisyphus-Junior": "coder-junior",
-  "sisyphus-junior": "coder-junior",
   "Coder-Junior": "coder-junior",
   "coder-junior": "coder-junior",
 
@@ -45,7 +32,7 @@ export const AGENT_NAME_MAP: Record<string, string> = {
 }
 
 export const BUILTIN_AGENT_NAMES = new Set([
-  "coder", // was "Sisyphus"
+  "coder", // was "Coder"
   "oracle",
   "librarian",
   "explore",

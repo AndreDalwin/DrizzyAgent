@@ -186,7 +186,7 @@ describe("generateOmoConfig - model fallback system", () => {
     // #when generating config
     const result = generateOmoConfig(config)
 
-    // #then Sisyphus uses Copilot (OR logic - copilot is in claude-opus-4-6 providers)
+    // #then Coder uses Copilot (OR logic - copilot is in claude-opus-4-6 providers)
     expect((result.agents as Record<string, { model: string }>).drizzy.model).toBe("github-copilot/claude-opus-4.6")
   })
 
@@ -206,7 +206,7 @@ describe("generateOmoConfig - model fallback system", () => {
     // #when generating config
     const result = generateOmoConfig(config)
 
-    // #then Sisyphus is omitted (requires all fallback providers)
+    // #then Coder is omitted (requires all fallback providers)
     expect(result.$schema).toBe("https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json")
     expect((result.agents as Record<string, { model: string }>).drizzy).toBeUndefined()
   })
@@ -229,7 +229,7 @@ describe("generateOmoConfig - model fallback system", () => {
 
     // #then librarian should use ZAI model
     expect((result.agents as Record<string, { model: string }>).librarian.model).toBe("zai-coding-plan/glm-4.7")
-    // #then Sisyphus uses Claude (OR logic)
+    // #then Coder uses Claude (OR logic)
     expect((result.agents as Record<string, { model: string }>).drizzy.model).toBe("anthropic/claude-opus-4-6")
   })
 
@@ -249,7 +249,7 @@ describe("generateOmoConfig - model fallback system", () => {
     // #when generating config
     const result = generateOmoConfig(config)
 
-    // #then Sisyphus resolves to gpt-5.4 medium (openai is now in sisyphus chain)
+    // #then Coder resolves to gpt-5.4 medium (openai is now in coder chain)
     expect((result.agents as Record<string, { model: string; variant?: string }>).drizzy.model).toBe("openai/gpt-5.4")
     expect((result.agents as Record<string, { model: string; variant?: string }>).drizzy.variant).toBe("medium")
     // #then Oracle should use native OpenAI (first fallback entry)

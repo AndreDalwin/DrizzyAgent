@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
-import { createSisyphusAgent } from "./sisyphus"
+import { createCoderAgent } from "./coder"
 import { createHephaestusAgent } from "./hephaestus"
-import { buildSisyphusJuniorPrompt } from "./sisyphus-junior/agent"
+import { buildCoderJuniorPrompt } from "./coder-junior/agent"
 import {
   buildAntiDuplicationSection,
   buildExploreSection,
@@ -44,9 +44,9 @@ describe("delegation trust prompt rules", () => {
     expect(section).toContain("do **not** manually perform that same search yourself")
   })
 
-  test("Sisyphus prompt forbids duplicate delegated exploration", () => {
+  test("Coder prompt forbids duplicate delegated exploration", () => {
     // given
-    const agent = createSisyphusAgent("anthropic/claude-sonnet-4-6", [exploreAgent])
+    const agent = createCoderAgent("anthropic/claude-sonnet-4-6", [exploreAgent])
 
     // when
     const prompt = agent.prompt
@@ -94,18 +94,18 @@ describe("delegation trust prompt rules", () => {
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Sisyphus-Junior GPT prompt forbids duplicate delegated exploration", () => {
+  test("Coder-Junior GPT prompt forbids duplicate delegated exploration", () => {
     // given
-    const prompt = buildSisyphusJuniorPrompt("openai/gpt-5.2", false)
+    const prompt = buildCoderJuniorPrompt("openai/gpt-5.2", false)
 
     // when / then
     expect(prompt).toContain("continue only with non-overlapping work while they search")
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Sisyphus GPT-5.4 prompt forbids duplicate delegated exploration", () => {
+  test("Coder GPT-5.4 prompt forbids duplicate delegated exploration", () => {
     // given
-    const agent = createSisyphusAgent("openai/gpt-5.4", [exploreAgent])
+    const agent = createCoderAgent("openai/gpt-5.4", [exploreAgent])
 
     // when
     const prompt = agent.prompt
@@ -116,27 +116,27 @@ describe("delegation trust prompt rules", () => {
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Sisyphus-Junior GPT-5.4 prompt forbids duplicate delegated exploration", () => {
+  test("Coder-Junior GPT-5.4 prompt forbids duplicate delegated exploration", () => {
     // given
-    const prompt = buildSisyphusJuniorPrompt("openai/gpt-5.4", false)
+    const prompt = buildCoderJuniorPrompt("openai/gpt-5.4", false)
 
     // when / then
     expect(prompt).toContain("continue only with non-overlapping work while they search")
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Sisyphus-Junior GPT-5.3 Codex prompt forbids duplicate delegated exploration", () => {
+  test("Coder-Junior GPT-5.3 Codex prompt forbids duplicate delegated exploration", () => {
     // given
-    const prompt = buildSisyphusJuniorPrompt("openai/gpt-5.3-codex", false)
+    const prompt = buildCoderJuniorPrompt("openai/gpt-5.3-codex", false)
 
     // when / then
     expect(prompt).toContain("continue only with non-overlapping work while they search")
     expect(prompt).toContain("DO NOT perform the same search yourself")
   })
 
-  test("Sisyphus-Junior Gemini prompt forbids duplicate delegated exploration", () => {
+  test("Coder-Junior Gemini prompt forbids duplicate delegated exploration", () => {
     // given
-    const prompt = buildSisyphusJuniorPrompt("google/gemini-3.1-pro", false)
+    const prompt = buildCoderJuniorPrompt("google/gemini-3.1-pro", false)
 
     // when / then
     expect(prompt).toContain("continue only with non-overlapping work while they search")

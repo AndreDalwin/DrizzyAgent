@@ -54,7 +54,7 @@ describe("isCompactionAgent", () => {
       expect(result).toBe(false)
     })
 
-    test("returns false for non-compaction agent like 'sisyphus'", () => {
+    test("returns false for non-compaction agent like 'coder'", () => {
       // when
       const result = isCompactionAgent("coder")
 

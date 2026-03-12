@@ -12,10 +12,10 @@ describe("model-resolution check", () => {
       const info = getModelResolutionInfo()
 
       // then: Should have agent entries
-      const sisyphus = info.agents.find((a) => a.name === "coder")
-      expect(sisyphus).toBeDefined()
-      expect(sisyphus!.requirement.fallbackChain[0]?.model).toBe("claude-opus-4-6")
-      expect(sisyphus!.requirement.fallbackChain[0]?.providers).toContain("anthropic")
+      const coder = info.agents.find((a) => a.name === "coder")
+      expect(coder).toBeDefined()
+      expect(coder!.requirement.fallbackChain[0]?.model).toBe("claude-opus-4-6")
+      expect(coder!.requirement.fallbackChain[0]?.providers).toContain("anthropic")
     })
 
     it("returns category requirements with provider chains", async () => {
@@ -83,11 +83,11 @@ describe("model-resolution check", () => {
       const info = getModelResolutionInfoWithOverrides(mockConfig)
 
       // then: Should show provider fallback chain
-      const sisyphus = info.agents.find((a) => a.name === "coder")
-      expect(sisyphus).toBeDefined()
-      expect(sisyphus!.userOverride).toBeUndefined()
-      expect(sisyphus!.effectiveResolution).toContain("Provider fallback:")
-      expect(sisyphus!.effectiveResolution).toContain("anthropic")
+      const coder = info.agents.find((a) => a.name === "coder")
+      expect(coder).toBeDefined()
+      expect(coder!.userOverride).toBeUndefined()
+      expect(coder!.effectiveResolution).toContain("Provider fallback:")
+      expect(coder!.effectiveResolution).toContain("anthropic")
     })
 
     it("captures user variant for agent when configured", async () => {

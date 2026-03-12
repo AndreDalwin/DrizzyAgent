@@ -68,10 +68,10 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const sisyphus = agentByKey(params.agentResult, "sisyphus");
-  if (sisyphus) {
-    sisyphus.permission = {
-      ...sisyphus.permission,
+  const coder = agentByKey(params.agentResult, "coder");
+  if (coder) {
+    coder.permission = {
+      ...coder.permission,
       call_omo_agent: "deny",
       task: "allow",
       question: questionPermission,
@@ -102,7 +102,7 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const junior = agentByKey(params.agentResult, "sisyphus-junior");
+  const junior = agentByKey(params.agentResult, "coder-junior");
   if (junior) {
     junior.permission = {
       ...junior.permission,

@@ -1,7 +1,7 @@
 /**
  * Agent config keys to display names mapping.
- * Config keys are lowercase (e.g., "sisyphus", "atlas").
- * Display names include suffixes for UI/logs (e.g., "Sisyphus (Ultraworker)").
+ * Config keys are lowercase (e.g., "coder", "atlas").
+ * Display names include suffixes for UI/logs (e.g., "Coder (Ultraworker)").
  */
 export const AGENT_DISPLAY_NAMES: Record<string, string> = {
   coder: "Coder",

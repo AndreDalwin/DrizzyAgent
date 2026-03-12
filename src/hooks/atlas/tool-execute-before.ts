@@ -4,7 +4,7 @@ import { isCallerOrchestrator } from "../../shared/session-utils"
 import type { PluginInput } from "@opencode-ai/plugin"
 import { HOOK_NAME } from "./hook-name"
 import { ORCHESTRATOR_DELEGATION_REQUIRED, SINGLE_TASK_DIRECTIVE } from "./system-reminder-templates"
-import { isSisyphusPath } from "./coder-path"
+import { isCoderPath } from "./coder-path"
 import { isWriteOrEditToolName } from "./write-edit-tool-policy"
 
 export function createToolExecuteBeforeHandler(input: {
@@ -25,7 +25,7 @@ export function createToolExecuteBeforeHandler(input: {
     // Warn-only policy: Atlas guides orchestrators toward delegation but doesn't block, allowing flexibility for urgent fixes
     if (isWriteOrEditToolName(toolInput.tool)) {
       const filePath = (toolOutput.args.filePath ?? toolOutput.args.path ?? toolOutput.args.file) as string | undefined
-      if (filePath && !isSisyphusPath(filePath)) {
+      if (filePath && !isCoderPath(filePath)) {
         // Store filePath for use in tool.execute.after
         if (toolInput.callID) {
           pendingFilePaths.set(toolInput.callID, filePath)

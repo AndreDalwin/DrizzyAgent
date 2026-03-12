@@ -9,14 +9,14 @@ import {
   buildGeminiToolGuide,
   buildGeminiToolCallExamples,
 } from "./coder/gemini";
-import { buildGpt54SisyphusPrompt } from "./coder/gpt-5-4";
+import { buildGpt54CoderPrompt } from "./coder/gpt-5-4";
 import { buildTaskManagementSection } from "./coder/default";
 
 const MODE: AgentMode = "all";
-export const SISYPHUS_PROMPT_METADATA: AgentPromptMetadata = {
+export const CODER_PROMPT_METADATA: AgentPromptMetadata = {
   category: "utility",
   cost: "EXPENSIVE",
-  promptAlias: "Sisyphus",
+  promptAlias: "Coder",
   triggers: [],
 };
 import type {
@@ -41,7 +41,7 @@ import {
   categorizeTools,
 } from "./dynamic-agent-prompt-builder";
 
-function buildDynamicSisyphusPrompt(
+function buildDynamicCoderPrompt(
   model: string,
   availableAgents: AvailableAgent[],
   availableTools: AvailableTool[] = [],
@@ -443,7 +443,7 @@ ${antiPatterns}
 `;
 }
 
-export function createSisyphusAgent(
+export function createCoderAgent(
   model: string,
   availableAgents?: AvailableAgent[],
   availableToolNames?: string[],
@@ -457,7 +457,7 @@ export function createSisyphusAgent(
   const agents = availableAgents ?? [];
 
   if (isGpt5_4Model(model)) {
-    const prompt = buildGpt54SisyphusPrompt(
+    const prompt = buildGpt54CoderPrompt(
       model,
       agents,
       tools,
@@ -467,7 +467,7 @@ export function createSisyphusAgent(
     );
     return {
       description:
-        "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Sisyphus - OhMyOpenCode)",
+        "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Coder - OhMyOpenCode)",
       mode: MODE,
       model,
       maxTokens: 64000,
@@ -481,7 +481,7 @@ export function createSisyphusAgent(
     };
   }
 
-  let prompt = buildDynamicSisyphusPrompt(
+  let prompt = buildDynamicCoderPrompt(
     model,
     agents,
     tools,
@@ -518,7 +518,7 @@ export function createSisyphusAgent(
   } as AgentConfig["permission"];
   const base = {
     description:
-      "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Sisyphus - OhMyOpenCode)",
+      "Powerful AI orchestrator. Plans obsessively with todos, assesses search complexity before exploration, delegates strategically via category+skills combinations. Uses explore for internal code (parallel-friendly), librarian for external docs. (Coder - OhMyOpenCode)",
     mode: MODE,
     model,
     maxTokens: 64000,
@@ -533,4 +533,4 @@ export function createSisyphusAgent(
 
   return { ...base, thinking: { type: "enabled", budgetTokens: 32000 } };
 }
-createSisyphusAgent.mode = MODE;
+createCoderAgent.mode = MODE;

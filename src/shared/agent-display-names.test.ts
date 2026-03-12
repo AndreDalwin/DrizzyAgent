@@ -9,19 +9,19 @@ describe("getAgentDisplayName", () => {
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Sisyphus (Ultraworker)"
-    expect(result).toBe("Sisyphus (Ultraworker)")
+    // then returns "Coder (Ultraworker)"
+    expect(result).toBe("Coder (Ultraworker)")
   })
 
   it("returns display name for uppercase config key (old format - case-insensitive)", () => {
-    // given config key "Sisyphus" (old format)
-    const configKey = "Sisyphus"
+    // given config key "Coder" (old format)
+    const configKey = "Coder"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Sisyphus (Ultraworker)" (case-insensitive lookup)
-    expect(result).toBe("Sisyphus (Ultraworker)")
+    // then returns "Coder (Ultraworker)" (case-insensitive lookup)
+    expect(result).toBe("Coder (Ultraworker)")
   })
 
   it("returns original key for unknown agents (fallback)", () => {
@@ -57,15 +57,15 @@ describe("getAgentDisplayName", () => {
     expect(result).toBe("Prometheus (Plan Builder)")
   })
 
-  it("returns display name for sisyphus-junior", () => {
-    // given config key "sisyphus-junior"
-    const configKey = "sisyphus-junior"
+  it("returns display name for coder-junior", () => {
+    // given config key "coder-junior"
+    const configKey = "coder-junior"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Sisyphus-Junior"
-    expect(result).toBe("Sisyphus-Junior")
+    // then returns "Coder-Junior"
+    expect(result).toBe("Coder-Junior")
   })
 
   it("returns display name for metis", () => {
@@ -137,10 +137,10 @@ describe("getAgentDisplayName", () => {
 
 describe("getAgentConfigKey", () => {
   it("resolves display name to config key", () => {
-    // given display name "Sisyphus (Ultraworker)"
+    // given display name "Coder (Ultraworker)"
     // when getAgentConfigKey called
     // then returns "coder"
-    expect(getAgentConfigKey("Sisyphus (Ultraworker)")).toBe("coder")
+    expect(getAgentConfigKey("Coder (Ultraworker)")).toBe("coder")
   })
 
   it("resolves display name case-insensitively", () => {
@@ -172,7 +172,7 @@ describe("getAgentConfigKey", () => {
     expect(getAgentConfigKey("Atlas (Plan Executor)")).toBe("atlas")
     expect(getAgentConfigKey("Metis (Plan Consultant)")).toBe("metis")
     expect(getAgentConfigKey("Momus (Plan Critic)")).toBe("momus")
-    expect(getAgentConfigKey("Sisyphus-Junior")).toBe("sisyphus-junior")
+    expect(getAgentConfigKey("Coder-Junior")).toBe("coder-junior")
   })
 })
 
@@ -180,11 +180,11 @@ describe("AGENT_DISPLAY_NAMES", () => {
   it("contains all expected agent mappings", () => {
     // given expected mappings
     const expectedMappings = {
-      sisyphus: "Sisyphus (Ultraworker)",
+      coder: "Coder (Ultraworker)",
       hephaestus: "Hephaestus (Deep Agent)",
       prometheus: "Prometheus (Plan Builder)",
       atlas: "Atlas (Plan Executor)",
-      "sisyphus-junior": "Sisyphus-Junior",
+      "coder-junior": "Coder-Junior",
       metis: "Metis (Plan Consultant)",
       momus: "Momus (Plan Critic)",
       oracle: "oracle",

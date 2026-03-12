@@ -24,7 +24,7 @@ bunDescribe("sendSyncPrompt", () => {
 
     const input = {
       sessionID: "test-session",
-      agentToUse: "sisyphus-junior",
+      agentToUse: "coder-junior",
       args: {
         description: "test task",
         prompt: "test prompt",
@@ -125,7 +125,7 @@ bunDescribe("sendSyncPrompt", () => {
     bunExpect(promptArgs.body.tools.call_omo_agent).toBe(false)
   })
 
-  bunTest("does not restrict call_omo_agent for sisyphus agent", async () => {
+  bunTest("does not restrict call_omo_agent for coder agent", async () => {
     //#given
     const { sendSyncPrompt } = require("./sync-prompt-sender")
 

@@ -61,7 +61,7 @@ ${buildAntiDuplicationSection()}
 Use \`task()\` with EITHER category OR agent (mutually exclusive):
 
 \`\`\`typescript
-// Category + Skills (spawns Sisyphus-Junior)
+// Category + Skills (spawns Coder-Junior)
 task(category="[name]", load_skills=["skill-1"], run_in_background=false, prompt="...")
 
 // Specialized Agent

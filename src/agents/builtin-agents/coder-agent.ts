@@ -6,9 +6,9 @@ import { AGENT_MODEL_REQUIREMENTS, isAnyFallbackModelAvailable } from "../../sha
 import { applyEnvironmentContext } from "./environment-context"
 import { applyOverrides } from "./agent-overrides"
 import { applyModelResolution, getFirstFallbackModel } from "./model-resolution"
-import { createSisyphusAgent } from "../coder"
+import { createCoderAgent } from "../coder"
 
-export function maybeCreateSisyphusConfig(input: {
+export function maybeCreateCoderConfig(input: {
   disabledAgents: string[]
   agentOverrides: AgentOverrides
   uiSelectedModel?: string
@@ -40,34 +40,34 @@ export function maybeCreateSisyphusConfig(input: {
     disableOmoEnv = false,
   } = input
 
-  const sisyphusOverride = agentOverrides["coder"]
-  const sisyphusRequirement = AGENT_MODEL_REQUIREMENTS["coder"]
-  const hasSisyphusExplicitConfig = sisyphusOverride !== undefined
-  const meetsSisyphusAnyModelRequirement =
-    !sisyphusRequirement?.requiresAnyModel ||
-    hasSisyphusExplicitConfig ||
+  const coderOverride = agentOverrides["coder"]
+  const coderRequirement = AGENT_MODEL_REQUIREMENTS["coder"]
+  const hasCoderExplicitConfig = coderOverride !== undefined
+  const meetsCoderAnyModelRequirement =
+    !coderRequirement?.requiresAnyModel ||
+    hasCoderExplicitConfig ||
     isFirstRunNoCache ||
-    isAnyFallbackModelAvailable(sisyphusRequirement.fallbackChain, availableModels)
+    isAnyFallbackModelAvailable(coderRequirement.fallbackChain, availableModels)
 
-  if (disabledAgents.includes("sisyphus") || !meetsSisyphusAnyModelRequirement) return undefined
+  if (disabledAgents.includes("coder") || !meetsCoderAnyModelRequirement) return undefined
 
-  let sisyphusResolution = applyModelResolution({
-    uiSelectedModel: sisyphusOverride?.model ? undefined : uiSelectedModel,
-    userModel: sisyphusOverride?.model,
-    requirement: sisyphusRequirement,
+  let coderResolution = applyModelResolution({
+    uiSelectedModel: coderOverride?.model ? undefined : uiSelectedModel,
+    userModel: coderOverride?.model,
+    requirement: coderRequirement,
     availableModels,
     systemDefaultModel,
   })
 
-  if (isFirstRunNoCache && !sisyphusOverride?.model && !uiSelectedModel) {
-    sisyphusResolution = getFirstFallbackModel(sisyphusRequirement)
+  if (isFirstRunNoCache && !coderOverride?.model && !uiSelectedModel) {
+    coderResolution = getFirstFallbackModel(coderRequirement)
   }
 
-  if (!sisyphusResolution) return undefined
-  const { model: sisyphusModel, variant: sisyphusResolvedVariant } = sisyphusResolution
+  if (!coderResolution) return undefined
+  const { model: coderModel, variant: coderResolvedVariant } = coderResolution
 
-  let sisyphusConfig = createSisyphusAgent(
-    sisyphusModel,
+  let coderConfig = createCoderAgent(
+    coderModel,
     availableAgents,
     undefined,
     availableSkills,
@@ -75,14 +75,14 @@ export function maybeCreateSisyphusConfig(input: {
     useTaskSystem
   )
 
-  if (sisyphusResolvedVariant) {
-    sisyphusConfig = { ...sisyphusConfig, variant: sisyphusResolvedVariant }
+  if (coderResolvedVariant) {
+    coderConfig = { ...coderConfig, variant: coderResolvedVariant }
   }
 
-  sisyphusConfig = applyOverrides(sisyphusConfig, sisyphusOverride, mergedCategories, directory)
-  sisyphusConfig = applyEnvironmentContext(sisyphusConfig, directory, {
+  coderConfig = applyOverrides(coderConfig, coderOverride, mergedCategories, directory)
+  coderConfig = applyEnvironmentContext(coderConfig, directory, {
     disableOmoEnv,
   })
 
-  return sisyphusConfig
+  return coderConfig
 }

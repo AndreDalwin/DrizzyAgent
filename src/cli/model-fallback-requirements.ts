@@ -5,7 +5,7 @@ import type { ModelRequirement } from "../shared/model-requirements";
 // not runtime-only providers like `nvidia`.
 
 export const CLI_AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
-  sisyphus: {
+  coder: {
     fallbackChain: [
       {
         providers: ["anthropic", "github-copilot", "opencode"],

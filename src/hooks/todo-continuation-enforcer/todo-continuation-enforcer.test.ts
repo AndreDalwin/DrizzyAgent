@@ -1467,7 +1467,7 @@ describe("todo-continuation-enforcer", () => {
   // ============================================================
 
   test("should skip compaction agent messages when resolving agent info", async () => {
-    // given - session where last message is from compaction agent but previous was Sisyphus
+    // given - session where last message is from compaction agent but previous was Coder
     const sessionID = "main-compaction-filter"
     setMainSession(sessionID)
 
@@ -1516,7 +1516,7 @@ describe("todo-continuation-enforcer", () => {
      await hook.handler({ event: { type: "session.idle", properties: { sessionID } } })
      await fakeTimers.advanceBy(2500)
 
-     // then - continuation uses Sisyphus (skipped compaction agent)
+     // then - continuation uses Coder (skipped compaction agent)
      expect(promptCalls.length).toBe(1)
     expect(promptCalls[0].agent).toBe("coder")
   })

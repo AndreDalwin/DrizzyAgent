@@ -3,7 +3,7 @@ import type { BuiltinAgentName, AgentOverrides, AgentFactory, AgentPromptMetadat
 import type { CategoriesConfig, GitMasterConfig } from "../config/schema"
 import type { LoadedSkill } from "../features/opencode-skill-loader/types"
 import type { BrowserAutomationProvider } from "../config/schema"
-import { createSisyphusAgent } from "./coder"
+import { createCoderAgent } from "./coder"
 import { createOracleAgent, ORACLE_PROMPT_METADATA } from "./oracle"
 import { createLibrarianAgent, LIBRARIAN_PROMPT_METADATA } from "./librarian"
 import { createExploreAgent, EXPLORE_PROMPT_METADATA } from "./explore"
@@ -12,7 +12,7 @@ import { createMetisAgent, metisPromptMetadata } from "./metis"
 import { createAtlasAgent, atlasPromptMetadata } from "./atlas"
 import { createMomusAgent, momusPromptMetadata } from "./momus"
 import { createHephaestusAgent } from "./hephaestus"
-import { createSisyphusJuniorAgentWithOverrides } from "./coder-junior"
+import { createCoderJuniorAgentWithOverrides } from "./coder-junior"
 import type { AvailableCategory } from "./dynamic-agent-prompt-builder"
 import {
   fetchAvailableModels,
@@ -23,7 +23,7 @@ import { CATEGORY_DESCRIPTIONS } from "../tools/delegate-task/constants"
 import { mergeCategories } from "../shared/merge-categories"
 import { buildAvailableSkills } from "./builtin-agents/available-skills"
 import { collectPendingBuiltinAgents } from "./builtin-agents/general-agents"
-import { maybeCreateSisyphusConfig } from "./builtin-agents/coder-agent"
+import { maybeCreateCoderConfig } from "./builtin-agents/coder-agent"
 import { maybeCreateHephaestusConfig } from "./builtin-agents/hephaestus-agent"
 import { maybeCreateAtlasConfig } from "./builtin-agents/atlas-agent"
 import { buildCustomAgentMetadata, parseRegisteredAgentSummaries } from "./custom-agent-summaries"
@@ -31,7 +31,7 @@ import { buildCustomAgentMetadata, parseRegisteredAgentSummaries } from "./custo
 type AgentSource = AgentFactory | AgentConfig
 
 const agentSources: Record<BuiltinAgentName, AgentSource> = {
-  coder: createSisyphusAgent,
+  coder: createCoderAgent,
   hephaestus: createHephaestusAgent,
   oracle: createOracleAgent,
   librarian: createLibrarianAgent,
@@ -42,11 +42,11 @@ const agentSources: Record<BuiltinAgentName, AgentSource> = {
   // Note: Atlas is handled specially in createBuiltinAgents()
   // because it needs OrchestratorContext, not just a model string
   atlas: createAtlasAgent as AgentFactory,
-  "coder-junior": createSisyphusJuniorAgentWithOverrides as unknown as AgentFactory,
+  "coder-junior": createCoderJuniorAgentWithOverrides as unknown as AgentFactory,
 }
 
 /**
- * Metadata for each agent, used to build Sisyphus's dynamic prompt sections
+ * Metadata for each agent, used to build Coder's dynamic prompt sections
  * (Delegation Table, Tool Selection, Key Triggers, etc.)
  */
 const agentMetadata: Partial<Record<BuiltinAgentName, AgentPromptMetadata>> = {
@@ -137,7 +137,7 @@ export async function createBuiltinAgents(
     })
   }
 
-  const sisyphusConfig = maybeCreateSisyphusConfig({
+  const coderConfig = maybeCreateCoderConfig({
     disabledAgents,
     agentOverrides,
     uiSelectedModel,
@@ -153,8 +153,8 @@ export async function createBuiltinAgents(
     useTaskSystem,
     disableOmoEnv,
   })
-  if (sisyphusConfig) {
-    result["sisyphus"] = sisyphusConfig
+  if (coderConfig) {
+    result["coder"] = coderConfig
   }
 
   const hephaestusConfig = maybeCreateHephaestusConfig({
@@ -175,7 +175,7 @@ export async function createBuiltinAgents(
     result["hephaestus"] = hephaestusConfig
   }
 
-  // Add pending agents after sisyphus and hephaestus to maintain order
+  // Add pending agents after coder and hephaestus to maintain order
   for (const [name, config] of pendingAgentConfigs) {
     result[name] = config
   }

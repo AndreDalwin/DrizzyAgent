@@ -1,5 +1,5 @@
 /**
- * GPT-5.4-native Sisyphus prompt — rewritten with 8-block architecture.
+ * GPT-5.4-native Coder prompt — rewritten with 8-block architecture.
  *
  * Design principles (derived from OpenAI's GPT-5.4 prompting guidance):
  * - Compact, block-structured prompts with XML tags + named sub-anchors
@@ -76,7 +76,7 @@ When asking for clarification:
 </tasks>`;
 }
 
-export function buildGpt54SisyphusPrompt(
+export function buildGpt54CoderPrompt(
   model: string,
   availableAgents: AvailableAgent[],
   availableTools: AvailableTool[] = [],

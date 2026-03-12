@@ -7,7 +7,7 @@ import type { OhMyOpenCodeConfig } from "../config"
 import { getAgentDisplayName } from "../shared/agent-display-names"
 
 import * as agents from "../agents"
-import * as sisyphusJunior from "../agents/sisyphus-junior"
+import * as coderJunior from "../agents/coder-junior"
 import * as commandLoader from "../features/claude-code-command-loader"
 import * as builtinCommands from "../features/builtin-commands"
 import * as skillLoader from "../features/opencode-skill-loader"
@@ -22,7 +22,7 @@ import * as modelResolver from "../shared/model-resolver"
 
 beforeEach(() => {
   spyOn(agents, "createBuiltinAgents" as any).mockResolvedValue({
-    sisyphus: { name: "coder", prompt: "test", mode: "primary" },
+    coder: { name: "coder", prompt: "test", mode: "primary" },
     oracle: { name: "oracle", prompt: "test", mode: "subagent" },
   })
 
@@ -75,7 +75,7 @@ beforeEach(() => {
 
 afterEach(() => {
   (agents.createBuiltinAgents as any)?.mockRestore?.()
-  ;(sisyphusJunior.createSisyphusJuniorAgentWithOverrides as any)?.mockRestore?.()
+  ;(coderJunior.createCoderJuniorAgentWithOverrides as any)?.mockRestore?.()
   ;(commandLoader.loadUserCommands as any)?.mockRestore?.()
   ;(commandLoader.loadProjectCommands as any)?.mockRestore?.()
   ;(commandLoader.loadOpencodeGlobalCommands as any)?.mockRestore?.()
@@ -102,7 +102,7 @@ afterEach(() => {
   ;(modelResolver.resolveModelWithFallback as any)?.mockRestore?.()
 })
 
-describe("Sisyphus-Junior model inheritance", () => {
+describe("Coder-Junior model inheritance", () => {
   test("does not inherit UI-selected model as system default", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {}
@@ -124,16 +124,16 @@ describe("Sisyphus-Junior model inheritance", () => {
 
     // #then
     const agentConfig = config.agent as Record<string, { model?: string }>
-    expect(agentConfig[getAgentDisplayName("sisyphus-junior")]?.model).toBe(
-      sisyphusJunior.SISYPHUS_JUNIOR_DEFAULTS.model
+    expect(agentConfig[getAgentDisplayName("coder-junior")]?.model).toBe(
+      coderJunior.CODER_JUNIOR_DEFAULTS.model
     )
   })
 
-  test("uses explicitly configured sisyphus-junior model", async () => {
+  test("uses explicitly configured coder-junior model", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {
       agents: {
-        "sisyphus-junior": {
+        "coder-junior": {
           model: "openai/gpt-5.3-codex",
         },
       },
@@ -156,26 +156,26 @@ describe("Sisyphus-Junior model inheritance", () => {
 
     // #then
     const agentConfig = config.agent as Record<string, { model?: string }>
-    expect(agentConfig[getAgentDisplayName("sisyphus-junior")]?.model).toBe(
+    expect(agentConfig[getAgentDisplayName("coder-junior")]?.model).toBe(
       "openai/gpt-5.3-codex"
     )
   })
 })
 
 describe("Plan agent demote behavior", () => {
-  test("orders core agents as sisyphus -> hephaestus -> prometheus -> atlas", async () => {
+  test("orders core agents as coder -> hephaestus -> prometheus -> atlas", async () => {
     // #given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
+      coder: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
     })
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
     }
@@ -210,7 +210,7 @@ describe("Plan agent demote behavior", () => {
   test("plan agent should be demoted to subagent without inheriting prometheus prompt", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
         replace_plan: true,
       },
@@ -248,7 +248,7 @@ describe("Plan agent demote behavior", () => {
   test("plan agent remains unchanged when planner is disabled", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: false,
       },
     }
@@ -285,7 +285,7 @@ describe("Plan agent demote behavior", () => {
   test("prometheus should have mode 'all' to be callable via task", async () => {
     // given
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
     }
@@ -320,7 +320,7 @@ describe("Agent permission defaults", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
+      coder: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
     })
@@ -349,7 +349,7 @@ describe("Agent permission defaults", () => {
   })
 })
 
-describe("default_agent behavior with Sisyphus orchestration", () => {
+describe("default_agent behavior with Coder orchestration", () => {
   test("canonicalizes configured default_agent with surrounding whitespace", async () => {
     // given
     const pluginConfig: OhMyOpenCodeConfig = {}
@@ -447,7 +447,7 @@ describe("default_agent behavior with Sisyphus orchestration", () => {
     expect(config.default_agent).toBe(displayName)
   })
 
-  test("sets default_agent to sisyphus when missing", async () => {
+  test("sets default_agent to coder when missing", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {}
     const config: Record<string, unknown> = {
@@ -470,7 +470,7 @@ describe("default_agent behavior with Sisyphus orchestration", () => {
     expect(config.default_agent).toBe(getAgentDisplayName("coder"))
   })
 
-  test("sets default_agent to sisyphus when configured default_agent is empty after trim", async () => {
+  test("sets default_agent to coder when configured default_agent is empty after trim", async () => {
     // given
     const pluginConfig: OhMyOpenCodeConfig = {}
     const config: Record<string, unknown> = {
@@ -518,10 +518,10 @@ describe("default_agent behavior with Sisyphus orchestration", () => {
     expect(config.default_agent).toBe("Custom Agent")
   })
 
-  test("does not normalize configured default_agent when Sisyphus is disabled", async () => {
+  test("does not normalize configured default_agent when Coder is disabled", async () => {
     // given
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         disabled: true,
       },
     }
@@ -651,7 +651,7 @@ describe("Prometheus direct override priority over category", () => {
   test("direct reasoningEffort takes priority over category reasoningEffort", async () => {
     // given - category has reasoningEffort=xhigh, direct override says "low"
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
       categories: {
@@ -693,7 +693,7 @@ describe("Prometheus direct override priority over category", () => {
   test("category reasoningEffort applied when no direct override", async () => {
     // given - category has reasoningEffort but no direct override
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
       categories: {
@@ -734,7 +734,7 @@ describe("Prometheus direct override priority over category", () => {
   test("direct temperature takes priority over category temperature", async () => {
     // given
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
       categories: {
@@ -777,7 +777,7 @@ describe("Prometheus direct override priority over category", () => {
     // #given - prometheus override with prompt_append
     const customInstructions = "## Custom Project Rules\nUse max 2 commits."
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
       agents: {
@@ -821,7 +821,7 @@ describe("Plan agent model inheritance from prometheus", () => {
       variant: "max",
     })
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
         replace_plan: true,
       },
@@ -865,7 +865,7 @@ describe("Plan agent model inheritance from prometheus", () => {
       variant: "high",
     })
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
         replace_plan: true,
       },
@@ -920,7 +920,7 @@ describe("Plan agent model inheritance from prometheus", () => {
       variant: "max",
     })
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
         replace_plan: true,
       },
@@ -963,7 +963,7 @@ describe("Plan agent model inheritance from prometheus", () => {
       variant: "max",
     })
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
         replace_plan: true,
       },
@@ -1002,7 +1002,7 @@ describe("Deadlock prevention - fetchAvailableModels must not receive client", (
     const fetchSpy = spyOn(shared, "fetchAvailableModels" as any).mockResolvedValue(new Set<string>())
 
     const pluginConfig: OhMyOpenCodeConfig = {
-      sisyphus_agent: {
+      coder_agent: {
         planner_enabled: true,
       },
     }
@@ -1162,7 +1162,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
     getAgentDisplayName("hephaestus"),
     getAgentDisplayName("atlas"),
     getAgentDisplayName("prometheus"),
-    getAgentDisplayName("sisyphus-junior"),
+    getAgentDisplayName("coder-junior"),
   ])
 
   test("denies todowrite and todoread for primary agents when task_system is enabled", async () => {
@@ -1171,11 +1171,11 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
+      coder: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
       prometheus: { name: "prometheus", prompt: "test", mode: "primary" },
-      "sisyphus-junior": { name: "sisyphus-junior", prompt: "test", mode: "subagent" },
+      "coder-junior": { name: "coder-junior", prompt: "test", mode: "subagent" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
     })
 
@@ -1212,7 +1212,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
+      coder: { name: "coder", prompt: "test", mode: "primary" },
       hephaestus: { name: "hephaestus", prompt: "test", mode: "primary" },
     })
 
@@ -1249,7 +1249,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       mockResolvedValue: (value: Record<string, unknown>) => void
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "test", mode: "primary" },
+      coder: { name: "coder", prompt: "test", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {}
@@ -1284,7 +1284,7 @@ describe("disable_omo_env pass-through", () => {
       mock: { calls: unknown[][] }
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "without-env", mode: "primary" },
+      coder: { name: "coder", prompt: "without-env", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {
@@ -1320,7 +1320,7 @@ describe("disable_omo_env pass-through", () => {
       mock: { calls: unknown[][] }
     }
     createBuiltinAgentsMock.mockResolvedValue({
-      sisyphus: { name: "coder", prompt: "with-env", mode: "primary" },
+      coder: { name: "coder", prompt: "with-env", mode: "primary" },
     })
 
     const pluginConfig: OhMyOpenCodeConfig = {}

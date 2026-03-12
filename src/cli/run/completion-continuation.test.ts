@@ -38,10 +38,10 @@ function createMockContext(directory: string): RunContext {
 }
 
 function writeBoulderStateFile(directory: string, activePlanPath: string, sessionIDs: string[]): void {
-  const sisyphusDir = join(directory, ".drizzy")
-  mkdirSync(sisyphusDir, { recursive: true })
+  const coderDir = join(directory, ".drizzy")
+  mkdirSync(coderDir, { recursive: true })
   writeFileSync(
-    join(sisyphusDir, "boulder.json"),
+    join(coderDir, "boulder.json"),
     JSON.stringify({
       active_plan: activePlanPath,
       started_at: new Date().toISOString(),

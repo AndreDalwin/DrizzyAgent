@@ -34,7 +34,7 @@ ${buildAntiDuplicationSection()}
 Use \`task()\` with EITHER category OR agent (mutually exclusive):
 
 \`\`\`typescript
-// Option A: Category + Skills (spawns Sisyphus-Junior with domain config)
+// Option A: Category + Skills (spawns Coder-Junior with domain config)
 task(
   category="[category-name]",
   load_skills=["skill-1", "skill-2"],

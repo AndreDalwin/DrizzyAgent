@@ -37,7 +37,7 @@ const { MESSAGE_STORAGE } = await import("../../features/hook-message-injector")
 
 describe("atlas hook", () => {
   let TEST_DIR: string
-  let SISYPHUS_DIR: string
+  let CODER_DIR: string
 
   function createMockPluginInput(overrides?: { promptMock?: ReturnType<typeof mock> }) {
     const promptMock = overrides?.promptMock ?? mock(() => Promise.resolve())
@@ -74,12 +74,12 @@ describe("atlas hook", () => {
 
   beforeEach(() => {
     TEST_DIR = join(tmpdir(), `atlas-test-${randomUUID()}`)
-    SISYPHUS_DIR = join(TEST_DIR, ".drizzy")
+    CODER_DIR = join(TEST_DIR, ".drizzy")
     if (!existsSync(TEST_DIR)) {
       mkdirSync(TEST_DIR, { recursive: true })
     }
-    if (!existsSync(SISYPHUS_DIR)) {
-      mkdirSync(SISYPHUS_DIR, { recursive: true })
+    if (!existsSync(CODER_DIR)) {
+      mkdirSync(CODER_DIR, { recursive: true })
     }
     clearBoulderState(TEST_DIR)
   })
@@ -143,7 +143,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task completed successfully",
         metadata: {},
       }
@@ -167,7 +167,7 @@ describe("atlas hook", () => {
       
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task completed successfully",
         metadata: {},
       }
@@ -204,7 +204,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task completed successfully",
         metadata: {},
       }
@@ -243,7 +243,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Original output",
         metadata: {},
       }
@@ -280,7 +280,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task output",
         metadata: {},
       }
@@ -316,7 +316,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task output",
         metadata: {},
       }
@@ -353,7 +353,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task completed",
         metadata: {},
       }
@@ -390,7 +390,7 @@ describe("atlas hook", () => {
 
       const hook = createAtlasHook(createMockPluginInput())
       const output = {
-        title: "Sisyphus Task",
+        title: "Coder Task",
         output: "Task completed",
         metadata: {},
       }
@@ -435,7 +435,7 @@ describe("atlas hook", () => {
 
         const hook = createAtlasHook(createMockPluginInput())
         const output = {
-          title: "Sisyphus Task",
+          title: "Coder Task",
           output: "Task completed successfully",
           metadata: {},
         }
@@ -470,7 +470,7 @@ describe("atlas hook", () => {
 
         const hook = createAtlasHook(createMockPluginInput())
         const output = {
-          title: "Sisyphus Task",
+          title: "Coder Task",
           output: "Task completed successfully",
           metadata: {},
         }
@@ -509,7 +509,7 @@ describe("atlas hook", () => {
 
         const hook = createAtlasHook(createMockPluginInput())
         const output = {
-          title: "Sisyphus Task",
+          title: "Coder Task",
           output: "Task completed successfully",
           metadata: {},
         }
@@ -601,7 +601,7 @@ describe("atlas hook", () => {
       test("should NOT append reminder when non-orchestrator writes outside .drizzy/", async () => {
         // given
         const nonOrchestratorSession = "non-orchestrator-session"
-        setupMessageStorage(nonOrchestratorSession, "sisyphus-junior")
+        setupMessageStorage(nonOrchestratorSession, "coder-junior")
         
         const hook = createAtlasHook(createMockPluginInput())
         const originalOutput = "File written successfully"
@@ -1146,8 +1146,8 @@ describe("atlas hook", () => {
       expect(callArgs.body.parts[0].text).toContain("2 remaining")
     })
 
-    test("should inject when last agent is sisyphus and boulder targets atlas explicitly", async () => {
-       // given - boulder explicitly set to atlas, but last agent is sisyphus (initial state after /start-work)
+    test("should inject when last agent is coder and boulder targets atlas explicitly", async () => {
+       // given - boulder explicitly set to atlas, but last agent is coder (initial state after /start-work)
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
@@ -1160,7 +1160,7 @@ describe("atlas hook", () => {
        }
        writeBoulderState(TEST_DIR, state)
 
-       // given - last agent is sisyphus (typical state right after /start-work)
+       // given - last agent is coder (typical state right after /start-work)
        cleanupMessageStorage(MAIN_SESSION_ID)
        setupMessageStorage(MAIN_SESSION_ID, "coder")
 
@@ -1175,7 +1175,7 @@ describe("atlas hook", () => {
          },
        })
 
-       // then - should call prompt because sisyphus is always allowed for atlas boulders
+       // then - should call prompt because coder is always allowed for atlas boulders
        expect(mockInput._promptMock).toHaveBeenCalled()
      })
 
@@ -1209,7 +1209,7 @@ describe("atlas hook", () => {
     })
 
      test("should inject when last agent matches boulder agent even if non-Atlas", async () => {
-       // given - boulder state expects sisyphus and last agent is sisyphus
+       // given - boulder state expects coder and last agent is coder
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
@@ -1236,7 +1236,7 @@ describe("atlas hook", () => {
          },
        })
 
-       // then - should call prompt for sisyphus
+       // then - should call prompt for coder
        expect(mockInput._promptMock).toHaveBeenCalled()
        const callArgs = mockInput._promptMock.mock.calls[0][0]
        expect(callArgs.body.agent).toBe("coder")

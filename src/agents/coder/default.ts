@@ -1,5 +1,5 @@
 /**
- * Default/base Sisyphus prompt builder.
+ * Default/base Coder prompt builder.
  * Used for Claude and other non-specialized models.
  */
 
@@ -135,7 +135,7 @@ Should I proceed with [recommendation], or would you prefer differently?
 </Task_Management>`;
 }
 
-export function buildDefaultSisyphusPrompt(
+export function buildDefaultCoderPrompt(
   model: string,
   availableAgents: AvailableAgent[],
   availableTools: AvailableTool[] = [],

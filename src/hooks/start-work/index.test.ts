@@ -16,7 +16,7 @@ import * as worktreeDetector from "./worktree-detector"
 
 describe("start-work hook", () => {
   let testDir: string
-  let sisyphusDir: string
+  let coderDir: string
 
   function createMockPluginInput() {
     return {
@@ -27,12 +27,12 @@ describe("start-work hook", () => {
 
   beforeEach(() => {
     testDir = join(tmpdir(), `start-work-test-${randomUUID()}`)
-    sisyphusDir = join(testDir, ".drizzy")
+    coderDir = join(testDir, ".drizzy")
     if (!existsSync(testDir)) {
       mkdirSync(testDir, { recursive: true })
     }
-    if (!existsSync(sisyphusDir)) {
-      mkdirSync(sisyphusDir, { recursive: true })
+    if (!existsSync(coderDir)) {
+      mkdirSync(coderDir, { recursive: true })
     }
     clearBoulderState(testDir)
   })
@@ -396,12 +396,12 @@ describe("start-work hook", () => {
 
       // when
       await hook["chat.message"](
-        { sessionID: "ses-prometheus-to-sisyphus" },
+        { sessionID: "ses-prometheus-to-coder" },
         output
       )
 
       // then
-      expect(updateSpy).toHaveBeenCalledWith("ses-prometheus-to-sisyphus", "atlas")
+      expect(updateSpy).toHaveBeenCalledWith("ses-prometheus-to-coder", "atlas")
       updateSpy.mockRestore()
     })
   })

@@ -100,7 +100,7 @@ describe("createAutoUpdateCheckerHook", () => {
 
     const hook = createAutoUpdateCheckerHook(createPluginInput(), {
       showStartupToast: true,
-      isSisyphusEnabled: true,
+      isCoderEnabled: true,
       autoUpdate: true,
     })
 
@@ -211,23 +211,23 @@ describe("createAutoUpdateCheckerHook", () => {
     expect(mockRunBackgroundUpdateCheck).not.toHaveBeenCalled()
   })
 
-  it("passes correct toast message with sisyphus enabled", async () => {
-    //#given - sisyphus mode enabled
+  it("passes correct toast message with coder enabled", async () => {
+    //#given - coder mode enabled
     const createAutoUpdateCheckerHook = await importFreshHookFactory()
     const hook = createAutoUpdateCheckerHook(createPluginInput(), {
-      isSisyphusEnabled: true,
+      isCoderEnabled: true,
     })
 
     //#when - session.created event arrives
     runSessionCreatedEvent(hook)
     await flushScheduledWork()
 
-    //#then - startup toast includes sisyphus wording
+    //#then - startup toast includes coder wording
     expect(mockShowVersionToast).toHaveBeenCalledTimes(1)
     expect(mockShowVersionToast).toHaveBeenCalledWith(
       expect.anything(),
       "3.6.0",
-      expect.stringContaining("Sisyphus")
+      expect.stringContaining("Coder")
     )
   })
 })

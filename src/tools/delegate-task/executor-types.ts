@@ -8,7 +8,7 @@ export interface ExecutorContext {
   directory: string
   userCategories?: CategoriesConfig
   gitMasterConfig?: GitMasterConfig
-  sisyphusJuniorModel?: string
+  coderJuniorModel?: string
   browserProvider?: BrowserAutomationProvider
   agentOverrides?: AgentOverrides
   onSyncSessionCreated?: (event: { sessionID: string; parentID: string; title: string }) => Promise<void>

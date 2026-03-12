@@ -564,7 +564,7 @@
           },
           "additionalProperties": false
         },
-        "sisyphus": {
+        "coder": {
           "type": "object",
           "properties": {
             "model": {
@@ -1005,7 +1005,7 @@
           },
           "additionalProperties": false
         },
-        "sisyphus-junior": {
+        "coder-junior": {
           "type": "object",
           "properties": {
             "model": {

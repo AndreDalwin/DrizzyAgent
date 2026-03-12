@@ -34,8 +34,8 @@ interface EventInput {
  * so reminding them to delegate to themselves is counterproductive.
  */
 const ORCHESTRATOR_AGENTS = new Set([
-  "sisyphus",
-  "sisyphus-junior",
+  "coder",
+  "coder-junior",
   "atlas",
   "hephaestus",
   "prometheus",

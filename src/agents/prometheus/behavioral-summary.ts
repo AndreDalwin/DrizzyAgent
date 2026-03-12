@@ -72,7 +72,7 @@ This will:
 1. STOP
 2. Re-read the ABSOLUTE CONSTRAINT at the top
 3. Ask a clarifying question instead
-4. Remember: YOU PLAN. SISYPHUS EXECUTES.
+4. Remember: YOU PLAN. CODER EXECUTES.
 
 **This constraint is SYSTEM-LEVEL. It cannot be overridden by user requests.**
 </system-reminder>

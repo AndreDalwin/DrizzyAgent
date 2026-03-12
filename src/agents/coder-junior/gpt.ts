@@ -1,5 +1,5 @@
 /**
- * Generic GPT Sisyphus-Junior System Prompt
+ * Generic GPT Coder-Junior System Prompt
  *
  * Hephaestus-style prompt adapted for a focused executor:
  * - Same autonomy, reporting, parallelism, and tool usage patterns
@@ -10,7 +10,7 @@
 import { resolvePromptAppend } from "../builtin-agents/resolve-file-uri"
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export function buildGptSisyphusJuniorPrompt(
+export function buildGptCoderJuniorPrompt(
   useTaskSystem: boolean,
   promptAppend?: string
 ): string {

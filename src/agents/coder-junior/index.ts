@@ -1,13 +1,13 @@
-export { buildDefaultSisyphusJuniorPrompt } from "./default"
-export { buildGptSisyphusJuniorPrompt } from "./gpt"
-export { buildGpt54SisyphusJuniorPrompt } from "./gpt-5-4"
-export { buildGpt53CodexSisyphusJuniorPrompt } from "./gpt-5-3-codex"
-export { buildGeminiSisyphusJuniorPrompt } from "./gemini"
+export { buildDefaultCoderJuniorPrompt } from "./default"
+export { buildGptCoderJuniorPrompt } from "./gpt"
+export { buildGpt54CoderJuniorPrompt } from "./gpt-5-4"
+export { buildGpt53CodexCoderJuniorPrompt } from "./gpt-5-3-codex"
+export { buildGeminiCoderJuniorPrompt } from "./gemini"
 
 export {
-  SISYPHUS_JUNIOR_DEFAULTS,
-  getSisyphusJuniorPromptSource,
-  buildSisyphusJuniorPrompt,
-  createSisyphusJuniorAgentWithOverrides,
+  CODER_JUNIOR_DEFAULTS,
+  getCoderJuniorPromptSource,
+  buildCoderJuniorPrompt,
+  createCoderJuniorAgentWithOverrides,
 } from "./agent"
-export type { SisyphusJuniorPromptSource } from "./agent"
+export type { CoderJuniorPromptSource } from "./agent"

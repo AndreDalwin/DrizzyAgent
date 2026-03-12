@@ -1,5 +1,5 @@
 /**
- * Sisyphus-Junior - Focused Task Executor
+ * Coder-Junior - Focused Task Executor
  *
  * Executes delegated tasks directly without spawning other agents.
  * Category-spawned executor with domain-specific configurations.
@@ -19,26 +19,26 @@ import {
   type PermissionValue,
 } from "../../shared/permission-compat"
 
-import { buildDefaultSisyphusJuniorPrompt } from "./default"
-import { buildGptSisyphusJuniorPrompt } from "./gpt"
-import { buildGpt54SisyphusJuniorPrompt } from "./gpt-5-4"
-import { buildGpt53CodexSisyphusJuniorPrompt } from "./gpt-5-3-codex"
-import { buildGeminiSisyphusJuniorPrompt } from "./gemini"
+import { buildDefaultCoderJuniorPrompt } from "./default"
+import { buildGptCoderJuniorPrompt } from "./gpt"
+import { buildGpt54CoderJuniorPrompt } from "./gpt-5-4"
+import { buildGpt53CodexCoderJuniorPrompt } from "./gpt-5-3-codex"
+import { buildGeminiCoderJuniorPrompt } from "./gemini"
 
 const MODE: AgentMode = "subagent"
 
-// Core tools that Sisyphus-Junior must NEVER have access to
+// Core tools that Coder-Junior must NEVER have access to
 // Note: call_omo_agent is ALLOWED so subagents can spawn explore/librarian
 const BLOCKED_TOOLS = ["task"]
 
-export const SISYPHUS_JUNIOR_DEFAULTS = {
+export const CODER_JUNIOR_DEFAULTS = {
   model: "anthropic/claude-sonnet-4-6",
   temperature: 0.1,
 } as const
 
-export type SisyphusJuniorPromptSource = "default" | "gpt" | "gpt-5-4" | "gpt-5-3-codex" | "gemini"
+export type CoderJuniorPromptSource = "default" | "gpt" | "gpt-5-4" | "gpt-5-3-codex" | "gemini"
 
-export function getSisyphusJuniorPromptSource(model?: string): SisyphusJuniorPromptSource {
+export function getCoderJuniorPromptSource(model?: string): CoderJuniorPromptSource {
   if (model && isGptModel(model)) {
     const lower = model.toLowerCase()
     if (lower.includes("gpt-5.4") || lower.includes("gpt-5-4")) return "gpt-5-4"
@@ -52,31 +52,31 @@ export function getSisyphusJuniorPromptSource(model?: string): SisyphusJuniorPro
 }
 
 /**
- * Builds the appropriate Sisyphus-Junior prompt based on model.
+ * Builds the appropriate Coder-Junior prompt based on model.
  */
-export function buildSisyphusJuniorPrompt(
+export function buildCoderJuniorPrompt(
   model: string | undefined,
   useTaskSystem: boolean,
   promptAppend?: string
 ): string {
-  const source = getSisyphusJuniorPromptSource(model)
+  const source = getCoderJuniorPromptSource(model)
 
   switch (source) {
     case "gpt-5-4":
-      return buildGpt54SisyphusJuniorPrompt(useTaskSystem, promptAppend)
+      return buildGpt54CoderJuniorPrompt(useTaskSystem, promptAppend)
     case "gpt-5-3-codex":
-      return buildGpt53CodexSisyphusJuniorPrompt(useTaskSystem, promptAppend)
+      return buildGpt53CodexCoderJuniorPrompt(useTaskSystem, promptAppend)
     case "gpt":
-      return buildGptSisyphusJuniorPrompt(useTaskSystem, promptAppend)
+      return buildGptCoderJuniorPrompt(useTaskSystem, promptAppend)
     case "gemini":
-      return buildGeminiSisyphusJuniorPrompt(useTaskSystem, promptAppend)
+      return buildGeminiCoderJuniorPrompt(useTaskSystem, promptAppend)
     case "default":
     default:
-      return buildDefaultSisyphusJuniorPrompt(useTaskSystem, promptAppend)
+      return buildDefaultCoderJuniorPrompt(useTaskSystem, promptAppend)
   }
 }
 
-export function createSisyphusJuniorAgentWithOverrides(
+export function createCoderJuniorAgentWithOverrides(
   override: AgentOverrideConfig | undefined,
   systemDefaultModel?: string,
   useTaskSystem = false
@@ -86,11 +86,11 @@ export function createSisyphusJuniorAgentWithOverrides(
   }
 
   const overrideModel = (override as { model?: string } | undefined)?.model
-  const model = overrideModel ?? systemDefaultModel ?? SISYPHUS_JUNIOR_DEFAULTS.model
-  const temperature = override?.temperature ?? SISYPHUS_JUNIOR_DEFAULTS.temperature
+  const model = overrideModel ?? systemDefaultModel ?? CODER_JUNIOR_DEFAULTS.model
+  const temperature = override?.temperature ?? CODER_JUNIOR_DEFAULTS.temperature
 
   const promptAppend = override?.prompt_append
-  const prompt = buildSisyphusJuniorPrompt(model, useTaskSystem, promptAppend)
+  const prompt = buildCoderJuniorPrompt(model, useTaskSystem, promptAppend)
 
   const baseRestrictions = createAgentToolRestrictions(BLOCKED_TOOLS)
 
@@ -105,7 +105,7 @@ export function createSisyphusJuniorAgentWithOverrides(
 
   const base: AgentConfig = {
     description: override?.description ??
-      "Focused task executor. Same discipline, no delegation. (Sisyphus-Junior - OhMyOpenCode)",
+      "Focused task executor. Same discipline, no delegation. (Coder-Junior - OhMyOpenCode)",
     mode: MODE,
     model,
     temperature,
@@ -129,4 +129,4 @@ export function createSisyphusJuniorAgentWithOverrides(
   } as AgentConfig
 }
 
-createSisyphusJuniorAgentWithOverrides.mode = MODE
+createCoderJuniorAgentWithOverrides.mode = MODE

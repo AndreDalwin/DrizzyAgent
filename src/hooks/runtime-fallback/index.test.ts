@@ -2160,7 +2160,7 @@ describe("runtime-fallback", () => {
         config: createMockConfig({ notify_on_fallback: false }),
         pluginConfig: createMockPluginConfigWithAgentFallback("coder", ["openai/gpt-5.4"]),
       })
-      const sessionID = "sisyphus-session-123"
+      const sessionID = "coder-session-123"
 
       await hook.event({
         event: {
@@ -2176,7 +2176,7 @@ describe("runtime-fallback", () => {
         },
       })
 
-      //#then - should detect sisyphus from sessionID and use its fallback
+      //#then - should detect coder from sessionID and use its fallback
       const fallbackLog = logCalls.find((c) => c.msg.includes("Preparing fallback"))
       expect(fallbackLog).toBeDefined()
       expect(fallbackLog?.data).toMatchObject({ to: "openai/gpt-5.4" })

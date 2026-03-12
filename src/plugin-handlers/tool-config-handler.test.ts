@@ -38,7 +38,7 @@ describe("applyToolConfig", () => {
         "coder",
         "hephaestus",
         "prometheus",
-        "sisyphus-junior",
+        "coder-junior",
       ])("#then should deny todo tools for %s agent", (agentName) => {
         const params = createParams({
           taskSystem: true,
@@ -166,7 +166,7 @@ describe("applyToolConfig", () => {
         "coder",
         "hephaestus",
         "prometheus",
-        "sisyphus-junior",
+        "coder-junior",
       ])("#then should NOT deny todo tools for %s agent", (agentName) => {
         const params = createParams({
           taskSystem: false,

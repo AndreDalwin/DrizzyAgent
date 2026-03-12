@@ -48,7 +48,7 @@ describe("runtime-fallback fallback-models", () => {
     //#given
     const pluginConfig = {
       agents: {
-        sisyphus: {
+        coder: {
           fallback_models: ["quotio/gpt-5.2", "quotio/glm-5", "quotio/kimi-k2.5"],
         },
         oracle: {

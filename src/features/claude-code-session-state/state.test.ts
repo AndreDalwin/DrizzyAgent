@@ -138,7 +138,7 @@ describe("claude-code-session-state", () => {
       expect(getSessionAgent(sessionID)).toBe(customAgent)
 
       // when - first message after switch sends default agent
-      // This simulates the bug: input.agent = "Sisyphus" on first message
+      // This simulates the bug: input.agent = "Coder" on first message
       // Using setSessionAgent (first-write wins) should preserve custom agent
       setSessionAgent(sessionID, defaultAgent)
 

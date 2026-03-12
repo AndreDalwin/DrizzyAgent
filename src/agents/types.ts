@@ -2,7 +2,7 @@ import type { AgentConfig } from "@opencode-ai/sdk";
 
 /**
  * Agent mode determines UI model selection behavior:
- * - "primary": Respects user's UI-selected model (sisyphus, atlas)
+ * - "primary": Respects user's UI-selected model (coder, atlas)
  * - "subagent": Uses own fallback chain, ignores UI selection (oracle, explore, etc.)
  * - "all": Available in both contexts (OpenCode compatibility)
  */
@@ -17,7 +17,7 @@ export type AgentFactory = ((model: string) => AgentConfig) & {
 };
 
 /**
- * Agent category for grouping in Sisyphus prompt sections
+ * Agent category for grouping in Coder prompt sections
  */
 export type AgentCategory =
   | "exploration"
@@ -31,7 +31,7 @@ export type AgentCategory =
 export type AgentCost = "FREE" | "CHEAP" | "EXPENSIVE";
 
 /**
- * Delegation trigger for Sisyphus prompt's Delegation Table
+ * Delegation trigger for Coder prompt's Delegation Table
  */
 export interface DelegationTrigger {
   /** Domain of work (e.g., "Frontend UI/UX") */
@@ -41,8 +41,8 @@ export interface DelegationTrigger {
 }
 
 /**
- * Metadata for generating Sisyphus prompt sections dynamically
- * This allows adding/removing agents without manually updating the Sisyphus prompt
+ * Metadata for generating Coder prompt sections dynamically
+ * This allows adding/removing agents without manually updating the Coder prompt
  */
 export interface AgentPromptMetadata {
   /** Category for grouping in prompt sections */

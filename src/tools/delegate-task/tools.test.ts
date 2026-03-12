@@ -31,7 +31,7 @@ function createTestAvailableModels(): Set<string> {
   return new Set(TEST_AVAILABLE_MODELS)
 }
 
-describe("sisyphus-task", () => {
+describe("coder-task", () => {
   let cacheSpy: ReturnType<typeof spyOn>
   let providerModelsSpy: ReturnType<typeof spyOn>
 
@@ -283,7 +283,7 @@ describe("sisyphus-task", () => {
           id: "task-123",
           status: "pending",
           description: "Parse test",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           sessionID: "test-session",
         }),
       }
@@ -346,7 +346,7 @@ describe("sisyphus-task", () => {
           id: "task-456",
           status: "pending",
           description: "Parse test",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           sessionID: "test-session",
         }),
       }
@@ -402,7 +402,7 @@ describe("sisyphus-task", () => {
   })
 
   describe("category delegation config validation", () => {
-    test("fills subagent_type as sisyphus-junior when category is provided without subagent_type", async () => {
+    test("fills subagent_type as coder-junior when category is provided without subagent_type", async () => {
       // given
       const { createDelegateTask } = require("./tools")
 
@@ -411,7 +411,7 @@ describe("sisyphus-task", () => {
           id: "task-123",
           status: "pending",
           description: "Test task",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           sessionID: "test-session",
         }),
       }
@@ -462,10 +462,10 @@ describe("sisyphus-task", () => {
        await tool.execute(args, toolContext)
 
        // then
-       expect(args.subagent_type).toBe("Sisyphus-Junior")
+       expect(args.subagent_type).toBe("Coder-Junior")
     }, { timeout: 10000 })
 
-    test("category overrides subagent_type and still maps to sisyphus-junior", async () => {
+    test("category overrides subagent_type and still maps to coder-junior", async () => {
       //#given
       const { createDelegateTask } = require("./tools")
 
@@ -474,7 +474,7 @@ describe("sisyphus-task", () => {
           id: "task-override",
           status: "pending",
           description: "Override test",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           sessionID: "test-session",
         }),
       }
@@ -527,7 +527,7 @@ describe("sisyphus-task", () => {
       const result = await tool.execute(args, toolContext)
 
       //#then
-      expect(args.subagent_type).toBe("Sisyphus-Junior")
+      expect(args.subagent_type).toBe("Coder-Junior")
       expect(result).toContain("Background task launched")
     }, { timeout: 10000 })
 
@@ -535,7 +535,7 @@ describe("sisyphus-task", () => {
       // given a mock client with no model in config
       const { createDelegateTask } = require("./tools")
       
-       const mockManager = { launch: async () => ({ id: "task-123", status: "pending", description: "Test task", agent: "sisyphus-junior", sessionID: "test-session" }) }
+       const mockManager = { launch: async () => ({ id: "task-123", status: "pending", description: "Test task", agent: "coder-junior", sessionID: "test-session" }) }
        const mockClient = {
          app: { agents: async () => ({ data: [] }) },
          config: { get: async () => ({}) }, // No model configured
@@ -937,7 +937,7 @@ describe("sisyphus-task", () => {
             id: "task-variant",
             sessionID: "session-variant",
             description: "Variant task",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -1003,7 +1003,7 @@ describe("sisyphus-task", () => {
             id: "task-default-variant",
             sessionID: "session-default-variant",
             description: "Default variant task",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -1373,7 +1373,7 @@ describe("sisyphus-task", () => {
         info: {
           id: "msg_001",
           role: "user",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           model: { providerID: "anthropic", modelID: "claude-opus-4-6" },
           variant: "max",
           time: { created: baseTime },
@@ -1428,7 +1428,7 @@ describe("sisyphus-task", () => {
     }
 
     const tool = createDelegateTask({
-      manager: { resume: async () => ({ id: "task-var", sessionID: "ses_var_test", description: "Variant test", agent: "sisyphus-junior", status: "running" }) },
+      manager: { resume: async () => ({ id: "task-var", sessionID: "ses_var_test", description: "Variant test", agent: "coder-junior", status: "running" }) },
       client: mockClient,
     })
 
@@ -1455,7 +1455,7 @@ describe("sisyphus-task", () => {
     expect(promptMock).toHaveBeenCalled()
     const callArgs = promptMock.mock.calls[0][0]
     expect(callArgs.body.variant).toBe("max")
-    expect(callArgs.body.agent).toBe("sisyphus-junior")
+    expect(callArgs.body.agent).toBe("coder-junior")
     expect(callArgs.body.model).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6" })
   }, { timeout: 10000 })
 
@@ -1763,7 +1763,7 @@ describe("sisyphus-task", () => {
         id: "task-unstable",
         sessionID: "ses_unstable_gemini",
         description: "Unstable gemini task",
-        agent: "sisyphus-junior",
+        agent: "coder-junior",
         status: "running",
       }
       const mockManager = {
@@ -1834,7 +1834,7 @@ describe("sisyphus-task", () => {
             id: "task-normal-bg",
             sessionID: "ses_normal_bg",
             description: "Normal background task",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -1890,7 +1890,7 @@ describe("sisyphus-task", () => {
         id: "task-unstable-minimax",
         sessionID: "ses_unstable_minimax",
         description: "Unstable minimax task",
-        agent: "sisyphus-junior",
+        agent: "coder-junior",
         status: "running",
       }
       const mockManager = {
@@ -2026,7 +2026,7 @@ describe("sisyphus-task", () => {
         id: "task-artistry",
         sessionID: "ses_artistry_gemini",
         description: "Artistry gemini task",
-        agent: "sisyphus-junior",
+        agent: "coder-junior",
         status: "running",
       }
       const mockManager = {
@@ -2094,7 +2094,7 @@ describe("sisyphus-task", () => {
         id: "task-writing",
         sessionID: "ses_writing_gemini",
         description: "Writing gemini task",
-        agent: "sisyphus-junior",
+        agent: "coder-junior",
         status: "running",
       }
       const mockManager = {
@@ -2162,7 +2162,7 @@ describe("sisyphus-task", () => {
         id: "task-custom-unstable",
         sessionID: "ses_custom_unstable",
         description: "Custom unstable task",
-        agent: "sisyphus-junior",
+        agent: "coder-junior",
         status: "running",
       }
       const mockManager = {
@@ -2243,7 +2243,7 @@ describe("sisyphus-task", () => {
             id: "task-fallback",
             sessionID: "ses_fallback_test",
             description: "Fallback test task",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -2260,12 +2260,12 @@ describe("sisyphus-task", () => {
         },
       }
 
-      // NO userCategories override, NO sisyphusJuniorModel
+      // NO userCategories override, NO coderJuniorModel
       const tool = createDelegateTask({
         manager: mockManager,
         client: mockClient,
         // userCategories: undefined - use DEFAULT_CATEGORIES only
-        // sisyphusJuniorModel: undefined
+        // coderJuniorModel: undefined
         connectedProvidersOverride: null,
         availableModelsOverride: new Set(),
       })
@@ -2307,7 +2307,7 @@ describe("sisyphus-task", () => {
             id: "task-ui-model",
             sessionID: "ses_ui_model_test",
             description: "UI model inheritance test",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -2359,8 +2359,8 @@ describe("sisyphus-task", () => {
       expect(launchInput.model.modelID).toBe("claude-haiku-4-5")
     })
 
-    test("sisyphus-junior model override takes precedence over category model", async () => {
-      // given - sisyphus-junior override model differs from category default
+    test("coder-junior model override takes precedence over category model", async () => {
+      // given - coder-junior override model differs from category default
       const { createDelegateTask } = require("./tools")
       let launchInput: any
 
@@ -2371,7 +2371,7 @@ describe("sisyphus-task", () => {
             id: "task-override",
             sessionID: "ses_override_test",
             description: "Override precedence test",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -2391,7 +2391,7 @@ describe("sisyphus-task", () => {
       const tool = createDelegateTask({
         manager: mockManager,
         client: mockClient,
-        sisyphusJuniorModel: "anthropic/claude-sonnet-4-6",
+        coderJuniorModel: "anthropic/claude-sonnet-4-6",
         connectedProvidersOverride: TEST_CONNECTED_PROVIDERS,
         availableModelsOverride: createTestAvailableModels(),
       })
@@ -2420,8 +2420,8 @@ describe("sisyphus-task", () => {
       expect(launchInput.model.modelID).toBe("claude-sonnet-4-6")
     })
 
-    test("explicit category model takes precedence over sisyphus-junior model", async () => {
-      // given - explicit category model differs from sisyphus-junior override
+    test("explicit category model takes precedence over coder-junior model", async () => {
+      // given - explicit category model differs from coder-junior override
       const { createDelegateTask } = require("./tools")
       let launchInput: any
 
@@ -2432,7 +2432,7 @@ describe("sisyphus-task", () => {
             id: "task-category-precedence",
             sessionID: "ses_category_precedence_test",
             description: "Category precedence test",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -2453,7 +2453,7 @@ describe("sisyphus-task", () => {
        const tool = createDelegateTask({
          manager: mockManager,
          client: mockClient,
-         sisyphusJuniorModel: "anthropic/claude-sonnet-4-6",
+         coderJuniorModel: "anthropic/claude-sonnet-4-6",
          userCategories: {
            ultrabrain: { model: "openai/gpt-5.4" },
          },
@@ -2485,7 +2485,7 @@ describe("sisyphus-task", () => {
       expect(launchInput.model.modelID).toBe("gpt-5.4")
     })
 
-    test("sisyphus-junior model override works with quick category (#1295)", async () => {
+    test("coder-junior model override works with quick category (#1295)", async () => {
       // given - user configures agents.drizzy-junior.model but uses quick category
       const { createDelegateTask } = require("./tools")
       let launchInput: any
@@ -2497,7 +2497,7 @@ describe("sisyphus-task", () => {
             id: "task-1295-quick",
             sessionID: "ses_1295_quick",
             description: "Issue 1295 regression",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -2517,7 +2517,7 @@ describe("sisyphus-task", () => {
       const tool = createDelegateTask({
         manager: mockManager,
         client: mockClient,
-        sisyphusJuniorModel: "anthropic/claude-sonnet-4-6",
+        coderJuniorModel: "anthropic/claude-sonnet-4-6",
         connectedProvidersOverride: TEST_CONNECTED_PROVIDERS,
         availableModelsOverride: createTestAvailableModels(),
       })
@@ -2541,12 +2541,12 @@ describe("sisyphus-task", () => {
         toolContext
       )
 
-      // then - sisyphus-junior override model should be used, not category default
+      // then - coder-junior override model should be used, not category default
       expect(launchInput.model.providerID).toBe("anthropic")
       expect(launchInput.model.modelID).toBe("claude-sonnet-4-6")
     })
 
-    test("sisyphus-junior model override works with user-defined category (#1295)", async () => {
+    test("coder-junior model override works with user-defined category (#1295)", async () => {
       // given - user has a custom category with no model requirement
       const { createDelegateTask } = require("./tools")
       let launchInput: any
@@ -2558,7 +2558,7 @@ describe("sisyphus-task", () => {
             id: "task-1295-custom",
             sessionID: "ses_1295_custom",
             description: "Issue 1295 custom category",
-            agent: "sisyphus-junior",
+            agent: "coder-junior",
             status: "running",
           }
         },
@@ -2578,7 +2578,7 @@ describe("sisyphus-task", () => {
       const tool = createDelegateTask({
         manager: mockManager,
         client: mockClient,
-        sisyphusJuniorModel: "openai/gpt-5.4",
+        coderJuniorModel: "openai/gpt-5.4",
         userCategories: {
           "my-custom": { temperature: 0.5 },
         },
@@ -2603,7 +2603,7 @@ describe("sisyphus-task", () => {
         toolContext
       )
 
-      // then - sisyphus-junior override model should be used as fallback
+      // then - coder-junior override model should be used as fallback
       expect(launchInput.model.providerID).toBe("openai")
       expect(launchInput.model.modelID).toBe("gpt-5.4")
     })
@@ -3179,7 +3179,7 @@ describe("sisyphus-task", () => {
       expect(result).toContain("plan-family")
     })
 
-    test("sisyphus CAN delegate to plan (not in plan family)", async () => {
+    test("coder CAN delegate to plan (not in plan family)", async () => {
       //#given
       const { createDelegateTask } = require("./tools")
       const mockClient = {
@@ -3602,7 +3602,7 @@ describe("sisyphus-task", () => {
 
   describe("subagent task permission", () => {
     test("plan subagent should have task permission enabled", async () => {
-      //#given - sisyphus delegates to plan agent
+      //#given - coder delegates to plan agent
       const { createDelegateTask } = require("./tools")
       let promptBody: any
       
@@ -3640,7 +3640,7 @@ describe("sisyphus-task", () => {
         abort: new AbortController().signal,
       }
       
-      //#when - sisyphus delegates to plan
+      //#when - coder delegates to plan
       await tool.execute(
         {
           description: "Test plan task permission",
@@ -3686,7 +3686,7 @@ describe("sisyphus-task", () => {
     }, { timeout: 20000 })
 
     test("non-plan subagent should NOT have task permission", async () => {
-      //#given - sisyphus delegates to oracle (non-plan)
+      //#given - coder delegates to oracle (non-plan)
       const { createDelegateTask } = require("./tools")
       let promptBody: any
       
@@ -3724,7 +3724,7 @@ describe("sisyphus-task", () => {
         abort: new AbortController().signal,
       }
       
-      // when - sisyphus delegates to oracle
+      // when - coder delegates to oracle
       await tool.execute(
         {
           description: "Test oracle no task permission",
@@ -3792,7 +3792,7 @@ describe("sisyphus-task", () => {
       )
 
       // then - title should follow OpenCode format
-      expect(createBody.title).toBe("Implement feature X (@Sisyphus-Junior subagent)")
+      expect(createBody.title).toBe("Implement feature X (@Coder-Junior subagent)")
     }, { timeout: 10000 })
 
     test("sync task output includes <task_metadata> block with session_id", async () => {
@@ -3855,7 +3855,7 @@ describe("sisyphus-task", () => {
           id: "bg_meta_test",
           sessionID: "ses_bg_metadata",
           description: "Background metadata test",
-          agent: "sisyphus-junior",
+          agent: "coder-junior",
           status: "running",
         }),
       }
@@ -3875,7 +3875,7 @@ describe("sisyphus-task", () => {
          manager: mockManager,
          client: mockClient,
          userCategories: {
-           "sisyphus-junior": { model: "anthropic/claude-sonnet-4-6" },
+           "coder-junior": { model: "anthropic/claude-sonnet-4-6" },
          },
        })
 

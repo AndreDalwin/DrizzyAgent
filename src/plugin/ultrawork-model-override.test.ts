@@ -121,7 +121,7 @@ describe("resolveUltraworkOverride", () => {
   test("should return null when agent has no ultrawork config", () => {
     //#given
     const config = {
-      agents: { sisyphus: { model: "anthropic/claude-sonnet-4-6" } },
+      agents: { coder: { model: "anthropic/claude-sonnet-4-6" } },
     } as unknown as Parameters<typeof resolveUltraworkOverride>[0]
     const output = createOutput("ultrawork do something")
 
@@ -174,7 +174,7 @@ describe("resolveUltraworkOverride", () => {
     const output = createOutput("ulw do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "Sisyphus (Ultraworker)", output)
+    const result = resolveUltraworkOverride(config, "Coder (Ultraworker)", output)
 
     //#then
     expect(result).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6", variant: "max" })
@@ -408,7 +408,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "Sisyphus (Ultraworker)", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "Coder (Ultraworker)", output, tui)
 
     //#then
     expect(dbOverrideSpy).toHaveBeenCalledWith(

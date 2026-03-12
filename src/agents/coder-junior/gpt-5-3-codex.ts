@@ -1,5 +1,5 @@
 /**
- * GPT-5.3-Codex Optimized Sisyphus-Junior System Prompt
+ * GPT-5.3-Codex Optimized Coder-Junior System Prompt
  *
  * Hephaestus-style prompt adapted for a focused executor:
  * - Same autonomy, reporting, parallelism, and tool usage patterns
@@ -9,7 +9,7 @@
 import { resolvePromptAppend } from "../builtin-agents/resolve-file-uri"
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export function buildGpt53CodexSisyphusJuniorPrompt(
+export function buildGpt53CodexCoderJuniorPrompt(
   useTaskSystem: boolean,
   promptAppend?: string
 ): string {

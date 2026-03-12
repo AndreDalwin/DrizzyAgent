@@ -407,12 +407,12 @@ describe("HookNameSchema", () => {
   })
 })
 
-describe("Sisyphus-Junior agent override", () => {
-  test("schema accepts agents['Sisyphus-Junior'] and retains the key after parsing", () => {
+describe("Coder-Junior agent override", () => {
+  test("schema accepts agents['Coder-Junior'] and retains the key after parsing", () => {
     // given
     const config = {
       agents: {
-        "sisyphus-junior": {
+        "coder-junior": {
           model: "openai/gpt-5.4",
           temperature: 0.2,
         },
@@ -425,18 +425,18 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.["sisyphus-junior"]).toBeDefined()
-      expect(result.data.agents?.["sisyphus-junior"]?.model).toBe("openai/gpt-5.4")
-      expect(result.data.agents?.["sisyphus-junior"]?.temperature).toBe(0.2)
+      expect(result.data.agents?.["coder-junior"]).toBeDefined()
+      expect(result.data.agents?.["coder-junior"]?.model).toBe("openai/gpt-5.4")
+      expect(result.data.agents?.["coder-junior"]?.temperature).toBe(0.2)
     }
   })
 
-  test("schema accepts sisyphus-junior with prompt_append", () => {
+  test("schema accepts coder-junior with prompt_append", () => {
     // given
     const config = {
       agents: {
-        "sisyphus-junior": {
-          prompt_append: "Additional instructions for sisyphus-junior",
+        "coder-junior": {
+          prompt_append: "Additional instructions for coder-junior",
         },
       },
     }
@@ -447,17 +447,17 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.["sisyphus-junior"]?.prompt_append).toBe(
-        "Additional instructions for sisyphus-junior"
+      expect(result.data.agents?.["coder-junior"]?.prompt_append).toBe(
+        "Additional instructions for coder-junior"
       )
     }
   })
 
-  test("schema accepts sisyphus-junior with tools override", () => {
+  test("schema accepts coder-junior with tools override", () => {
     // given
     const config = {
       agents: {
-        "sisyphus-junior": {
+        "coder-junior": {
           tools: {
             read: true,
             write: false,
@@ -472,18 +472,18 @@ describe("Sisyphus-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.["sisyphus-junior"]?.tools).toEqual({
+      expect(result.data.agents?.["coder-junior"]?.tools).toEqual({
         read: true,
         write: false,
       })
     }
   })
 
-  test("schema accepts lowercase agent names (sisyphus, atlas, prometheus)", () => {
+  test("schema accepts lowercase agent names (coder, atlas, prometheus)", () => {
     // given
     const config = {
       agents: {
-        sisyphus: {
+        coder: {
           temperature: 0.1,
         },
         atlas: {

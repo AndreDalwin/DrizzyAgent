@@ -1,5 +1,5 @@
 /**
- * Gemini-specific overlay sections for Sisyphus prompt.
+ * Gemini-specific overlay sections for Coder prompt.
  *
  * Gemini models are aggressively optimistic and tend to:
  * - Skip tool calls in favor of internal reasoning
@@ -10,7 +10,7 @@
  * - Conflate investigation with implementation ("look into X" → starts coding)
  *
  * These overlays inject corrective sections at strategic points
- * in the dynamic Sisyphus prompt to counter these tendencies.
+ * in the dynamic Coder prompt to counter these tendencies.
  */
 
 export function buildGeminiToolMandate(): string {
