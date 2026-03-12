@@ -126,11 +126,11 @@ export async function applyAgentConfig(params: {
       Object.entries(agents).filter(([name]) => !disabledAgentNames.has(name.toLowerCase()))
     );
 
-  const isSisyphusEnabled = params.pluginConfig.sisyphus_agent?.disabled !== true;
+  const isSisyphusEnabled = params.pluginConfig.coder_agent?.disabled !== true;
   const builderEnabled =
-    params.pluginConfig.sisyphus_agent?.default_builder_enabled ?? false;
-  const plannerEnabled = params.pluginConfig.sisyphus_agent?.planner_enabled ?? true;
-  const replacePlan = params.pluginConfig.sisyphus_agent?.replace_plan ?? true;
+    params.pluginConfig.coder_agent?.default_builder_enabled ?? false;
+  const plannerEnabled = params.pluginConfig.coder_agent?.planner_enabled ?? true;
+  const replacePlan = params.pluginConfig.coder_agent?.replace_plan ?? true;
   const shouldDemotePlan = plannerEnabled && replacePlan;
   const configuredDefaultAgent = getConfiguredDefaultAgent(params.config);
 
