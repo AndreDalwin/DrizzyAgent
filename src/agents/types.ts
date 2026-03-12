@@ -105,7 +105,7 @@ export function isGeminiModel(model: string): boolean {
 }
 
 export type BuiltinAgentName =
-  | "sisyphus"
+  | "coder"
   | "hephaestus"
   | "oracle"
   | "librarian"
@@ -114,7 +114,7 @@ export type BuiltinAgentName =
   | "metis"
   | "momus"
   | "atlas"
-  | "sisyphus-junior";
+  | "coder-junior";
 
 export type OverridableAgentName = "build" | BuiltinAgentName;
 

@@ -8,9 +8,9 @@ import {
   buildGeminiIntentGateEnforcement,
   buildGeminiToolGuide,
   buildGeminiToolCallExamples,
-} from "./sisyphus/gemini";
-import { buildGpt54SisyphusPrompt } from "./sisyphus/gpt-5-4";
-import { buildTaskManagementSection } from "./sisyphus/default";
+} from "./coder/gemini";
+import { buildGpt54SisyphusPrompt } from "./coder/gpt-5-4";
+import { buildTaskManagementSection } from "./coder/default";
 
 const MODE: AgentMode = "all";
 export const SISYPHUS_PROMPT_METADATA: AgentPromptMetadata = {
