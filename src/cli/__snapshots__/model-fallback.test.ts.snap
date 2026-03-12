@@ -28,7 +28,7 @@ exports[`generateModelConfig no providers available returns ULTIMATE_FALLBACK fo
     "oracle": {
       "model": "opencode/glm-4.7-free",
     },
-    "prometheus": {
+    "planner": {
       "model": "opencode/glm-4.7-free",
     },
   },
@@ -89,7 +89,7 @@ exports[`generateModelConfig single native provider uses Claude models when only
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -151,7 +151,7 @@ exports[`generateModelConfig single native provider uses Claude models with isMa
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -222,7 +222,7 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
@@ -304,7 +304,7 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
@@ -378,7 +378,7 @@ exports[`generateModelConfig single native provider uses Gemini models when only
       "model": "google/gemini-3.1-pro-preview",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "google/gemini-3.1-pro-preview",
     },
   },
@@ -439,7 +439,7 @@ exports[`generateModelConfig single native provider uses Gemini models with isMa
       "model": "google/gemini-3.1-pro-preview",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "google/gemini-3.1-pro-preview",
     },
   },
@@ -505,7 +505,7 @@ exports[`generateModelConfig all native providers uses preferred models from fal
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -580,7 +580,7 @@ exports[`generateModelConfig all native providers uses preferred models with isM
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -656,7 +656,7 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
       "model": "opencode/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "opencode/claude-opus-4-6",
       "variant": "max",
     },
@@ -731,7 +731,7 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models with is
       "model": "opencode/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "opencode/claude-opus-4-6",
       "variant": "max",
     },
@@ -802,7 +802,7 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models when 
       "model": "github-copilot/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
     },
@@ -868,7 +868,7 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models with 
       "model": "github-copilot/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
     },
@@ -932,7 +932,7 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian whe
     "oracle": {
       "model": "opencode/glm-4.7-free",
     },
-    "prometheus": {
+    "planner": {
       "model": "opencode/glm-4.7-free",
     },
     "coder": {
@@ -987,7 +987,7 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian wit
     "oracle": {
       "model": "opencode/glm-4.7-free",
     },
-    "prometheus": {
+    "planner": {
       "model": "opencode/glm-4.7-free",
     },
     "coder": {
@@ -1050,7 +1050,7 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + OpenCode Zen
       "model": "opencode/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -1125,7 +1125,7 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
     },
@@ -1195,7 +1195,7 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + ZAI combinat
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -1256,7 +1256,7 @@ exports[`generateModelConfig mixed provider scenarios uses Gemini + Claude combi
       "model": "google/gemini-3.1-pro-preview",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -1327,7 +1327,7 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
       "model": "github-copilot/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
     },
@@ -1402,7 +1402,7 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },
@@ -1477,7 +1477,7 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
       "model": "openai/gpt-5.4",
       "variant": "high",
     },
-    "prometheus": {
+    "planner": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
     },

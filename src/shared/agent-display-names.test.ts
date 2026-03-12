@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { describe, it, expect } from "bun:test"
 import { AGENT_DISPLAY_NAMES, getAgentDisplayName, getAgentConfigKey } from "./agent-display-names"
 
@@ -46,15 +47,15 @@ describe("getAgentDisplayName", () => {
     expect(result).toBe("Atlas (Plan Executor)")
   })
 
-  it("returns display name for prometheus", () => {
-    // given config key "prometheus"
-    const configKey = "prometheus"
+  it("returns display name for planner", () => {
+    // given config key "planner"
+    const configKey = "planner"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Prometheus (Plan Builder)"
-    expect(result).toBe("Prometheus (Plan Builder)")
+    // then returns "Planner"
+    expect(result).toBe("Planner")
   })
 
   it("returns display name for coder-junior", () => {
@@ -151,10 +152,10 @@ describe("getAgentConfigKey", () => {
   })
 
   it("passes through lowercase config keys unchanged", () => {
-    // given lowercase config key "prometheus"
+    // given lowercase config key "planner"
     // when getAgentConfigKey called
-    // then returns "prometheus"
-    expect(getAgentConfigKey("prometheus")).toBe("prometheus")
+    // then returns "planner"
+    expect(getAgentConfigKey("planner")).toBe("planner")
   })
 
   it("returns lowercased unknown agents", () => {
@@ -168,7 +169,7 @@ describe("getAgentConfigKey", () => {
     // given all core display names
     // when/then each resolves to its config key
     expect(getAgentConfigKey("GPTCoder")).toBe("gptcoder")
-    expect(getAgentConfigKey("Prometheus (Plan Builder)")).toBe("prometheus")
+    expect(getAgentConfigKey("Planner")).toBe("planner")
     expect(getAgentConfigKey("Atlas (Plan Executor)")).toBe("atlas")
     expect(getAgentConfigKey("Metis (Plan Consultant)")).toBe("metis")
     expect(getAgentConfigKey("Momus (Plan Critic)")).toBe("momus")
@@ -182,7 +183,7 @@ describe("AGENT_DISPLAY_NAMES", () => {
     const expectedMappings = {
       coder: "Coder (Ultraworker)",
       gptcoder: "GPTCoder",
-      prometheus: "Prometheus (Plan Builder)",
+      planner: "Planner",
       atlas: "Atlas (Plan Executor)",
       "coder-junior": "Coder-Junior",
       metis: "Metis (Plan Consultant)",

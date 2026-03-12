@@ -15,7 +15,7 @@ import { loadProjectAgents, loadUserAgents } from "../features/claude-code-agent
 import type { PluginComponents } from "./plugin-components-loader";
 import { reorderAgentsByPriority } from "./agent-priority-order";
 import { remapAgentKeysToDisplayNames } from "./agent-key-remapper";
-import { buildPrometheusAgentConfig } from "./prometheus-agent-config-builder";
+import { buildPlannerAgentConfig } from "./planner-agent-config-builder";
 import { buildPlanDemoteConfig } from "./plan-model-inheritance";
 
 type AgentConfigRecord = Record<string, Record<string, unknown> | undefined> & {
@@ -170,13 +170,13 @@ export async function applyAgentConfig(params: {
     }
 
     if (plannerEnabled) {
-      const prometheusOverride = params.pluginConfig.agents?.["prometheus"] as
+      const plannerOverride = params.pluginConfig.agents?.["planner"] as
         | (Record<string, unknown> & { prompt_append?: string })
         | undefined;
 
-      agentConfig["prometheus"] = await buildPrometheusAgentConfig({
+      agentConfig["planner"] = await buildPlannerAgentConfig({
         configAgentPlan: configAgent?.plan,
-        pluginPrometheusOverride: prometheusOverride,
+        pluginPlannerOverride: plannerOverride,
         userCategories: params.pluginConfig.categories,
         currentModel,
       });
@@ -202,12 +202,12 @@ export async function applyAgentConfig(params: {
       ? migrateAgentConfig(configAgent.build as Record<string, unknown>)
       : {};
 
-    const planDemoteConfig = shouldDemotePlan
-      ? buildPlanDemoteConfig(
-          agentConfig["prometheus"] as Record<string, unknown> | undefined,
-          params.pluginConfig.agents?.plan as Record<string, unknown> | undefined,
-        )
-      : undefined;
+      const planDemoteConfig = shouldDemotePlan
+        ? buildPlanDemoteConfig(
+            agentConfig["planner"] as Record<string, unknown> | undefined,
+            params.pluginConfig.agents?.plan as Record<string, unknown> | undefined,
+          )
+        : undefined;
 
     // Collect all builtin agent names to prevent user/project .md files from overriding them
     const builtinAgentNames = new Set([

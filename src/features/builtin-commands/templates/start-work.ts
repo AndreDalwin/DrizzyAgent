@@ -11,7 +11,7 @@ export const START_WORK_TEMPLATE = `You are starting a Coder work session.
 
 ## WHAT TO DO
 
-1. **Find available plans**: Search for Prometheus-generated plan files at \`.drizzy/plans/\`
+1. **Find available plans**: Search for Planner-generated plan files at \`.drizzy/plans/\`
 
 2. **Check for active boulder state**: Read \`.drizzy/boulder.json\` if it exists
 

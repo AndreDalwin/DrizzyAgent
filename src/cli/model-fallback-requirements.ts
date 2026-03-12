@@ -80,7 +80,7 @@ export const CLI_AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
       { providers: ["opencode"], model: "gpt-5-nano" },
     ],
   },
-  prometheus: {
+  planner: {
     fallbackChain: [
       {
         providers: ["anthropic", "github-copilot", "opencode"],

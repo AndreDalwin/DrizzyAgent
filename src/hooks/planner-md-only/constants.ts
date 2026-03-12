@@ -1,9 +1,9 @@
 import { createSystemDirective, SystemDirectiveTypes } from "../../shared/system-directive"
 import { getAgentDisplayName } from "../../shared/agent-display-names"
 
-export const HOOK_NAME = "prometheus-md-only"
+export const HOOK_NAME = "planner-md-only"
 
-export const PROMETHEUS_AGENT = "prometheus"
+export const PLANNER_AGENT = "planner"
 
 export const ALLOWED_EXTENSIONS = [".md"]
 
@@ -15,9 +15,9 @@ export const PLANNING_CONSULT_WARNING = `
 
 ---
 
-${createSystemDirective(SystemDirectiveTypes.PROMETHEUS_READ_ONLY)}
+  ${createSystemDirective(SystemDirectiveTypes.PLANNER_READ_ONLY)}
 
-You are being invoked by ${getAgentDisplayName("prometheus")}, a READ-ONLY planning agent.
+You are being invoked by ${getAgentDisplayName("planner")}, a READ-ONLY planning agent.
 
 **CRITICAL CONSTRAINTS:**
 - DO NOT modify any files (no Write, Edit, or any file mutations)
@@ -32,18 +32,18 @@ Return your findings and recommendations. The actual implementation will be hand
 
 `
 
-export const PROMETHEUS_WORKFLOW_REMINDER = `
+export const PLANNER_WORKFLOW_REMINDER = `
 
 ---
 
-${createSystemDirective(SystemDirectiveTypes.PROMETHEUS_READ_ONLY)}
+  ${createSystemDirective(SystemDirectiveTypes.PLANNER_READ_ONLY)}
 
-## PROMETHEUS MANDATORY WORKFLOW REMINDER
+## PLANNER MANDATORY WORKFLOW REMINDER
 
 **You are writing a work plan. STOP AND VERIFY you completed ALL steps:**
 
 ┌─────────────────────────────────────────────────────────────────────┐
-│                     PROMETHEUS WORKFLOW                             │
+│                      PLANNER WORKFLOW                              │
 ├──────┬──────────────────────────────────────────────────────────────┤
 │  1   │ INTERVIEW: Full consultation with user                       │
 │      │    - Gather ALL requirements                                 │

@@ -38,7 +38,7 @@ const ORCHESTRATOR_AGENTS = new Set([
   "coder-junior",
   "atlas",
   "gptcoder",
-  "prometheus",
+  "planner",
 ]);
 
 function isOrchestratorAgent(agentName: string): boolean {

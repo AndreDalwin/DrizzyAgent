@@ -124,17 +124,17 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(last.model).toBe("gpt-5-nano")
   })
 
-  test("prometheus has claude-opus-4-6 as primary", () => {
-    // #given - prometheus agent requirement
-    const prometheus = AGENT_MODEL_REQUIREMENTS["prometheus"]
+  test("planner has claude-opus-4-6 as primary", () => {
+    // #given - planner agent requirement
+    const planner = AGENT_MODEL_REQUIREMENTS["planner"]
 
-    // #when - accessing Prometheus requirement
+    // #when - accessing Planner requirement
     // #then - claude-opus-4-6 is first
-    expect(prometheus).toBeDefined()
-    expect(prometheus.fallbackChain).toBeArray()
-    expect(prometheus.fallbackChain.length).toBeGreaterThan(1)
+    expect(planner).toBeDefined()
+    expect(planner.fallbackChain).toBeArray()
+    expect(planner.fallbackChain.length).toBeGreaterThan(1)
 
-    const primary = prometheus.fallbackChain[0]
+    const primary = planner.fallbackChain[0]
     expect(primary.model).toBe("claude-opus-4-6")
     expect(primary.providers).toEqual(["anthropic", "github-copilot", "opencode"])
     expect(primary.variant).toBe("max")
@@ -208,7 +208,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
       "librarian",
       "explore",
       "multimodal-looker",
-      "prometheus",
+      "planner",
       "metis",
       "momus",
       "atlas",

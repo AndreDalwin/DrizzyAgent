@@ -10,7 +10,6 @@ import {
   getPlanProgress,
   getPlanName,
   createBoulderState,
-  findPrometheusPlans,
 } from "./storage"
 import type { BoulderState } from "./types"
 

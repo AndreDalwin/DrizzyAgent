@@ -6,7 +6,7 @@
 export const AGENT_DISPLAY_NAMES: Record<string, string> = {
   coder: "Coder",
   gptcoder: "GPTCoder",
-  prometheus: "Prometheus (Plan Builder)",
+  planner: "Planner",
   atlas: "Atlas (Plan Executor)",
   "coder-junior": "Coder Junior",
   metis: "Metis (Plan Consultant)",

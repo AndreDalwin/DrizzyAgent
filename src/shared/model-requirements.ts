@@ -105,7 +105,7 @@ export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
       },
     ],
   },
-  prometheus: {
+  planner: {
     fallbackChain: [
       {
         providers: ["anthropic", "github-copilot", "opencode"],

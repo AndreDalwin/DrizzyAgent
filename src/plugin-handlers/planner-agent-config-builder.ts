@@ -1,5 +1,5 @@
 import type { CategoryConfig } from "../config/schema";
-import { PROMETHEUS_PERMISSION, getPrometheusPrompt } from "../agents/prometheus";
+import { PLANNER_PERMISSION, getPlannerPrompt } from "../agents/planner";
 import { resolvePromptAppend } from "../agents/builtin-agents/resolve-file-uri";
 import { AGENT_MODEL_REQUIREMENTS } from "../shared/model-requirements";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../shared";
 import { resolveCategoryConfig } from "./category-config-resolver";
 
-type PrometheusOverride = Record<string, unknown> & {
+type PlannerOverride = Record<string, unknown> & {
   category?: string;
   model?: string;
   variant?: string;
@@ -22,17 +22,17 @@ type PrometheusOverride = Record<string, unknown> & {
   prompt_append?: string;
 };
 
-export async function buildPrometheusAgentConfig(params: {
+export async function buildPlannerAgentConfig(params: {
   configAgentPlan: Record<string, unknown> | undefined;
-  pluginPrometheusOverride: PrometheusOverride | undefined;
+  pluginPlannerOverride: PlannerOverride | undefined;
   userCategories: Record<string, CategoryConfig> | undefined;
   currentModel: string | undefined;
 }): Promise<Record<string, unknown>> {
-  const categoryConfig = params.pluginPrometheusOverride?.category
-    ? resolveCategoryConfig(params.pluginPrometheusOverride.category, params.userCategories)
+  const categoryConfig = params.pluginPlannerOverride?.category
+    ? resolveCategoryConfig(params.pluginPlannerOverride.category, params.userCategories)
     : undefined;
 
-  const requirement = AGENT_MODEL_REQUIREMENTS["prometheus"];
+  const requirement = AGENT_MODEL_REQUIREMENTS["planner"];
   const connectedProviders = readConnectedProvidersCache();
   const availableModels = await fetchAvailableModels(undefined, {
     connectedProviders: connectedProviders ?? undefined,
@@ -41,7 +41,7 @@ export async function buildPrometheusAgentConfig(params: {
   const modelResolution = resolveModelPipeline({
     intent: {
       uiSelectedModel: params.currentModel,
-      userModel: params.pluginPrometheusOverride?.model ?? categoryConfig?.model,
+      userModel: params.pluginPlannerOverride?.model ?? categoryConfig?.model,
     },
     constraints: { availableModels },
     policy: {
@@ -53,25 +53,25 @@ export async function buildPrometheusAgentConfig(params: {
   const resolvedModel = modelResolution?.model;
   const resolvedVariant = modelResolution?.variant;
 
-  const variantToUse = params.pluginPrometheusOverride?.variant ?? resolvedVariant;
+  const variantToUse = params.pluginPlannerOverride?.variant ?? resolvedVariant;
   const reasoningEffortToUse =
-    params.pluginPrometheusOverride?.reasoningEffort ?? categoryConfig?.reasoningEffort;
+    params.pluginPlannerOverride?.reasoningEffort ?? categoryConfig?.reasoningEffort;
   const textVerbosityToUse =
-    params.pluginPrometheusOverride?.textVerbosity ?? categoryConfig?.textVerbosity;
-  const thinkingToUse = params.pluginPrometheusOverride?.thinking ?? categoryConfig?.thinking;
+    params.pluginPlannerOverride?.textVerbosity ?? categoryConfig?.textVerbosity;
+  const thinkingToUse = params.pluginPlannerOverride?.thinking ?? categoryConfig?.thinking;
   const temperatureToUse =
-    params.pluginPrometheusOverride?.temperature ?? categoryConfig?.temperature;
-  const topPToUse = params.pluginPrometheusOverride?.top_p ?? categoryConfig?.top_p;
+    params.pluginPlannerOverride?.temperature ?? categoryConfig?.temperature;
+  const topPToUse = params.pluginPlannerOverride?.top_p ?? categoryConfig?.top_p;
   const maxTokensToUse =
-    params.pluginPrometheusOverride?.maxTokens ?? categoryConfig?.maxTokens;
+    params.pluginPlannerOverride?.maxTokens ?? categoryConfig?.maxTokens;
 
   const base: Record<string, unknown> = {
     ...(resolvedModel ? { model: resolvedModel } : {}),
     ...(variantToUse ? { variant: variantToUse } : {}),
     mode: "all",
-    prompt: getPrometheusPrompt(resolvedModel),
-    permission: PROMETHEUS_PERMISSION,
-    description: `${(params.configAgentPlan?.description as string) ?? "Plan agent"} (Prometheus - OhMyOpenCode)`,
+    prompt: getPlannerPrompt(resolvedModel),
+    permission: PLANNER_PERMISSION,
+    description: `${(params.configAgentPlan?.description as string) ?? "Plan agent"} (Planner - OhMyOpenCode)`,
     color: (params.configAgentPlan?.color as string) ?? "#FF5722",
     ...(temperatureToUse !== undefined ? { temperature: temperatureToUse } : {}),
     ...(topPToUse !== undefined ? { top_p: topPToUse } : {}),
@@ -86,7 +86,7 @@ export async function buildPrometheusAgentConfig(params: {
       : {}),
   };
 
-  const override = params.pluginPrometheusOverride;
+  const override = params.pluginPlannerOverride;
   if (!override) return base;
 
   const { prompt_append, ...restOverride } = override;

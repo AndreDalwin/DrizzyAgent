@@ -12,7 +12,7 @@ DrizzyAgent provides **discipline agents** that work together to complete coding
 |-------|---------|-------|
 | **Coder** | Main orchestrator - plans, delegates, drives to completion | Claude Opus / Kimi K2.5 / GLM-5 |
 | **GPTCoder** | Deep autonomous worker - explores, researches, executes end-to-end | GPT-5.3 Codex |
-| **Prometheus** | Strategic planner - interviews, identifies scope, builds plans | Claude Opus / Kimi K2.5 / GLM-5 |
+| **Planner** | Strategic planner - interviews, identifies scope, builds plans | Claude Opus / Kimi K2.5 / GLM-5 |
 | **Oracle** | Architecture consultant - debugging, complex logic decisions | High-IQ reasoning models |
 | **Librarian** | Documentation/code search - external references, OSS examples | Research models |
 | **Explore** | Fast codebase grep - pattern discovery, cross-layer search | Fast models |
@@ -57,7 +57,7 @@ The harness maps categories to the right models automatically.
 |---------|-------------|
 | `/ultrawork` or `/ulw` | Activate all agents, work until done |
 | `/init-deep` | Generate hierarchical AGENTS.md files |
-| `/start-work` | Prometheus interview-mode planning |
+| `/start-work` | Planner interview-mode planning |
 | `/ralph-loop` | Self-referential development loop |
 | `/stop-continuation` | Stop all continuation mechanisms |
 

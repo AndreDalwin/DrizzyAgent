@@ -332,7 +332,7 @@ export const momusPromptMetadata: AgentPromptMetadata = {
     },
   ],
   useWhen: [
-    "After Prometheus creates a work plan",
+    "After Planner creates a work plan",
     "Before executing a complex todo list",
     "To validate plan quality before delegating to executors",
     "When plan needs rigorous review for ADHD-driven omissions",

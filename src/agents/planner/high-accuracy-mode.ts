@@ -1,10 +1,10 @@
 /**
- * Prometheus High Accuracy Mode
+ * Planner High Accuracy Mode
  *
  * Phase 3: Momus review loop for rigorous plan validation.
  */
 
-export const PROMETHEUS_HIGH_ACCURACY_MODE = `# PHASE 3: PLAN GENERATION
+export const PLANNER_HIGH_ACCURACY_MODE = `# PHASE 3: PLAN GENERATION
 
 ## High Accuracy Mode (If User Requested) - MANDATORY LOOP
 

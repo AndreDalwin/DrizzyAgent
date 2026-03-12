@@ -19,7 +19,7 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 | **Metis** | claude-opus-4-6 max | **0.3** | subagent | gpt-5.4 high → gemini-3.1-pro high | Pre-planning consultant |
 | **Momus** | gpt-5.4 xhigh | 0.1 | subagent | claude-opus-4-6 max → gemini-3.1-pro high | Plan reviewer |
 | **Atlas** | claude-sonnet-4-6 | 0.1 | primary | gpt-5.4 medium | Todo-list orchestrator |
-| **Prometheus** | claude-opus-4-6 max | 0.1 | — | gpt-5.4 high → gemini-3.1-pro | Strategic planner (internal) |
+| **Planner** | claude-opus-4-6 max | 0.1 | — | gpt-5.4 high → gemini-3.1-pro | Strategic planner (internal) |
 | **Coder-Junior** | claude-sonnet-4-6 | 0.1 | all | user-configurable | Category-spawned executor |
 
 ## TOOL RESTRICTIONS

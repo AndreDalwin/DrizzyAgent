@@ -4,7 +4,7 @@ import {
   readBoulderState,
   writeBoulderState,
   appendSessionId,
-  findPrometheusPlans,
+  findPlannerPlans,
   getPlanProgress,
   createBoulderState,
   getPlanName,
@@ -92,7 +92,7 @@ export function createStartWorkHook(ctx: PluginInput) {
       if (explicitPlanName) {
         log(`[${HOOK_NAME}] Explicit plan name requested: ${explicitPlanName}`, { sessionID: input.sessionID })
 
-        const allPlans = findPrometheusPlans(ctx.directory)
+        const allPlans = findPlannerPlans(ctx.directory)
         const matchedPlan = findPlanByName(allPlans, explicitPlanName)
 
         if (matchedPlan) {
@@ -195,15 +195,15 @@ Looking for new plans...`
         (!existingState && !explicitPlanName) ||
         (existingState && !explicitPlanName && getPlanProgress(existingState.active_plan).isComplete)
       ) {
-        const plans = findPrometheusPlans(ctx.directory)
+        const plans = findPlannerPlans(ctx.directory)
         const incompletePlans = plans.filter((p) => !getPlanProgress(p).isComplete)
 
         if (plans.length === 0) {
           contextInfo += `
 ## No Plans Found
 
-No Prometheus plan files found at .drizzy/plans/
-Use Prometheus to create a work plan first: /plan "your task"`
+No Planner plan files found at .drizzy/plans/
+Use Planner to create a work plan first: /plan "your task"`
         } else if (incompletePlans.length === 0) {
           contextInfo += `
 

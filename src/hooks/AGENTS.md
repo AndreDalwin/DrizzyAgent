@@ -38,7 +38,7 @@ hooks/
 ├── no-gptcoder-non-gpt/      # Block GPTCoder from non-GPT
 ├── no-coder-gpt/            # Block Coder from GPT
 ├── non-interactive-env/        # Non-TTY environment handling
-├── prometheus-md-only/         # Planner read-only mode
+├── planner-md-only/            # Planner read-only mode
 ├── question-label-truncator/   # Auto-truncates question labels
 ├── ralph-loop/                 # Self-referential dev loop
 ├── read-image-resizer/         # Resize images for context efficiency
@@ -75,7 +75,7 @@ hooks/
 | editErrorRecovery | tool.execute.after | Retry failed file edits |
 | delegateTaskRetry | tool.execute.after | Retry failed task delegations |
 | startWork | chat.message | `/start-work` command handler |
-| prometheusMdOnly | tool.execute.before | Enforce .md-only writes for Prometheus |
+| plannerMdOnly | tool.execute.before | Enforce .md-only writes for Planner |
 | coderJuniorNotepad | chat.message | Notepad injection for subagents |
 | questionLabelTruncator | tool.execute.before | Truncate long question labels |
 | taskResumeInfo | chat.message | Inject task context on resume |

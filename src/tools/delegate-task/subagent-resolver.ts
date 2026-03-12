@@ -41,7 +41,7 @@ Coder-Junior is spawned automatically when you specify a category. Pick the appr
     return {
       agentToUse: "",
       categoryModel: undefined,
-    error: `You are a plan-family agent (plan/prometheus). You cannot delegate to other plan-family agents via task.
+    error: `You are a plan-family agent (plan/planner). You cannot delegate to other plan-family agents via task.
 
 Create the work plan directly - that's your job as the planning agent.`,
     }

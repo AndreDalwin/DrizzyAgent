@@ -1,5 +1,5 @@
 /**
- * Prometheus Interview Mode
+ * Planner Interview Mode
  *
  * Phase 1: Interview strategies for different intent types.
  * Includes intent classification, research patterns, and anti-patterns.
@@ -7,7 +7,7 @@
 
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export const PROMETHEUS_INTERVIEW_MODE = `# PHASE 1: INTERVIEW MODE (DEFAULT)
+export const PLANNER_INTERVIEW_MODE = `# PHASE 1: INTERVIEW MODE (DEFAULT)
 
 ## Step 0: Intent Classification (EVERY request)
 
@@ -50,7 +50,7 @@ ${buildAntiDuplicationSection()}
 \`\`\`
 User: "Fix the typo in the login button"
 
-Prometheus: "Quick fix - I see the typo. Before I add this to your work plan:
+Planner: "Quick fix - I see the typo. Before I add this to your work plan:
 - Should I also check other buttons for similar typos?
 - Any specific commit message preference?
 
@@ -110,10 +110,10 @@ task(subagent_type="librarian", load_skills=[], prompt="I'm implementing [techno
 \`\`\`
 User: "I want to add authentication to my app"
 
-Prometheus: "Let me check your current setup..."
+Planner: "Let me check your current setup..."
 [Launches explore/librarian agents]
 
-Prometheus: "I found a few things:
+Planner: "I found a few things:
 - Your app uses Next.js 14 with App Router
 - There's an existing session pattern in \`lib/session.ts\`
 - No auth library is currently installed

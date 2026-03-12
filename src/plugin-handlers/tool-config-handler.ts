@@ -90,10 +90,10 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
-  const prometheus = agentByKey(params.agentResult, "prometheus");
-  if (prometheus) {
-    prometheus.permission = {
-      ...prometheus.permission,
+  const planner = agentByKey(params.agentResult, "planner");
+  if (planner) {
+    planner.permission = {
+      ...planner.permission,
       call_omo_agent: "deny",
       task: "allow",
       question: questionPermission,

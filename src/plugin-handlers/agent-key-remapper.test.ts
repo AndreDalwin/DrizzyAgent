@@ -36,7 +36,7 @@ describe("remapAgentKeysToDisplayNames", () => {
     const agents = {
       coder: {},
       gptcoder: {},
-      prometheus: {},
+      planner: {},
       atlas: {},
       metis: {},
       momus: {},
@@ -51,8 +51,8 @@ describe("remapAgentKeysToDisplayNames", () => {
     expect(result["coder"]).toBeUndefined()
     expect(result["GPTCoder"]).toBeDefined()
     expect(result["gptcoder"]).toBeUndefined()
-    expect(result["Prometheus (Plan Builder)"]).toBeDefined()
-    expect(result["prometheus"]).toBeUndefined()
+    expect(result["Planner"]).toBeDefined()
+    expect(result["planner"]).toBeUndefined()
     expect(result["Atlas (Plan Executor)"]).toBeDefined()
     expect(result["atlas"]).toBeUndefined()
     expect(result["Metis (Plan Consultant)"]).toBeDefined()

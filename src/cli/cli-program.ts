@@ -45,7 +45,7 @@ Model Providers (Priority: Native > Copilot > OpenCode Zen > Z.ai > Kimi):
   Copilot       github-copilot/ models (fallback)
   OpenCode Zen  opencode/ models (opencode/claude-opus-4-6, etc.)
    Z.ai          zai-coding-plan/glm-5 (visual-engineering fallback)
-  Kimi          kimi-for-coding/k2p5 (Coder/Prometheus fallback)
+   Kimi          kimi-for-coding/k2p5 (Coder/Planner fallback)
 `)
   .action(async (options) => {
     const args: InstallArgs = {
@@ -97,7 +97,7 @@ Agent resolution order:
   4) Coder (fallback)
 
 Available core agents:
-  Coder, GPTCoder, Prometheus, Atlas
+  Coder, GPTCoder, Planner, Atlas
 
 Unlike 'opencode run', this command waits until:
   - All todos are completed or cancelled

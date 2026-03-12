@@ -6,9 +6,13 @@ export const AGENT_NAME_MAP: Record<string, string> = {
   GPTCoder: "gptcoder",
   gptcoder: "gptcoder",
 
-  // Prometheus variants → "prometheus"
-  "Prometheus (Planner)": "prometheus",
-  prometheus: "prometheus",
+  // Planner variants → "planner"
+  Planner: "planner",
+  planner: "planner",
+
+  // Prometheus variants → "planner" (historical)
+  "Prometheus (Planner)": "planner",
+  prometheus: "planner",
 
   // Atlas variants → "atlas"
   Atlas: "atlas",
@@ -43,6 +47,7 @@ export const BUILTIN_AGENT_NAMES = new Set([
   "multimodal-looker",
   "metis", // was "Metis (Plan Consultant)"
   "momus", // was "Momus (Plan Reviewer)"
+  "planner",
   "prometheus", // was "Prometheus (Planner)"
   "atlas", // was "Atlas"
   "build",

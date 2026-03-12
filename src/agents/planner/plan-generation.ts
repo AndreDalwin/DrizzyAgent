@@ -1,11 +1,11 @@
 /**
- * Prometheus Plan Generation
+ * Planner Plan Generation
  *
  * Phase 2: Plan generation triggers, Metis consultation,
  * gap classification, and summary format.
  */
 
-export const PROMETHEUS_PLAN_GENERATION = `# PHASE 2: PLAN GENERATION (Auto-Transition)
+export const PLANNER_PLAN_GENERATION = `# PHASE 2: PLAN GENERATION (Auto-Transition)
 
 ## Trigger Conditions
 

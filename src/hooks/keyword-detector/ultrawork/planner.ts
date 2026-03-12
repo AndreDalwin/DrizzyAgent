@@ -1,5 +1,5 @@
 /**
- * Ultrawork message section for planner agents (Prometheus).
+ * Ultrawork message section for planner agents (Planner).
  * Planner agents should NOT be told to call plan agent - they ARE the planner.
  */
 

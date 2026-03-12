@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { describe, test, expect } from "bun:test"
 import { migrateAgentNames } from "./migration"
 import { getAgentDisplayName } from "./agent-display-names"
@@ -21,7 +22,7 @@ describe("Agent Config Integration", () => {
       // then - keys are lowercase
       expect(result.migrated).toHaveProperty("coder")
       expect(result.migrated).toHaveProperty("atlas")
-      expect(result.migrated).toHaveProperty("prometheus")
+      expect(result.migrated).toHaveProperty("planner")
       expect(result.migrated).toHaveProperty("metis")
       expect(result.migrated).toHaveProperty("momus")
 
@@ -35,7 +36,7 @@ describe("Agent Config Integration", () => {
       // then - values are preserved
       expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6" })
       expect(result.migrated.atlas).toEqual({ model: "anthropic/claude-opus-4-6" })
-      expect(result.migrated.prometheus).toEqual({ model: "anthropic/claude-opus-4-6" })
+      expect(result.migrated.planner).toEqual({ model: "anthropic/claude-opus-4-6" })
       
       // then - changed flag is true
       expect(result.changed).toBe(true)
@@ -74,7 +75,7 @@ describe("Agent Config Integration", () => {
       // then - all keys are lowercase
       expect(result.migrated).toHaveProperty("coder")
       expect(result.migrated).toHaveProperty("oracle")
-      expect(result.migrated).toHaveProperty("prometheus")
+      expect(result.migrated).toHaveProperty("planner")
       expect(result.migrated).toHaveProperty("librarian")
       expect(Object.keys(result.migrated).every((key) => key === key.toLowerCase())).toBe(true)
       
@@ -86,7 +87,7 @@ describe("Agent Config Integration", () => {
   describe("Display name resolution", () => {
     test("returns correct display names for all builtin agents", () => {
       // given - lowercase config keys
-      const agents = ["coder", "atlas", "prometheus", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
+      const agents = ["coder", "atlas", "planner", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - display names are requested
       const displayNames = agents.map((agent) => getAgentDisplayName(agent))
@@ -94,7 +95,7 @@ describe("Agent Config Integration", () => {
       // then - display names are correct
       expect(displayNames).toContain("Coder (Ultraworker)")
       expect(displayNames).toContain("Atlas (Plan Executor)")
-      expect(displayNames).toContain("Prometheus (Plan Builder)")
+      expect(displayNames).toContain("Planner")
       expect(displayNames).toContain("Metis (Plan Consultant)")
       expect(displayNames).toContain("Momus (Plan Critic)")
       expect(displayNames).toContain("oracle")
@@ -105,7 +106,7 @@ describe("Agent Config Integration", () => {
 
     test("handles lowercase keys case-insensitively", () => {
       // given - various case formats of lowercase keys
-      const keys = ["Coder", "Atlas", "CODER", "atlas", "prometheus", "PROMETHEUS"]
+      const keys = ["Coder", "Atlas", "CODER", "atlas", "planner", "PLANNER"]
 
       // when - display names are requested
       const displayNames = keys.map((key) => getAgentDisplayName(key))
@@ -115,8 +116,8 @@ describe("Agent Config Integration", () => {
       expect(displayNames[1]).toBe("Atlas (Plan Executor)")
       expect(displayNames[2]).toBe("Coder (Ultraworker)")
       expect(displayNames[3]).toBe("Atlas (Plan Executor)")
-      expect(displayNames[4]).toBe("Prometheus (Plan Builder)")
-      expect(displayNames[5]).toBe("Prometheus (Plan Builder)")
+      expect(displayNames[4]).toBe("Planner")
+      expect(displayNames[5]).toBe("Planner")
     })
 
     test("returns original key for unknown agents", () => {
@@ -145,7 +146,7 @@ describe("Agent Config Integration", () => {
 
     test("model requirements include all builtin agents", () => {
       // given - expected builtin agents
-      const expectedAgents = ["coder", "atlas", "prometheus", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
+      const expectedAgents = ["coder", "atlas", "planner", "metis", "momus", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - checking AGENT_MODEL_REQUIREMENTS
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
@@ -181,19 +182,19 @@ describe("Agent Config Integration", () => {
 
       // then - keys are lowercase
       expect(result.migrated).toHaveProperty("coder")
-      expect(result.migrated).toHaveProperty("prometheus")
+        expect(result.migrated).toHaveProperty("planner")
 
       // when - display names are retrieved
       const coderDisplay = getAgentDisplayName("coder")
-      const prometheusDisplay = getAgentDisplayName("prometheus")
+        const plannerDisplay = getAgentDisplayName("planner")
 
       // then - display names are correct
       expect(coderDisplay).toBe("Coder (Ultraworker)")
-      expect(prometheusDisplay).toBe("Prometheus (Plan Builder)")
+        expect(plannerDisplay).toBe("Planner")
 
       // then - config values are preserved
       expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6", temperature: 0.1 })
-      expect(result.migrated.prometheus).toEqual({ model: "anthropic/claude-opus-4-6" })
+        expect(result.migrated.planner).toEqual({ model: "anthropic/claude-opus-4-6" })
     })
 
     test("new config works without migration", () => {

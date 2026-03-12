@@ -28,9 +28,9 @@
 | `command-config-handler.ts` | ~200 | 9 parallel sources for commands/skills |
 | `tool-config-handler.ts` | ~100 | Agent-specific tool grants/denials |
 | `provider-config-handler.ts` | ~80 | Provider config + model cache |
-| `prometheus-agent-config-builder.ts` | ~100 | Prometheus config with model resolution |
+| `planner-agent-config-builder.ts` | ~100 | Planner config with model resolution |
 | `plan-model-inheritance.ts` | 28 | Plan demotion logic |
-| `agent-priority-order.ts` | ~30 | coder, GPTCoder, prometheus, atlas first |
+| `agent-priority-order.ts` | ~30 | coder, GPTCoder, planner, atlas first |
 | `agent-key-remapper.ts` | ~30 | Agent key → display name |
 | `category-config-resolver.ts` | ~40 | User vs default category lookup |
 | `index.ts` | ~10 | Barrel exports |
@@ -40,7 +40,7 @@
 | Agent | Granted | Denied |
 |-------|---------|--------|
 | Librarian | grep_app_* | — |
-| Atlas, Coder, Prometheus | task, task_*, teammate | — |
+| Atlas, Coder, Planner | task, task_*, teammate | — |
 | GPTCoder | task | — |
 | Default (all others) | — | grep_app_*, task_*, teammate, LSP |
 

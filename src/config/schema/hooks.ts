@@ -36,7 +36,7 @@ export const HookNameSchema = z.enum([
   "edit-error-recovery",
   "json-error-recovery",
   "delegate-task-retry",
-  "prometheus-md-only",
+  "planner-md-only",
   "coder-junior-notepad",
   "no-coder-gpt",
   "no-gptcoder-non-gpt",

@@ -396,12 +396,12 @@ describe("start-work hook", () => {
 
       // when
       await hook["chat.message"](
-        { sessionID: "ses-prometheus-to-coder" },
+        { sessionID: "ses-planner-to-coder" },
         output
       )
 
       // then
-      expect(updateSpy).toHaveBeenCalledWith("ses-prometheus-to-coder", "atlas")
+      expect(updateSpy).toHaveBeenCalledWith("ses-planner-to-coder", "atlas")
       updateSpy.mockRestore()
     })
   })

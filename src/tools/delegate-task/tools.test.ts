@@ -168,11 +168,11 @@ describe("coder-task", () => {
       expect(result).toBe(true)
     })
 
-    test("returns false for 'prometheus' (decoupled from plan)", () => {
+    test("returns false for 'strategist' (decoupled from plan)", () => {
       //#given / #when
-      const result = isPlanAgent("prometheus")
+      const result = isPlanAgent("strategist")
 
-      //#then - prometheus is NOT a plan agent
+      //#then - strategist is NOT a plan agent
       expect(result).toBe(false)
     })
 
@@ -246,9 +246,9 @@ describe("coder-task", () => {
       expect(result).toBe(true)
     })
 
-    test("returns true for 'prometheus'", () => {
+    test("returns true for 'planner'", () => {
       //#given / #when
-      const result = isPlanFamily("prometheus")
+      const result = isPlanFamily("planner")
       //#then
       expect(result).toBe(true)
     })
@@ -267,9 +267,9 @@ describe("coder-task", () => {
       expect(result).toBe(false)
     })
 
-    test("PLAN_FAMILY_NAMES contains plan and prometheus", () => {
+    test("PLAN_FAMILY_NAMES contains plan and planner", () => {
       //#given / #when / #then
-      expect(PLAN_FAMILY_NAMES).toEqual(["plan", "prometheus"])
+      expect(PLAN_FAMILY_NAMES).toEqual(["plan", "planner"])
     })
   })
 
@@ -2811,31 +2811,31 @@ describe("coder-task", () => {
       expect(result).toBe(buildPlanAgentSystemPrepend(availableCategories, availableSkills))
     })
 
-    test("does not prepend plan agent prompt for prometheus agent", () => {
-      //#given - prometheus is NOT a plan agent (decoupled)
+    test("does not prepend plan agent prompt for planner agent", () => {
+      //#given - planner is NOT a plan agent (decoupled)
       const { buildSystemContent } = require("./tools")
       const skillContent = "You are a strategic planner"
 
       //#when
       const result = buildSystemContent({
         skillContent,
-        agentName: "prometheus",
+        agentName: "planner",
       })
 
-      //#then - prometheus should NOT get plan agent system prepend
+      //#then - planner should NOT get plan agent system prepend
       expect(result).toBe(skillContent)
       expect(result).not.toContain("MANDATORY CONTEXT GATHERING PROTOCOL")
     })
 
-    test("does not prepend plan agent prompt for Prometheus (case insensitive)", () => {
-      //#given - Prometheus (capitalized) is NOT a plan agent
+    test("does not prepend plan agent prompt for Planner (case insensitive)", () => {
+      //#given - Planner (capitalized) is NOT a plan agent
       const { buildSystemContent } = require("./tools")
       const skillContent = "You are a strategic planner"
 
       //#when
       const result = buildSystemContent({
         skillContent,
-        agentName: "Prometheus",
+        agentName: "Planner",
       })
 
       //#then
@@ -3139,7 +3139,7 @@ describe("coder-task", () => {
       expect(result).toContain("directly")
     })
 
-    test("prometheus cannot delegate to plan (cross-blocking)", async () => {
+    test("planner cannot delegate to plan (cross-blocking)", async () => {
       //#given
       const { createDelegateTask } = require("./tools")
       const mockClient = {
@@ -3152,18 +3152,18 @@ describe("coder-task", () => {
       //#when
       const result = await tool.execute(
         { description: "test", prompt: "Create a plan", subagent_type: "plan", run_in_background: false, load_skills: [] },
-        { sessionID: "p", messageID: "m", agent: "prometheus", abort: new AbortController().signal }
+          { sessionID: "p", messageID: "m", agent: "planner", abort: new AbortController().signal }
       )
       
       //#then
       expect(result).toContain("plan-family")
     })
 
-    test("plan cannot delegate to prometheus (cross-blocking)", async () => {
+    test("plan cannot delegate to planner (cross-blocking)", async () => {
       //#given
       const { createDelegateTask } = require("./tools")
       const mockClient = {
-         app: { agents: async () => ({ data: [{ name: "prometheus", mode: "subagent" }] }) },
+          app: { agents: async () => ({ data: [{ name: "planner", mode: "subagent" }] }) },
          config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
          session: { get: async () => ({ data: { directory: "/project" } }), create: async () => ({ data: { id: "s" } }), prompt: async () => ({ data: {} }), promptAsync: async () => ({ data: {} }), messages: async () => ({ data: [] }), status: async () => ({ data: {} }) },
        }
@@ -3171,7 +3171,7 @@ describe("coder-task", () => {
       
       //#when
       const result = await tool.execute(
-        { description: "test", prompt: "Execute", subagent_type: "prometheus", run_in_background: false, load_skills: [] },
+        { description: "test", prompt: "Execute", subagent_type: "planner", run_in_background: false, load_skills: [] },
         { sessionID: "p", messageID: "m", agent: "plan", abort: new AbortController().signal }
       )
       
@@ -3656,28 +3656,28 @@ describe("coder-task", () => {
       expect(promptBody.tools.task).toBe(true)
     }, { timeout: 20000 })
 
-    test("prometheus subagent should have task permission (plan family)", async () => {
+    test("planner subagent should have task permission (plan family)", async () => {
       //#given
       const { createDelegateTask } = require("./tools")
       let promptBody: any
       const promptMock = async (input: any) => { promptBody = input.body; return { data: {} } }
        const mockClient = {
-         app: { agents: async () => ({ data: [{ name: "prometheus", mode: "subagent" }] }) },
+          app: { agents: async () => ({ data: [{ name: "planner", mode: "subagent" }] }) },
          config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
          session: {
            get: async () => ({ data: { directory: "/project" } }),
-           create: async () => ({ data: { id: "ses_prometheus_task" } }),
+            create: async () => ({ data: { id: "ses_planner_task" } }),
            prompt: promptMock,
            promptAsync: promptMock,
            messages: async () => ({ data: [{ info: { role: "assistant" }, parts: [{ type: "text", text: "Plan created" }] }] }),
-           status: async () => ({ data: { "ses_prometheus_task": { type: "idle" } } }),
+            status: async () => ({ data: { "ses_planner_task": { type: "idle" } } }),
          },
        }
        const tool = createDelegateTask({ manager: { launch: async () => ({}) }, client: mockClient })
       
       //#when
       await tool.execute(
-        { description: "Test prometheus task permission", prompt: "Create a plan", subagent_type: "prometheus", run_in_background: false, load_skills: [] },
+        { description: "Test planner task permission", prompt: "Create a plan", subagent_type: "planner", run_in_background: false, load_skills: [] },
         { sessionID: "p", messageID: "m", agent: "coder", abort: new AbortController().signal }
       )
       

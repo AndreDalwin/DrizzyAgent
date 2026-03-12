@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { describe, expect, it } from "bun:test";
 import { mergeConfigs, parseConfigPartially } from "./plugin-config";
 import type { OhMyOpenCodeConfig } from "./config";
@@ -125,7 +126,7 @@ describe("parseConfigPartially", () => {
     //#then should return the full parsed config unchanged
 
     it("should return the full config when everything is valid", () => {
-      const rawConfig = {
+    const rawConfig: Record<string, unknown> = {
         agents: {
           oracle: { model: "openai/gpt-5.4" },
           momus: { model: "openai/gpt-5.4" },
@@ -148,11 +149,11 @@ describe("parseConfigPartially", () => {
     //#then should return valid sections and skip invalid ones
 
     it("should preserve valid agent overrides when another section is invalid", () => {
-      const rawConfig = {
+    const rawConfig: Record<string, unknown> = {
         agents: {
           oracle: { model: "openai/gpt-5.4" },
           momus: { model: "openai/gpt-5.4" },
-          prometheus: {
+          planner: {
             permission: {
               edit: { "*": "ask", ".drizzy/**": "allow" },
             },
@@ -180,7 +181,7 @@ describe("parseConfigPartially", () => {
 
       expect(result).not.toBeNull();
       expect(result!.agents?.oracle?.model).toBe("openai/gpt-5.4");
-      expect(result!.disabled_hooks).toEqual(["not-a-real-hook"]);
+      expect(result!.disabled_hooks as string[]).toEqual(["not-a-real-hook"]);
     });
   });
 
@@ -199,7 +200,7 @@ describe("parseConfigPartially", () => {
 
       expect(result).not.toBeNull();
       expect(result!.agents).toBeUndefined();
-      expect(result!.disabled_hooks).toEqual(["not-a-real-hook"]);
+      expect(result!.disabled_hooks as string[]).toEqual(["not-a-real-hook"]);
     });
   });
 

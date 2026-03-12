@@ -1,12 +1,12 @@
 import { describe, test, expect } from "bun:test"
-import { PROMETHEUS_SYSTEM_PROMPT } from "./prometheus"
-import { PROMETHEUS_GPT_SYSTEM_PROMPT } from "./prometheus/gpt"
-import { PROMETHEUS_GEMINI_SYSTEM_PROMPT } from "./prometheus/gemini"
+import { PLANNER_SYSTEM_PROMPT } from "./planner"
+import { PLANNER_GPT_SYSTEM_PROMPT } from "./planner/gpt"
+import { PLANNER_GEMINI_SYSTEM_PROMPT } from "./planner/gemini"
 
-describe("PROMETHEUS_SYSTEM_PROMPT Momus invocation policy", () => {
+describe("PLANNER_SYSTEM_PROMPT Momus invocation policy", () => {
   test("should direct providing ONLY the file path string when invoking Momus", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when / #then
     expect(prompt.toLowerCase()).toMatch(/momus.*only.*path|path.*only.*momus/)
@@ -14,17 +14,17 @@ describe("PROMETHEUS_SYSTEM_PROMPT Momus invocation policy", () => {
 
   test("should forbid wrapping Momus invocation in explanations or markdown", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when / #then
     expect(prompt.toLowerCase()).toMatch(/not.*wrap|no.*explanation|no.*markdown/)
   })
 })
 
-describe("PROMETHEUS_SYSTEM_PROMPT zero human intervention", () => {
+describe("PLANNER_SYSTEM_PROMPT zero human intervention", () => {
   test("should enforce universal zero human intervention rule", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when
     const lowerPrompt = prompt.toLowerCase()
@@ -37,7 +37,7 @@ describe("PROMETHEUS_SYSTEM_PROMPT zero human intervention", () => {
 
   test("should require agent-executed QA scenarios as mandatory for all tasks", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when
     const lowerPrompt = prompt.toLowerCase()
@@ -49,7 +49,7 @@ describe("PROMETHEUS_SYSTEM_PROMPT zero human intervention", () => {
 
   test("should not contain ambiguous 'manual QA' terminology", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when / #then
     expect(prompt).not.toMatch(/manual QA procedures/i)
@@ -59,7 +59,7 @@ describe("PROMETHEUS_SYSTEM_PROMPT zero human intervention", () => {
 
   test("should require per-scenario format with detailed structure", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when
     const lowerPrompt = prompt.toLowerCase()
@@ -73,7 +73,7 @@ describe("PROMETHEUS_SYSTEM_PROMPT zero human intervention", () => {
 
   test("should require QA scenario adequacy in self-review checklist", () => {
     //#given
-    const prompt = PROMETHEUS_SYSTEM_PROMPT
+    const prompt = PLANNER_SYSTEM_PROMPT
 
     //#when
     const lowerPrompt = prompt.toLowerCase()
@@ -85,14 +85,14 @@ describe("PROMETHEUS_SYSTEM_PROMPT zero human intervention", () => {
   })
 })
 
-describe("Prometheus prompts anti-duplication coverage", () => {
+describe("Planner prompts anti-duplication coverage", () => {
   test("all variants should include anti-duplication rules for delegated exploration", () => {
     // given
-    const prompts = [
-      PROMETHEUS_SYSTEM_PROMPT,
-      PROMETHEUS_GPT_SYSTEM_PROMPT,
-      PROMETHEUS_GEMINI_SYSTEM_PROMPT,
-    ]
+  const prompts = [
+    PLANNER_SYSTEM_PROMPT,
+    PLANNER_GPT_SYSTEM_PROMPT,
+    PLANNER_GEMINI_SYSTEM_PROMPT,
+  ]
 
     // when / then
     for (const prompt of prompts) {

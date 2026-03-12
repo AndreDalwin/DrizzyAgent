@@ -34,11 +34,11 @@ describe("applyToolConfig", () => {
       })
 
       it.each([
-        "atlas",
-        "coder",
-        "gptcoder",
-        "prometheus",
-        "coder-junior",
+      "atlas",
+      "coder",
+      "gptcoder",
+      "planner",
+      "coder-junior",
       ])("#then should deny todo tools for %s agent", (agentName) => {
         const params = createParams({
           taskSystem: true,
@@ -79,7 +79,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when config explicitly denies question permission", () => {
-      it.each(["coder", "gptcoder", "prometheus"])(
+    it.each(["coder", "gptcoder", "planner"])(
         "#then should deny question for %s even without CLI_RUN_MODE",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -99,7 +99,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when config does not deny question permission", () => {
-      it.each(["coder", "gptcoder", "prometheus"])(
+    it.each(["coder", "gptcoder", "planner"])(
         "#then should allow question for %s in interactive mode",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -119,7 +119,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when CLI_RUN_MODE is true and config does not deny", () => {
-      it.each(["coder", "gptcoder", "prometheus"])(
+    it.each(["coder", "gptcoder", "planner"])(
         "#then should deny question for %s via CLI_RUN_MODE",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -139,7 +139,7 @@ describe("applyToolConfig", () => {
     })
 
     describe("#when config deny overrides CLI_RUN_MODE allow", () => {
-      it.each(["coder", "gptcoder", "prometheus"])(
+    it.each(["coder", "gptcoder", "planner"])(
         "#then should deny question for %s when config says deny regardless of CLI_RUN_MODE",
         (agentName) => {
           process.env.OPENCODE_CONFIG_CONTENT = JSON.stringify({
@@ -165,7 +165,7 @@ describe("applyToolConfig", () => {
         "atlas",
         "coder",
         "gptcoder",
-        "prometheus",
+        "planner",
         "coder-junior",
       ])("#then should NOT deny todo tools for %s agent", (agentName) => {
         const params = createParams({

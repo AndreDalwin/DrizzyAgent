@@ -163,7 +163,7 @@ describe("Coder-Junior model inheritance", () => {
 })
 
 describe("Plan agent demote behavior", () => {
-  test("orders core agents as coder -> gptcoder -> prometheus -> atlas", async () => {
+  test("orders core agents as coder -> gptcoder -> planner -> atlas", async () => {
     // #given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
@@ -200,14 +200,14 @@ describe("Plan agent demote behavior", () => {
     const coreAgents = [
       getAgentDisplayName("coder"),
       getAgentDisplayName("gptcoder"),
-      getAgentDisplayName("prometheus"),
+      getAgentDisplayName("planner"),
       getAgentDisplayName("atlas"),
     ]
     const ordered = keys.filter((key) => coreAgents.includes(key))
     expect(ordered).toEqual(coreAgents)
   })
 
-  test("plan agent should be demoted to subagent without inheriting prometheus prompt", async () => {
+  test("plan agent should be demoted to subagent without inheriting planner prompt", async () => {
     // #given
     const pluginConfig: OhMyOpenCodeConfig = {
       coder_agent: {
@@ -237,12 +237,12 @@ describe("Plan agent demote behavior", () => {
     // #when
     await handler(config)
 
-    // #then - plan is demoted to subagent but does NOT inherit prometheus prompt
+    // #then - plan is demoted to subagent but does NOT inherit planner prompt
     const agents = config.agent as Record<string, { mode?: string; name?: string; prompt?: string }>
     expect(agents.plan).toBeDefined()
     expect(agents.plan.mode).toBe("subagent")
     expect(agents.plan.prompt).toBeUndefined()
-    expect(agents[getAgentDisplayName("prometheus")]?.prompt).toBeDefined()
+    expect(agents[getAgentDisplayName("planner")]?.prompt).toBeDefined()
   })
 
   test("plan agent remains unchanged when planner is disabled", async () => {
@@ -274,15 +274,15 @@ describe("Plan agent demote behavior", () => {
     // #when
     await handler(config)
 
-    // #then - plan is not touched, prometheus is not created
+    // #then - plan is not touched, planner is not created
     const agents = config.agent as Record<string, { mode?: string; name?: string; prompt?: string }>
-    expect(agents[getAgentDisplayName("prometheus")]).toBeUndefined()
+    expect(agents[getAgentDisplayName("planner")]).toBeUndefined()
     expect(agents.plan).toBeDefined()
     expect(agents.plan.mode).toBe("primary")
     expect(agents.plan.prompt).toBe("original plan prompt")
   })
 
-  test("prometheus should have mode 'all' to be callable via task", async () => {
+  test("planner should have mode 'all' to be callable via task", async () => {
     // given
     const pluginConfig: OhMyOpenCodeConfig = {
       coder_agent: {
@@ -307,9 +307,9 @@ describe("Plan agent demote behavior", () => {
 
     // then
     const agents = config.agent as Record<string, { mode?: string }>
-    const prometheusKey = getAgentDisplayName("prometheus")
-    expect(agents[prometheusKey]).toBeDefined()
-    expect(agents[prometheusKey].mode).toBe("all")
+    const plannerKey = getAgentDisplayName("planner")
+    expect(agents[plannerKey]).toBeDefined()
+    expect(agents[plannerKey].mode).toBe("all")
   })
 })
 
@@ -547,7 +547,7 @@ describe("default_agent behavior with Coder orchestration", () => {
   })
 })
 
-describe("Prometheus category config resolution", () => {
+describe("Planner category config resolution", () => {
   test("resolves ultrabrain category config", () => {
     // given
     const categoryName = "ultrabrain"
@@ -647,7 +647,7 @@ describe("Prometheus category config resolution", () => {
   })
 })
 
-describe("Prometheus direct override priority over category", () => {
+describe("Planner direct override priority over category", () => {
   test("direct reasoningEffort takes priority over category reasoningEffort", async () => {
     // given - category has reasoningEffort=xhigh, direct override says "low"
     const pluginConfig: OhMyOpenCodeConfig = {
@@ -661,7 +661,7 @@ describe("Prometheus direct override priority over category", () => {
         },
       },
       agents: {
-        prometheus: {
+        planner: {
           category: "test-planning",
           reasoningEffort: "low",
         },
@@ -685,7 +685,7 @@ describe("Prometheus direct override priority over category", () => {
 
     // then - direct override's reasoningEffort wins
     const agents = config.agent as Record<string, { reasoningEffort?: string }>
-    const pKey = getAgentDisplayName("prometheus")
+    const pKey = getAgentDisplayName("planner")
     expect(agents[pKey]).toBeDefined()
     expect(agents[pKey].reasoningEffort).toBe("low")
   })
@@ -703,7 +703,7 @@ describe("Prometheus direct override priority over category", () => {
         },
       },
       agents: {
-        prometheus: {
+        planner: {
           category: "reasoning-cat",
         },
       },
@@ -726,7 +726,7 @@ describe("Prometheus direct override priority over category", () => {
 
     // then - category's reasoningEffort is applied
     const agents = config.agent as Record<string, { reasoningEffort?: string }>
-    const pKey = getAgentDisplayName("prometheus")
+    const pKey = getAgentDisplayName("planner")
     expect(agents[pKey]).toBeDefined()
     expect(agents[pKey].reasoningEffort).toBe("high")
   })
@@ -744,7 +744,7 @@ describe("Prometheus direct override priority over category", () => {
         },
       },
       agents: {
-        prometheus: {
+        planner: {
           category: "temp-cat",
           temperature: 0.1,
         },
@@ -768,20 +768,20 @@ describe("Prometheus direct override priority over category", () => {
 
     // then - direct temperature wins over category
     const agents = config.agent as Record<string, { temperature?: number }>
-    const pKey = getAgentDisplayName("prometheus")
+    const pKey = getAgentDisplayName("planner")
     expect(agents[pKey]).toBeDefined()
     expect(agents[pKey].temperature).toBe(0.1)
   })
 
-  test("prometheus prompt_append is appended to base prompt", async () => {
-    // #given - prometheus override with prompt_append
+  test("planner prompt_append is appended to base prompt", async () => {
+    // #given - planner override with prompt_append
     const customInstructions = "## Custom Project Rules\nUse max 2 commits."
     const pluginConfig: OhMyOpenCodeConfig = {
       coder_agent: {
         planner_enabled: true,
       },
       agents: {
-        prometheus: {
+        planner: {
           prompt_append: customInstructions,
         },
       },
@@ -804,17 +804,17 @@ describe("Prometheus direct override priority over category", () => {
 
     // #then - prompt_append is appended to base prompt, not overwriting it
     const agents = config.agent as Record<string, { prompt?: string }>
-    const pKey = getAgentDisplayName("prometheus")
+    const pKey = getAgentDisplayName("planner")
     expect(agents[pKey]).toBeDefined()
-    expect(agents[pKey].prompt).toContain("Prometheus")
+    expect(agents[pKey].prompt).toContain("Planner")
     expect(agents[pKey].prompt).toContain(customInstructions)
     expect(agents[pKey].prompt!.endsWith(customInstructions)).toBe(true)
   })
 })
 
-describe("Plan agent model inheritance from prometheus", () => {
-  test("plan agent inherits all model-related settings from resolved prometheus config", async () => {
-    //#given - prometheus resolves to claude-opus-4-6 with model settings
+describe("Plan agent model inheritance from planner", () => {
+  test("plan agent inherits all model-related settings from resolved planner config", async () => {
+    //#given - planner resolves to claude-opus-4-6 with model settings
     spyOn(shared, "resolveModelPipeline" as any).mockReturnValue({
       model: "anthropic/claude-opus-4-6",
       provenance: "provider-fallback",
@@ -848,7 +848,7 @@ describe("Plan agent model inheritance from prometheus", () => {
     //#when
     await handler(config)
 
-    //#then - plan inherits model and variant from prometheus, but NOT prompt
+    //#then - plan inherits model and variant from planner, but NOT prompt
     const agents = config.agent as Record<string, { mode?: string; model?: string; variant?: string; prompt?: string }>
     expect(agents.plan).toBeDefined()
     expect(agents.plan.mode).toBe("subagent")
@@ -857,8 +857,8 @@ describe("Plan agent model inheritance from prometheus", () => {
     expect(agents.plan.prompt).toBeUndefined()
   })
 
-  test("plan agent inherits temperature, reasoningEffort, and other model settings from prometheus", async () => {
-    //#given - prometheus configured with category that has temperature and reasoningEffort
+  test("plan agent inherits temperature, reasoningEffort, and other model settings from planner", async () => {
+    //#given - planner configured with category that has temperature and reasoningEffort
     spyOn(shared, "resolveModelPipeline" as any).mockReturnValue({
       model: "openai/gpt-5.4",
       provenance: "override",
@@ -870,7 +870,7 @@ describe("Plan agent model inheritance from prometheus", () => {
         replace_plan: true,
       },
       agents: {
-        prometheus: {
+        planner: {
           model: "openai/gpt-5.4",
           variant: "high",
           temperature: 0.3,
@@ -898,7 +898,7 @@ describe("Plan agent model inheritance from prometheus", () => {
     //#when
     await handler(config)
 
-    //#then - plan inherits ALL model-related settings from resolved prometheus
+    //#then - plan inherits ALL model-related settings from resolved planner
     const agents = config.agent as Record<string, Record<string, unknown>>
     expect(agents.plan).toBeDefined()
     expect(agents.plan.mode).toBe("subagent")
@@ -912,8 +912,8 @@ describe("Plan agent model inheritance from prometheus", () => {
     expect(agents.plan.thinking).toEqual({ type: "enabled", budgetTokens: 8000 })
   })
 
-  test("plan agent user override takes priority over prometheus inherited settings", async () => {
-    //#given - prometheus resolves to opus, but user has plan override for gpt-5.4
+  test("plan agent user override takes priority over planner inherited settings", async () => {
+    //#given - planner resolves to opus, but user has plan override for gpt-5.4
     spyOn(shared, "resolveModelPipeline" as any).mockReturnValue({
       model: "anthropic/claude-opus-4-6",
       provenance: "provider-fallback",
@@ -948,14 +948,14 @@ describe("Plan agent model inheritance from prometheus", () => {
     //#when
     await handler(config)
 
-    //#then - plan uses its own override, not prometheus settings
+    //#then - plan uses its own override, not planner settings
     const agents = config.agent as Record<string, Record<string, unknown>>
     expect(agents.plan.model).toBe("openai/gpt-5.4")
     expect(agents.plan.variant).toBe("high")
     expect(agents.plan.temperature).toBe(0.5)
   })
 
-  test("plan agent does NOT inherit prompt, description, or color from prometheus", async () => {
+  test("plan agent does NOT inherit prompt, description, or color from planner", async () => {
     //#given
     spyOn(shared, "resolveModelPipeline" as any).mockReturnValue({
       model: "anthropic/claude-opus-4-6",
@@ -1161,7 +1161,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
     getAgentDisplayName("coder"),
     getAgentDisplayName("gptcoder"),
     getAgentDisplayName("atlas"),
-    getAgentDisplayName("prometheus"),
+    getAgentDisplayName("planner"),
     getAgentDisplayName("coder-junior"),
   ])
 
@@ -1174,7 +1174,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
       coder: { name: "coder", prompt: "test", mode: "primary" },
       gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
       atlas: { name: "atlas", prompt: "test", mode: "primary" },
-      prometheus: { name: "prometheus", prompt: "test", mode: "primary" },
+      planner: { name: "planner", prompt: "test", mode: "primary" },
       "coder-junior": { name: "coder-junior", prompt: "test", mode: "subagent" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
     })

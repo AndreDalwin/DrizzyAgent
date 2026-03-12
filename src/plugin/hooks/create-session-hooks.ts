@@ -18,7 +18,7 @@ import {
   createDelegateTaskRetryHook,
   createTaskResumeInfoHook,
   createStartWorkHook,
-  createPrometheusMdOnlyHook,
+  createPlannerMdOnlyHook,
   createCoderJuniorNotepadHook,
   createNoCoderGptHook,
   createNoGptcoderNonGptHook,
@@ -52,7 +52,7 @@ export type SessionHooks = {
   editErrorRecovery: ReturnType<typeof createEditErrorRecoveryHook> | null
   delegateTaskRetry: ReturnType<typeof createDelegateTaskRetryHook> | null
   startWork: ReturnType<typeof createStartWorkHook> | null
-  prometheusMdOnly: ReturnType<typeof createPrometheusMdOnlyHook> | null
+  plannerMdOnly: ReturnType<typeof createPlannerMdOnlyHook> | null
   coderJuniorNotepad: ReturnType<typeof createCoderJuniorNotepadHook> | null
   noCoderGpt: ReturnType<typeof createNoCoderGptHook> | null
   noGptcoderNonGpt: ReturnType<typeof createNoGptcoderNonGptHook> | null
@@ -219,8 +219,8 @@ export function createSessionHooks(args: {
     ? safeHook("start-work", () => createStartWorkHook(ctx))
     : null
 
-  const prometheusMdOnly = isHookEnabled("prometheus-md-only")
-    ? safeHook("prometheus-md-only", () => createPrometheusMdOnlyHook(ctx))
+  const plannerMdOnly = isHookEnabled("planner-md-only")
+    ? safeHook("planner-md-only", () => createPlannerMdOnlyHook(ctx))
     : null
 
   const coderJuniorNotepad = isHookEnabled("coder-junior-notepad")
@@ -277,7 +277,7 @@ export function createSessionHooks(args: {
     editErrorRecovery,
     delegateTaskRetry,
     startWork,
-    prometheusMdOnly,
+    plannerMdOnly,
     coderJuniorNotepad,
     noCoderGpt,
     noGptcoderNonGpt,

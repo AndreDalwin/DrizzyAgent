@@ -1,5 +1,5 @@
 export * from "./types"
 export { createBuiltinAgents } from "./builtin-agents"
 export type { AvailableAgent, AvailableCategory, AvailableSkill } from "./dynamic-agent-prompt-builder"
-export type { PrometheusPromptSource } from "./prometheus"
+export type { PlannerPromptSource } from "./planner"
 export { createCoderJuniorAgentWithOverrides, CODER_JUNIOR_DEFAULTS } from "./coder-junior"

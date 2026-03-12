@@ -52,6 +52,6 @@ chat.message (user input)
 ## GUARDS
 
 - **System directive skip**: Messages tagged as system directives are not scanned (prevents infinite loops)
-- **Planner agent filter**: Prometheus/plan agents do not receive `ultrawork` injection
+- **Planner agent filter**: Planner agents do not receive `ultrawork` injection
 - **Session agent tracking**: Uses `getSessionAgent()` to get actual agent (not just input hint)
 - **Model-aware messages**: `getUltraworkMessage(agentName, modelID)` adapts message to active model

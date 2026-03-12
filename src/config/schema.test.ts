@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { describe, expect, test } from "bun:test"
 import {
   AgentOverrideConfigSchema,
@@ -479,7 +480,7 @@ describe("Coder-Junior agent override", () => {
     }
   })
 
-  test("schema accepts lowercase agent names (coder, atlas, prometheus)", () => {
+  test("schema accepts lowercase agent names (coder, atlas, planner)", () => {
     // given
     const config = {
       agents: {
@@ -489,7 +490,7 @@ describe("Coder-Junior agent override", () => {
         atlas: {
           temperature: 0.2,
         },
-        prometheus: {
+        planner: {
           temperature: 0.3,
         },
       },
@@ -501,9 +502,10 @@ describe("Coder-Junior agent override", () => {
     // then
     expect(result.success).toBe(true)
     if (result.success) {
-      expect(result.data.agents?.drizzy?.temperature).toBe(0.1)
+      const namedAgents = result.data.agents as Record<string, { temperature?: number } | undefined>
+      expect(namedAgents.drizzy?.temperature).toBe(0.1)
       expect(result.data.agents?.atlas?.temperature).toBe(0.2)
-      expect(result.data.agents?.prometheus?.temperature).toBe(0.3)
+      expect(result.data.agents?.planner?.temperature).toBe(0.3)
     }
   })
 
