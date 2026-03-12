@@ -28,7 +28,13 @@ function getConfiguredDefaultAgent(config: Record<string, unknown>): string | un
   if (typeof defaultAgent !== "string") return undefined;
 
   const trimmedDefaultAgent = defaultAgent.trim();
-  return trimmedDefaultAgent.length > 0 ? trimmedDefaultAgent : undefined;
+  if (trimmedDefaultAgent.length === 0) return undefined;
+
+  return (
+    AGENT_NAME_MAP[trimmedDefaultAgent.toLowerCase()] ??
+    AGENT_NAME_MAP[trimmedDefaultAgent] ??
+    trimmedDefaultAgent
+  );
 }
 
 export async function applyAgentConfig(params: {
@@ -136,7 +142,7 @@ export async function applyAgentConfig(params: {
 
   const configAgent = params.config.agent as AgentConfigRecord | undefined;
 
-  if (isCoderEnabled && builtinAgents.drizzy) {
+  if (isCoderEnabled && builtinAgents.coder) {
     if (configuredDefaultAgent) {
       (params.config as { default_agent?: string }).default_agent =
         getAgentDisplayName(configuredDefaultAgent);
@@ -146,7 +152,7 @@ export async function applyAgentConfig(params: {
     }
 
     const agentConfig: Record<string, unknown> = {
-      coder: builtinAgents.drizzy,
+      coder: builtinAgents.coder,
     };
 
     agentConfig["coder-junior"] = createCoderJuniorAgentWithOverrides(

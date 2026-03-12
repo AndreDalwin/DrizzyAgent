@@ -5,6 +5,7 @@ export const AGENT_NAME_MAP: Record<string, string> = {
 
   GPTCoder: "gptcoder",
   gptcoder: "gptcoder",
+  hephaestus: "gptcoder",
 
   // Planner variants → "planner"
   Planner: "planner",
