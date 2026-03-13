@@ -4,7 +4,7 @@ const BASH_CODE_BLOCK_PATTERN = /```bash\r?\n([\s\S]*?)```/g
 const LEADING_GIT_COMMAND_PATTERN = /^([ \t]*(?:[A-Za-z_][A-Za-z0-9_]*=[^ \t]+\s+)*)git(?=[ \t]|$)/gm
 const INLINE_GIT_COMMAND_PATTERN = /([;&|()][ \t]*)git(?=[ \t]|$)/g
 const DEFAULT_COMMIT_FOOTER =
-	"Ultraworked with [DrizzyAgent](https://github.com/AndreDalwin/DrizzyAgent)"
+	"Developed with [DrizzyAgent](https://github.com/AndreDalwin/DrizzyAgent)"
 const DEFAULT_CO_AUTHORED_BY =
 	"Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>"
 

@@ -239,7 +239,7 @@ describe("resolveMultipleSkillsAsync", () => {
 		expect(result.resolved.size).toBe(1)
 		expect(result.notFound).toEqual([])
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).not.toContain("Ultraworked with")
+		expect(gitMasterContent).not.toContain("Developed with")
 		expect(gitMasterContent).not.toContain("Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>")
 	})
 
@@ -260,7 +260,7 @@ describe("resolveMultipleSkillsAsync", () => {
 		// then: watermark section is injected
 		expect(result.resolved.size).toBe(1)
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [DrizzyAgent]")
+		expect(gitMasterContent).toContain("Developed with [DrizzyAgent]")
 		expect(gitMasterContent).toContain("Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>")
 	})
 
@@ -280,7 +280,7 @@ describe("resolveMultipleSkillsAsync", () => {
 
 		// then: only footer is injected
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [DrizzyAgent]")
+		expect(gitMasterContent).toContain("Developed with [DrizzyAgent]")
 		expect(gitMasterContent).not.toContain("Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>")
 	})
 
@@ -294,7 +294,7 @@ describe("resolveMultipleSkillsAsync", () => {
 		// then: watermark is injected (default is ON)
 		expect(result.resolved.size).toBe(1)
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [DrizzyAgent]")
+		expect(gitMasterContent).toContain("Developed with [DrizzyAgent]")
 		expect(gitMasterContent).toContain("Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>")
 	})
 
@@ -314,7 +314,7 @@ describe("resolveMultipleSkillsAsync", () => {
 
 		// then: only co-author is injected
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).not.toContain("Ultraworked with [DrizzyAgent]")
+		expect(gitMasterContent).not.toContain("Developed with [DrizzyAgent]")
 		expect(gitMasterContent).toContain("Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>")
 	})
 
@@ -336,7 +336,7 @@ describe("resolveMultipleSkillsAsync", () => {
 		// then: custom footer is injected instead of default
 		const gitMasterContent = result.resolved.get("git-master")
 		expect(gitMasterContent).toContain(customFooter)
-		expect(gitMasterContent).not.toContain("Ultraworked with [DrizzyAgent]")
+		expect(gitMasterContent).not.toContain("Developed with [DrizzyAgent]")
 	})
 
 	it("should use default DrizzyAgent footer when commit_footer is boolean true", async () => {
@@ -355,7 +355,7 @@ describe("resolveMultipleSkillsAsync", () => {
 
 		// then: default DrizzyAgent footer is injected
 		const gitMasterContent = result.resolved.get("git-master")
-		expect(gitMasterContent).toContain("Ultraworked with [DrizzyAgent]")
+		expect(gitMasterContent).toContain("Developed with [DrizzyAgent]")
 	})
 
 	it("should handle empty array", async () => {
