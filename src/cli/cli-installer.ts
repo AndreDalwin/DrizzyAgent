@@ -63,7 +63,16 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
 
   if (isUpdate) {
     const initial = detectedToInitialValues(detected)
-    printInfo(`Current config: Claude=${initial.claude}, Gemini=${initial.gemini}`)
+    const enabledProviders = [
+      initial.claude !== "no" && `Claude=${initial.claude}`,
+      initial.openai !== "no" && `OpenAI`,
+      initial.gemini !== "no" && `Gemini`,
+      initial.copilot !== "no" && `Copilot`,
+      initial.opencodeZen !== "no" && `OpenCodeZen`,
+      initial.zaiCodingPlan !== "no" && `Zai`,
+      initial.kimiForCoding !== "no" && `Kimi`,
+    ].filter(Boolean).join(", ") || "none"
+    printInfo(`Current config: ${enabledProviders}`)
   }
 
   // Check for oh-my-opencode conflict
