@@ -6,8 +6,16 @@ import { getConfigDir, getDrizzyConfigPath } from "./config-context"
 import { detectConfigFormat } from "./opencode-config-format"
 import { parseOpenCodeConfigFileWithError } from "./parse-opencode-config-file"
 
-function detectProvidersFromOmoConfig(): {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function detectProvidersFromDrizzyConfig(): {
+  hasClaude: boolean
+  isMax20: boolean
   hasOpenAI: boolean
+  hasGemini: boolean
+  hasCopilot: boolean
   hasOpencodeZen: boolean
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
@@ -16,33 +24,80 @@ function detectProvidersFromOmoConfig(): {
   const legacyConfigPath = join(getConfigDir(), "oh-my-opencode.json")
   const configPath = existsSync(drizzyConfigPath) ? drizzyConfigPath : legacyConfigPath
   if (!existsSync(configPath)) {
-    return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
+    return {
+      hasClaude: false,
+      isMax20: false,
+      hasOpenAI: true,
+      hasGemini: false,
+      hasCopilot: false,
+      hasOpencodeZen: true,
+      hasZaiCodingPlan: false,
+      hasKimiForCoding: false,
+    }
   }
 
   try {
     const content = readFileSync(configPath, "utf-8")
     const drizzyConfig = parseJsonc<Record<string, unknown>>(content)
-    if (!drizzyConfig || typeof drizzyConfig !== "object") {
-      return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
+    if (!isRecord(drizzyConfig)) {
+      return {
+        hasClaude: false,
+        isMax20: false,
+        hasOpenAI: true,
+        hasGemini: false,
+        hasCopilot: false,
+        hasOpencodeZen: true,
+        hasZaiCodingPlan: false,
+        hasKimiForCoding: false,
+      }
     }
 
     const configStr = JSON.stringify(drizzyConfig)
+    const hasClaude = configStr.includes('"anthropic/')
     const hasOpenAI = configStr.includes('"openai/')
+    const hasGemini = configStr.includes('"google/')
+    const hasCopilot = configStr.includes('"github-copilot/')
     const hasOpencodeZen = configStr.includes('"opencode/')
     const hasZaiCodingPlan = configStr.includes('"zai-coding-plan/')
     const hasKimiForCoding = configStr.includes('"kimi-for-coding/')
 
-    return { hasOpenAI, hasOpencodeZen, hasZaiCodingPlan, hasKimiForCoding }
+    const categories = drizzyConfig.categories
+    const unspecifiedHigh = isRecord(categories) ? categories["unspecified-high"] : undefined
+    const isMax20 =
+      hasClaude &&
+      isRecord(unspecifiedHigh) &&
+      unspecifiedHigh.model === "anthropic/claude-opus-4-6" &&
+      unspecifiedHigh.variant === "max"
+
+    return {
+      hasClaude,
+      isMax20,
+      hasOpenAI,
+      hasGemini,
+      hasCopilot,
+      hasOpencodeZen,
+      hasZaiCodingPlan,
+      hasKimiForCoding,
+    }
   } catch {
-    return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
+    return {
+      hasClaude: false,
+      isMax20: false,
+      hasOpenAI: true,
+      hasGemini: false,
+      hasCopilot: false,
+      hasOpencodeZen: true,
+      hasZaiCodingPlan: false,
+      hasKimiForCoding: false,
+    }
   }
 }
 
 export function detectCurrentConfig(): DetectedConfig {
   const result: DetectedConfig = {
     isInstalled: false,
-    hasClaude: true,
-    isMax20: true,
+    hasClaude: false,
+    isMax20: false,
     hasOpenAI: true,
     hasGemini: false,
     hasCopilot: false,
@@ -70,10 +125,22 @@ export function detectCurrentConfig(): DetectedConfig {
   }
 
   const providers = openCodeConfig.provider as Record<string, unknown> | undefined
-  result.hasGemini = providers ? "google" in providers : false
+  const {
+    hasClaude,
+    isMax20,
+    hasOpenAI,
+    hasGemini,
+    hasCopilot,
+    hasOpencodeZen,
+    hasZaiCodingPlan,
+    hasKimiForCoding,
+  } = detectProvidersFromDrizzyConfig()
 
-  const { hasOpenAI, hasOpencodeZen, hasZaiCodingPlan, hasKimiForCoding } = detectProvidersFromOmoConfig()
+  result.hasClaude = hasClaude || (providers ? "anthropic" in providers : false)
+  result.isMax20 = isMax20
   result.hasOpenAI = hasOpenAI
+  result.hasGemini = hasGemini || (providers ? "google" in providers : false)
+  result.hasCopilot = hasCopilot || (providers ? "github-copilot" in providers : false)
   result.hasOpencodeZen = hasOpencodeZen
   result.hasZaiCodingPlan = hasZaiCodingPlan
   result.hasKimiForCoding = hasKimiForCoding
