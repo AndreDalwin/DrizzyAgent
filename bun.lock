@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "oh-my-opencode",
+      "name": "drizzy-agent",
       "dependencies": {
         "@ast-grep/cli": "^0.41.1",
         "@ast-grep/napi": "^0.41.1",
