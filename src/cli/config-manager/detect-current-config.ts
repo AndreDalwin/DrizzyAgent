@@ -34,7 +34,6 @@ const DEFAULT_PROVIDER_DETECTION = {
   hasOpencodeZen: true,
   hasZaiCodingPlan: false,
   hasKimiForCoding: false,
-  isLegacyConfig: false,
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -50,7 +49,6 @@ type ProviderDetectionResult = {
   hasOpencodeZen: boolean
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
-  isLegacyConfig: boolean
 }
 
 function detectProvidersFromString(configStr: string) {
@@ -68,7 +66,7 @@ function detectProvidersFromString(configStr: string) {
 function mergeProviderDetection(
   source: ReturnType<typeof detectProvidersFromString>,
   isMax20: boolean,
-): Omit<ProviderDetectionResult, "isLegacyConfig"> {
+): ProviderDetectionResult {
   return { ...source, isMax20 }
 }
 
@@ -89,42 +87,22 @@ function detectProvidersFromDrizzyConfig(
     )
     if (!isRecord(drizzyConfig)) return DEFAULT_PROVIDER_DETECTION
 
-    const isLegacyConfig = !("_install_defaults" in drizzyConfig)
-    let result: Omit<ProviderDetectionResult, "isLegacyConfig">
-
-    if (!isLegacyConfig) {
-      const installDefaults = drizzyConfig._install_defaults
-      if (isRecord(installDefaults) && isRecord(installDefaults.providers)) {
-        const p = installDefaults.providers
-        result = {
-          hasClaude: p.claude !== "no",
-          isMax20: p.claude === "max20",
-          hasOpenAI: p.openai === true,
-          hasGemini: p.gemini === true,
-          hasCopilot: p.copilot === true,
-          hasOpencodeZen: p.opencode_zen === true,
-          hasZaiCodingPlan: p.zai_coding_plan === true,
-          hasKimiForCoding: p.kimi_for_coding === true,
-        }
-      } else {
-        const inferred = detectProvidersFromString(JSON.stringify(drizzyConfig))
-        result = mergeProviderDetection(inferred, false)
+    const installDefaults = drizzyConfig._install_defaults
+    if (isRecord(installDefaults) && isRecord(installDefaults.providers)) {
+      const p = installDefaults.providers
+      return {
+        hasClaude: p.claude !== "no",
+        isMax20: p.claude === "max20",
+        hasOpenAI: p.openai === true,
+        hasGemini: p.gemini === true,
+        hasCopilot: p.copilot === true,
+        hasOpencodeZen: p.opencode_zen === true,
+        hasZaiCodingPlan: p.zai_coding_plan === true,
+        hasKimiForCoding: p.kimi_for_coding === true,
       }
-    } else {
-      const inferred = detectProvidersFromString(JSON.stringify(drizzyConfig))
-      const categories = drizzyConfig.categories
-      const unspecifiedHigh = isRecord(categories)
-        ? categories["unspecified-high"]
-        : undefined
-      const isMax20 =
-        inferred.hasClaude &&
-        isRecord(unspecifiedHigh) &&
-        unspecifiedHigh.model === "anthropic/claude-opus-4-6" &&
-        unspecifiedHigh.variant === "max"
-      result = mergeProviderDetection(inferred, isMax20)
     }
 
-    return { ...result, isLegacyConfig }
+    return DEFAULT_PROVIDER_DETECTION
   } catch {
     return DEFAULT_PROVIDER_DETECTION
   }
@@ -153,7 +131,6 @@ export function detectCurrentConfig(
     hasOpencodeZen: true,
     hasZaiCodingPlan: false,
     hasKimiForCoding: false,
-    isLegacyConfig: false,
   }
 
   const openCodeConfig = parseResult.config as OpenCodeConfig
@@ -174,7 +151,6 @@ export function detectCurrentConfig(
     hasOpencodeZen,
     hasZaiCodingPlan,
     hasKimiForCoding,
-    isLegacyConfig,
   } = detectProvidersFromDrizzyConfig(deps)
 
   result.hasClaude = hasClaude || (providers ? "anthropic" in providers : false)
@@ -185,7 +161,6 @@ export function detectCurrentConfig(
   result.hasOpencodeZen = hasOpencodeZen
   result.hasZaiCodingPlan = hasZaiCodingPlan
   result.hasKimiForCoding = hasKimiForCoding
-  result.isLegacyConfig = isLegacyConfig
 
   return result
 }

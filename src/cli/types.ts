@@ -54,8 +54,6 @@ export interface DetectedConfig {
   hasOpencodeZen: boolean
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
-  /** True if config lacks _install_defaults (legacy config that won't receive auto-updates) */
-  isLegacyConfig?: boolean
 }
 
 export interface OmoDetectionResult {
