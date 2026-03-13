@@ -1,8 +1,6 @@
 # DrizzyAgent
 
-**DrizzyAgent** is an AI agent harness that extends Claude Code (OpenCode fork) with multi-agent orchestration. It provides a powerful system for coding tasks with specialized agents for different types of work.
-
-> If you have a stale cached plugin install, clear it with: `rm -rf ~/.cache/opencode/node_modules/drizzy-agent`
+**DrizzyAgent** is an AI agent harness that extends OpenCode (oh-my-opencode fork) with multi-agent orchestration. It provides a powerful system for coding tasks with specialized agents for different types of work.
 
 Built for those who want the power of multi-model AI agents without the complexity of managing them manually.
 
@@ -98,12 +96,12 @@ Create `.opencode/drizzy-agent.jsonc` or `~/.config/opencode/drizzy-agent.jsonc`
 {
   "agents": {
     "coder": {
-      "model": "claude-opus-4"
+      "model": "anthropic/claude-opus-4-6"
     }
   },
   "categories": {
     "visual-engineering": {
-      "model": "claude-opus-4"
+      "model": "anthropic/claude-opus-4-6"
     }
   },
   "disabled_hooks": []
