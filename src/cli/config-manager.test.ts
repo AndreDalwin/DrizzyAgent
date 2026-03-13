@@ -169,28 +169,44 @@ describe("fetchNpmDistTags", () => {
   })
 })
 
-describe("generateDrizzyConfig - model fallback system", () => {
-  test("uses github-copilot sonnet fallback when only copilot available", () => {
-    // #given user has only copilot (no max plan)
+describe("generateDrizzyConfig - snapshot-only data", () => {
+  test("returns only schema and install_defaults for fresh install with providers", () => {
+    // #given user has multiple providers
     const config: InstallConfig = {
-      hasClaude: false,
-      isMax20: false,
-      hasOpenAI: false,
+      hasClaude: true,
+      isMax20: true,
+      hasOpenAI: true,
       hasGemini: false,
       hasCopilot: true,
       hasOpencodeZen: false,
-      hasZaiCodingPlan: false,
+      hasZaiCodingPlan: true,
       hasKimiForCoding: false,
     }
 
     // #when generating config
     const result = generateDrizzyConfig(config)
 
-    // #then Coder uses Copilot (OR logic - copilot is in claude-opus-4-6 providers)
-    expect((result.agents as Record<string, { model: string }>).coder.model).toBe("github-copilot/claude-opus-4.6")
+    // #then should return only $schema and _install_defaults
+    expect(result.$schema).toBe("https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json")
+    expect(result._install_defaults).toBeDefined()
+    const installDefaults = result._install_defaults as { snapshot_version: number; providers: Record<string, unknown> }
+    expect(installDefaults.snapshot_version).toBe(1)
+    expect(installDefaults.providers).toEqual({
+      claude: "max20",
+      openai: true,
+      gemini: false,
+      copilot: true,
+      opencode_zen: false,
+      zai_coding_plan: true,
+      kimi_for_coding: false,
+    })
+
+    // #then should NOT contain expanded agents or categories
+    expect(result.agents).toBeUndefined()
+    expect(result.categories).toBeUndefined()
   })
 
-  test("uses ultimate fallback when no providers configured", () => {
+  test("returns correct provider availability when no providers configured", () => {
     // #given user has no providers
     const config: InstallConfig = {
       hasClaude: false,
@@ -206,63 +222,30 @@ describe("generateDrizzyConfig - model fallback system", () => {
     // #when generating config
     const result = generateDrizzyConfig(config)
 
-    // #then Coder is omitted (requires all fallback providers)
-    expect(result.$schema).toBe("https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json")
-    expect((result.agents as Record<string, { model: string }>).coder).toBeUndefined()
+    // #then should return snapshot with all providers disabled
+    expect(result.$schema).toBeDefined()
+    expect(result._install_defaults).toBeDefined()
+    const installDefaults = result._install_defaults as { providers: Record<string, unknown> }
+    expect(installDefaults.providers).toEqual({
+      claude: "no",
+      openai: false,
+      gemini: false,
+      copilot: false,
+      opencode_zen: false,
+      zai_coding_plan: false,
+      kimi_for_coding: false,
+    })
+
+    // #then should NOT contain expanded agents or categories
+    expect(result.agents).toBeUndefined()
+    expect(result.categories).toBeUndefined()
   })
 
-  test("uses ZAI model for librarian when Z.ai is available", () => {
-    // #given user has Z.ai and Claude max20
-    const config: InstallConfig = {
-      hasClaude: true,
-      isMax20: true,
-      hasOpenAI: false,
-      hasGemini: false,
-      hasCopilot: false,
-      hasOpencodeZen: false,
-      hasZaiCodingPlan: true,
-      hasKimiForCoding: false,
-    }
-
-    // #when generating config
-    const result = generateDrizzyConfig(config)
-
-    // #then librarian should use ZAI model
-    expect((result.agents as Record<string, { model: string }>).librarian.model).toBe("zai-coding-plan/glm-4.7")
-    // #then Coder uses Claude (OR logic)
-    expect((result.agents as Record<string, { model: string }>).coder.model).toBe("anthropic/claude-opus-4-6")
-  })
-
-  test("uses native OpenAI models when only ChatGPT available", () => {
-    // #given user has only ChatGPT subscription
-    const config: InstallConfig = {
+  test("handles Claude tri-state correctly (no, yes, max20)", () => {
+    // #given user has no Claude
+    const configNoClaude: InstallConfig = {
       hasClaude: false,
       isMax20: false,
-      hasOpenAI: true,
-      hasGemini: false,
-      hasCopilot: false,
-      hasOpencodeZen: false,
-      hasZaiCodingPlan: false,
-      hasKimiForCoding: false,
-    }
-
-    // #when generating config
-    const result = generateDrizzyConfig(config)
-
-    // #then Coder resolves to gpt-5.4 medium (openai is now in coder chain)
-    expect((result.agents as Record<string, { model: string; variant?: string }>).coder.model).toBe("openai/gpt-5.4")
-    expect((result.agents as Record<string, { model: string; variant?: string }>).coder.variant).toBe("medium")
-    // #then Oracle should use native OpenAI (first fallback entry)
-    expect((result.agents as Record<string, { model: string }>).oracle.model).toBe("openai/gpt-5.4")
-    // #then multimodal-looker should use native OpenAI (first fallback entry is gpt-5.4)
-    expect((result.agents as Record<string, { model: string }>)["multimodal-looker"].model).toBe("openai/gpt-5.4")
-  })
-
-  test("uses haiku for explore when Claude max20", () => {
-    // #given user has Claude max20
-    const config: InstallConfig = {
-      hasClaude: true,
-      isMax20: true,
       hasOpenAI: false,
       hasGemini: false,
       hasCopilot: false,
@@ -272,15 +255,14 @@ describe("generateDrizzyConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateDrizzyConfig(config)
+    const resultNoClaude = generateDrizzyConfig(configNoClaude)
 
-    // #then explore should use haiku (max20 plan uses Claude quota)
-    expect((result.agents as Record<string, { model: string }>).explore.model).toBe("anthropic/claude-haiku-4-5")
-  })
+    // #then claude should be "no"
+    const installDefaultsNoClaude = resultNoClaude._install_defaults as { providers: Record<string, unknown> }
+    expect(installDefaultsNoClaude.providers.claude).toBe("no")
 
-  test("uses haiku for explore regardless of max20 flag", () => {
-    // #given user has Claude but not max20
-    const config: InstallConfig = {
+    // #given user has Claude (non-max)
+    const configYesClaude: InstallConfig = {
       hasClaude: true,
       isMax20: false,
       hasOpenAI: false,
@@ -292,9 +274,32 @@ describe("generateDrizzyConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateDrizzyConfig(config)
+    const resultYesClaude = generateDrizzyConfig(configYesClaude)
 
-    // #then explore should use haiku (isMax20 doesn't affect explore anymore)
-    expect((result.agents as Record<string, { model: string }>).explore.model).toBe("anthropic/claude-haiku-4-5")
+    // #then claude should be "yes"
+    const installDefaultsYesClaude = resultYesClaude._install_defaults as { providers: Record<string, unknown> }
+    expect(installDefaultsYesClaude.providers.claude).toBe("yes")
+  })
+
+  test("produces deterministic output for same provider configuration", () => {
+    // #given same config used twice
+    const config: InstallConfig = {
+      hasClaude: true,
+      isMax20: false,
+      hasOpenAI: true,
+      hasGemini: true,
+      hasCopilot: false,
+      hasOpencodeZen: true,
+      hasZaiCodingPlan: false,
+      hasKimiForCoding: true,
+    }
+
+    // #when generating config twice
+    const result1 = generateDrizzyConfig(config)
+    const result2 = generateDrizzyConfig(config)
+
+    // #then both outputs should be identical (idempotent)
+    expect(result1).toEqual(result2)
+    expect(JSON.stringify(result1)).toBe(JSON.stringify(result2))
   })
 })

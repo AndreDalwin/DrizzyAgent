@@ -110,6 +110,86 @@ Create `.opencode/drizzy-agent.jsonc` or `~/.config/opencode/drizzy-agent.jsonc`
 }
 ```
 
+### How Configuration Works (Override-Only Architecture)
+
+DrizzyAgent uses an **override-only** configuration system. Understanding this helps you manage your setup effectively.
+
+#### Fresh Installs (Adopted Configs)
+
+When you run `drizzy-agent install`, the tool creates a minimal config containing only:
+
+```jsonc
+{
+  "$schema": "...",
+  "_install_defaults": {
+    "snapshot_version": 1,
+    "providers": {
+      "claude": "yes",
+      "openai": false,
+      "gemini": false,
+      // ... which providers you selected
+    }
+  }
+}
+```
+
+The `_install_defaults` section is **install-managed and read-only**. It captures which providers you selected during installation. The actual `agents` and `categories` configuration is computed at runtime from current fallback rules.
+
+**Key benefits of adopted configs:**
+- Your config stays small and focused on your choices
+- Model fallbacks automatically improve with each plugin update
+- No manual updates needed when better models become available
+
+#### Legacy Configs (Pre-Existing)
+
+If you have an existing config without `_install_defaults`, it is considered **legacy**. Legacy configs:
+- Have all `agents` and `categories` explicitly defined
+- Stay pinned to whatever models were set
+- Do not receive automatic fallback improvements
+
+**To check your status:** Open your config file. If you see `_install_defaults`, you are adopted. If you see explicit `agents` and `categories` without `_install_defaults`, you are legacy.
+
+#### Migration Path
+
+To migrate from legacy to adopted (recommended):
+
+```bash
+# Backs up your existing config and creates fresh adopted config
+bunx drizzy-agent install
+```
+
+Your explicit overrides (if any) will be merged into the new structure.
+
+#### Adding Custom Overrides
+
+You can always add explicit overrides on top of the computed defaults:
+
+```jsonc
+{
+  "_install_defaults": { /* ... */ },
+  "agents": {
+    "coder": {
+      "model": "claude-opus-4"  // This overrides the computed default
+    }
+  },
+  "categories": {
+    "deep": {
+      "model": "o3-mini"  // Override for specific category
+    }
+  }
+}
+```
+
+Explicit overrides take precedence over computed defaults. Omitting a field means "use the computed default."
+
+#### Future Fallback Updates
+
+When DrizzyAgent releases improvements to model fallback chains:
+- **Adopted configs**: Automatically benefit from updates (computed defaults refresh)
+- **Legacy configs**: Stay pinned to existing explicit settings (no automatic changes)
+
+To get the latest fallback improvements on a legacy config, rerun `drizzy-agent install`.
+
 ### Troubleshooting: Version Display Issues
 
 If you see an old version (like 3.11.2) instead of the current version, clear the cache:

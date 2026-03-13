@@ -20,4 +20,6 @@ export type {
   CoderTasksConfig,
   RuntimeFallbackConfig,
   FallbackModels,
+  InstallDefaultsSnapshot,
+  InstallDefaultsProviders,
 } from "./schema"

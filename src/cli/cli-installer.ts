@@ -73,6 +73,22 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
       initial.kimiForCoding !== "no" && `Kimi`,
     ].filter(Boolean).join(", ") || "none"
     printInfo(`Current config: ${enabledProviders}`)
+
+    // Warn about legacy configs that won't receive automatic updates
+    if (detected.isLegacyConfig) {
+      console.log()
+      console.log(color.bgYellow(color.black(color.bold(" LEGACY CONFIG DETECTED "))))
+      console.log()
+      console.log(color.yellow("  Your config was created before the override-only architecture."))
+      console.log(color.yellow("  Legacy configs stay pinned to current models and won't receive"))
+      console.log(color.yellow("  automatic fallback improvements."))
+      console.log()
+      console.log(color.dim("  To migrate to the new system (recommended):"))
+      console.log(color.cyan("    bunx drizzy-agent install"))
+      console.log()
+      console.log(color.dim("  Your explicit overrides will be preserved."))
+      console.log()
+    }
   }
 
   // Check for oh-my-opencode conflict
