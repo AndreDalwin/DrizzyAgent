@@ -10,7 +10,7 @@ Entry point `index.ts` orchestrates 5-step initialization: loadConfig → create
 
 | File | Purpose |
 |------|---------|
-| `index.ts` | Plugin entry, exports `OhMyOpenCodePlugin` |
+| `index.ts` | Plugin entry, exports `DrizzyAgentPlugin` |
 | `plugin-config.ts` | JSONC parse, multi-level merge, Zod v4 validation |
 | `create-managers.ts` | TmuxSessionManager, BackgroundManager, SkillMcpManager, ConfigHandler |
 | `create-tools.ts` | SkillContext + AvailableCategories + ToolRegistry (26 tools) |
@@ -21,8 +21,8 @@ Entry point `index.ts` orchestrates 5-step initialization: loadConfig → create
 
 ```
 loadPluginConfig(directory, ctx)
-  1. User: ~/.config/opencode/oh-my-opencode.jsonc
-  2. Project: .opencode/oh-my-opencode.jsonc
+  1. User: ~/.config/opencode/drizzy-agent.jsonc
+  2. Project: .opencode/drizzy-agent.jsonc
   3. mergeConfigs(user, project) → deepMerge for agents/categories, Set union for disabled_*
   4. Zod safeParse → defaults for omitted fields
   5. migrateConfigFile() → legacy key transformation

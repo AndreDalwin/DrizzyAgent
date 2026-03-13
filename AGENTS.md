@@ -65,7 +65,7 @@ DrizzyAgentPlugin(ctx)
 | Add new command | `src/features/builtin-commands/` | Template in templates/ |
 | Add new CLI command | `src/cli/cli-program.ts` | Commander.js subcommand |
 | Add new doctor check | `src/cli/doctor/checks/` | Register in checks/index.ts |
-| Modify config schema | `src/config/schema/` + update root schema | Zod v4, add to OhMyOpenCodeConfigSchema |
+| Modify config schema | `src/config/schema/` + update root schema | Zod v4, add to DrizzyAgentConfigSchema |
 | Add new category | `src/tools/delegate-task/constants.ts` | DEFAULT_CATEGORIES + CATEGORY_MODEL_REQUIREMENTS |
 
 ## MULTI-LEVEL CONFIG

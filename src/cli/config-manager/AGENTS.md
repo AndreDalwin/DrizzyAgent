@@ -10,7 +10,7 @@
 
 | File | Purpose |
 |------|---------|
-| `add-plugin-to-opencode-config.ts` | Register `oh-my-opencode` in `.opencode/opencode.json` plugin array |
+| `add-plugin-to-opencode-config.ts` | Register `drizzy-agent` in `.opencode/opencode.json` plugin array |
 | `add-provider-config.ts` | Add provider API key to OpenCode config (user-level) |
 | `antigravity-provider-configuration.ts` | Handle Antigravity provider setup (special case) |
 | `auth-plugins.ts` | Detect auth plugin requirements per provider (oauth vs key) |
@@ -26,7 +26,7 @@
 | `opencode-binary.ts` | Detect OpenCode binary location, verify it's installed |
 | `opencode-config-format.ts` | OpenCode config format constants and type guards |
 | `parse-opencode-config-file.ts` | Parse opencode.json/opencode.jsonc with fallback |
-| `plugin-name-with-version.ts` | Resolve `oh-my-opencode@X.Y.Z` for installation |
+| `plugin-name-with-version.ts` | Resolve `drizzy-agent@X.Y.Z` for installation |
 | `write-drizzy-config.ts` | Write generated config to `.opencode/drizzy-agent.json` |
 
 ## USAGE PATTERN
