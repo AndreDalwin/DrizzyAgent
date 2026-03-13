@@ -102,7 +102,19 @@ function detectProvidersFromDrizzyConfig(
       }
     }
 
-    return DEFAULT_PROVIDER_DETECTION
+    // Legacy config without _install_defaults: detect providers from model strings
+    const configStr = JSON.stringify(drizzyConfig)
+    const detected = detectProvidersFromString(configStr)
+
+    // Check for isMax20 in legacy configs (look for variant: "max" in unspecified-high)
+    const categories = drizzyConfig.categories
+    const isMax20 =
+      detected.hasClaude &&
+      isRecord(categories) &&
+      isRecord(categories["unspecified-high"]) &&
+      categories["unspecified-high"].variant === "max"
+
+    return mergeProviderDetection(detected, isMax20)
   } catch {
     return DEFAULT_PROVIDER_DETECTION
   }
