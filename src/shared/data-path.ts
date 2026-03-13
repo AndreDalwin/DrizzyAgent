@@ -31,10 +31,10 @@ export function getCacheDir(): string {
 }
 
 /**
- * Returns the oh-my-opencode cache directory.
- * All platforms: ~/.cache/oh-my-opencode
+ * Returns the drizzy-agent cache directory.
+ * All platforms: ~/.cache/drizzy-agent
  */
-export function getOmoOpenCodeCacheDir(): string {
+export function getDrizzyAgentCacheDir(): string {
   return path.join(getCacheDir(), "drizzy-agent")
 }
 

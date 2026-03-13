@@ -21,8 +21,9 @@ function detectProvidersFromDrizzyConfig(): {
   hasKimiForCoding: boolean
 } {
   const drizzyConfigPath = getDrizzyConfigPath()
-  const legacyConfigPath = join(getConfigDir(), "oh-my-opencode.json")
-  const configPath = existsSync(drizzyConfigPath) ? drizzyConfigPath : legacyConfigPath
+  const configPath = existsSync(drizzyConfigPath)
+    ? drizzyConfigPath
+    : join(getConfigDir(), "drizzy-agent.json")
   if (!existsSync(configPath)) {
     return {
       hasClaude: false,

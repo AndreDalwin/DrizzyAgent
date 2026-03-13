@@ -55,12 +55,7 @@ export function writeDrizzyConfig(installConfig: InstallConfig): ConfigMergeResu
   }
 
   const drizzyConfigPath = getDrizzyConfigPath()
-  const legacyConfigPath = join(getConfigDir(), "oh-my-opencode.json")
-  const existingConfigPath = existsSync(drizzyConfigPath)
-    ? drizzyConfigPath
-    : existsSync(legacyConfigPath)
-      ? legacyConfigPath
-      : drizzyConfigPath
+  const existingConfigPath = drizzyConfigPath
 
   try {
     const newConfig = generateDrizzyConfig(installConfig)

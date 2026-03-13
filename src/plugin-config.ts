@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { OhMyOpenCodeConfigSchema, type OhMyOpenCodeConfig } from "./config";
+import { DrizzyAgentConfigSchema, type DrizzyAgentConfig } from "./config";
 import {
   log,
   deepMerge,
@@ -22,8 +22,8 @@ const PARTIAL_STRING_ARRAY_KEYS = new Set([
 
 export function parseConfigPartially(
   rawConfig: Record<string, unknown>
-): OhMyOpenCodeConfig | null {
-  const fullResult = OhMyOpenCodeConfigSchema.safeParse(rawConfig);
+): DrizzyAgentConfig | null {
+  const fullResult = DrizzyAgentConfigSchema.safeParse(rawConfig);
   if (fullResult.success) {
     return fullResult.data;
   }
@@ -40,7 +40,7 @@ export function parseConfigPartially(
       continue;
     }
 
-    const sectionResult = OhMyOpenCodeConfigSchema.safeParse({ [key]: rawConfig[key] });
+    const sectionResult = DrizzyAgentConfigSchema.safeParse({ [key]: rawConfig[key] });
     if (sectionResult.success) {
       const parsed = sectionResult.data as Record<string, unknown>;
       if (parsed[key] !== undefined) {
@@ -61,13 +61,13 @@ export function parseConfigPartially(
     log("Partial config loaded — invalid sections skipped:", invalidSections);
   }
 
-  return partialConfig as OhMyOpenCodeConfig;
+  return partialConfig as DrizzyAgentConfig;
 }
 
 export function loadConfigFromPath(
   configPath: string,
   _ctx: unknown
-): OhMyOpenCodeConfig | null {
+): DrizzyAgentConfig | null {
   try {
     if (fs.existsSync(configPath)) {
       const content = fs.readFileSync(configPath, "utf-8");
@@ -75,7 +75,7 @@ export function loadConfigFromPath(
 
       migrateConfigFile(configPath, rawConfig);
 
-      const result = OhMyOpenCodeConfigSchema.safeParse(rawConfig);
+      const result = DrizzyAgentConfigSchema.safeParse(rawConfig);
 
       if (result.success) {
         log(`Config loaded from ${configPath}`, { agents: result.data.agents });
@@ -108,9 +108,9 @@ export function loadConfigFromPath(
 }
 
 export function mergeConfigs(
-  base: OhMyOpenCodeConfig,
-  override: OhMyOpenCodeConfig
-): OhMyOpenCodeConfig {
+  base: DrizzyAgentConfig,
+  override: DrizzyAgentConfig
+): DrizzyAgentConfig {
   return {
     ...base,
     ...override,
@@ -153,31 +153,23 @@ export function mergeConfigs(
 export function loadPluginConfig(
   directory: string,
   ctx: unknown
-): OhMyOpenCodeConfig {
+): DrizzyAgentConfig {
   const configDir = getOpenCodeConfigDir({ binary: "opencode" });
   const userBasePath = path.join(configDir, "drizzy-agent");
-  const legacyUserBasePath = path.join(configDir, "oh-my-opencode");
   const userDetected = detectConfigFile(userBasePath);
-  const legacyUserDetected = detectConfigFile(legacyUserBasePath);
   const userConfigPath =
     userDetected.format !== "none"
       ? userDetected.path
-      : legacyUserDetected.format !== "none"
-        ? legacyUserDetected.path
-        : userBasePath + ".json";
+      : userBasePath + ".json";
 
   const projectBasePath = path.join(directory, ".opencode", "drizzy-agent");
-  const legacyProjectBasePath = path.join(directory, ".opencode", "oh-my-opencode");
   const projectDetected = detectConfigFile(projectBasePath);
-  const legacyProjectDetected = detectConfigFile(legacyProjectBasePath);
   const projectConfigPath =
     projectDetected.format !== "none"
       ? projectDetected.path
-      : legacyProjectDetected.format !== "none"
-        ? legacyProjectDetected.path
-        : projectBasePath + ".json";
+      : projectBasePath + ".json";
 
-  let config: OhMyOpenCodeConfig =
+  let config: DrizzyAgentConfig =
     loadConfigFromPath(userConfigPath, ctx) ?? {};
 
   const projectConfig = loadConfigFromPath(projectConfigPath, ctx);

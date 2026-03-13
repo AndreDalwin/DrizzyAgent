@@ -1,5 +1,5 @@
 /**
- * Detects external plugins that may conflict with oh-my-opencode features.
+ * Detects external plugins that may conflict with drizzy-agent features.
  * Used to prevent crashes from concurrent notification plugins.
  */
 
@@ -14,7 +14,7 @@ interface OpencodeConfig {
 }
 
 /**
- * Known notification plugins that conflict with oh-my-opencode's session-notification.
+ * Known notification plugins that conflict with drizzy-agent's session-notification.
  * Both plugins listen to session.idle and send notifications simultaneously,
  * which can cause crashes on Windows due to resource contention.
  */

@@ -26,11 +26,11 @@ interface ProviderModelsCache {
 }
 
 function getCacheFilePath(filename: string): string {
-	return join(dataPath.getOmoOpenCodeCacheDir(), filename)
+	return join(dataPath.getDrizzyAgentCacheDir(), filename)
 }
 
 function ensureCacheDir(): void {
-	const cacheDir = dataPath.getOmoOpenCodeCacheDir()
+	const cacheDir = dataPath.getDrizzyAgentCacheDir()
 	if (!existsSync(cacheDir)) {
 		mkdirSync(cacheDir, { recursive: true })
 	}

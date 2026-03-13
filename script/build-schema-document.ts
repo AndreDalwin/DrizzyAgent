@@ -1,8 +1,8 @@
 import * as z from "zod"
-import { OhMyOpenCodeConfigSchema } from "../src/config/schema"
+import { DrizzyAgentConfigSchema } from "../src/config/schema"
 
-export function createOhMyOpenCodeJsonSchema(): Record<string, unknown> {
-  const jsonSchema = z.toJSONSchema(OhMyOpenCodeConfigSchema, {
+export function createDrizzyAgentJsonSchema(): Record<string, unknown> {
+  const jsonSchema = z.toJSONSchema(DrizzyAgentConfigSchema, {
     target: "draft-7",
     unrepresentable: "any",
   })

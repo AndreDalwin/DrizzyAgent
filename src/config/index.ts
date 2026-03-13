@@ -1,9 +1,9 @@
 export {
-  OhMyOpenCodeConfigSchema,
+  DrizzyAgentConfigSchema,
 } from "./schema"
 
 export type {
-  OhMyOpenCodeConfig,
+  DrizzyAgentConfig,
   AgentOverrideConfig,
   AgentOverrides,
   McpName,

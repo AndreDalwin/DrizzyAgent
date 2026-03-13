@@ -1,6 +1,6 @@
 import { createBuiltinAgents } from "../agents";
 import { createCoderJuniorAgentWithOverrides } from "../agents/coder-junior";
-import type { OhMyOpenCodeConfig } from "../config";
+import type { DrizzyAgentConfig } from "../config";
 import { log, migrateAgentConfig } from "../shared";
 import { AGENT_NAME_MAP } from "../shared/migration";
 import { getAgentDisplayName } from "../shared/agent-display-names";
@@ -39,7 +39,7 @@ function getConfiguredDefaultAgent(config: Record<string, unknown>): string | un
 
 export async function applyAgentConfig(params: {
   config: Record<string, unknown>;
-  pluginConfig: OhMyOpenCodeConfig;
+  pluginConfig: DrizzyAgentConfig;
   ctx: { directory: string; client?: any };
   pluginComponents: PluginComponents;
 }): Promise<Record<string, unknown>> {
