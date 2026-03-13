@@ -1,20 +1,22 @@
-import { afterEach, beforeEach, describe, expect, it, mock } from "bun:test"
+import { afterAll, afterEach, beforeEach, describe, expect, it, mock } from "bun:test"
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import type { PluginEntryInfo } from "./plugin-entry"
+import * as constants from "../constants"
 
 const TEST_CACHE_DIR = join(import.meta.dir, "__test-sync-cache__")
 
 mock.module("../constants", () => ({
+  ...constants,
   CACHE_DIR: TEST_CACHE_DIR,
-  PACKAGE_NAME: "oh-my-opencode",
-  NPM_REGISTRY_URL: "https://registry.npmjs.org/-/package/oh-my-opencode/dist-tags",
+  PACKAGE_NAME: "drizzy-agent",
+  NPM_REGISTRY_URL: "https://registry.npmjs.org/-/package/drizzy-agent/dist-tags",
   NPM_FETCH_TIMEOUT: 5000,
   VERSION_FILE: join(TEST_CACHE_DIR, "version"),
   USER_CONFIG_DIR: "/tmp/opencode-config",
   USER_OPENCODE_CONFIG: "/tmp/opencode-config/opencode.json",
   USER_OPENCODE_CONFIG_JSONC: "/tmp/opencode-config/opencode.jsonc",
-  INSTALLED_PACKAGE_JSON: join(TEST_CACHE_DIR, "node_modules", "oh-my-opencode", "package.json"),
+  INSTALLED_PACKAGE_JSON: join(TEST_CACHE_DIR, "node_modules", "drizzy-agent", "package.json"),
   getWindowsAppdataDir: () => null,
 }))
 
@@ -30,7 +32,7 @@ function resetTestCache(currentVersion = "3.10.0"): void {
   mkdirSync(TEST_CACHE_DIR, { recursive: true })
   writeFileSync(
     join(TEST_CACHE_DIR, "package.json"),
-    JSON.stringify({ dependencies: { "oh-my-opencode": currentVersion, other: "1.0.0" } }, null, 2)
+    JSON.stringify({ dependencies: { "drizzy-agent": currentVersion, other: "1.0.0" } }, null, 2)
   )
 }
 
@@ -43,10 +45,14 @@ function cleanupTestCache(): void {
 function readCachePackageJsonVersion(): string | undefined {
   const content = readFileSync(join(TEST_CACHE_DIR, "package.json"), "utf-8")
   const pkg = JSON.parse(content) as { dependencies?: Record<string, string> }
-  return pkg.dependencies?.["oh-my-opencode"]
+  return pkg.dependencies?.["drizzy-agent"]
 }
 
 describe("syncCachePackageJsonToIntent", () => {
+  afterAll(() => {
+    mock.restore()
+  })
+
   beforeEach(() => {
     resetTestCache()
   })
@@ -61,7 +67,7 @@ describe("syncCachePackageJsonToIntent", () => {
         const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
         const pluginInfo: PluginEntryInfo = {
-          entry: "oh-my-opencode@latest",
+          entry: "drizzy-agent@latest",
           isPinned: false,
           pinnedVersion: "latest",
           configPath: "/tmp/opencode.json",
@@ -80,7 +86,7 @@ describe("syncCachePackageJsonToIntent", () => {
         const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
         const pluginInfo: PluginEntryInfo = {
-          entry: "oh-my-opencode@next",
+          entry: "drizzy-agent@next",
           isPinned: false,
           pinnedVersion: "next",
           configPath: "/tmp/opencode.json",
@@ -99,7 +105,7 @@ describe("syncCachePackageJsonToIntent", () => {
         const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
         const pluginInfo: PluginEntryInfo = {
-          entry: "oh-my-opencode",
+          entry: "drizzy-agent",
           isPinned: false,
           pinnedVersion: null,
           configPath: "/tmp/opencode.json",
@@ -120,7 +126,7 @@ describe("syncCachePackageJsonToIntent", () => {
       const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
       const pluginInfo: PluginEntryInfo = {
-        entry: "oh-my-opencode@latest",
+        entry: "drizzy-agent@latest",
         isPinned: false,
         pinnedVersion: "latest",
         configPath: "/tmp/opencode.json",
@@ -140,7 +146,7 @@ describe("syncCachePackageJsonToIntent", () => {
       const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
       const pluginInfo: PluginEntryInfo = {
-        entry: "oh-my-opencode@latest",
+        entry: "drizzy-agent@latest",
         isPinned: false,
         pinnedVersion: "latest",
         configPath: "/tmp/opencode.json",
@@ -165,7 +171,7 @@ describe("syncCachePackageJsonToIntent", () => {
       const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
       const pluginInfo: PluginEntryInfo = {
-        entry: "oh-my-opencode@latest",
+        entry: "drizzy-agent@latest",
         isPinned: false,
         pinnedVersion: "latest",
         configPath: "/tmp/opencode.json",
@@ -184,7 +190,7 @@ describe("syncCachePackageJsonToIntent", () => {
       const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
       const pluginInfo: PluginEntryInfo = {
-        entry: "oh-my-opencode@3.10.0",
+        entry: "drizzy-agent@3.10.0",
         isPinned: true,
         pinnedVersion: "3.10.0",
         configPath: "/tmp/opencode.json",
@@ -203,7 +209,7 @@ describe("syncCachePackageJsonToIntent", () => {
       const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
       const pluginInfo: PluginEntryInfo = {
-        entry: "oh-my-opencode@latest",
+        entry: "drizzy-agent@latest",
         isPinned: false,
         pinnedVersion: "latest",
         configPath: "/tmp/opencode.json",
@@ -229,7 +235,7 @@ describe("syncCachePackageJsonToIntent", () => {
       const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
       const pluginInfo: PluginEntryInfo = {
-        entry: "oh-my-opencode@latest",
+        entry: "drizzy-agent@latest",
         isPinned: false,
         pinnedVersion: "latest",
         configPath: "/tmp/opencode.json",
@@ -248,7 +254,7 @@ describe("syncCachePackageJsonToIntent", () => {
       mkdirSync(TEST_CACHE_DIR, { recursive: true })
       writeFileSync(
         join(TEST_CACHE_DIR, "package.json"),
-        JSON.stringify({ dependencies: { "oh-my-opencode": "3.10.0" } }, null, 2)
+        JSON.stringify({ dependencies: { "drizzy-agent": "3.10.0" } }, null, 2)
       )
 
       const fs = await import("node:fs")
@@ -267,7 +273,7 @@ describe("syncCachePackageJsonToIntent", () => {
         const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
         const pluginInfo: PluginEntryInfo = {
-          entry: "oh-my-opencode@latest",
+          entry: "drizzy-agent@latest",
           isPinned: false,
           pinnedVersion: "latest",
           configPath: "/tmp/opencode.json",
@@ -293,7 +299,7 @@ describe("syncCachePackageJsonToIntent", () => {
       mkdirSync(TEST_CACHE_DIR, { recursive: true })
       writeFileSync(
         join(TEST_CACHE_DIR, "package.json"),
-        JSON.stringify({ dependencies: { "oh-my-opencode": "3.10.0" } }, null, 2)
+        JSON.stringify({ dependencies: { "drizzy-agent": "3.10.0" } }, null, 2)
       )
 
       const fs = await import("node:fs")
@@ -317,7 +323,7 @@ describe("syncCachePackageJsonToIntent", () => {
         const { syncCachePackageJsonToIntent } = await import("./sync-package-json")
 
         const pluginInfo: PluginEntryInfo = {
-          entry: "oh-my-opencode@latest",
+          entry: "drizzy-agent@latest",
           isPinned: false,
           pinnedVersion: "latest",
           configPath: "/tmp/opencode.json",

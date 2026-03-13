@@ -1,31 +1,24 @@
-import { beforeEach, describe, expect, mock, test } from "bun:test"
+import { afterAll, afterEach, beforeEach, describe, expect, mock, test } from "bun:test"
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import * as shared from "../../shared"
 
 const OPEN_CODE_CONFIG_PATH = "/tmp/opencode.json"
-const DRIZZY_CONFIG_PATH = "/tmp/drizzy-agent.json"
-const CONFIG_DIR = "/tmp"
+let drizzyConfigPath = "/tmp/drizzy-agent.json"
+let configDir = "/tmp"
+const tempDirs: string[] = []
 
-let hasDrizzyConfig = true
-let drizzyConfigContent = "{}"
 let openCodeConfig: Record<string, unknown> | null = null
 
-mock.module("node:fs", () => ({
-  existsSync: (filePath: string) => filePath === DRIZZY_CONFIG_PATH ? hasDrizzyConfig : false,
-  readFileSync: (filePath: string) => {
-    if (filePath === DRIZZY_CONFIG_PATH) {
-      return drizzyConfigContent
-    }
-
-    throw new Error(`Unexpected file read: ${filePath}`)
-  },
-}))
-
 mock.module("../../shared", () => ({
+  ...shared,
   parseJsonc: (content: string) => JSON.parse(content) as Record<string, unknown>,
 }))
 
 mock.module("./config-context", () => ({
-  getConfigDir: () => CONFIG_DIR,
-  getDrizzyConfigPath: () => DRIZZY_CONFIG_PATH,
+  getConfigDir: () => configDir,
+  getDrizzyConfigPath: () => drizzyConfigPath,
 }))
 
 mock.module("./opencode-config-format", () => ({
@@ -42,12 +35,29 @@ async function loadDetectCurrentConfig(): Promise<() => import("../types").Detec
 }
 
 describe("detectCurrentConfig", () => {
+  afterAll(() => {
+    mock.restore()
+  })
+
+  afterEach(() => {
+    while (tempDirs.length > 0) {
+      const dir = tempDirs.pop()
+      if (dir) {
+        rmSync(dir, { recursive: true, force: true })
+      }
+    }
+  })
+
   beforeEach(() => {
-    hasDrizzyConfig = true
+    const tempDir = mkdtempSync(join(tmpdir(), "drizzy-config-test-"))
+    tempDirs.push(tempDir)
+    configDir = tempDir
+    drizzyConfigPath = join(tempDir, "drizzy-agent.json")
+
     openCodeConfig = {
       plugin: ["drizzy-agent@latest"],
     }
-    drizzyConfigContent = JSON.stringify({
+    writeFileSync(drizzyConfigPath, JSON.stringify({
       agents: {
         coder: { model: "openai/gpt-5.4", variant: "medium" },
         planner: { model: "kimi-for-coding/k2p5" },
@@ -56,7 +66,7 @@ describe("detectCurrentConfig", () => {
         quick: { model: "opencode/glm-4.7-free" },
         "unspecified-high": { model: "openai/gpt-5.4", variant: "medium" },
       },
-    })
+    }))
   })
 
   test("detects provider availability from drizzy config instead of stale Claude defaults", async () => {
@@ -78,7 +88,7 @@ describe("detectCurrentConfig", () => {
   })
 
   test("detects Gemini from drizzy config even without provider.google in opencode config", async () => {
-    drizzyConfigContent = JSON.stringify({
+    writeFileSync(drizzyConfigPath, JSON.stringify({
       agents: {
         coder: { model: "google/gemini-3.1-pro" },
       },
@@ -86,7 +96,7 @@ describe("detectCurrentConfig", () => {
         quick: { model: "google/gemini-3-flash" },
         "unspecified-high": { model: "google/gemini-3.1-pro" },
       },
-    })
+    }))
 
     const detectCurrentConfig = await loadDetectCurrentConfig()
 
@@ -97,7 +107,7 @@ describe("detectCurrentConfig", () => {
   })
 
   test("infers Claude max20 from generated unspecified-high category", async () => {
-    drizzyConfigContent = JSON.stringify({
+    writeFileSync(drizzyConfigPath, JSON.stringify({
       agents: {
         coder: { model: "anthropic/claude-opus-4-6", variant: "max" },
       },
@@ -105,7 +115,7 @@ describe("detectCurrentConfig", () => {
         quick: { model: "anthropic/claude-haiku-4-5" },
         "unspecified-high": { model: "anthropic/claude-opus-4-6", variant: "max" },
       },
-    })
+    }))
 
     const detectCurrentConfig = await loadDetectCurrentConfig()
 
