@@ -1,6 +1,6 @@
 import { describe, expect, test, mock, afterEach } from "bun:test"
 
-import { getPluginNameWithVersion, fetchNpmDistTags, generateOmoConfig } from "./config-manager"
+import { getPluginNameWithVersion, fetchNpmDistTags, generateDrizzyConfig } from "./config-manager"
 import type { InstallConfig } from "./types"
 
 describe("getPluginNameWithVersion", () => {
@@ -169,7 +169,7 @@ describe("fetchNpmDistTags", () => {
   })
 })
 
-describe("generateOmoConfig - model fallback system", () => {
+describe("generateDrizzyConfig - model fallback system", () => {
   test("uses github-copilot sonnet fallback when only copilot available", () => {
     // #given user has only copilot (no max plan)
     const config: InstallConfig = {
@@ -184,7 +184,7 @@ describe("generateOmoConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateOmoConfig(config)
+    const result = generateDrizzyConfig(config)
 
     // #then Coder uses Copilot (OR logic - copilot is in claude-opus-4-6 providers)
     expect((result.agents as Record<string, { model: string }>).coder.model).toBe("github-copilot/claude-opus-4.6")
@@ -204,7 +204,7 @@ describe("generateOmoConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateOmoConfig(config)
+    const result = generateDrizzyConfig(config)
 
     // #then Coder is omitted (requires all fallback providers)
     expect(result.$schema).toBe("https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json")
@@ -225,7 +225,7 @@ describe("generateOmoConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateOmoConfig(config)
+    const result = generateDrizzyConfig(config)
 
     // #then librarian should use ZAI model
     expect((result.agents as Record<string, { model: string }>).librarian.model).toBe("zai-coding-plan/glm-4.7")
@@ -247,7 +247,7 @@ describe("generateOmoConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateOmoConfig(config)
+    const result = generateDrizzyConfig(config)
 
     // #then Coder resolves to gpt-5.4 medium (openai is now in coder chain)
     expect((result.agents as Record<string, { model: string; variant?: string }>).coder.model).toBe("openai/gpt-5.4")
@@ -272,7 +272,7 @@ describe("generateOmoConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateOmoConfig(config)
+    const result = generateDrizzyConfig(config)
 
     // #then explore should use haiku (max20 plan uses Claude quota)
     expect((result.agents as Record<string, { model: string }>).explore.model).toBe("anthropic/claude-haiku-4-5")
@@ -292,7 +292,7 @@ describe("generateOmoConfig - model fallback system", () => {
     }
 
     // #when generating config
-    const result = generateOmoConfig(config)
+    const result = generateDrizzyConfig(config)
 
     // #then explore should use haiku (isMax20 doesn't affect explore anymore)
     expect((result.agents as Record<string, { model: string }>).explore.model).toBe("anthropic/claude-haiku-4-5")
