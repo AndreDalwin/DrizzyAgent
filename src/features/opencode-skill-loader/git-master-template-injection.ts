@@ -3,6 +3,10 @@ import { assertValidGitEnvPrefix, type GitMasterConfig } from "../../config/sche
 const BASH_CODE_BLOCK_PATTERN = /```bash\r?\n([\s\S]*?)```/g
 const LEADING_GIT_COMMAND_PATTERN = /^([ \t]*(?:[A-Za-z_][A-Za-z0-9_]*=[^ \t]+\s+)*)git(?=[ \t]|$)/gm
 const INLINE_GIT_COMMAND_PATTERN = /([;&|()][ \t]*)git(?=[ \t]|$)/g
+const DEFAULT_COMMIT_FOOTER =
+	"Ultraworked with [DrizzyAgent](https://github.com/AndreDalwin/DrizzyAgent)"
+const DEFAULT_CO_AUTHORED_BY =
+	"Co-authored-by: DrizzyBot <263155900+DrizzyBot@users.noreply.github.com>"
 
 export function injectGitMasterConfig(template: string, config?: GitMasterConfig): string {
 	const commitFooter = config?.commit_footer ?? true
@@ -12,7 +16,7 @@ export function injectGitMasterConfig(template: string, config?: GitMasterConfig
 	let result = gitEnvPrefix ? injectGitEnvPrefix(template, gitEnvPrefix) : template
 
 	if (commitFooter || includeCoAuthoredBy) {
-		const injection = buildCommitFooterInjection(commitFooter, includeCoAuthoredBy, gitEnvPrefix)
+		const injection = buildCommitFooterInjection(commitFooter, includeCoAuthoredBy)
 		const insertionPoint = result.indexOf("```\n</execution>")
 
 		result =
@@ -79,21 +83,19 @@ function prefixGitCommandsInCodeBlock(codeBlock: string, prefix: string): string
 function buildCommitFooterInjection(
 	commitFooter: boolean | string,
 	includeCoAuthoredBy: boolean,
-	gitEnvPrefix: string,
 ): string {
 	const sections: string[] = []
-	const cmdPrefix = gitEnvPrefix ? `${gitEnvPrefix} ` : ""
 
 	sections.push("### 5.5 Commit Footer & Co-Author")
 	sections.push("")
-	sections.push("Add Coder attribution to EVERY commit:")
+	sections.push("Add DrizzyAgent attribution to EVERY commit:")
 	sections.push("")
 
 	if (commitFooter) {
 		const footerText =
 			typeof commitFooter === "string"
 				? commitFooter
-				: "Ultraworked with [Coder](https://github.com/code-yeongyu/oh-my-openagent)"
+				: DEFAULT_COMMIT_FOOTER
 		sections.push("1. **Footer in commit body:**")
 		sections.push("```")
 		sections.push(footerText)
@@ -104,7 +106,7 @@ function buildCommitFooterInjection(
 	if (includeCoAuthoredBy) {
 		sections.push(`${commitFooter ? "2" : "1"}. **Co-authored-by trailer:**`)
 		sections.push("```")
-		sections.push("Co-authored-by: Coder <clio-agent@coderlabs.ai>")
+		sections.push(DEFAULT_CO_AUTHORED_BY)
 		sections.push("```")
 		sections.push("")
 	}
@@ -113,28 +115,26 @@ function buildCommitFooterInjection(
 		const footerText =
 			typeof commitFooter === "string"
 				? commitFooter
-				: "Ultraworked with [Coder](https://github.com/code-yeongyu/oh-my-openagent)"
+				: DEFAULT_COMMIT_FOOTER
 		sections.push("**Example (both enabled):**")
 		sections.push("```bash")
 		sections.push(
-			`${cmdPrefix}git commit -m "{Commit Message}" -m "${footerText}" -m "Co-authored-by: Coder <clio-agent@coderlabs.ai>"`
+			`git commit -m "{Commit Message}" -m "${footerText}" -m "${DEFAULT_CO_AUTHORED_BY}"`
 		)
 		sections.push("```")
 	} else if (commitFooter) {
 		const footerText =
 			typeof commitFooter === "string"
 				? commitFooter
-				: "Ultraworked with [Coder](https://github.com/code-yeongyu/oh-my-openagent)"
+				: DEFAULT_COMMIT_FOOTER
 		sections.push("**Example:**")
 		sections.push("```bash")
-		sections.push(`${cmdPrefix}git commit -m "{Commit Message}" -m "${footerText}"`)
+		sections.push(`git commit -m "{Commit Message}" -m "${footerText}"`)
 		sections.push("```")
 	} else if (includeCoAuthoredBy) {
 		sections.push("**Example:**")
 		sections.push("```bash")
-		sections.push(
-			`${cmdPrefix}git commit -m "{Commit Message}" -m "Co-authored-by: Coder <clio-agent@coderlabs.ai>"`
-		)
+		sections.push(`git commit -m "{Commit Message}" -m "${DEFAULT_CO_AUTHORED_BY}"`)
 		sections.push("```")
 	}
 
