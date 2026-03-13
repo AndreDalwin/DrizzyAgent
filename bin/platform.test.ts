@@ -12,7 +12,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name
-    expect(result).toBe("oh-my-opencode-darwin-arm64");
+    expect(result).toBe("drizzy-agent-darwin-arm64");
   });
 
   test("returns darwin-x64 for macOS Intel", () => {
@@ -23,7 +23,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name
-    expect(result).toBe("oh-my-opencode-darwin-x64");
+    expect(result).toBe("drizzy-agent-darwin-x64");
   });
   // #endregion
 
@@ -36,7 +36,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name
-    expect(result).toBe("oh-my-opencode-linux-x64");
+    expect(result).toBe("drizzy-agent-linux-x64");
   });
 
   test("returns linux-arm64 for Linux ARM64 with glibc", () => {
@@ -47,7 +47,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name
-    expect(result).toBe("oh-my-opencode-linux-arm64");
+    expect(result).toBe("drizzy-agent-linux-arm64");
   });
   // #endregion
 
@@ -60,7 +60,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name with musl suffix
-    expect(result).toBe("oh-my-opencode-linux-x64-musl");
+    expect(result).toBe("drizzy-agent-linux-x64-musl");
   });
 
   test("returns linux-arm64-musl for Alpine ARM64", () => {
@@ -71,7 +71,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name with musl suffix
-    expect(result).toBe("oh-my-opencode-linux-arm64-musl");
+    expect(result).toBe("drizzy-agent-linux-arm64-musl");
   });
   // #endregion
 
@@ -84,7 +84,7 @@ describe("getPlatformPackage", () => {
     const result = getPlatformPackage(input);
 
     // #then returns correct package name with 'windows' not 'win32'
-    expect(result).toBe("oh-my-opencode-windows-x64");
+    expect(result).toBe("drizzy-agent-windows-x64");
   });
   // #endregion
 
@@ -112,38 +112,38 @@ describe("getPlatformPackage", () => {
 describe("getBinaryPath", () => {
   test("returns path without .exe for Unix platforms", () => {
     // #given Unix platform package
-    const pkg = "oh-my-opencode-darwin-arm64";
+    const pkg = "drizzy-agent-darwin-arm64";
     const platform = "darwin";
 
     // #when getting binary path
     const result = getBinaryPath(pkg, platform);
 
     // #then returns path without extension
-    expect(result).toBe("oh-my-opencode-darwin-arm64/bin/oh-my-opencode");
+    expect(result).toBe("drizzy-agent-darwin-arm64/bin/drizzy-agent");
   });
 
   test("returns path with .exe for Windows", () => {
     // #given Windows platform package
-    const pkg = "oh-my-opencode-windows-x64";
+    const pkg = "drizzy-agent-windows-x64";
     const platform = "win32";
 
     // #when getting binary path
     const result = getBinaryPath(pkg, platform);
 
     // #then returns path with .exe extension
-    expect(result).toBe("oh-my-opencode-windows-x64/bin/oh-my-opencode.exe");
+    expect(result).toBe("drizzy-agent-windows-x64/bin/drizzy-agent.exe");
   });
 
   test("returns path without .exe for Linux", () => {
     // #given Linux platform package
-    const pkg = "oh-my-opencode-linux-x64";
+    const pkg = "drizzy-agent-linux-x64";
     const platform = "linux";
 
     // #when getting binary path
     const result = getBinaryPath(pkg, platform);
 
     // #then returns path without extension
-    expect(result).toBe("oh-my-opencode-linux-x64/bin/oh-my-opencode");
+    expect(result).toBe("drizzy-agent-linux-x64/bin/drizzy-agent");
   });
 });
 
@@ -157,8 +157,8 @@ describe("getPlatformPackageCandidates", () => {
 
     // #then returns modern first then baseline fallback
     expect(result).toEqual([
-      "oh-my-opencode-linux-x64",
-      "oh-my-opencode-linux-x64-baseline",
+      "drizzy-agent-linux-x64",
+      "drizzy-agent-linux-x64-baseline",
     ]);
   });
 
@@ -171,8 +171,8 @@ describe("getPlatformPackageCandidates", () => {
 
     // #then returns musl modern first then musl baseline fallback
     expect(result).toEqual([
-      "oh-my-opencode-linux-x64-musl",
-      "oh-my-opencode-linux-x64-musl-baseline",
+      "drizzy-agent-linux-x64-musl",
+      "drizzy-agent-linux-x64-musl-baseline",
     ]);
   });
 
@@ -185,8 +185,8 @@ describe("getPlatformPackageCandidates", () => {
 
     // #then baseline package is preferred first
     expect(result).toEqual([
-      "oh-my-opencode-windows-x64-baseline",
-      "oh-my-opencode-windows-x64",
+      "drizzy-agent-windows-x64-baseline",
+      "drizzy-agent-windows-x64",
     ]);
   });
 
@@ -198,6 +198,6 @@ describe("getPlatformPackageCandidates", () => {
     const result = getPlatformPackageCandidates(input);
 
     // #then baseline fallback is not included
-    expect(result).toEqual(["oh-my-opencode-linux-arm64"]);
+    expect(result).toEqual(["drizzy-agent-linux-arm64"]);
   });
 });

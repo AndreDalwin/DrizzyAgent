@@ -69,7 +69,7 @@ describe("writeOmoConfig", () => {
 
     const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
     const savedAgents = getRecord(savedConfig.agents)
-    const savedCoder = getRecord(savedAgents.drizzy)
+    const savedCoder = getRecord(savedAgents.coder)
     expect(savedCoder.model).toBe("custom/provider-model")
     expect(savedConfig.disabled_hooks).toEqual(["comment-checker"])
 

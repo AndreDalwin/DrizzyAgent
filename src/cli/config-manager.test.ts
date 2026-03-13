@@ -187,7 +187,7 @@ describe("generateOmoConfig - model fallback system", () => {
     const result = generateOmoConfig(config)
 
     // #then Coder uses Copilot (OR logic - copilot is in claude-opus-4-6 providers)
-    expect((result.agents as Record<string, { model: string }>).drizzy.model).toBe("github-copilot/claude-opus-4.6")
+    expect((result.agents as Record<string, { model: string }>).coder.model).toBe("github-copilot/claude-opus-4.6")
   })
 
   test("uses ultimate fallback when no providers configured", () => {
@@ -208,7 +208,7 @@ describe("generateOmoConfig - model fallback system", () => {
 
     // #then Coder is omitted (requires all fallback providers)
     expect(result.$schema).toBe("https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json")
-    expect((result.agents as Record<string, { model: string }>).drizzy).toBeUndefined()
+    expect((result.agents as Record<string, { model: string }>).coder).toBeUndefined()
   })
 
   test("uses ZAI model for librarian when Z.ai is available", () => {
@@ -230,7 +230,7 @@ describe("generateOmoConfig - model fallback system", () => {
     // #then librarian should use ZAI model
     expect((result.agents as Record<string, { model: string }>).librarian.model).toBe("zai-coding-plan/glm-4.7")
     // #then Coder uses Claude (OR logic)
-    expect((result.agents as Record<string, { model: string }>).drizzy.model).toBe("anthropic/claude-opus-4-6")
+    expect((result.agents as Record<string, { model: string }>).coder.model).toBe("anthropic/claude-opus-4-6")
   })
 
   test("uses native OpenAI models when only ChatGPT available", () => {
@@ -250,8 +250,8 @@ describe("generateOmoConfig - model fallback system", () => {
     const result = generateOmoConfig(config)
 
     // #then Coder resolves to gpt-5.4 medium (openai is now in coder chain)
-    expect((result.agents as Record<string, { model: string; variant?: string }>).drizzy.model).toBe("openai/gpt-5.4")
-    expect((result.agents as Record<string, { model: string; variant?: string }>).drizzy.variant).toBe("medium")
+    expect((result.agents as Record<string, { model: string; variant?: string }>).coder.model).toBe("openai/gpt-5.4")
+    expect((result.agents as Record<string, { model: string; variant?: string }>).coder.variant).toBe("medium")
     // #then Oracle should use native OpenAI (first fallback entry)
     expect((result.agents as Record<string, { model: string }>).oracle.model).toBe("openai/gpt-5.4")
     // #then multimodal-looker should use native OpenAI (first fallback entry is gpt-5.4)

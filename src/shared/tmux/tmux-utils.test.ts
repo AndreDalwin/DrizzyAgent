@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, mock } from "bun:test"
 import {
   isInsideTmux,
+  isInsideTmuxWithEnv,
   isServerRunning,
   resetServerCheck,
   spawnTmuxPane,
@@ -10,48 +11,35 @@ import {
 
 describe("isInsideTmux", () => {
   test("returns true when TMUX env is set", () => {
-    // given
-    const originalTmux = process.env.TMUX
-    process.env.TMUX = "/tmp/tmux-1000/default"
-
     // when
-    const result = isInsideTmux()
+    const result = isInsideTmuxWithEnv({ TMUX: "/tmp/tmux-1000/default" } as NodeJS.ProcessEnv)
 
     // then
     expect(result).toBe(true)
-
-    // cleanup
-    process.env.TMUX = originalTmux
   })
 
   test("returns false when TMUX env is not set", () => {
-    // given
-    const originalTmux = process.env.TMUX
-    delete process.env.TMUX
-
     // when
-    const result = isInsideTmux()
+    const result = isInsideTmuxWithEnv({} as NodeJS.ProcessEnv)
 
     // then
     expect(result).toBe(false)
-
-    // cleanup
-    process.env.TMUX = originalTmux
   })
 
   test("returns false when TMUX env is empty string", () => {
-    // given
-    const originalTmux = process.env.TMUX
-    process.env.TMUX = ""
+    // when
+    const result = isInsideTmuxWithEnv({ TMUX: "" } as NodeJS.ProcessEnv)
 
+    // then
+    expect(result).toBe(false)
+  })
+
+  test("reads from process env in the wrapper", () => {
     // when
     const result = isInsideTmux()
 
     // then
-    expect(result).toBe(false)
-
-    // cleanup
-    process.env.TMUX = originalTmux
+    expect(typeof result).toBe("boolean")
   })
 })
 

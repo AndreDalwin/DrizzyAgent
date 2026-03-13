@@ -34,7 +34,7 @@ describe("Agent Config Integration", () => {
       expect(result.migrated).not.toHaveProperty("Plan Reviewer")
 
       // then - values are preserved
-      expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6" })
+      expect(result.migrated.coder).toEqual({ model: "anthropic/claude-opus-4-6" })
       expect(result.migrated.atlas).toEqual({ model: "anthropic/claude-opus-4-6" })
       expect(result.migrated.planner).toEqual({ model: "anthropic/claude-opus-4-6" })
       
@@ -93,7 +93,7 @@ describe("Agent Config Integration", () => {
       const displayNames = agents.map((agent) => getAgentDisplayName(agent))
 
       // then - display names are correct
-      expect(displayNames).toContain("Coder (Ultraworker)")
+      expect(displayNames).toContain("Coder")
       expect(displayNames).toContain("Atlas (Plan Executor)")
       expect(displayNames).toContain("Planner")
       expect(displayNames).toContain("Plan Consultant")
@@ -112,9 +112,9 @@ describe("Agent Config Integration", () => {
       const displayNames = keys.map((key) => getAgentDisplayName(key))
 
       // then - correct display names are returned
-      expect(displayNames[0]).toBe("Coder (Ultraworker)")
+      expect(displayNames[0]).toBe("Coder")
       expect(displayNames[1]).toBe("Atlas (Plan Executor)")
-      expect(displayNames[2]).toBe("Coder (Ultraworker)")
+      expect(displayNames[2]).toBe("Coder")
       expect(displayNames[3]).toBe("Atlas (Plan Executor)")
       expect(displayNames[4]).toBe("Planner")
       expect(displayNames[5]).toBe("Planner")
@@ -133,20 +133,20 @@ describe("Agent Config Integration", () => {
   })
 
   describe("Model requirements integration", () => {
-    test("all model requirements use lowercase keys", () => {
+    test("model requirements use canonical internal keys", () => {
       // given - AGENT_MODEL_REQUIREMENTS object
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
 
       // when - checking key format
-      const allLowercase = agentKeys.every((key) => key === key.toLowerCase())
+      const expectedAgentKeys = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior"]
 
-      // then - all keys are lowercase
-      expect(allLowercase).toBe(true)
+      // then - keys match the canonical internal schema
+      expect([...agentKeys].sort()).toEqual([...expectedAgentKeys].sort())
     })
 
     test("model requirements include all builtin agents", () => {
       // given - expected builtin agents
-      const expectedAgents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker"]
+      const expectedAgents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior"]
 
       // when - checking AGENT_MODEL_REQUIREMENTS
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
@@ -157,15 +157,13 @@ describe("Agent Config Integration", () => {
       }
     })
 
-    test("no uppercase keys in model requirements", () => {
+    test("model requirements keep camelCase plan agent keys for config compatibility", () => {
       // given - AGENT_MODEL_REQUIREMENTS object
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
 
-      // when - checking for uppercase keys
-      const uppercaseKeys = agentKeys.filter((key) => key !== key.toLowerCase())
-
-      // then - no uppercase keys exist
-      expect(uppercaseKeys).toEqual([])
+      // then - plan agents remain camelCase because getAgentConfigKey resolves to those keys
+      expect(agentKeys).toContain("planConsultant")
+      expect(agentKeys).toContain("planReviewer")
     })
   })
 
@@ -189,11 +187,11 @@ describe("Agent Config Integration", () => {
         const plannerDisplay = getAgentDisplayName("planner")
 
       // then - display names are correct
-      expect(coderDisplay).toBe("Coder (Ultraworker)")
+      expect(coderDisplay).toBe("Coder")
         expect(plannerDisplay).toBe("Planner")
 
       // then - config values are preserved
-      expect(result.migrated.drizzy).toEqual({ model: "anthropic/claude-opus-4-6", temperature: 0.1 })
+      expect(result.migrated.coder).toEqual({ model: "anthropic/claude-opus-4-6", temperature: 0.1 })
         expect(result.migrated.planner).toEqual({ model: "anthropic/claude-opus-4-6" })
     })
 
@@ -218,7 +216,7 @@ describe("Agent Config Integration", () => {
       const atlasDisplay = getAgentDisplayName("atlas")
 
       // then - display names are correct
-      expect(coderDisplay).toBe("Coder (Ultraworker)")
+      expect(coderDisplay).toBe("Coder")
       expect(atlasDisplay).toBe("Atlas (Plan Executor)")
     })
   })

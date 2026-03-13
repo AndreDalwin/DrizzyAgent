@@ -176,12 +176,12 @@ describe("coder-task", () => {
       expect(result).toBe(false)
     })
 
-    test("returns true for 'planner' (matches via includes('plan'))", () => {
+    test("returns false for 'planner' (separate from plan agent)", () => {
       //#given / #when
       const result = isPlanAgent("planner")
 
-      //#then - "planner" contains "plan" so it matches via includes
-      expect(result).toBe(true)
+      //#then - planner is intentionally decoupled from the plan agent system prepend
+      expect(result).toBe(false)
     })
 
     test("returns true for case-insensitive match 'PLAN'", () => {
@@ -462,7 +462,7 @@ describe("coder-task", () => {
        await tool.execute(args, toolContext)
 
        // then
-       expect(args.subagent_type).toBe("Coder-Junior")
+        expect(args.subagent_type).toBe("Coder Junior")
     }, { timeout: 10000 })
 
     test("category overrides subagent_type and still maps to coder-junior", async () => {
@@ -527,7 +527,7 @@ describe("coder-task", () => {
       const result = await tool.execute(args, toolContext)
 
       //#then
-      expect(args.subagent_type).toBe("Coder-Junior")
+      expect(args.subagent_type).toBe("Coder Junior")
       expect(result).toContain("Background task launched")
     }, { timeout: 10000 })
 
@@ -3792,7 +3792,7 @@ describe("coder-task", () => {
       )
 
       // then - title should follow OpenCode format
-      expect(createBody.title).toBe("Implement feature X (@Coder-Junior subagent)")
+      expect(createBody.title).toBe("Implement feature X (@Coder Junior subagent)")
     }, { timeout: 10000 })
 
     test("sync task output includes <task_metadata> block with session_id", async () => {

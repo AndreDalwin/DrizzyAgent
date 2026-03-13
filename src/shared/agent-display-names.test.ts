@@ -10,8 +10,8 @@ describe("getAgentDisplayName", () => {
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Coder (Ultraworker)"
-    expect(result).toBe("Coder (Ultraworker)")
+    // then returns "Coder"
+    expect(result).toBe("Coder")
   })
 
   it("returns display name for uppercase config key (old format - case-insensitive)", () => {
@@ -21,8 +21,8 @@ describe("getAgentDisplayName", () => {
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Coder (Ultraworker)" (case-insensitive lookup)
-    expect(result).toBe("Coder (Ultraworker)")
+    // then returns "Coder" (case-insensitive lookup)
+    expect(result).toBe("Coder")
   })
 
   it("returns original key for unknown agents (fallback)", () => {
@@ -65,8 +65,8 @@ describe("getAgentDisplayName", () => {
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-    // then returns "Coder-Junior"
-    expect(result).toBe("Coder-Junior")
+    // then returns "Coder Junior"
+    expect(result).toBe("Coder Junior")
   })
 
   it("returns display name for planConsultant", () => {
@@ -138,10 +138,10 @@ describe("getAgentDisplayName", () => {
 
 describe("getAgentConfigKey", () => {
   it("resolves display name to config key", () => {
-    // given display name "Coder (Ultraworker)"
+    // given display name "Coder"
     // when getAgentConfigKey called
     // then returns "coder"
-    expect(getAgentConfigKey("Coder (Ultraworker)")).toBe("coder")
+    expect(getAgentConfigKey("Coder")).toBe("coder")
   })
 
   it("resolves display name case-insensitively", () => {
@@ -172,8 +172,8 @@ describe("getAgentConfigKey", () => {
     expect(getAgentConfigKey("Planner")).toBe("planner")
     expect(getAgentConfigKey("Atlas (Plan Executor)")).toBe("atlas")
     expect(getAgentConfigKey("Plan Consultant")).toBe("planConsultant")
-    expect(getAgentConfigKey("Plan Reviewer")).toBe("planreviewer")
-    expect(getAgentConfigKey("Coder-Junior")).toBe("coder-junior")
+    expect(getAgentConfigKey("Plan Reviewer")).toBe("planReviewer")
+    expect(getAgentConfigKey("Coder Junior")).toBe("coder-junior")
   })
 })
 
@@ -181,11 +181,11 @@ describe("AGENT_DISPLAY_NAMES", () => {
   it("contains all expected agent mappings", () => {
     // given expected mappings
     const expectedMappings = {
-      coder: "Coder (Ultraworker)",
+      coder: "Coder",
       gptcoder: "GPTCoder",
       planner: "Planner",
       atlas: "Atlas (Plan Executor)",
-      "coder-junior": "Coder-Junior",
+      "coder-junior": "Coder Junior",
       planConsultant: "Plan Consultant",
       planReviewer: "Plan Reviewer",
       oracle: "oracle",

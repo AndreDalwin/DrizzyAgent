@@ -61,7 +61,7 @@ describe("model fallback hook", () => {
 
     const set = setPendingModelFallback(
       "ses_model_fallback_main",
-      "Coder (Ultraworker)",
+      "Coder",
       "anthropic",
       "claude-opus-4-6-thinking",
     )
@@ -99,7 +99,7 @@ describe("model fallback hook", () => {
     const sessionID = "ses_model_fallback_main"
 
     expect(
-      setPendingModelFallback(sessionID, "Coder (Ultraworker)", "anthropic", "claude-opus-4-6-thinking"),
+      setPendingModelFallback(sessionID, "Coder", "anthropic", "claude-opus-4-6-thinking"),
     ).toBe(true)
 
     const firstOutput = {
@@ -121,7 +121,7 @@ describe("model fallback hook", () => {
 
     //#when - second error re-arms fallback and should advance to next entry
     expect(
-      setPendingModelFallback(sessionID, "Coder (Ultraworker)", "anthropic", "claude-opus-4-6"),
+      setPendingModelFallback(sessionID, "Coder", "anthropic", "claude-opus-4-6"),
     ).toBe(true)
 
     const secondOutput = {
@@ -148,7 +148,7 @@ describe("model fallback hook", () => {
     //#when
     const firstSet = setPendingModelFallback(
       sessionID,
-      "Coder (Ultraworker)",
+      "Coder",
       "anthropic",
       "claude-opus-4-6-thinking",
     )
@@ -185,7 +185,7 @@ describe("model fallback hook", () => {
     expect(
       setPendingModelFallback(
         sessionID,
-        "Coder (Ultraworker)",
+        "Coder",
         "anthropic",
         "claude-opus-4-6",
       ),
@@ -229,7 +229,7 @@ describe("model fallback hook", () => {
     expect(
       setPendingModelFallback(
         sessionID,
-        "Coder (Ultraworker)",
+        "Coder",
         "quotio",
         "claude-opus-4-6",
       ),
@@ -271,7 +271,7 @@ describe("model fallback hook", () => {
 
     const set = setPendingModelFallback(
       "ses_model_fallback_toast",
-      "Coder (Ultraworker)",
+      "Coder",
       "anthropic",
       "claude-opus-4-6-thinking",
     )
@@ -356,7 +356,7 @@ describe("model fallback hook", () => {
 
     const set = setPendingModelFallback(
       sessionID,
-      "Oracle",
+      "oracle",
       "google",
       "gemini-3-pro",
     )

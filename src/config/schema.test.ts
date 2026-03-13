@@ -503,7 +503,7 @@ describe("Coder-Junior agent override", () => {
     expect(result.success).toBe(true)
     if (result.success) {
       const namedAgents = result.data.agents as Record<string, { temperature?: number } | undefined>
-      expect(namedAgents.drizzy?.temperature).toBe(0.1)
+      expect(namedAgents.coder?.temperature).toBe(0.1)
       expect(result.data.agents?.atlas?.temperature).toBe(0.2)
       expect(result.data.agents?.planner?.temperature).toBe(0.3)
     }

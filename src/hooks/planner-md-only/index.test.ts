@@ -4,24 +4,32 @@ import { join } from "node:path"
 import { tmpdir } from "node:os"
 import { randomUUID } from "node:crypto"
 import { SYSTEM_DIRECTIVE_PREFIX } from "../../shared/system-directive"
-import { clearSessionAgent } from "../../features/claude-code-session-state"
+import { clearSessionAgent, setSessionAgent } from "../../features/claude-code-session-state"
+import { clearBoulderState } from "../../features/boulder-state"
 // Force stable (JSON) mode for tests that rely on message file storage
 mock.module("../../shared/opencode-storage-detection", () => ({
   isSqliteBackend: () => false,
   resetSqliteBackendCache: () => {},
 }))
 
-const { createPlannerMdOnlyHook } = await import("./index")
+const plannerMdOnlyModulePath = "./index?planner-md-only-test"
+const { createPlannerMdOnlyHook }: typeof import("./index") = await import(plannerMdOnlyModulePath)
 const { MESSAGE_STORAGE } = await import("../../features/hook-message-injector")
 
 describe("planner-md-only", () => {
   const TEST_SESSION_ID = "ses_test_planner"
   let testMessageDir: string
+  let workspaceDir: string
+
+  beforeEach(() => {
+    workspaceDir = join(tmpdir(), `planner-md-only-${randomUUID()}`)
+    mkdirSync(workspaceDir, { recursive: true })
+  })
 
   function createMockPluginInput() {
     return {
       client: {},
-      directory: "/tmp/test",
+      directory: workspaceDir,
     } as never
   }
 
@@ -40,6 +48,7 @@ describe("planner-md-only", () => {
 
   afterEach(() => {
     clearSessionAgent(TEST_SESSION_ID)
+    clearBoulderState(workspaceDir)
     if (testMessageDir) {
       try {
         rmSync(testMessageDir, { recursive: true, force: true })
@@ -47,12 +56,15 @@ describe("planner-md-only", () => {
         // ignore
       }
     }
+    if (workspaceDir) {
+      rmSync(workspaceDir, { recursive: true, force: true })
+    }
   })
 
   describe("agent name matching", () => {
     test("should enforce md-only restriction for exact planner agent name", async () => {
       //#given
-      setupMessageStorage(TEST_SESSION_ID, "planner")
+      setSessionAgent(TEST_SESSION_ID, "planner")
       const hook = createPlannerMdOnlyHook(createMockPluginInput())
       const input = {
         tool: "Write",
@@ -71,7 +83,7 @@ describe("planner-md-only", () => {
 
     test("should enforce md-only restriction for Planner display name Plan Builder", async () => {
       //#given
-      setupMessageStorage(TEST_SESSION_ID, "Planner (Plan Builder)")
+      setSessionAgent(TEST_SESSION_ID, "Planner (Plan Builder)")
       const hook = createPlannerMdOnlyHook(createMockPluginInput())
       const input = {
         tool: "Write",
@@ -90,7 +102,7 @@ describe("planner-md-only", () => {
 
     test("should enforce md-only restriction for Planner display name Planner", async () => {
       //#given
-      setupMessageStorage(TEST_SESSION_ID, "Planner (Planner)")
+      setSessionAgent(TEST_SESSION_ID, "Planner (Planner)")
       const hook = createPlannerMdOnlyHook(createMockPluginInput())
       const input = {
         tool: "Write",
@@ -109,7 +121,7 @@ describe("planner-md-only", () => {
 
     test("should enforce md-only restriction for uppercase PLANNER", async () => {
       //#given
-      setupMessageStorage(TEST_SESSION_ID, "PLANNER")
+      setSessionAgent(TEST_SESSION_ID, "PLANNER")
       const hook = createPlannerMdOnlyHook(createMockPluginInput())
       const input = {
         tool: "Write",
@@ -128,7 +140,7 @@ describe("planner-md-only", () => {
 
     test("should not enforce restriction for non-Planner agent", async () => {
       //#given
-      setupMessageStorage(TEST_SESSION_ID, "coder")
+      setSessionAgent(TEST_SESSION_ID, "coder")
       const hook = createPlannerMdOnlyHook(createMockPluginInput())
       const input = {
         tool: "Write",
@@ -167,7 +179,7 @@ describe("planner-md-only", () => {
 
    describe("with Planner agent in message storage", () => {
      beforeEach(() => {
-       setupMessageStorage(TEST_SESSION_ID, "planner")
+       setSessionAgent(TEST_SESSION_ID, "planner")
      })
 
     test("should block Planner from writing non-.md files", async () => {
@@ -197,7 +209,7 @@ describe("planner-md-only", () => {
         callID: "call-1",
       }
       const output = {
-        args: { filePath: "/tmp/test/.drizzy/plans/work-plan.md" },
+        args: { filePath: join(workspaceDir, ".drizzy/plans/work-plan.md") },
       }
 
       // when / #then
@@ -215,7 +227,7 @@ describe("planner-md-only", () => {
         callID: "call-1",
       }
       const output: { args: Record<string, unknown>; message?: string } = {
-        args: { filePath: "/tmp/test/.drizzy/plans/work-plan.md" },
+        args: { filePath: join(workspaceDir, ".drizzy/plans/work-plan.md") },
       }
 
       // when
@@ -237,7 +249,7 @@ describe("planner-md-only", () => {
         callID: "call-1",
       }
       const output: { args: Record<string, unknown>; message?: string } = {
-        args: { filePath: "/tmp/test/.drizzy/drafts/notes.md" },
+        args: { filePath: join(workspaceDir, ".drizzy/drafts/notes.md") },
       }
 
       // when
@@ -544,8 +556,8 @@ describe("planner-md-only", () => {
     })
 
     test("should fall back to message files when session not in boulder", async () => {
-      // given - planner in message files
-      setupMessageStorage(TEST_SESSION_ID, "planner")
+      // given - planner is still the effective session agent
+      setSessionAgent(TEST_SESSION_ID, "planner")
       
       // given - boulder state exists but for different session
       writeFileSync(BOULDER_FILE, JSON.stringify({
@@ -599,12 +611,11 @@ describe("planner-md-only", () => {
 
   describe("cross-platform path validation", () => {
     beforeEach(() => {
-      setupMessageStorage(TEST_SESSION_ID, "planner")
+      setSessionAgent(TEST_SESSION_ID, "planner")
     })
 
      test("should allow Windows-style backslash paths under .drizzy/", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -623,7 +634,6 @@ describe("planner-md-only", () => {
 
      test("should allow mixed separator paths under .drizzy/", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -642,7 +652,6 @@ describe("planner-md-only", () => {
 
      test("should allow uppercase .MD extension", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -661,7 +670,6 @@ describe("planner-md-only", () => {
 
      test("should block paths outside workspace root even if containing .drizzy", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -680,7 +688,6 @@ describe("planner-md-only", () => {
 
      test("should allow nested .drizzy directories (ctx.directory may be parent)", async () => {
        // given - when ctx.directory is parent of actual project, path includes project name
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -699,7 +706,6 @@ describe("planner-md-only", () => {
 
      test("should block path traversal attempts", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -718,7 +724,6 @@ describe("planner-md-only", () => {
 
      test("should allow case-insensitive .drizzy directory", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -738,7 +743,6 @@ describe("planner-md-only", () => {
      test("should allow nested project path with .drizzy (Windows real-world case)", async () => {
        // given - simulates when ctx.directory is parent of actual project
        // User reported: xauusd-dxy-plan\.drizzy\drafts\supabase-email-templates.md
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -757,7 +761,6 @@ describe("planner-md-only", () => {
 
      test("should allow nested project path with mixed separators", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",
@@ -776,7 +779,6 @@ describe("planner-md-only", () => {
 
      test("should block nested project path without .drizzy", async () => {
        // given
-       setupMessageStorage(TEST_SESSION_ID, "planner")
        const hook = createPlannerMdOnlyHook(createMockPluginInput())
        const input = {
          tool: "Write",

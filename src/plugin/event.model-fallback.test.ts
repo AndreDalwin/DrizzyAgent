@@ -11,11 +11,18 @@ import { createChatMessageHandler } from "./chat-message"
 import { _resetForTesting, setMainSession } from "../features/claude-code-session-state"
 import { createModelFallbackHook, clearPendingModelFallback } from "../hooks/model-fallback/hook"
 describe("createEventHandler - model fallback", () => {
+  type LooseEventHandler = (input: {
+    event: {
+      type: string
+      properties?: Record<string, unknown>
+    }
+  }) => Promise<void>
+
   const createHandler = (args?: { hooks?: any; pluginConfig?: any }) => {
     const abortCalls: string[] = []
     const promptCalls: string[] = []
 
-    const handler = createEventHandler({
+    const rawHandler = createEventHandler({
       ctx: {
         directory: "/tmp",
         client: {
@@ -47,6 +54,10 @@ describe("createEventHandler - model fallback", () => {
       } as any,
       hooks: args?.hooks ?? ({} as any),
     })
+
+    const handler: LooseEventHandler = async (input) => {
+      await rawHandler(input as never)
+    }
 
     return { handler, abortCalls, promptCalls }
   }
@@ -82,8 +93,8 @@ describe("createEventHandler - model fallback", () => {
             parentID: "msg_user_1",
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            mode: "Coder (Ultraworker)",
-            agent: "Coder (Ultraworker)",
+            mode: "Coder",
+            agent: "Coder",
             path: { cwd: "/tmp", root: "/tmp" },
             cost: 0,
             tokens: { input: 0, output: 0, reasoning: 0, cache: { read: 0, write: 0 } },
@@ -174,7 +185,7 @@ describe("createEventHandler - model fallback", () => {
             content: [],
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            agent: "Coder (Ultraworker)",
+            agent: "Coder",
             path: { cwd: "/tmp", root: "/tmp" },
           },
         },
@@ -236,7 +247,7 @@ describe("createEventHandler - model fallback", () => {
             role: "user",
             modelID: "claude-opus-4-6-thinking",
             providerID: "anthropic",
-            agent: "Coder (Ultraworker)",
+            agent: "Coder",
           },
         },
       },
@@ -304,7 +315,7 @@ describe("createEventHandler - model fallback", () => {
             role: "user",
             modelID: "claude-opus-4-6",
             providerID: "quotio",
-            agent: "Coder (Ultraworker)",
+            agent: "Coder",
           },
         },
       },
@@ -385,7 +396,7 @@ describe("createEventHandler - model fallback", () => {
             content: [],
             modelID: "claude-opus-4-6",
             providerID: "quotio",
-            agent: "Coder (Ultraworker)",
+            agent: "Coder",
             path: { cwd: "/tmp", root: "/tmp" },
           },
         },
@@ -440,7 +451,7 @@ describe("createEventHandler - model fallback", () => {
 
     const modelFallback = createModelFallbackHook()
 
-    const eventHandler = createEventHandler({
+    const rawEventHandler = createEventHandler({
       ctx: {
         directory: "/tmp",
         client: {
@@ -474,6 +485,10 @@ describe("createEventHandler - model fallback", () => {
         modelFallback,
       } as any,
     })
+
+    const eventHandler: LooseEventHandler = async (input) => {
+      await rawEventHandler(input as never)
+    }
 
     const chatMessageHandler = createChatMessageHandler({
       ctx: {

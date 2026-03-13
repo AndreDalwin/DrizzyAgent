@@ -22,7 +22,7 @@ describe("resolveRunAgent", () => {
     )
 
     // then
-    expect(agent).toBe("GPTCoder (Deep Agent)")
+    expect(agent).toBe("GPTCoder")
   })
 
   it("uses env agent over config", () => {
@@ -45,7 +45,7 @@ describe("resolveRunAgent", () => {
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("Planner (Plan Builder)")
+    expect(agent).toBe("Planner")
   })
 
   it("falls back to coder when none set", () => {
@@ -56,7 +56,7 @@ describe("resolveRunAgent", () => {
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("Coder (Ultraworker)")
+    expect(agent).toBe("Coder")
   })
 
   it("skips disabled coder for next available core agent", () => {
@@ -67,18 +67,18 @@ describe("resolveRunAgent", () => {
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("GPTCoder (Deep Agent)")
+    expect(agent).toBe("GPTCoder")
   })
 
   it("maps display-name style default_run_agent values to canonical display names", () => {
     // given
-    const config = createConfig({ default_run_agent: "Coder (Ultraworker)" })
+    const config = createConfig({ default_run_agent: "Coder" })
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, {})
 
     // then
-    expect(agent).toBe("Coder (Ultraworker)")
+    expect(agent).toBe("Coder")
   })
 })
 

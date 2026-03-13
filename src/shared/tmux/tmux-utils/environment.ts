@@ -1,7 +1,12 @@
 export type SplitDirection = "-h" | "-v"
 
+export function isInsideTmuxWithEnv(env: NodeJS.ProcessEnv): boolean {
+	const tmux = env.TMUX
+	return typeof tmux === "string" && tmux.length > 0
+}
+
 export function isInsideTmux(): boolean {
-	return Boolean(process.env.TMUX)
+	return isInsideTmuxWithEnv(process.env)
 }
 
 export function getCurrentPaneId(): string | undefined {

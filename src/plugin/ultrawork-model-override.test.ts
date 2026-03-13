@@ -174,7 +174,7 @@ describe("resolveUltraworkOverride", () => {
     const output = createOutput("ulw do something")
 
     //#when
-    const result = resolveUltraworkOverride(config, "Coder (Ultraworker)", output)
+    const result = resolveUltraworkOverride(config, "Coder", output)
 
     //#then
     expect(result).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6", variant: "max" })
@@ -408,7 +408,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     const tui = createMockTui()
 
     //#when
-    applyUltraworkModelOverrideOnMessage(config, "Coder (Ultraworker)", output, tui)
+    applyUltraworkModelOverrideOnMessage(config, "Coder", output, tui)
 
     //#then
     expect(dbOverrideSpy).toHaveBeenCalledWith(

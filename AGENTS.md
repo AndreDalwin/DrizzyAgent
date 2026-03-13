@@ -155,3 +155,35 @@ bunx oh-my-opencode run     # Non-interactive session
 - Test setup: `test-setup.ts` preloaded via bunfig.toml, mock-heavy tests run in isolation in CI
 - 98 barrel export files (index.ts) establish module boundaries
 - Architecture rules enforced via `.coder/rules/modular-code-enforcement.md`
+
+## DRIZZYAGENT NAMING CONVENTIONS
+
+**Project Name**: DrizzyAgent (named after the author's nickname "Drizzy")
+
+**Agent Names**:
+- The default/main agent is named **"Coder"** (config key: `coder`)
+- There is **no** agent named "Drizzy" — "Drizzy" is just the project name
+- Display names are simple and clean:
+  - `coder` → "Coder" (not "Coder (Ultraworker)")
+  - `gptcoder` → "GPTCoder" (not "GPTCoder (Deep Agent)")
+  - `planner` → "Planner"
+  - `atlas` → "Atlas (Plan Executor)"
+  - `coder-junior` → "Coder Junior" (not "Coder-Junior")
+  - `planConsultant` → "Plan Consultant"
+  - `planReviewer` → "Plan Reviewer"
+
+**When to use what**:
+- **DrizzyAgent**: Project name, documentation, user-facing branding
+- **drizzy-agent**: Package names, npm package, binary names, config filenames
+  - Example: `drizzy-agent-darwin-arm64` (platform package)
+  - Example: `drizzy-agent.json` (config file)
+- **coder**: The actual agent config key in code and configs
+  - Example: `agents.coder.model` in tests
+  - Example: `{ "agents": { "coder": { "model": "..." } } }` in config
+
+**Files that use each**:
+- `package.json` → `name: "drizzy-agent"`
+- `bin/platform.js` → platform packages as `drizzy-agent-{platform}-{arch}`
+- `src/shared/opencode-config-dir.ts` → config file as `drizzy-agent.json`
+- `src/agents/builtin-agents.ts` → agent registry uses `coder` as the key
+- Tests should use `agents.coder` not `agents.drizzy`

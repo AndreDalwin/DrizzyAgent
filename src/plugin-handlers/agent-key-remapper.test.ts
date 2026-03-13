@@ -13,7 +13,7 @@ describe("remapAgentKeysToDisplayNames", () => {
     const result = remapAgentKeysToDisplayNames(agents)
 
     // then known agents get display name keys only
-    expect(result["Coder (Ultraworker)"]).toBeDefined()
+    expect(result["Coder"]).toBeDefined()
     expect(result["oracle"]).toBeDefined()
     expect(result["coder"]).toBeUndefined()
   })
@@ -47,7 +47,7 @@ describe("remapAgentKeysToDisplayNames", () => {
     const result = remapAgentKeysToDisplayNames(agents)
 
     // then all get display name keys without lowercase duplicates
-    expect(result["Coder (Ultraworker)"]).toBeDefined()
+    expect(result["Coder"]).toBeDefined()
     expect(result["coder"]).toBeUndefined()
     expect(result["GPTCoder"]).toBeDefined()
     expect(result["gptcoder"]).toBeUndefined()
@@ -59,7 +59,7 @@ describe("remapAgentKeysToDisplayNames", () => {
     expect(result["planConsultant"]).toBeUndefined()
     expect(result["Plan Reviewer"]).toBeDefined()
     expect(result["planReviewer"]).toBeUndefined()
-    expect(result["Coder-Junior"]).toBeDefined()
+    expect(result["Coder Junior"]).toBeDefined()
     expect(result["coder-junior"]).toBeUndefined()
   })
 })

@@ -62,7 +62,7 @@ export function migrateConfigFile(
   }
 
   if (copy.omo_agent) {
-    copy.drizzy_agent = copy.omo_agent
+    copy.coder_agent = copy.omo_agent
     delete copy.omo_agent
     needsWrite = true
   }
