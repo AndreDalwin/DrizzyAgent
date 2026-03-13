@@ -26,6 +26,10 @@ describe("writeDrizzyConfig", () => {
   let testConfigDir = ""
   let testConfigPath = ""
 
+  function readSavedConfig(): Record<string, unknown> {
+    return parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
+  }
+
   beforeEach(() => {
     testConfigDir = join(tmpdir(), `omo-write-config-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     testConfigPath = join(testConfigDir, "drizzy-agent.json")
@@ -62,7 +66,7 @@ describe("writeDrizzyConfig", () => {
     // then
     expect(result.success).toBe(true)
 
-    const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
+    const savedConfig = readSavedConfig()
     const savedCoder = ((savedConfig as any).agents?.coder) as Record<string, unknown> | undefined
     expect(savedCoder?.effort).toBe("high")
     // Schema and install defaults should be generated anew
@@ -75,19 +79,80 @@ describe("writeDrizzyConfig", () => {
     }
   })
 
-  describe("legacy generated config adoption policy", () => {
-    it.todo("treats rerun install as the only automatic file-mutating adoption path", () => {})
+  it("replaces install-owned snapshot fields on rerun without touching explicit overrides", () => {
+    // given
+    const existingConfig = {
+      _install_defaults: {
+        snapshot_version: 0,
+        providers: {
+          claude: "yes",
+          openai: false,
+          gemini: false,
+        },
+        legacy_generated_defaults: true,
+      },
+      agents: {
+        coder: {
+          model: "custom-model",
+        },
+      },
+    }
+    writeFileSync(testConfigPath, JSON.stringify(existingConfig, null, 2) + "\n", "utf-8")
 
-    it.todo("creates a backup before stripping legacy generated model pins during adoption", () => {})
+    const generatedDefaults = generateDrizzyConfig(installConfig)
 
-    it.todo(
-      "strips only generated-territory model and variant fields that exactly match current generated defaults",
-      () => {}
+    // when
+    const result = writeDrizzyConfig(installConfig)
+
+    // then
+    expect(result.success).toBe(true)
+
+    const savedConfig = readSavedConfig()
+    expect(savedConfig._install_defaults).toEqual(generatedDefaults._install_defaults)
+    expect(((savedConfig as any).agents?.coder as Record<string, unknown> | undefined)?.model).toBe(
+      "custom-model"
     )
+  })
 
-    it.todo(
-      "aborts adoption, prints a mismatch report, and leaves the file untouched when any generated-territory model or variant differs",
-      () => {}
-    )
+  it("preserves explicit user overrides across reruns while keeping snapshot-only install fields current", () => {
+    // given
+    const existingConfig = {
+      $schema: "https://example.com/old-schema.json",
+      _install_defaults: {
+        snapshot_version: 0,
+        providers: {
+          claude: "yes",
+          openai: false,
+          gemini: false,
+        },
+      },
+      agents: {
+        coder: {
+          model: "claude-opus-4",
+        },
+      },
+      categories: {
+        deep: {
+          model: "o3-mini",
+        },
+      },
+      disabled_hooks: ["comment-checker"],
+    }
+    writeFileSync(testConfigPath, JSON.stringify(existingConfig, null, 2) + "\n", "utf-8")
+
+    const generatedDefaults = generateDrizzyConfig(installConfig)
+
+    // when
+    const result = writeDrizzyConfig(installConfig)
+
+    // then
+    expect(result.success).toBe(true)
+
+    const savedConfig = readSavedConfig()
+    expect(savedConfig.$schema).toBe(generatedDefaults.$schema)
+    expect(savedConfig._install_defaults).toEqual(generatedDefaults._install_defaults)
+    expect(savedConfig.agents).toEqual(existingConfig.agents)
+    expect(savedConfig.categories).toEqual(existingConfig.categories)
+    expect(savedConfig.disabled_hooks).toEqual(existingConfig.disabled_hooks)
   })
 })

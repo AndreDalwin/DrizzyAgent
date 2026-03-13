@@ -1,7 +1,7 @@
 /// <reference types="bun-types" />
 
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
-import { mkdirSync, readFileSync, rmSync } from "node:fs"
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
@@ -25,6 +25,10 @@ describe("fresh install snapshot persistence", () => {
   let testConfigDir = ""
   let testConfigPath = ""
 
+  function readSavedConfig(): Record<string, unknown> {
+    return parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
+  }
+
   beforeEach(() => {
     testConfigDir = join(tmpdir(), `omo-install-snapshot-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     testConfigPath = join(testConfigDir, "drizzy-agent.json")
@@ -45,7 +49,7 @@ describe("fresh install snapshot persistence", () => {
 
     expect(result.success).toBe(true)
 
-    const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
+    const savedConfig = readSavedConfig()
 
     expect(Object.keys(savedConfig).sort()).toEqual(["$schema", "_install_defaults"])
     expect(savedConfig._install_defaults).toEqual({
@@ -60,6 +64,55 @@ describe("fresh install snapshot persistence", () => {
         kimi_for_coding: false,
       },
     })
+    expect(savedConfig.agents).toBeUndefined()
+    expect(savedConfig.categories).toBeUndefined()
+  })
+
+  test("reruns refresh snapshot fields without reintroducing generated defaults", () => {
+    writeFileSync(
+      testConfigPath,
+      JSON.stringify(
+        {
+          $schema: "https://example.com/old-schema.json",
+          _install_defaults: {
+            snapshot_version: 0,
+            providers: {
+              claude: "yes",
+              openai: false,
+              gemini: false,
+            },
+            mismatch_report: {
+              stale: true,
+            },
+          },
+          disabled_hooks: ["comment-checker"],
+        },
+        null,
+        2
+      ) + "\n",
+      "utf-8"
+    )
+
+    const result = writeDrizzyConfig(installConfig)
+
+    expect(result.success).toBe(true)
+
+    const savedConfig = readSavedConfig()
+
+    expect(Object.keys(savedConfig).sort()).toEqual(["$schema", "_install_defaults", "disabled_hooks"])
+    expect(savedConfig._install_defaults).toEqual({
+      snapshot_version: 1,
+      providers: {
+        claude: "max20",
+        openai: true,
+        gemini: true,
+        copilot: false,
+        opencode_zen: false,
+        zai_coding_plan: false,
+        kimi_for_coding: false,
+      },
+    })
+    expect(savedConfig.disabled_hooks).toEqual(["comment-checker"])
     expect(savedConfig.agents).toBeUndefined()
     expect(savedConfig.categories).toBeUndefined()
   })
