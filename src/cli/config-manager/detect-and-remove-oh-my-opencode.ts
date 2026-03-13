@@ -1,6 +1,6 @@
-import { existsSync, readFileSync, unlinkSync } from "node:fs"
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
-import { getConfigDir, getConfigJson, getConfigJsonc } from "./config-context"
+import { getOmoConfigPaths, type OmoConfigPaths } from "./oh-my-opencode-paths"
 import { parseOpenCodeConfigFileWithError } from "./parse-opencode-config-file"
 
 export interface OmoDetectionResult {
@@ -18,24 +18,21 @@ const OMO_PACKAGE_NAMES = ["oh-my-opencode", "oh-my-openagent"]
  * 1. Plugin entry in opencode.json/opencode.jsonc
  * 2. Config file at oh-my-opencode.json
  */
-export function detectOhMyOpencode(): OmoDetectionResult {
-  const configDir = getConfigDir()
-  const omoConfigPath = join(configDir, "oh-my-opencode.json")
-  const omoConfigPathC = join(configDir, "oh-my-opencode.jsonc")
+export function detectOhMyOpencode(paths: OmoConfigPaths = getOmoConfigPaths()): OmoDetectionResult {
+  const omoConfigPath = join(paths.configDir, "oh-my-opencode.json")
+  const omoConfigPathC = join(paths.configDir, "oh-my-opencode.jsonc")
 
   // Check for config file
   const configExists = existsSync(omoConfigPath) || existsSync(omoConfigPathC)
 
   // Check opencode.json for plugin entry
-  const openCodeConfigJson = getConfigJson()
-  const openCodeConfigJsonc = getConfigJsonc()
   let openCodeConfigPath: string | undefined
   let pluginEntry: string | undefined
 
-  if (existsSync(openCodeConfigJsonc)) {
-    openCodeConfigPath = openCodeConfigJsonc
-  } else if (existsSync(openCodeConfigJson)) {
-    openCodeConfigPath = openCodeConfigJson
+  if (existsSync(paths.configJsonc)) {
+    openCodeConfigPath = paths.configJsonc
+  } else if (existsSync(paths.configJson)) {
+    openCodeConfigPath = paths.configJson
   }
 
   if (openCodeConfigPath) {
@@ -71,18 +68,18 @@ export function detectOhMyOpencode(): OmoDetectionResult {
 /**
  * Removes oh-my-opencode plugin entry from opencode.json/opencode.jsonc
  */
-export function removeOhMyOpencodeFromOpenCodeConfig(): {
+export function removeOhMyOpencodeFromOpenCodeConfig(
+  paths: OmoConfigPaths = getOmoConfigPaths(),
+): {
   success: boolean
   error?: string
 } {
-  const openCodeConfigJson = getConfigJson()
-  const openCodeConfigJsonc = getConfigJsonc()
   let configPath: string
 
-  if (existsSync(openCodeConfigJsonc)) {
-    configPath = openCodeConfigJsonc
-  } else if (existsSync(openCodeConfigJson)) {
-    configPath = openCodeConfigJson
+  if (existsSync(paths.configJsonc)) {
+    configPath = paths.configJsonc
+  } else if (existsSync(paths.configJson)) {
+    configPath = paths.configJson
   } else {
     return { success: true } // No config to modify
   }
@@ -127,23 +124,19 @@ export function removeOhMyOpencodeFromOpenCodeConfig(): {
           // Clean up any trailing commas before the closing brace
           const cleanedContent = newContent.replace(/,(\s*\})/g, "$1")
           // Write the cleaned content
-          const fs = require("node:fs")
-          fs.writeFileSync(configPath, cleanedContent)
+          writeFileSync(configPath, cleanedContent)
         } else {
           const formattedPlugins = filteredPlugins.map((p) => `"${p}"`).join(",\n    ")
           const newContent = content.replace(pluginArrayRegex, `"plugin": [\n    ${formattedPlugins}\n  ]`)
-          const fs = require("node:fs")
-          fs.writeFileSync(configPath, newContent)
+          writeFileSync(configPath, newContent)
         }
       } else {
         // Fallback: write as JSON
-        const fs = require("node:fs")
-        fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n")
+        writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n")
       }
     } else {
       // JSON format
-      const fs = require("node:fs")
-      fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n")
+      writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n")
     }
 
     return { success: true }
@@ -158,20 +151,19 @@ export function removeOhMyOpencodeFromOpenCodeConfig(): {
 /**
  * Removes oh-my-opencode config files
  */
-export function removeOhMyOpencodeConfig(): {
+export function removeOhMyOpencodeConfig(paths: OmoConfigPaths = getOmoConfigPaths()): {
   success: boolean
   removedPaths: string[]
   error?: string
 } {
-  const configDir = getConfigDir()
-  const paths = [
-    join(configDir, "oh-my-opencode.json"),
-    join(configDir, "oh-my-opencode.jsonc"),
+  const configPaths = [
+    join(paths.configDir, "oh-my-opencode.json"),
+    join(paths.configDir, "oh-my-opencode.jsonc"),
   ]
 
   const removedPaths: string[] = []
 
-  for (const configPath of paths) {
+  for (const configPath of configPaths) {
     if (existsSync(configPath)) {
       try {
         unlinkSync(configPath)

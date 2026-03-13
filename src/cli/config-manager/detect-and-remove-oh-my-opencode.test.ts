@@ -7,27 +7,23 @@ import {
   removeOhMyOpencodeFromOpenCodeConfig,
   removeOhMyOpencodeConfig,
 } from "./detect-and-remove-oh-my-opencode"
-import { initConfigContext, resetConfigContext } from "./config-context"
+import type { OmoConfigPaths } from "./oh-my-opencode-paths"
 
 describe("detect-and-remove-oh-my-opencode", () => {
   let tempDir: string
-  let originalEnv: string | undefined
+  let testPaths: OmoConfigPaths
 
   beforeEach(() => {
-    originalEnv = process.env.OPENCODE_CONFIG_DIR
     tempDir = join(tmpdir(), `drizzy-test-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempDir, { recursive: true })
-    process.env.OPENCODE_CONFIG_DIR = tempDir
-    resetConfigContext()
-    initConfigContext("opencode", "1.0.0")
+    testPaths = {
+      configDir: tempDir,
+      configJson: join(tempDir, "opencode.json"),
+      configJsonc: join(tempDir, "opencode.jsonc"),
+    }
   })
 
   afterEach(() => {
-    if (originalEnv) {
-      process.env.OPENCODE_CONFIG_DIR = originalEnv
-    } else {
-      delete process.env.OPENCODE_CONFIG_DIR
-    }
     if (existsSync(tempDir)) {
       rmSync(tempDir, { recursive: true, force: true })
     }
@@ -35,7 +31,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
 
   describe("#detectOhMyOpencode", () => {
     it("returns not installed when no omo files exist", () => {
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(false)
       expect(result.configPath).toBeUndefined()
@@ -46,7 +42,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
       const configPath = join(tempDir, "oh-my-opencode.json")
       writeFileSync(configPath, JSON.stringify({ version: "1.0.0" }))
 
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(true)
       expect(result.configPath).toBe(configPath)
@@ -56,7 +52,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
       const configPath = join(tempDir, "oh-my-opencode.jsonc")
       writeFileSync(configPath, JSON.stringify({ version: "1.0.0" }))
 
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(true)
       expect(result.configPath).toBe(configPath)
@@ -69,7 +65,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-opencode@3.11.2"] }),
       )
 
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(true)
       expect(result.pluginEntry).toBe("oh-my-opencode@3.11.2")
@@ -83,7 +79,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-openagent@3.11.2"] }),
       )
 
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(true)
       expect(result.pluginEntry).toBe("oh-my-openagent@3.11.2")
@@ -96,7 +92,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-opencode"] }),
       )
 
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(true)
       expect(result.pluginEntry).toBe("oh-my-opencode")
@@ -112,7 +108,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-opencode@3.11.2"] }),
       )
 
-      const result = detectOhMyOpencode()
+      const result = detectOhMyOpencode(testPaths)
 
       expect(result.isInstalled).toBe(true)
       expect(result.configPath).toBe(configPath)
@@ -122,7 +118,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
 
   describe("#removeOhMyOpencodeFromOpenCodeConfig", () => {
     it("succeeds when no opencode config exists", () => {
-      const result = removeOhMyOpencodeFromOpenCodeConfig()
+      const result = removeOhMyOpencodeFromOpenCodeConfig(testPaths)
 
       expect(result.success).toBe(true)
     })
@@ -134,7 +130,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-opencode@3.11.2", "other-plugin"], setting: true }, null, 2),
       )
 
-      const result = removeOhMyOpencodeFromOpenCodeConfig()
+      const result = removeOhMyOpencodeFromOpenCodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       const updatedConfig = JSON.parse(readFileSync(openCodeConfigPath, "utf-8"))
@@ -149,7 +145,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-openagent", "other-plugin"] }),
       )
 
-      const result = removeOhMyOpencodeFromOpenCodeConfig()
+      const result = removeOhMyOpencodeFromOpenCodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       const updatedConfig = JSON.parse(readFileSync(openCodeConfigPath, "utf-8"))
@@ -170,7 +166,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
 }`,
       )
 
-      const result = removeOhMyOpencodeFromOpenCodeConfig()
+      const result = removeOhMyOpencodeFromOpenCodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       const updatedContent = readFileSync(openCodeConfigPath, "utf-8")
@@ -186,7 +182,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
         JSON.stringify({ plugin: ["oh-my-opencode@3.11.2"], setting: true }, null, 2),
       )
 
-      const result = removeOhMyOpencodeFromOpenCodeConfig()
+      const result = removeOhMyOpencodeFromOpenCodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       const updatedConfig = JSON.parse(readFileSync(openCodeConfigPath, "utf-8"))
@@ -197,7 +193,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
 
   describe("#removeOhMyOpencodeConfig", () => {
     it("succeeds when no config files exist", () => {
-      const result = removeOhMyOpencodeConfig()
+      const result = removeOhMyOpencodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       expect(result.removedPaths).toEqual([])
@@ -207,7 +203,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
       const configPath = join(tempDir, "oh-my-opencode.json")
       writeFileSync(configPath, JSON.stringify({ version: "1.0.0" }))
 
-      const result = removeOhMyOpencodeConfig()
+      const result = removeOhMyOpencodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       expect(result.removedPaths).toContain(configPath)
@@ -218,7 +214,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
       const configPath = join(tempDir, "oh-my-opencode.jsonc")
       writeFileSync(configPath, JSON.stringify({ version: "1.0.0" }))
 
-      const result = removeOhMyOpencodeConfig()
+      const result = removeOhMyOpencodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       expect(result.removedPaths).toContain(configPath)
@@ -231,7 +227,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
       writeFileSync(jsonPath, JSON.stringify({ version: "1.0.0" }))
       writeFileSync(jsoncPath, JSON.stringify({ version: "1.0.0" }))
 
-      const result = removeOhMyOpencodeConfig()
+      const result = removeOhMyOpencodeConfig(testPaths)
 
       expect(result.success).toBe(true)
       expect(result.removedPaths).toHaveLength(2)
