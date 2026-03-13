@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { parseJsonc } from "../../shared"
 import type { DetectedConfig } from "../types"
-import { getConfigDir, getOmoConfigPath } from "./config-context"
+import { getConfigDir, getDrizzyConfigPath } from "./config-context"
 import { detectConfigFormat } from "./opencode-config-format"
 import { parseOpenCodeConfigFileWithError } from "./parse-opencode-config-file"
 
@@ -12,21 +12,21 @@ function detectProvidersFromOmoConfig(): {
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
 } {
-  const omoConfigPath = getOmoConfigPath()
+  const drizzyConfigPath = getDrizzyConfigPath()
   const legacyConfigPath = join(getConfigDir(), "oh-my-opencode.json")
-  const configPath = existsSync(omoConfigPath) ? omoConfigPath : legacyConfigPath
+  const configPath = existsSync(drizzyConfigPath) ? drizzyConfigPath : legacyConfigPath
   if (!existsSync(configPath)) {
     return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
   }
 
   try {
     const content = readFileSync(configPath, "utf-8")
-    const omoConfig = parseJsonc<Record<string, unknown>>(content)
-    if (!omoConfig || typeof omoConfig !== "object") {
+    const drizzyConfig = parseJsonc<Record<string, unknown>>(content)
+    if (!drizzyConfig || typeof drizzyConfig !== "object") {
       return { hasOpenAI: true, hasOpencodeZen: true, hasZaiCodingPlan: false, hasKimiForCoding: false }
     }
 
-    const configStr = JSON.stringify(omoConfig)
+    const configStr = JSON.stringify(drizzyConfig)
     const hasOpenAI = configStr.includes('"openai/')
     const hasOpencodeZen = configStr.includes('"opencode/')
     const hasZaiCodingPlan = configStr.includes('"zai-coding-plan/')
