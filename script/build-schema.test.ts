@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { createOhMyOpenCodeJsonSchema } from "./build-schema-document"
+import { createDrizzyAgentJsonSchema } from "./build-schema-document"
 
 describe("build-schema-document", () => {
   test("generates schema with skills property", () => {
@@ -7,7 +7,7 @@ describe("build-schema-document", () => {
     const expectedDraft = "http://json-schema.org/draft-07/schema#"
 
     // when
-    const schema = createOhMyOpenCodeJsonSchema()
+    const schema = createDrizzyAgentJsonSchema()
 
     // then
     expect(schema.$schema).toBe(expectedDraft)

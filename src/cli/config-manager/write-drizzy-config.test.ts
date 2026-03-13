@@ -50,7 +50,7 @@ describe("writeDrizzyConfig", () => {
   it("refreshes generated defaults while preserving user-only keys", () => {
     // given
     const existingConfig = {
-      $schema: "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+      $schema: "https://raw.githubusercontent.com/code-yeongyu/drizzy-agent/master/assets/drizzy-agent.schema.json",
       agents: {
         coder: {
           model: "custom/provider-model",

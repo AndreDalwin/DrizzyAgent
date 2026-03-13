@@ -10,7 +10,7 @@ import * as dataPath from "./data-path"
 let testCacheDir = ""
 let moduleImportCounter = 0
 
-const getOmoOpenCodeCacheDirMock = mock(() => testCacheDir)
+const getDrizzyAgentCacheDirMock = mock(() => testCacheDir)
 
 let updateConnectedProvidersCache: typeof import("./connected-providers-cache").updateConnectedProvidersCache
 let readProviderModelsCache: typeof import("./connected-providers-cache").readProviderModelsCache
@@ -22,15 +22,15 @@ describe("updateConnectedProvidersCache", () => {
 
 	beforeEach(async () => {
 		mock.restore()
-		const realCacheDir = join(dataPath.getCacheDir(), "oh-my-opencode")
+		const realCacheDir = join(dataPath.getCacheDir(), "drizzy-agent")
 		if (existsSync(realCacheDir)) {
 			rmSync(realCacheDir, { recursive: true, force: true })
 		}
 
 		testCacheDir = mkdtempSync(join(tmpdir(), "connected-providers-cache-test-"))
-		getOmoOpenCodeCacheDirMock.mockClear()
+		getDrizzyAgentCacheDirMock.mockClear()
 		mock.module("./data-path", () => ({
-			getOmoOpenCodeCacheDir: getOmoOpenCodeCacheDirMock,
+			getDrizzyAgentCacheDir: getDrizzyAgentCacheDirMock,
 		}))
 		moduleImportCounter += 1
 		;({ updateConnectedProvidersCache, readProviderModelsCache } = await import(`./connected-providers-cache?test=${moduleImportCounter}`))

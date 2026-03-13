@@ -9,7 +9,7 @@ import {
   ExperimentalConfigSchema,
   GitMasterConfigSchema,
   HookNameSchema,
-  OhMyOpenCodeConfigSchema,
+  DrizzyAgentConfigSchema,
 } from "./schema"
 
 describe("disabled_mcps schema", () => {
@@ -20,7 +20,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -36,7 +36,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -52,7 +52,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -68,7 +68,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -84,7 +84,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(false)
@@ -95,7 +95,7 @@ describe("disabled_mcps schema", () => {
     const config = {}
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -111,7 +111,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(false)
@@ -130,7 +130,7 @@ describe("disabled_mcps schema", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -421,7 +421,7 @@ describe("Coder-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -443,7 +443,7 @@ describe("Coder-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -468,7 +468,7 @@ describe("Coder-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -497,7 +497,7 @@ describe("Coder-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -523,7 +523,7 @@ describe("Coder-Junior agent override", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     // then
     expect(result.success).toBe(true)
@@ -618,7 +618,7 @@ describe("BrowserAutomationConfigSchema", () => {
   })
 })
 
-describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
+describe("DrizzyAgentConfigSchema - browser_automation_engine", () => {
   test("accepts browser_automation_engine config", () => {
     // given
     const input = {
@@ -628,7 +628,7 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
     }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     // then
     expect(result.success).toBe(true)
@@ -640,7 +640,7 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
     const input = {}
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     // then
     expect(result.success).toBe(true)
@@ -652,7 +652,7 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
     const input = { browser_automation_engine: { provider: "playwright-cli" } }
 
     // when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     // then
     expect(result.success).toBe(true)
@@ -660,13 +660,13 @@ describe("OhMyOpenCodeConfigSchema - browser_automation_engine", () => {
   })
 })
 
-describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
+describe("DrizzyAgentConfigSchema - hashline_edit", () => {
   test("accepts hashline_edit as true", () => {
     //#given
     const input = { hashline_edit: true }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(true)
@@ -678,7 +678,7 @@ describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
     const input = { hashline_edit: false }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(true)
@@ -690,7 +690,7 @@ describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
     const input = { auto_update: true }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(true)
@@ -702,7 +702,7 @@ describe("OhMyOpenCodeConfigSchema - hashline_edit", () => {
     const input = { hashline_edit: "true" }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(input)
+    const result = DrizzyAgentConfigSchema.safeParse(input)
 
     //#then
     expect(result.success).toBe(false)
@@ -917,7 +917,7 @@ describe("skills schema", () => {
     }
 
     //#when
-    const result = OhMyOpenCodeConfigSchema.safeParse(config)
+    const result = DrizzyAgentConfigSchema.safeParse(config)
 
     //#then
     expect(result.success).toBe(true)

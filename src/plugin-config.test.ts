@@ -1,7 +1,7 @@
 /// <reference types="bun-types" />
 import { describe, expect, it } from "bun:test";
 import { mergeConfigs, parseConfigPartially } from "./plugin-config";
-import type { OhMyOpenCodeConfig } from "./config";
+import type { DrizzyAgentConfig } from "./config";
 
 describe("mergeConfigs", () => {
   describe("categories merging", () => {
@@ -20,7 +20,7 @@ describe("mergeConfigs", () => {
             model: "anthropic/claude-haiku-4-5",
           },
         },
-      } as OhMyOpenCodeConfig;
+      } as DrizzyAgentConfig;
 
       const override = {
         categories: {
@@ -31,7 +31,7 @@ describe("mergeConfigs", () => {
             model: "google/gemini-3.1-pro",
           },
         },
-      } as unknown as OhMyOpenCodeConfig;
+      } as unknown as DrizzyAgentConfig;
 
       const result = mergeConfigs(base, override);
 
@@ -46,7 +46,7 @@ describe("mergeConfigs", () => {
     });
 
     it("should preserve base categories when override has no categories", () => {
-      const base: OhMyOpenCodeConfig = {
+      const base: DrizzyAgentConfig = {
         categories: {
           general: {
             model: "openai/gpt-5.4",
@@ -54,7 +54,7 @@ describe("mergeConfigs", () => {
         },
       };
 
-      const override: OhMyOpenCodeConfig = {};
+      const override: DrizzyAgentConfig = {};
 
       const result = mergeConfigs(base, override);
 
@@ -62,9 +62,9 @@ describe("mergeConfigs", () => {
     });
 
     it("should use override categories when base has no categories", () => {
-      const base: OhMyOpenCodeConfig = {};
+      const base: DrizzyAgentConfig = {};
 
-      const override: OhMyOpenCodeConfig = {
+      const override: DrizzyAgentConfig = {
         categories: {
           general: {
             model: "openai/gpt-5.4",
@@ -80,13 +80,13 @@ describe("mergeConfigs", () => {
 
   describe("existing behavior preservation", () => {
     it("should deep merge agents", () => {
-      const base: OhMyOpenCodeConfig = {
+      const base: DrizzyAgentConfig = {
         agents: {
           oracle: { model: "openai/gpt-5.4" },
         },
       };
 
-      const override: OhMyOpenCodeConfig = {
+      const override: DrizzyAgentConfig = {
         agents: {
           oracle: { temperature: 0.5 },
           explore: { model: "anthropic/claude-haiku-4-5" },
@@ -101,11 +101,11 @@ describe("mergeConfigs", () => {
     });
 
     it("should merge disabled arrays without duplicates", () => {
-      const base: OhMyOpenCodeConfig = {
+      const base: DrizzyAgentConfig = {
         disabled_hooks: ["comment-checker", "think-mode"],
       };
 
-      const override: OhMyOpenCodeConfig = {
+      const override: DrizzyAgentConfig = {
         disabled_hooks: ["think-mode", "session-recovery"],
       };
 
