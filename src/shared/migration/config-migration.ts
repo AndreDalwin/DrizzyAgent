@@ -6,8 +6,10 @@ import { migrateModelVersions } from "./model-versions"
 
 export function migrateConfigFile(
   configPath: string,
-  rawConfig: Record<string, unknown>
+  rawConfig: Record<string, unknown>,
+  options?: { writeToDisk?: boolean }
 ): boolean {
+  const { writeToDisk = true } = options ?? {}
   const copy = structuredClone(rawConfig)
   let needsWrite = false
 
@@ -111,35 +113,39 @@ export function migrateConfigFile(
   }
 
   if (needsWrite) {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
-    const backupPath = `${configPath}.bak.${timestamp}`
-    let backupSucceeded = false
-    try {
-      fs.copyFileSync(configPath, backupPath)
-      backupSucceeded = true
-    } catch {
-      // Original file may not exist yet — skip backup
-    }
-
-    let writeSucceeded = false
-    try {
-      fs.writeFileSync(configPath, JSON.stringify(copy, null, 2) + "\n", "utf-8")
-      writeSucceeded = true
-    } catch (err) {
-      log(`Failed to write migrated config to ${configPath}:`, err)
-    }
-
+    // Always apply migrations in-memory
     for (const key of Object.keys(rawConfig)) {
       delete rawConfig[key]
     }
     Object.assign(rawConfig, copy)
 
-    if (writeSucceeded) {
-      const backupMessage = backupSucceeded ? ` (backup: ${backupPath})` : ""
-      log(`Migrated config file: ${configPath}${backupMessage}`)
-    } else {
-      const backupMessage = backupSucceeded ? ` (backup: ${backupPath})` : ""
-      log(`Applied migrated config in-memory for: ${configPath}${backupMessage}`)
+    // Only write to disk if requested
+    if (writeToDisk) {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-")
+      const backupPath = `${configPath}.bak.${timestamp}`
+      let backupSucceeded = false
+      try {
+        fs.copyFileSync(configPath, backupPath)
+        backupSucceeded = true
+      } catch {
+        // Original file may not exist yet — skip backup
+      }
+
+      let writeSucceeded = false
+      try {
+        fs.writeFileSync(configPath, JSON.stringify(copy, null, 2) + "\n", "utf-8")
+        writeSucceeded = true
+      } catch (err) {
+        log(`Failed to write migrated config to ${configPath}:`, err)
+      }
+
+      if (writeSucceeded) {
+        const backupMessage = backupSucceeded ? ` (backup: ${backupPath})` : ""
+        log(`Migrated config file: ${configPath}${backupMessage}`)
+      } else {
+        const backupMessage = backupSucceeded ? ` (backup: ${backupPath})` : ""
+        log(`Applied migrated config in-memory for: ${configPath}${backupMessage}`)
+      }
     }
   }
 

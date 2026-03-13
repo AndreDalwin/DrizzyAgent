@@ -1,3 +1,5 @@
+/// <reference types="bun-types" />
+
 import { describe, test, expect, afterEach } from "bun:test"
 import * as fs from "fs"
 import * as path from "path"
@@ -200,6 +202,18 @@ describe("migrateAgentNames", () => {
     expect(changed).toBe(false)
     expect(migrated["oracle"]).toEqual({ model: "test" })
   })
+})
+
+describe("legacy generated config preservation policy", () => {
+  test.todo(
+    "preserves legacy generated agent and category model pins during normal startup until explicit adoption runs",
+    () => {}
+  )
+
+  test.todo(
+    "does not guess ownership for mixed legacy subtrees during normal startup migration",
+    () => {}
+  )
 })
 
 describe("migrateHookNames", () => {
