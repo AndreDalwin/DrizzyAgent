@@ -1,61 +1,20 @@
 /// <reference types="bun-types" />
 
 import { afterEach, describe, expect, test } from "bun:test"
-import * as fs from "fs"
-import * as os from "os"
-import * as path from "path"
 
 import { resolveCategoryConfig } from "./plugin-handlers/category-config-resolver"
 import { loadPluginConfig } from "./plugin-config"
+import {
+  createInstallDefaultsSnapshot,
+  PluginConfigFixture,
+} from "./plugin-config-test-fixture"
 import { clearConfigLoadErrors, getConfigLoadErrors } from "./shared"
 
-class PluginConfigRuntimeFixture {
-  readonly rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "drizzy-agent-runtime-config-"))
-  readonly userConfigDir = path.join(this.rootDir, "user-config")
-  readonly projectDir = path.join(this.rootDir, "project")
-
-  constructor() {
-    fs.mkdirSync(this.userConfigDir, { recursive: true })
-    fs.mkdirSync(path.join(this.projectDir, ".opencode"), { recursive: true })
-  }
-
-  writeUserConfig(config: Record<string, unknown>): void {
-    this.writeConfig(path.join(this.userConfigDir, "drizzy-agent.json"), config)
-  }
-
-  writeProjectConfig(config: Record<string, unknown>): void {
-    this.writeConfig(path.join(this.projectDir, ".opencode", "drizzy-agent.json"), config)
-  }
-
+class PluginConfigRuntimeFixture extends PluginConfigFixture {
   load() {
     process.env.OPENCODE_CONFIG_DIR = this.userConfigDir
     clearConfigLoadErrors()
     return loadPluginConfig(this.projectDir, {})
-  }
-
-  cleanup(): void {
-    clearConfigLoadErrors()
-    fs.rmSync(this.rootDir, { recursive: true, force: true })
-  }
-
-  private writeConfig(filePath: string, config: Record<string, unknown>): void {
-    fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
-  }
-}
-
-function createSnapshot(overrides: Record<string, unknown> = {}): Record<string, unknown> {
-  return {
-    snapshot_version: 1,
-    providers: {
-      claude: "no",
-      openai: false,
-      gemini: false,
-      copilot: false,
-      opencode_zen: false,
-      zai_coding_plan: false,
-      kimi_for_coding: false,
-      ...overrides,
-    },
   }
 }
 
@@ -79,7 +38,7 @@ describe("loadPluginConfig runtime precedence", () => {
   test("applies project, user, computed, and built-in precedence at runtime", () => {
     const fixture = createFixture()
     fixture.writeUserConfig({
-      _install_defaults: createSnapshot({ openai: true }),
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
       categories: {
         deep: {
           variant: "high",
@@ -112,7 +71,7 @@ describe("loadPluginConfig runtime precedence", () => {
   test("returns omitted overrides to computed snapshot defaults", () => {
     const fixture = createFixture()
     fixture.writeUserConfig({
-      _install_defaults: createSnapshot({ openai: true }),
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
       categories: {
         deep: {
           model: "user/custom-deep",
@@ -129,7 +88,7 @@ describe("loadPluginConfig runtime precedence", () => {
     })
 
     fixture.writeUserConfig({
-      _install_defaults: createSnapshot({ openai: true }),
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
       categories: {
         deep: {
           temperature: 0.4,
@@ -143,6 +102,29 @@ describe("loadPluginConfig runtime precedence", () => {
       model: "openai/gpt-5.4",
       variant: "medium",
       temperature: 0.4,
+    })
+    expect(getConfigLoadErrors()).toHaveLength(0)
+  })
+
+  test("does not infer snapshot defaults from explicit pins when snapshot is missing", () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      categories: {
+        deep: {
+          model: "openai/gpt-5.4",
+        },
+      },
+    })
+
+    const config = fixture.load()
+    const resolvedQuick = resolveCategoryConfig("quick", config.categories)
+
+    expect(config._install_defaults).toBeUndefined()
+    expect(config.categories?.deep).toEqual({
+      model: "openai/gpt-5.4",
+    })
+    expect(resolvedQuick).toEqual({
+      model: "anthropic/claude-haiku-4-5",
     })
     expect(getConfigLoadErrors()).toHaveLength(0)
   })

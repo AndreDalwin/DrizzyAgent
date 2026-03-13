@@ -1,69 +1,29 @@
 /// <reference types="bun-types" />
 
 import { afterEach, describe, expect, test } from "bun:test"
-import * as fs from "fs"
-import * as os from "os"
 import * as path from "path"
 
 import { resolveCategoryConfig } from "./plugin-handlers/category-config-resolver"
 import { loadPluginConfig } from "./plugin-config"
+import {
+  createInstallDefaultsSnapshot,
+  PluginConfigFixture,
+} from "./plugin-config-test-fixture"
 import { clearConfigLoadErrors, getConfigLoadErrors } from "./shared"
 
-class PluginConfigFixture {
-  readonly rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "drizzy-agent-plugin-config-"))
-  readonly userConfigDir = path.join(this.rootDir, "user-config")
-  readonly projectDir = path.join(this.rootDir, "project")
-
-  constructor() {
-    fs.mkdirSync(this.userConfigDir, { recursive: true })
-    fs.mkdirSync(path.join(this.projectDir, ".opencode"), { recursive: true })
-  }
-
-  writeUserConfig(config: Record<string, unknown>): void {
-    this.writeConfig(path.join(this.userConfigDir, "drizzy-agent.json"), config)
-  }
-
-  writeProjectConfig(config: Record<string, unknown>): void {
-    this.writeConfig(path.join(this.projectDir, ".opencode", "drizzy-agent.json"), config)
-  }
-
+class PluginConfigSnapshotFixture extends PluginConfigFixture {
   load() {
     process.env.OPENCODE_CONFIG_DIR = this.userConfigDir
     clearConfigLoadErrors()
     return loadPluginConfig(this.projectDir, {})
   }
-
-  cleanup(): void {
-    clearConfigLoadErrors()
-    fs.rmSync(this.rootDir, { recursive: true, force: true })
-  }
-
-  private writeConfig(filePath: string, config: Record<string, unknown>): void {
-    fs.writeFileSync(filePath, JSON.stringify(config, null, 2))
-  }
 }
 
-function createSnapshot(overrides: Record<string, unknown> = {}): Record<string, unknown> {
-  return {
-    snapshot_version: 1,
-    providers: {
-      claude: "no",
-      openai: false,
-      gemini: false,
-      copilot: false,
-      opencode_zen: false,
-      zai_coding_plan: false,
-      kimi_for_coding: false,
-      ...overrides,
-    },
-  }
-}
-
-const fixtures: PluginConfigFixture[] = []
+const fixtures: PluginConfigSnapshotFixture[] = []
 const originalOpenCodeConfigDir = process.env.OPENCODE_CONFIG_DIR
 
-function createFixture(): PluginConfigFixture {
-  const fixture = new PluginConfigFixture()
+function createFixture(): PluginConfigSnapshotFixture {
+  const fixture = new PluginConfigSnapshotFixture()
   fixtures.push(fixture)
   return fixture
 }
@@ -79,7 +39,7 @@ describe("loadPluginConfig snapshot defaults", () => {
   test("applies project explicit overrides over user explicit and computed defaults", () => {
     const fixture = createFixture()
     fixture.writeUserConfig({
-      _install_defaults: createSnapshot({ openai: true }),
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
       categories: {
         deep: {
           model: "user/custom-deep",
@@ -104,7 +64,7 @@ describe("loadPluginConfig snapshot defaults", () => {
   test("fills omitted user fields from computed defaults", () => {
     const fixture = createFixture()
     fixture.writeUserConfig({
-      _install_defaults: createSnapshot({ openai: true }),
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
       categories: {
         deep: {
           temperature: 0.4,
@@ -121,10 +81,32 @@ describe("loadPluginConfig snapshot defaults", () => {
     })
   })
 
+  test("supports snapshot-backed configs without explicit overrides", () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
+    })
+
+    const config = fixture.load()
+    const resolvedQuick = resolveCategoryConfig("quick", config.categories)
+
+    expect(config._install_defaults).toEqual(
+      createInstallDefaultsSnapshot({ openai: true }),
+    )
+    expect(resolvedQuick).toEqual({
+      model: "openai/gpt-5.4",
+      variant: "low",
+    })
+    expect(getConfigLoadErrors()).toHaveLength(0)
+  })
+
   test("falls back to built-in category defaults when no snapshot exists", () => {
     const fixture = createFixture()
     fixture.writeUserConfig({
       categories: {
+        deep: {
+          model: "openai/gpt-5.4",
+        },
         quick: {
           temperature: 0.1,
         },
@@ -138,12 +120,15 @@ describe("loadPluginConfig snapshot defaults", () => {
       model: "anthropic/claude-haiku-4-5",
       temperature: 0.1,
     })
+    expect(config.categories?.deep).toEqual({
+      model: "openai/gpt-5.4",
+    })
   })
 
   test("ignores project install defaults and records a warning", () => {
     const fixture = createFixture()
     fixture.writeProjectConfig({
-      _install_defaults: createSnapshot({ openai: true }),
+      _install_defaults: createInstallDefaultsSnapshot({ openai: true }),
     })
 
     const config = fixture.load()
@@ -157,10 +142,10 @@ describe("loadPluginConfig snapshot defaults", () => {
     })
   })
 
-  test("ignores invalid user snapshot and falls back to built-in defaults", () => {
-    const fixture = createFixture()
-    fixture.writeUserConfig({
-      _install_defaults: {
+  for (const invalidSnapshotCase of [
+    {
+      name: "ignores invalid user snapshot and falls back to built-in defaults",
+      installDefaults: {
         snapshot_version: 999,
         providers: {
           claude: "no",
@@ -172,35 +157,37 @@ describe("loadPluginConfig snapshot defaults", () => {
           kimi_for_coding: false,
         },
       },
+    },
+    {
+      name: "ignores malformed user snapshot structure",
+      installDefaults: "not-an-object",
+    },
+  ]) {
+    test(invalidSnapshotCase.name, () => {
+      const fixture = createFixture()
+      fixture.writeUserConfig({
+        _install_defaults: invalidSnapshotCase.installDefaults,
+        categories: {
+          deep: {
+            model: "openai/gpt-5.4",
+          },
+        },
+      })
+
+      const config = fixture.load()
+      const resolved = resolveCategoryConfig("quick", config.categories)
+
+      expect(config._install_defaults).toBeUndefined()
+      expect(resolved?.model).toBe("anthropic/claude-haiku-4-5")
+      expect(config.categories?.deep).toEqual({
+        model: "openai/gpt-5.4",
+      })
+      const errors = getConfigLoadErrors()
+      expect(errors.length).toBeGreaterThan(0)
+      expect(errors[0].path).toBe(path.join(fixture.userConfigDir, "drizzy-agent.json"))
+      expect(errors[0].error).toContain("_install_defaults")
     })
-
-    const config = fixture.load()
-    const resolved = resolveCategoryConfig("quick", config.categories)
-
-    expect(config._install_defaults).toBeUndefined()
-    expect(resolved?.model).toBe("anthropic/claude-haiku-4-5")
-    const errors = getConfigLoadErrors()
-    expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0].path).toBe(path.join(fixture.userConfigDir, "drizzy-agent.json"))
-    expect(errors[0].error).toContain("_install_defaults")
-  })
-
-  test("ignores malformed user snapshot structure", () => {
-    const fixture = createFixture()
-    fixture.writeUserConfig({
-      _install_defaults: "not-an-object",
-    })
-
-    const config = fixture.load()
-    const resolved = resolveCategoryConfig("quick", config.categories)
-
-    expect(config._install_defaults).toBeUndefined()
-    expect(resolved?.model).toBe("anthropic/claude-haiku-4-5")
-    const errors = getConfigLoadErrors()
-    expect(errors.length).toBeGreaterThan(0)
-    expect(errors[0].path).toBe(path.join(fixture.userConfigDir, "drizzy-agent.json"))
-    expect(errors[0].error).toContain("_install_defaults")
-  })
+  }
 
   test("uses built-in defaults when user has no snapshot", () => {
     const fixture = createFixture()
