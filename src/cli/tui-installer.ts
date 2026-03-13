@@ -6,7 +6,7 @@ import {
   detectCurrentConfig,
   getOpenCodeVersion,
   isOpenCodeInstalled,
-  writeOmoConfig,
+  writeDrizzyConfig,
 } from "./config-manager"
 import { detectedToInitialValues, formatBanner, formatConfigSummary, SYMBOLS } from "./install-validators"
 import { promptInstallConfig } from "./tui-install-prompts"
@@ -53,13 +53,13 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
   spinner.stop(`Plugin added to ${color.cyan(pluginResult.configPath)}`)
 
   spinner.start("Writing drizzy-agent configuration")
-  const omoResult = writeOmoConfig(config)
-  if (!omoResult.success) {
-    spinner.stop(`Failed to write config: ${omoResult.error}`)
+  const drizzyResult = writeDrizzyConfig(config)
+  if (!drizzyResult.success) {
+    spinner.stop(`Failed to write config: ${drizzyResult.error}`)
     p.outro(color.red("Installation failed."))
     return 1
   }
-  spinner.stop(`Config written to ${color.cyan(omoResult.configPath)}`)
+  spinner.stop(`Config written to ${color.cyan(drizzyResult.configPath)}`)
 
   if (!config.hasClaude) {
     console.log()

@@ -5,7 +5,7 @@ import {
   detectCurrentConfig,
   getOpenCodeVersion,
   isOpenCodeInstalled,
-  writeOmoConfig,
+  writeDrizzyConfig,
 } from "./config-manager"
 import {
   SYMBOLS,
@@ -76,12 +76,12 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
   )
 
   printStep(step++, totalSteps, "Writing drizzy-agent configuration...")
-  const omoResult = writeOmoConfig(config)
-  if (!omoResult.success) {
-    printError(`Failed: ${omoResult.error}`)
+  const drizzyResult = writeDrizzyConfig(config)
+  if (!drizzyResult.success) {
+    printError(`Failed: ${drizzyResult.error}`)
     return 1
   }
-  printSuccess(`Config written ${SYMBOLS.arrow} ${color.dim(omoResult.configPath)}`)
+  printSuccess(`Config written ${SYMBOLS.arrow} ${color.dim(drizzyResult.configPath)}`)
 
   printBox(formatConfigSummary(config), isUpdate ? "Updated Configuration" : "Installation Complete")
 
