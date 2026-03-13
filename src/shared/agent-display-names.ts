@@ -46,6 +46,7 @@ export function getAgentConfigKey(agentName: string): string {
   const reversed = REVERSE_DISPLAY_NAMES[lower]
   if (reversed !== undefined) return reversed
   if (lower === "plan-consultant") return "planConsultant"
+  if (lower === "plan-reviewer") return "planReviewer"
   if (AGENT_DISPLAY_NAMES[lower] !== undefined) return lower
   return lower
 }

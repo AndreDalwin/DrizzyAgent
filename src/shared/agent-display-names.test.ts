@@ -175,6 +175,20 @@ describe("getAgentConfigKey", () => {
     expect(getAgentConfigKey("Plan Reviewer")).toBe("planReviewer")
     expect(getAgentConfigKey("Coder Junior")).toBe("coder-junior")
   })
+
+  it("resolves kebab-case plan-consultant to camelCase", () => {
+    // given kebab-case agent name
+    // when getAgentConfigKey called
+    // then returns camelCase config key for AGENT_MODEL_REQUIREMENTS lookup
+    expect(getAgentConfigKey("plan-consultant")).toBe("planConsultant")
+  })
+
+  it("resolves kebab-case plan-reviewer to camelCase", () => {
+    // given kebab-case agent name
+    // when getAgentConfigKey called
+    // then returns camelCase config key for AGENT_MODEL_REQUIREMENTS lookup
+    expect(getAgentConfigKey("plan-reviewer")).toBe("planReviewer")
+  })
 })
 
 describe("AGENT_DISPLAY_NAMES", () => {
