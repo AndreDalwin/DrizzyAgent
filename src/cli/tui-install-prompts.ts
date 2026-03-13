@@ -1,9 +1,11 @@
 import * as p from "@clack/prompts"
 import type { Option } from "@clack/prompts"
+import color from "picocolors"
 import type {
   ClaudeSubscription,
   DetectedConfig,
   InstallConfig,
+  OmoDetectionResult,
 } from "./types"
 import { detectedToInitialValues } from "./install-validators"
 
@@ -110,4 +112,44 @@ export async function promptInstallConfig(detected: DetectedConfig): Promise<Ins
     hasZaiCodingPlan: zaiCodingPlan === "yes",
     hasKimiForCoding: kimiForCoding === "yes",
   }
+}
+
+export async function promptOhMyOpencodeConfirmation(detected: OmoDetectionResult): Promise<boolean> {
+  if (!process.stdin.isTTY || !process.stdout.isTTY) return true
+
+  console.log()
+  console.log(color.bgYellow(color.black(color.bold(" CONFLICT DETECTED "))))
+  console.log()
+  console.log(color.yellow("  Oh My OpenCode (oh-my-opencode) is currently installed."))
+  console.log(color.yellow("  DrizzyAgent and Oh My OpenCode cannot run simultaneously."))
+  console.log()
+  console.log(color.dim("  DrizzyAgent will:"))
+  console.log(color.dim("    • Replace Oh My OpenCode plugin in OpenCode config"))
+  console.log(color.dim("    • Remove oh-my-opencode.json configuration file"))
+  console.log(color.dim("    • Install DrizzyAgent as the active plugin"))
+  console.log()
+
+  if (detected.configPath) {
+    console.log(color.dim(`  Config to remove: ${detected.configPath}`))
+  }
+  if (detected.pluginEntry) {
+    console.log(color.dim(`  Plugin to replace: ${detected.pluginEntry}`))
+  }
+  console.log()
+
+  const confirm = await p.select({
+    message: "Do you want to replace Oh My OpenCode with DrizzyAgent?",
+    options: [
+      { value: "yes", label: "Yes, replace it", hint: "Oh My OpenCode will be removed" },
+      { value: "no", label: "No, cancel installation", hint: "Keep Oh My OpenCode" },
+    ],
+    initialValue: "yes",
+  })
+
+  if (p.isCancel(confirm) || confirm === "no") {
+    p.cancel("Installation cancelled. Oh My OpenCode remains installed.")
+    return false
+  }
+
+  return true
 }

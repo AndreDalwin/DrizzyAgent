@@ -18,3 +18,10 @@ export { detectCurrentConfig } from "./config-manager/detect-current-config"
 
 export type { BunInstallResult } from "./config-manager/bun-install"
 export { runBunInstall, runBunInstallWithDetails } from "./config-manager/bun-install"
+
+export type { OmoDetectionResult } from "./config-manager/detect-and-remove-oh-my-opencode"
+export {
+  detectOhMyOpencode,
+  removeOhMyOpencodeFromOpenCodeConfig,
+  removeOhMyOpencodeConfig,
+} from "./config-manager/detect-and-remove-oh-my-opencode"

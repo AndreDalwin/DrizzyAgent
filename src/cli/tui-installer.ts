@@ -4,12 +4,15 @@ import type { InstallArgs } from "./types"
 import {
   addPluginToOpenCodeConfig,
   detectCurrentConfig,
+  detectOhMyOpencode,
   getOpenCodeVersion,
   isOpenCodeInstalled,
+  removeOhMyOpencodeConfig,
+  removeOhMyOpencodeFromOpenCodeConfig,
   writeDrizzyConfig,
 } from "./config-manager"
 import { detectedToInitialValues, formatBanner, formatConfigSummary, SYMBOLS } from "./install-validators"
-import { promptInstallConfig } from "./tui-install-prompts"
+import { promptInstallConfig, promptOhMyOpencodeConfirmation } from "./tui-install-prompts"
 
 export async function runTuiInstaller(args: InstallArgs, version: string): Promise<number> {
   if (!process.stdin.isTTY || !process.stdout.isTTY) {
@@ -38,6 +41,31 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
     p.note("Visit https://opencode.ai/docs for installation instructions", "Installation Guide")
   } else {
     spinner.stop(`OpenCode ${openCodeVersion ?? "installed"} ${color.green("[OK]")}`)
+  }
+
+  // Check for oh-my-opencode conflict
+  const omoDetected = detectOhMyOpencode()
+  if (omoDetected.isInstalled) {
+    const shouldReplace = await promptOhMyOpencodeConfirmation(omoDetected)
+    if (!shouldReplace) return 1
+
+    spinner.start("Removing Oh My OpenCode")
+
+    // Remove from OpenCode config
+    const removePluginResult = removeOhMyOpencodeFromOpenCodeConfig()
+    if (!removePluginResult.success) {
+      spinner.stop(`Warning: Could not remove Oh My OpenCode plugin: ${removePluginResult.error}`)
+    }
+
+    // Remove config files
+    const removeConfigResult = removeOhMyOpencodeConfig()
+    if (!removeConfigResult.success) {
+      spinner.stop(`Warning: Could not remove Oh My OpenCode config: ${removeConfigResult.error}`)
+    } else if (removeConfigResult.removedPaths.length > 0) {
+      spinner.stop(`Removed Oh My OpenCode ${color.green("[OK]")}`)
+    } else {
+      spinner.stop(`Oh My OpenCode removed ${color.green("[OK]")}`)
+    }
   }
 
   const config = await promptInstallConfig(detected)

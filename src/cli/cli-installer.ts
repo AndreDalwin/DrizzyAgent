@@ -3,8 +3,11 @@ import type { InstallArgs } from "./types"
 import {
   addPluginToOpenCodeConfig,
   detectCurrentConfig,
+  detectOhMyOpencode,
   getOpenCodeVersion,
   isOpenCodeInstalled,
+  removeOhMyOpencodeConfig,
+  removeOhMyOpencodeFromOpenCodeConfig,
   writeDrizzyConfig,
 } from "./config-manager"
 import {
@@ -63,9 +66,35 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
     printInfo(`Current config: Claude=${initial.claude}, Gemini=${initial.gemini}`)
   }
 
+  // Check for oh-my-opencode conflict
+  const omoDetected = detectOhMyOpencode()
+  if (omoDetected.isInstalled) {
+    printStep(step++, totalSteps + 1, "Detected Oh My OpenCode - removing...")
+    printWarning("Oh My OpenCode (oh-my-opencode) is currently installed.")
+    printInfo("DrizzyAgent will replace Oh My OpenCode (plugins cannot coexist).")
+
+    // Remove from OpenCode config
+    const removePluginResult = removeOhMyOpencodeFromOpenCodeConfig()
+    if (!removePluginResult.success) {
+      printWarning(`Could not remove Oh My OpenCode plugin: ${removePluginResult.error}`)
+    }
+
+    // Remove config files
+    const removeConfigResult = removeOhMyOpencodeConfig()
+    if (!removeConfigResult.success) {
+      printWarning(`Could not remove Oh My OpenCode config: ${removeConfigResult.error}`)
+    } else if (removeConfigResult.removedPaths.length > 0) {
+      printSuccess(`Removed Oh My OpenCode config: ${removeConfigResult.removedPaths.join(", ")}`)
+    }
+
+    if (removePluginResult.success && removeConfigResult.success) {
+      printSuccess("Oh My OpenCode removed successfully")
+    }
+  }
+
   const config = argsToConfig(args)
 
-  printStep(step++, totalSteps, "Adding drizzy-agent plugin...")
+  printStep(step++, totalSteps + (omoDetected.isInstalled ? 1 : 0), "Adding drizzy-agent plugin...")
   const pluginResult = await addPluginToOpenCodeConfig(version)
   if (!pluginResult.success) {
     printError(`Failed: ${pluginResult.error}`)

@@ -41,3 +41,10 @@ export interface DetectedConfig {
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
 }
+
+export interface OmoDetectionResult {
+  isInstalled: boolean
+  configPath?: string
+  pluginEntry?: string
+  openCodeConfigPath?: string
+}
