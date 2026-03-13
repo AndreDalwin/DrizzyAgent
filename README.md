@@ -110,15 +110,74 @@ Create `.opencode/drizzy-agent.jsonc` or `~/.config/opencode/drizzy-agent.jsonc`
 }
 ```
 
-### Troubleshooting: Version Display Issues
+### How Configuration Works (Snapshot-Based Defaults)
 
-If you see an old version (like 3.11.2) instead of the current version, clear the cache:
+DrizzyAgent uses a **snapshot-based** configuration system. When you run `drizzy-agent install`, the tool creates a minimal config containing only your provider selections:
 
-```bash
-rm -rf ~/.cache/opencode/node_modules/drizzy-agent
+```jsonc
+{
+  "$schema": "...",
+  "_install_defaults": {
+    "snapshot_version": 1,
+    "providers": {
+      "claude": "yes",
+      "openai": false,
+      "gemini": false,
+      // ... which providers you selected during install
+    }
+  }
+}
 ```
 
-This removes cached data from the previous package name.
+The `_install_defaults` section is **install-managed and read-only**. It captures which providers you selected. The actual `agents` and `categories` configuration is computed at runtime from current fallback rules based on your available providers.
+
+**Benefits of this approach:**
+- Your config stays small and focused on your provider choices
+- Model fallbacks automatically improve with each plugin update
+- No manual updates needed when better models become available
+
+#### Adding Custom Overrides
+
+You can add explicit overrides on top of the computed defaults:
+
+```jsonc
+{
+  "_install_defaults": { /* ... */ },
+  "agents": {
+    "coder": {
+      "model": "claude-opus-4"  // This overrides the computed default
+    }
+  },
+  "categories": {
+    "deep": {
+      "model": "o3-mini"  // Override for specific category
+    }
+  }
+}
+```
+
+Explicit overrides take precedence over computed defaults. Omitting a field means "use the computed default."
+
+#### Updating Provider Selections
+
+Rerun the install command to update provider selections:
+
+```bash
+bunx drizzy-agent install
+```
+
+Or manually override by editing `~/.config/opencode/drizzy-agent.jsonc`:
+
+```jsonc
+{
+  "agents": {
+    "coder": { "model": "claude-opus-4" }
+  },
+  "categories": {
+    "deep": { "model": "o3-mini" }
+  }
+}
+```
 
 ## Development
 

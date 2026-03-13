@@ -3919,6 +3919,61 @@
       ],
       "additionalProperties": false
     },
+    "_install_defaults": {
+      "type": "object",
+      "properties": {
+        "snapshot_version": {
+          "type": "number",
+          "const": 1
+        },
+        "providers": {
+          "type": "object",
+          "properties": {
+            "claude": {
+              "type": "string",
+              "enum": [
+                "no",
+                "yes",
+                "max20"
+              ]
+            },
+            "openai": {
+              "type": "boolean"
+            },
+            "gemini": {
+              "type": "boolean"
+            },
+            "copilot": {
+              "type": "boolean"
+            },
+            "opencode_zen": {
+              "type": "boolean"
+            },
+            "zai_coding_plan": {
+              "type": "boolean"
+            },
+            "kimi_for_coding": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "claude",
+            "openai",
+            "gemini",
+            "copilot",
+            "opencode_zen",
+            "zai_coding_plan",
+            "kimi_for_coding"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "snapshot_version",
+        "providers"
+      ],
+      "additionalProperties": false
+    },
     "_migrations": {
       "type": "array",
       "items": {

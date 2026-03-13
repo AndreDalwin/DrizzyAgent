@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { synthesizeComputedDefaultsConfig } from "./computed-install-defaults";
 import { DrizzyAgentConfigSchema, type DrizzyAgentConfig } from "./config";
 import {
   log,
@@ -73,7 +74,7 @@ export function loadConfigFromPath(
       const content = fs.readFileSync(configPath, "utf-8");
       const rawConfig = parseJsonc<Record<string, unknown>>(content);
 
-      migrateConfigFile(configPath, rawConfig);
+      migrateConfigFile(configPath, rawConfig, { writeToDisk: false });
 
       const result = DrizzyAgentConfigSchema.safeParse(rawConfig);
 
@@ -114,6 +115,7 @@ export function mergeConfigs(
   return {
     ...base,
     ...override,
+    _install_defaults: override._install_defaults ?? base._install_defaults,
     agents: deepMerge(base.agents, override.agents),
     categories: deepMerge(base.categories, override.categories),
     disabled_agents: [
@@ -150,6 +152,60 @@ export function mergeConfigs(
   };
 }
 
+function isValidUserSnapshot(snapshot: unknown): snapshot is { snapshot_version: number; providers: Record<string, unknown> } {
+  if (typeof snapshot !== "object" || snapshot === null) {
+    return false;
+  }
+  const s = snapshot as Record<string, unknown>;
+  if (s.snapshot_version !== 1) {
+    return false;
+  }
+  if (typeof s.providers !== "object" || s.providers === null) {
+    return false;
+  }
+  return true;
+}
+
+function stripInvalidUserInstallDefaults(
+  config: DrizzyAgentConfig,
+  configPath: string
+): DrizzyAgentConfig {
+  if (!config._install_defaults) {
+    return config;
+  }
+
+  if (isValidUserSnapshot(config._install_defaults)) {
+    return config;
+  }
+
+  log(`Ignoring invalid _install_defaults from ${configPath}`);
+  addConfigLoadError({
+    path: configPath,
+    error: "Ignoring invalid _install_defaults section, falling back to built-in defaults",
+  });
+
+  const { _install_defaults: _ignored, ...explicitConfig } = config;
+  return explicitConfig;
+}
+
+function stripProjectInstallDefaults(
+  config: DrizzyAgentConfig | null,
+  configPath: string
+): DrizzyAgentConfig | null {
+  if (!config?._install_defaults) {
+    return config;
+  }
+
+  log(`Ignoring project _install_defaults from ${configPath}`);
+  addConfigLoadError({
+    path: configPath,
+    error: "Ignoring project _install_defaults, snapshot defaults are user-config only",
+  });
+
+  const { _install_defaults: _ignored, ...explicitConfig } = config;
+  return explicitConfig;
+}
+
 export function loadPluginConfig(
   directory: string,
   ctx: unknown
@@ -169,10 +225,17 @@ export function loadPluginConfig(
       ? projectDetected.path
       : projectBasePath + ".json";
 
-  let config: DrizzyAgentConfig =
-    loadConfigFromPath(userConfigPath, ctx) ?? {};
+  const rawUserConfig = loadConfigFromPath(userConfigPath, ctx) ?? {};
+  const userConfig = stripInvalidUserInstallDefaults(rawUserConfig, userConfigPath);
+  let config = mergeConfigs(
+    synthesizeComputedDefaultsConfig(userConfig._install_defaults),
+    userConfig,
+  );
 
-  const projectConfig = loadConfigFromPath(projectConfigPath, ctx);
+  const projectConfig = stripProjectInstallDefaults(
+    loadConfigFromPath(projectConfigPath, ctx),
+    projectConfigPath
+  );
   if (projectConfig) {
     config = mergeConfigs(config, projectConfig);
   }

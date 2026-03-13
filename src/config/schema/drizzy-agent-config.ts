@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { AnyMcpNameSchema } from "../../mcp/types"
-import { BuiltinAgentNameSchema, BuiltinSkillNameSchema } from "./agent-names"
+import { BuiltinSkillNameSchema } from "./agent-names"
 import { AgentOverridesSchema } from "./agent-overrides"
 import { BabysittingConfigSchema } from "./babysitting"
 import { BackgroundTaskConfigSchema } from "./background-task"
@@ -13,6 +13,7 @@ import { ExperimentalConfigSchema } from "./experimental"
 import { GitMasterConfigSchema } from "./git-master"
 import { HookNameSchema } from "./hooks"
 import { NotificationConfigSchema } from "./notification"
+import { InstallDefaultsSnapshotSchema } from "./install-defaults"
 import { RalphLoopConfigSchema } from "./ralph-loop"
 import { RuntimeFallbackConfigSchema } from "./runtime-fallback"
 import { SkillsConfigSchema } from "./skills"
@@ -63,6 +64,7 @@ export const DrizzyAgentConfigSchema = z.object({
   tmux: TmuxConfigSchema.optional(),
   coder: CoderConfigSchema.optional(),
   start_work: StartWorkConfigSchema.optional(),
+  _install_defaults: InstallDefaultsSnapshotSchema.optional(),
   /** Migration history to prevent re-applying migrations (e.g., model version upgrades) */
   _migrations: z.array(z.string()).optional(),
 })

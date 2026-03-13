@@ -1,3 +1,5 @@
+/// <reference types="bun-types" />
+
 import { afterEach, beforeEach, describe, expect, it } from "bun:test"
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
@@ -20,17 +22,13 @@ const installConfig: InstallConfig = {
   hasKimiForCoding: false,
 }
 
-function getRecord(value: unknown): Record<string, unknown> {
-  if (value && typeof value === "object" && !Array.isArray(value)) {
-    return value as Record<string, unknown>
-  }
-
-  return {}
-}
-
 describe("writeDrizzyConfig", () => {
   let testConfigDir = ""
   let testConfigPath = ""
+
+  function readSavedConfig(): Record<string, unknown> {
+    return parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
+  }
 
   beforeEach(() => {
     testConfigDir = join(tmpdir(), `omo-write-config-${Date.now()}-${Math.random().toString(36).slice(2)}`)
@@ -47,13 +45,13 @@ describe("writeDrizzyConfig", () => {
     delete process.env.OPENCODE_CONFIG_DIR
   })
 
-  it("refreshes generated defaults while preserving user-only keys", () => {
+  it("refreshes generated defaults while preserving user-owned keys", () => {
     // given
     const existingConfig = {
       $schema: "https://raw.githubusercontent.com/code-yeongyu/drizzy-agent/master/assets/drizzy-agent.schema.json",
       agents: {
         coder: {
-          model: "custom/provider-model",
+          effort: "high",
         },
       },
       disabled_hooks: ["comment-checker"],
@@ -68,18 +66,93 @@ describe("writeDrizzyConfig", () => {
     // then
     expect(result.success).toBe(true)
 
-    const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
-    const savedAgents = getRecord(savedConfig.agents)
-    const savedCoder = getRecord(savedAgents.coder)
-    const generatedAgents = getRecord(generatedDefaults.agents)
-    const generatedCoder = getRecord(generatedAgents.coder)
-
+    const savedConfig = readSavedConfig()
+    const savedCoder = ((savedConfig as any).agents?.coder) as Record<string, unknown> | undefined
+    expect(savedCoder?.effort).toBe("high")
+    // Schema and install defaults should be generated anew
     expect(savedConfig.$schema).toBe(generatedDefaults.$schema)
-    expect(savedCoder.model).toBe(generatedCoder.model)
+    expect(savedConfig._install_defaults).toEqual(generatedDefaults._install_defaults)
     expect(savedConfig.disabled_hooks).toEqual(["comment-checker"])
 
     for (const defaultKey of Object.keys(generatedDefaults)) {
       expect(savedConfig).toHaveProperty(defaultKey)
     }
+  })
+
+  it("replaces install-owned snapshot fields on rerun without touching explicit overrides", () => {
+    // given
+    const existingConfig = {
+      _install_defaults: {
+        snapshot_version: 0,
+        providers: {
+          claude: "yes",
+          openai: false,
+          gemini: false,
+        },
+        legacy_generated_defaults: true,
+      },
+      agents: {
+        coder: {
+          model: "custom-model",
+        },
+      },
+    }
+    writeFileSync(testConfigPath, JSON.stringify(existingConfig, null, 2) + "\n", "utf-8")
+
+    const generatedDefaults = generateDrizzyConfig(installConfig)
+
+    // when
+    const result = writeDrizzyConfig(installConfig)
+
+    // then
+    expect(result.success).toBe(true)
+
+    const savedConfig = readSavedConfig()
+    expect(savedConfig._install_defaults).toEqual(generatedDefaults._install_defaults)
+    expect(((savedConfig as any).agents?.coder as Record<string, unknown> | undefined)?.model).toBe(
+      "custom-model"
+    )
+  })
+
+  it("preserves explicit user overrides across reruns while keeping snapshot-only install fields current", () => {
+    // given
+    const existingConfig = {
+      $schema: "https://example.com/old-schema.json",
+      _install_defaults: {
+        snapshot_version: 0,
+        providers: {
+          claude: "yes",
+          openai: false,
+          gemini: false,
+        },
+      },
+      agents: {
+        coder: {
+          model: "claude-opus-4",
+        },
+      },
+      categories: {
+        deep: {
+          model: "o3-mini",
+        },
+      },
+      disabled_hooks: ["comment-checker"],
+    }
+    writeFileSync(testConfigPath, JSON.stringify(existingConfig, null, 2) + "\n", "utf-8")
+
+    const generatedDefaults = generateDrizzyConfig(installConfig)
+
+    // when
+    const result = writeDrizzyConfig(installConfig)
+
+    // then
+    expect(result.success).toBe(true)
+
+    const savedConfig = readSavedConfig()
+    expect(savedConfig.$schema).toBe(generatedDefaults.$schema)
+    expect(savedConfig._install_defaults).toEqual(generatedDefaults._install_defaults)
+    expect(savedConfig.agents).toEqual(existingConfig.agents)
+    expect(savedConfig.categories).toEqual(existingConfig.categories)
+    expect(savedConfig.disabled_hooks).toEqual(existingConfig.disabled_hooks)
   })
 })

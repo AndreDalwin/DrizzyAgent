@@ -1,5 +1,4 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
-import { join } from "node:path"
 import { parseJsonc } from "../../shared/jsonc-parser"
 import type { ConfigMergeResult, InstallConfig } from "../types"
 import { getConfigDir, getDrizzyConfigPath } from "./config-context"
@@ -11,36 +10,14 @@ function isEmptyOrWhitespace(content: string): boolean {
   return content.trim().length === 0
 }
 
-function mergeGeneratedConfigWithExisting(
+function mergeSnapshotConfigWithExisting(
   generated: Record<string, unknown>,
   existing: Record<string, unknown>
 ): Record<string, unknown> {
-  const result: Record<string, unknown> = { ...existing }
-
-  for (const [key, generatedValue] of Object.entries(generated)) {
-    if (key === "__proto__" || key === "constructor" || key === "prototype") continue
-
-    const existingValue = existing[key]
-
-    if (
-      generatedValue !== null &&
-      typeof generatedValue === "object" &&
-      !Array.isArray(generatedValue) &&
-      existingValue !== null &&
-      typeof existingValue === "object" &&
-      !Array.isArray(existingValue)
-    ) {
-      result[key] = mergeGeneratedConfigWithExisting(
-        generatedValue as Record<string, unknown>,
-        existingValue as Record<string, unknown>
-      )
-      continue
-    }
-
-    result[key] = generatedValue
+  return {
+    ...existing,
+    ...generated,
   }
-
-  return result
 }
 
 export function writeDrizzyConfig(installConfig: InstallConfig): ConfigMergeResult {
@@ -55,15 +32,14 @@ export function writeDrizzyConfig(installConfig: InstallConfig): ConfigMergeResu
   }
 
   const drizzyConfigPath = getDrizzyConfigPath()
-  const existingConfigPath = drizzyConfigPath
 
   try {
     const newConfig = generateDrizzyConfig(installConfig)
 
-    if (existsSync(existingConfigPath)) {
+    if (existsSync(drizzyConfigPath)) {
       try {
-        const stat = statSync(existingConfigPath)
-        const content = readFileSync(existingConfigPath, "utf-8")
+        const stat = statSync(drizzyConfigPath)
+        const content = readFileSync(drizzyConfigPath, "utf-8")
 
         if (stat.size === 0 || isEmptyOrWhitespace(content)) {
           writeFileSync(drizzyConfigPath, JSON.stringify(newConfig, null, 2) + "\n")
@@ -76,7 +52,8 @@ export function writeDrizzyConfig(installConfig: InstallConfig): ConfigMergeResu
           return { success: true, configPath: drizzyConfigPath }
         }
 
-        const merged = mergeGeneratedConfigWithExisting(newConfig, existing)
+        const merged = mergeSnapshotConfigWithExisting(newConfig, existing)
+
         writeFileSync(drizzyConfigPath, JSON.stringify(merged, null, 2) + "\n")
       } catch (parseErr) {
         if (parseErr instanceof SyntaxError) {

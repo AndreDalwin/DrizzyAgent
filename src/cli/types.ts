@@ -1,4 +1,11 @@
-export type ClaudeSubscription = "no" | "yes" | "max20"
+import type {
+  InstallDefaultsClaudeProvider,
+  InstallDefaultsProviders,
+  InstallDefaultsSnapshot,
+} from "../shared/install-defaults-contract";
+import type { InstallIntent as _InstallIntent } from "./install-intent-types";
+
+export type ClaudeSubscription = InstallDefaultsClaudeProvider
 export type BooleanArg = "no" | "yes"
 
 export interface InstallArgs {
@@ -23,6 +30,13 @@ export interface InstallConfig {
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
 }
+
+export type InstallSnapshotProviders = InstallDefaultsProviders
+
+export type InstallSnapshot = InstallDefaultsSnapshot
+
+// Explicit install intent structure separated from the persisted snapshot
+export type InstallIntent = _InstallIntent
 
 export interface ConfigMergeResult {
   success: boolean
