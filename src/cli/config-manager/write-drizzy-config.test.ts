@@ -6,8 +6,8 @@ import { join } from "node:path"
 import { parseJsonc } from "../../shared/jsonc-parser"
 import type { InstallConfig } from "../types"
 import { resetConfigContext } from "./config-context"
-import { generateOmoConfig } from "./generate-omo-config"
-import { writeOmoConfig } from "./write-omo-config"
+import { generateDrizzyConfig } from "./generate-drizzy-config"
+import { writeDrizzyConfig } from "./write-drizzy-config"
 
 const installConfig: InstallConfig = {
   hasClaude: true,
@@ -28,7 +28,7 @@ function getRecord(value: unknown): Record<string, unknown> {
   return {}
 }
 
-describe("writeOmoConfig", () => {
+describe("writeDrizzyConfig", () => {
   let testConfigDir = ""
   let testConfigPath = ""
 
@@ -47,9 +47,10 @@ describe("writeOmoConfig", () => {
     delete process.env.OPENCODE_CONFIG_DIR
   })
 
-  it("preserves existing user values while adding new defaults", () => {
+  it("refreshes generated defaults while preserving user-only keys", () => {
     // given
     const existingConfig = {
+      $schema: "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
       agents: {
         coder: {
           model: "custom/provider-model",
@@ -59,10 +60,10 @@ describe("writeOmoConfig", () => {
     }
     writeFileSync(testConfigPath, JSON.stringify(existingConfig, null, 2) + "\n", "utf-8")
 
-    const generatedDefaults = generateOmoConfig(installConfig)
+    const generatedDefaults = generateDrizzyConfig(installConfig)
 
     // when
-    const result = writeOmoConfig(installConfig)
+    const result = writeDrizzyConfig(installConfig)
 
     // then
     expect(result.success).toBe(true)
@@ -70,7 +71,11 @@ describe("writeOmoConfig", () => {
     const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
     const savedAgents = getRecord(savedConfig.agents)
     const savedCoder = getRecord(savedAgents.coder)
-    expect(savedCoder.model).toBe("custom/provider-model")
+    const generatedAgents = getRecord(generatedDefaults.agents)
+    const generatedCoder = getRecord(generatedAgents.coder)
+
+    expect(savedConfig.$schema).toBe(generatedDefaults.$schema)
+    expect(savedCoder.model).toBe(generatedCoder.model)
     expect(savedConfig.disabled_hooks).toEqual(["comment-checker"])
 
     for (const defaultKey of Object.keys(generatedDefaults)) {
