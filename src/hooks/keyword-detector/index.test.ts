@@ -77,6 +77,29 @@ describe("keyword-detector message transform", () => {
     expect(textPart!.text).toContain("[search-mode]")
   })
 
+  test("should prepend git message to text part", async () => {
+    // given - git intent in main session
+    const collector = new ContextCollector()
+    const sessionID = "git-test-session"
+    getMainSessionSpy = spyOn(sessionState, "getMainSessionID").mockReturnValue(sessionID)
+    const hook = createKeywordDetectorHook(createMockPluginInput(), collector)
+    const output = {
+      message: {} as Record<string, unknown>,
+      parts: [{ type: "text", text: "please commit these changes" }],
+    }
+
+    // when - keyword detection runs
+    await hook["chat.message"]({ sessionID }, output)
+
+    // then - git message should be prepended to text part
+    const textPart = output.parts.find(p => p.type === "text")
+    expect(textPart).toBeDefined()
+    expect(textPart!.text).toContain("---")
+    expect(textPart!.text).toContain("please commit these changes")
+    expect(textPart!.text).toContain("[git-mode]")
+    expect(textPart!.text).toContain("Load the `git-master` skill before acting on git requests")
+  })
+
   test("should NOT transform when no keywords detected", async () => {
     // given - no keywords in message
     const collector = new ContextCollector()
@@ -148,6 +171,31 @@ describe("keyword-detector session filtering", () => {
     // then - search keyword should be filtered out based on mainSessionID comparison
     const skipLog = logCalls.find(c => c.msg.includes("Skipping non-ultrawork keywords in non-main session"))
     expect(skipLog).toBeDefined()
+  })
+
+  test("should skip git keywords in non-main session", async () => {
+    // given - main session is set, different session submits git keyword
+    const mainSessionID = "main-123"
+    const subagentSessionID = "subagent-456"
+    setMainSession(mainSessionID)
+
+    const hook = createKeywordDetectorHook(createMockPluginInput())
+    const output = {
+      message: {} as Record<string, unknown>,
+      parts: [{ type: "text", text: "commit these changes" }],
+    }
+
+    // when - non-main session triggers keyword detection
+    await hook["chat.message"](
+      { sessionID: subagentSessionID },
+      output
+    )
+
+    // then - git keyword should be filtered out like other non-ultrawork keywords
+    const skipLog = logCalls.find(c => c.msg.includes("Skipping non-ultrawork keywords in non-main session"))
+    expect(skipLog).toBeDefined()
+    const textPart = output.parts.find(p => p.type === "text")
+    expect(textPart!.text).toBe("commit these changes")
   })
 
   test("should allow ultrawork keywords in non-main session", async () => {
@@ -392,6 +440,31 @@ Please locate and scan the directory.
     expect(textPart!.text).toContain("<system-reminder>")
   })
 
+  test("should NOT trigger git mode from keywords inside <system-reminder> tags", async () => {
+    // given - message contains git keywords only inside system-reminder tags
+    const collector = new ContextCollector()
+    const hook = createKeywordDetectorHook(createMockPluginInput(), collector)
+    const sessionID = "test-session"
+    const output = {
+      message: {} as Record<string, unknown>,
+      parts: [{
+        type: "text",
+        text: `<system-reminder>
+Please commit these changes and rebase the branch.
+</system-reminder>`,
+      }],
+    }
+
+    // when - keyword detection runs on system-reminder content
+    await hook["chat.message"]({ sessionID }, output)
+
+    // then - should NOT trigger git mode
+    const textPart = output.parts.find(p => p.type === "text")
+    expect(textPart).toBeDefined()
+    expect(textPart!.text).not.toContain("[git-mode]")
+    expect(textPart!.text).toContain("<system-reminder>")
+  })
+
   test("should NOT trigger analyze mode from keywords inside <system-reminder> tags", async () => {
     // given - message contains analyze keywords only inside system-reminder tags
     const collector = new ContextCollector()
@@ -443,6 +516,33 @@ Please search for the bug in the code.`
     expect(textPart).toBeDefined()
     expect(textPart!.text).toContain("[search-mode]")
     expect(textPart!.text).toContain("Please search for the bug in the code.")
+  })
+
+  test("should detect git keywords in user text even when system-reminder is present", async () => {
+    // given - message contains both system-reminder and user git keyword
+    const collector = new ContextCollector()
+    const hook = createKeywordDetectorHook(createMockPluginInput(), collector)
+    const sessionID = "test-session"
+    const output = {
+      message: {} as Record<string, unknown>,
+      parts: [{
+        type: "text",
+        text: `<system-reminder>
+System should commit and rebase automatically.
+</system-reminder>
+
+Please commit these changes now.`,
+      }],
+    }
+
+    // when - keyword detection runs on mixed content
+    await hook["chat.message"]({ sessionID }, output)
+
+    // then - should trigger git mode from user text only
+    const textPart = output.parts.find(p => p.type === "text")
+    expect(textPart).toBeDefined()
+    expect(textPart!.text).toContain("[git-mode]")
+    expect(textPart!.text).toContain("Please commit these changes now.")
   })
 
   test("should handle multiple system-reminder tags in message", async () => {
