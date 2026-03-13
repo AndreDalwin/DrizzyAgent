@@ -1,3 +1,5 @@
+/// <reference types="bun-types" />
+
 import { afterEach, beforeEach, describe, expect, it } from "bun:test"
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
@@ -20,14 +22,6 @@ const installConfig: InstallConfig = {
   hasKimiForCoding: false,
 }
 
-function getRecord(value: unknown): Record<string, unknown> {
-  if (value && typeof value === "object" && !Array.isArray(value)) {
-    return value as Record<string, unknown>
-  }
-
-  return {}
-}
-
 describe("writeDrizzyConfig", () => {
   let testConfigDir = ""
   let testConfigPath = ""
@@ -47,13 +41,13 @@ describe("writeDrizzyConfig", () => {
     delete process.env.OPENCODE_CONFIG_DIR
   })
 
-  it("refreshes generated defaults while preserving user-only keys", () => {
+  it("refreshes generated defaults while preserving user-owned keys", () => {
     // given
     const existingConfig = {
       $schema: "https://raw.githubusercontent.com/code-yeongyu/drizzy-agent/master/assets/drizzy-agent.schema.json",
       agents: {
         coder: {
-          model: "custom/provider-model",
+          effort: "high",
         },
       },
       disabled_hooks: ["comment-checker"],
@@ -69,17 +63,31 @@ describe("writeDrizzyConfig", () => {
     expect(result.success).toBe(true)
 
     const savedConfig = parseJsonc<Record<string, unknown>>(readFileSync(testConfigPath, "utf-8"))
-    const savedAgents = getRecord(savedConfig.agents)
-    const savedCoder = getRecord(savedAgents.coder)
-    const generatedAgents = getRecord(generatedDefaults.agents)
-    const generatedCoder = getRecord(generatedAgents.coder)
-
+    const savedCoder = ((savedConfig as any).agents?.coder) as Record<string, unknown> | undefined
+    expect(savedCoder?.effort).toBe("high")
+    // Schema and install defaults should be generated anew
     expect(savedConfig.$schema).toBe(generatedDefaults.$schema)
-    expect(savedCoder.model).toBe(generatedCoder.model)
+    expect(savedConfig._install_defaults).toEqual(generatedDefaults._install_defaults)
     expect(savedConfig.disabled_hooks).toEqual(["comment-checker"])
 
     for (const defaultKey of Object.keys(generatedDefaults)) {
       expect(savedConfig).toHaveProperty(defaultKey)
     }
+  })
+
+  describe("legacy generated config adoption policy", () => {
+    it.todo("treats rerun install as the only automatic file-mutating adoption path", () => {})
+
+    it.todo("creates a backup before stripping legacy generated model pins during adoption", () => {})
+
+    it.todo(
+      "strips only generated-territory model and variant fields that exactly match current generated defaults",
+      () => {}
+    )
+
+    it.todo(
+      "aborts adoption, prints a mismatch report, and leaves the file untouched when any generated-territory model or variant differs",
+      () => {}
+    )
   })
 })
