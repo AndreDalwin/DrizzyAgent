@@ -1,6 +1,5 @@
 import type { DelegateTaskArgs } from "./types"
 import type { ExecutorContext } from "./executor-types"
-import { isPlanFamily } from "./constants"
 import { CODER_JUNIOR_AGENT } from "./coder-junior-agent"
 import { normalizeModelFormat } from "../../shared/model-format-normalizer"
 import { AGENT_MODEL_REQUIREMENTS } from "../../shared/model-requirements"
@@ -37,11 +36,14 @@ Coder-Junior is spawned automatically when you specify a category. Pick the appr
     }
   }
 
-  if (isPlanFamily(agentName) && isPlanFamily(parentAgent)) {
+  if (
+    parentAgent?.toLowerCase().trim() === "planner"
+    && agentName.toLowerCase() === "planner"
+  ) {
     return {
       agentToUse: "",
       categoryModel: undefined,
-    error: `You are a plan-family agent (plan/planner). You cannot delegate to other plan-family agents via task.
+      error: `You are the planner agent. You cannot delegate to another planner agent via task.
 
 Create the work plan directly - that's your job as the planning agent.`,
     }

@@ -3117,66 +3117,26 @@ describe("coder-task", () => {
     })
   })
 
-  describe("plan family mutual delegation block", () => {
-    test("plan cannot delegate to plan (self-delegation)", async () => {
+  describe("planner self-delegation block", () => {
+    test("planner cannot delegate to planner (self-delegation)", async () => {
       //#given
       const { createDelegateTask } = require("./tools")
       const mockClient = {
-         app: { agents: async () => ({ data: [{ name: "plan", mode: "subagent" }] }) },
+         app: { agents: async () => ({ data: [{ name: "planner", mode: "subagent" }] }) },
          config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
          session: { get: async () => ({ data: { directory: "/project" } }), create: async () => ({ data: { id: "s" } }), prompt: async () => ({ data: {} }), promptAsync: async () => ({ data: {} }), messages: async () => ({ data: [] }), status: async () => ({ data: {} }) },
        }
        const tool = createDelegateTask({ manager: { launch: async () => ({}) }, client: mockClient })
-      
-      //#when
-      const result = await tool.execute(
-        { description: "test", prompt: "Create a plan", subagent_type: "plan", run_in_background: false, load_skills: [] },
-        { sessionID: "p", messageID: "m", agent: "plan", abort: new AbortController().signal }
-      )
-      
-      //#then
-      expect(result).toContain("plan-family")
-      expect(result).toContain("directly")
-    })
 
-    test("planner cannot delegate to plan (cross-blocking)", async () => {
-      //#given
-      const { createDelegateTask } = require("./tools")
-      const mockClient = {
-         app: { agents: async () => ({ data: [{ name: "plan", mode: "subagent" }] }) },
-         config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
-         session: { get: async () => ({ data: { directory: "/project" } }), create: async () => ({ data: { id: "s" } }), prompt: async () => ({ data: {} }), promptAsync: async () => ({ data: {} }), messages: async () => ({ data: [] }), status: async () => ({ data: {} }) },
-       }
-       const tool = createDelegateTask({ manager: { launch: async () => ({}) }, client: mockClient })
-      
       //#when
       const result = await tool.execute(
-        { description: "test", prompt: "Create a plan", subagent_type: "plan", run_in_background: false, load_skills: [] },
-          { sessionID: "p", messageID: "m", agent: "planner", abort: new AbortController().signal }
+        { description: "test", prompt: "Create a plan", subagent_type: "planner", run_in_background: false, load_skills: [] },
+        { sessionID: "p", messageID: "m", agent: "planner", abort: new AbortController().signal }
       )
-      
-      //#then
-      expect(result).toContain("plan-family")
-    })
 
-    test("plan cannot delegate to planner (cross-blocking)", async () => {
-      //#given
-      const { createDelegateTask } = require("./tools")
-      const mockClient = {
-          app: { agents: async () => ({ data: [{ name: "planner", mode: "subagent" }] }) },
-         config: { get: async () => ({ data: { model: SYSTEM_DEFAULT_MODEL } }) },
-         session: { get: async () => ({ data: { directory: "/project" } }), create: async () => ({ data: { id: "s" } }), prompt: async () => ({ data: {} }), promptAsync: async () => ({ data: {} }), messages: async () => ({ data: [] }), status: async () => ({ data: {} }) },
-       }
-       const tool = createDelegateTask({ manager: { launch: async () => ({}) }, client: mockClient })
-      
-      //#when
-      const result = await tool.execute(
-        { description: "test", prompt: "Execute", subagent_type: "planner", run_in_background: false, load_skills: [] },
-        { sessionID: "p", messageID: "m", agent: "plan", abort: new AbortController().signal }
-      )
-      
       //#then
-      expect(result).toContain("plan-family")
+      expect(result).toContain("planner agent")
+      expect(result).toContain("cannot delegate to another planner")
     })
 
     test("coder CAN delegate to plan (not in plan family)", async () => {
