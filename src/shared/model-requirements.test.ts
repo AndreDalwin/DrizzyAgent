@@ -253,19 +253,19 @@ describe("CATEGORY_MODEL_REQUIREMENTS", () => {
     expect(primary.providers[0]).toBe("openai")
   })
 
-  test("deep has valid fallbackChain with gpt-5.3-codex as primary", () => {
+  test("deep has valid fallbackChain with gpt-5.4 as primary", () => {
     // given - deep category requirement
     const deep = CATEGORY_MODEL_REQUIREMENTS["deep"]
 
     // when - accessing deep requirement
-    // then - fallbackChain exists with gpt-5.3-codex as first entry, medium variant
+    // then - fallbackChain exists with gpt-5.4 as first entry, medium variant
     expect(deep).toBeDefined()
     expect(deep.fallbackChain).toBeArray()
     expect(deep.fallbackChain.length).toBeGreaterThan(0)
 
     const primary = deep.fallbackChain[0]
     expect(primary.variant).toBe("medium")
-    expect(primary.model).toBe("gpt-5.3-codex")
+    expect(primary.model).toBe("gpt-5.4")
     expect(primary.providers[0]).toBe("openai")
   })
 
@@ -507,12 +507,12 @@ describe("ModelRequirement type", () => {
 })
 
 describe("requiresModel field in categories", () => {
-  test("deep category has requiresModel set to gpt-5.3-codex", () => {
+  test("deep category has requiresModel set to gpt-5.4", () => {
     // given
     const deep = CATEGORY_MODEL_REQUIREMENTS["deep"]
 
     // when / #then
-    expect(deep.requiresModel).toBe("gpt-5.3-codex")
+    expect(deep.requiresModel).toBe("gpt-5.4")
   })
 
   test("artistry category has requiresModel set to gemini-3.1-pro", () => {

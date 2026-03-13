@@ -419,18 +419,18 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.4")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
-    test("GPTCoder is NOT created when only Copilot is available (gpt-5.3-codex unavailable on github-copilot)", () => {
+    test("GPTCoder is NOT created when only Copilot is available (gpt-5.4 unavailable on github-copilot)", () => {
       // #given
       const config = createConfig({ hasCopilot: true })
 
       // #when
       const result = generateModelConfig(config)
 
-      // #then - gptcoder is omitted because gpt-5.3-codex is not available on github-copilot
+      // #then - gptcoder is omitted because gpt-5.4 is not available on github-copilot
       expect(result.agents?.gptcoder).toBeUndefined()
     })
 
@@ -442,7 +442,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.4")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 

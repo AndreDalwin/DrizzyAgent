@@ -642,7 +642,7 @@ describe("createBuiltinAgents with requiresProvider gating (gptcoder)", () => {
 
       // #then
       expect(agents.gptcoder).toBeDefined()
-      expect(agents.gptcoder.model).toBe("openai/gpt-5.3-codex")
+      expect(agents.gptcoder.model).toBe("openai/gpt-5.4")
     } finally {
       cacheSpy.mockRestore()
       fetchSpy.mockRestore()

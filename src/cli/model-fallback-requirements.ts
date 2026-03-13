@@ -22,7 +22,7 @@ export const CLI_AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
     fallbackChain: [
       {
         providers: ["openai", "opencode"],
-        model: "gpt-5.3-codex",
+        model: "gpt-5.4",
         variant: "medium",
       },
     ],
@@ -176,7 +176,7 @@ export const CLI_CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> =
       fallbackChain: [
         {
           providers: ["openai", "opencode"],
-          model: "gpt-5.3-codex",
+          model: "gpt-5.4",
           variant: "xhigh",
         },
         {
@@ -195,7 +195,7 @@ export const CLI_CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> =
       fallbackChain: [
         {
           providers: ["openai", "opencode"],
-          model: "gpt-5.3-codex",
+          model: "gpt-5.4",
           variant: "medium",
         },
         {
@@ -209,7 +209,7 @@ export const CLI_CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> =
           variant: "high",
         },
       ],
-      requiresModel: "gpt-5.3-codex",
+      requiresModel: "gpt-5.4",
     },
     artistry: {
       fallbackChain: [
@@ -251,7 +251,7 @@ export const CLI_CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> =
         },
         {
           providers: ["openai", "opencode"],
-          model: "gpt-5.3-codex",
+          model: "gpt-5.4",
           variant: "medium",
         },
         {

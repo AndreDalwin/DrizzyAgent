@@ -39,7 +39,7 @@ describe("generateModelConfig OpenAI-only model catalog", () => {
 
     // #then
     expect(result.categories?.artistry).toEqual({ model: "openai/gpt-5.4", variant: "xhigh" })
-    expect(result.categories?.quick).toEqual({ model: "openai/gpt-5.3-codex", variant: "low" })
+    expect(result.categories?.quick).toEqual({ model: "openai/gpt-5.4", variant: "low" })
     expect(result.categories?.["visual-engineering"]).toEqual({ model: "openai/gpt-5.4", variant: "high" })
     expect(result.categories?.writing).toEqual({ model: "openai/gpt-5.4", variant: "medium" })
   })

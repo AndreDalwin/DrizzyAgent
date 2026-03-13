@@ -93,7 +93,7 @@ describe("coder-task", () => {
 
       // when / #then
       expect(category).toBeDefined()
-      expect(category.model).toBe("openai/gpt-5.3-codex")
+      expect(category.model).toBe("openai/gpt-5.4")
       expect(category.variant).toBe("medium")
     })
 
