@@ -73,8 +73,12 @@ Skills bring domain expertise:
 
 ## Installation
 
+To install drizzy-agent, run:
+
 ```bash
-npm install drizzy-agent
+npx drizzy-agent install
+# or
+bunx drizzy-agent install
 ```
 
 Or install as an OpenCode plugin:
