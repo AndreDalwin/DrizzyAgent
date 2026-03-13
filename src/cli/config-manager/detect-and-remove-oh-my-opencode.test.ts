@@ -7,7 +7,7 @@ import {
   removeOhMyOpencodeFromOpenCodeConfig,
   removeOhMyOpencodeConfig,
 } from "./detect-and-remove-oh-my-opencode"
-import { initConfigContext } from "./config-context"
+import { initConfigContext, resetConfigContext } from "./config-context"
 
 describe("detect-and-remove-oh-my-opencode", () => {
   let tempDir: string
@@ -18,6 +18,7 @@ describe("detect-and-remove-oh-my-opencode", () => {
     tempDir = join(tmpdir(), `drizzy-test-${Date.now()}-${Math.random().toString(36).slice(2)}`)
     mkdirSync(tempDir, { recursive: true })
     process.env.OPENCODE_CONFIG_DIR = tempDir
+    resetConfigContext()
     initConfigContext("opencode", "1.0.0")
   })
 
