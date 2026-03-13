@@ -1,8 +1,8 @@
-import { afterAll, afterEach, beforeEach, describe, expect, mock, test } from "bun:test"
+import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import * as shared from "../../shared"
+import { detectCurrentConfig } from "./detect-current-config"
 
 const OPEN_CODE_CONFIG_PATH = "/tmp/opencode.json"
 let drizzyConfigPath = "/tmp/drizzy-agent.json"
@@ -11,34 +11,20 @@ const tempDirs: string[] = []
 
 let openCodeConfig: Record<string, unknown> | null = null
 
-mock.module("../../shared", () => ({
-  ...shared,
-  parseJsonc: (content: string) => JSON.parse(content) as Record<string, unknown>,
-}))
-
-mock.module("./config-context", () => ({
-  getConfigDir: () => configDir,
-  getDrizzyConfigPath: () => drizzyConfigPath,
-}))
-
-mock.module("./opencode-config-format", () => ({
-  detectConfigFormat: () => ({ format: "json" as const, path: OPEN_CODE_CONFIG_PATH }),
-}))
-
-mock.module("./parse-opencode-config-file", () => ({
-  parseOpenCodeConfigFileWithError: () => ({ config: openCodeConfig, error: undefined }),
-}))
-
-async function loadDetectCurrentConfig(): Promise<() => import("../types").DetectedConfig> {
-  const mod = await import("./detect-current-config")
-  return mod.detectCurrentConfig
+function createDependencies() {
+  return {
+    detectConfigFormat: () => ({ format: "json" as const, path: OPEN_CODE_CONFIG_PATH }),
+    getConfigDir: () => configDir,
+    getDrizzyConfigPath: () => drizzyConfigPath,
+    parseJsonc: <T>(content: string) => JSON.parse(content) as T,
+    parseOpenCodeConfigFileWithError: () => ({
+      config: openCodeConfig,
+      error: undefined,
+    }),
+  }
 }
 
 describe("detectCurrentConfig", () => {
-  afterAll(() => {
-    mock.restore()
-  })
-
   afterEach(() => {
     while (tempDirs.length > 0) {
       const dir = tempDirs.pop()
@@ -70,9 +56,7 @@ describe("detectCurrentConfig", () => {
   })
 
   test("detects provider availability from drizzy config instead of stale Claude defaults", async () => {
-    const detectCurrentConfig = await loadDetectCurrentConfig()
-
-    const result = detectCurrentConfig()
+    const result = detectCurrentConfig(createDependencies())
 
     expect(result).toMatchObject({
       isInstalled: true,
@@ -98,9 +82,7 @@ describe("detectCurrentConfig", () => {
       },
     }))
 
-    const detectCurrentConfig = await loadDetectCurrentConfig()
-
-    const result = detectCurrentConfig()
+    const result = detectCurrentConfig(createDependencies())
 
     expect(result.hasGemini).toBe(true)
     expect(result.hasClaude).toBe(false)
@@ -117,9 +99,7 @@ describe("detectCurrentConfig", () => {
       },
     }))
 
-    const detectCurrentConfig = await loadDetectCurrentConfig()
-
-    const result = detectCurrentConfig()
+    const result = detectCurrentConfig(createDependencies())
 
     expect(result.hasClaude).toBe(true)
     expect(result.isMax20).toBe(true)

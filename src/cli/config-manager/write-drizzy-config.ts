@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
-import { parseJsonc } from "../../shared"
+import { parseJsonc } from "../../shared/jsonc-parser"
 import type { ConfigMergeResult, InstallConfig } from "../types"
 import { getConfigDir, getDrizzyConfigPath } from "./config-context"
 import { ensureConfigDirectoryExists } from "./ensure-config-directory-exists"

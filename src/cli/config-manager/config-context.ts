@@ -1,4 +1,4 @@
-import { getOpenCodeConfigPaths } from "../../shared"
+import { getOpenCodeConfigPaths } from "../../shared/opencode-config-dir"
 import type {
   OpenCodeBinaryType,
   OpenCodeConfigPaths,

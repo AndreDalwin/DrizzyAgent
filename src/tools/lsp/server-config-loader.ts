@@ -3,7 +3,7 @@ import { join } from "path"
 
 import { BUILTIN_SERVERS } from "./constants"
 import type { ResolvedServer } from "./types"
-import { getOpenCodeConfigDir } from "../../shared"
+import { getOpenCodeConfigDir } from "../../shared/opencode-config-dir"
 import { parseJsonc, detectConfigFile } from "../../shared/jsonc-parser"
 
 interface LspEntry {

@@ -1,16 +1,35 @@
 import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
-import { parseJsonc } from "../../shared"
+import { parseJsonc } from "../../shared/jsonc-parser"
 import type { DetectedConfig } from "../types"
 import { getConfigDir, getDrizzyConfigPath } from "./config-context"
 import { detectConfigFormat } from "./opencode-config-format"
-import { parseOpenCodeConfigFileWithError } from "./parse-opencode-config-file"
+import {
+  parseOpenCodeConfigFileWithError,
+  type OpenCodeConfig,
+} from "./parse-opencode-config-file"
+
+interface DetectCurrentConfigDependencies {
+  detectConfigFormat: typeof detectConfigFormat
+  getConfigDir: typeof getConfigDir
+  getDrizzyConfigPath: typeof getDrizzyConfigPath
+  parseJsonc: typeof parseJsonc
+  parseOpenCodeConfigFileWithError: typeof parseOpenCodeConfigFileWithError
+}
+
+const defaultDependencies: DetectCurrentConfigDependencies = {
+  detectConfigFormat,
+  getConfigDir,
+  getDrizzyConfigPath,
+  parseJsonc,
+  parseOpenCodeConfigFileWithError,
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
 
-function detectProvidersFromDrizzyConfig(): {
+function detectProvidersFromDrizzyConfig(deps: DetectCurrentConfigDependencies): {
   hasClaude: boolean
   isMax20: boolean
   hasOpenAI: boolean
@@ -20,10 +39,10 @@ function detectProvidersFromDrizzyConfig(): {
   hasZaiCodingPlan: boolean
   hasKimiForCoding: boolean
 } {
-  const drizzyConfigPath = getDrizzyConfigPath()
+  const drizzyConfigPath = deps.getDrizzyConfigPath()
   const configPath = existsSync(drizzyConfigPath)
     ? drizzyConfigPath
-    : join(getConfigDir(), "drizzy-agent.json")
+    : join(deps.getConfigDir(), "drizzy-agent.json")
   if (!existsSync(configPath)) {
     return {
       hasClaude: false,
@@ -39,7 +58,7 @@ function detectProvidersFromDrizzyConfig(): {
 
   try {
     const content = readFileSync(configPath, "utf-8")
-    const drizzyConfig = parseJsonc<Record<string, unknown>>(content)
+    const drizzyConfig = deps.parseJsonc<Record<string, unknown>>(content)
     if (!isRecord(drizzyConfig)) {
       return {
         hasClaude: false,
@@ -94,7 +113,9 @@ function detectProvidersFromDrizzyConfig(): {
   }
 }
 
-export function detectCurrentConfig(): DetectedConfig {
+export function detectCurrentConfig(
+  deps: DetectCurrentConfigDependencies = defaultDependencies,
+): DetectedConfig {
   const result: DetectedConfig = {
     isInstalled: false,
     hasClaude: false,
@@ -107,17 +128,17 @@ export function detectCurrentConfig(): DetectedConfig {
     hasKimiForCoding: false,
   }
 
-  const { format, path } = detectConfigFormat()
+  const { format, path } = deps.detectConfigFormat()
   if (format === "none") {
     return result
   }
 
-  const parseResult = parseOpenCodeConfigFileWithError(path)
+  const parseResult = deps.parseOpenCodeConfigFileWithError(path)
   if (!parseResult.config) {
     return result
   }
 
-  const openCodeConfig = parseResult.config
+  const openCodeConfig = parseResult.config as OpenCodeConfig
   const plugins = openCodeConfig.plugin ?? []
   result.isInstalled = plugins.some((p) => p.startsWith("drizzy-agent"))
 
@@ -135,7 +156,7 @@ export function detectCurrentConfig(): DetectedConfig {
     hasOpencodeZen,
     hasZaiCodingPlan,
     hasKimiForCoding,
-  } = detectProvidersFromDrizzyConfig()
+  } = detectProvidersFromDrizzyConfig(deps)
 
   result.hasClaude = hasClaude || (providers ? "anthropic" in providers : false)
   result.isMax20 = isMax20
