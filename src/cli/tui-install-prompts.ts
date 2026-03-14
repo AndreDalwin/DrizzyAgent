@@ -32,71 +32,71 @@ export async function promptInstallConfig(detected: DetectedConfig): Promise<Ins
   const initial = detectedToInitialValues(detected)
 
   const claude = await selectOrCancel<ClaudeSubscription>({
-    message: "Do you have a Claude Pro/Max subscription?",
+    message: "Will you use your Claude Pro/Max subscription?",
     options: [
-      { value: "no", label: "No", hint: "Will use opencode/big-pickle as fallback" },
-      { value: "yes", label: "Yes (standard)", hint: "Claude Opus 4.5 for orchestration" },
-      { value: "max20", label: "Yes (max20 mode)", hint: "Full power with Claude Sonnet 4.6 for Librarian" },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes (standard)", hint: "" },
+      { value: "max20", label: "Yes (max20 mode)", hint: "" },
     ],
     initialValue: initial.claude,
   })
   if (!claude) return null
 
   const openai = await selectOrCancel({
-    message: "Do you have an OpenAI/ChatGPT Plus subscription?",
+    message: "Will you use your ChatGPT Plus/Pro subscription or API Key?",
     options: [
-      { value: "no", label: "No", hint: "Oracle will use fallback models" },
-      { value: "yes", label: "Yes", hint: "GPT-5.4 for Oracle (high-IQ debugging)" },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes", hint: "" },
     ],
     initialValue: initial.openai,
   })
   if (!openai) return null
 
   const gemini = await selectOrCancel({
-    message: "Will you integrate Google Gemini?",
+    message: "Will you use Google Gemini API Key?",
     options: [
-      { value: "no", label: "No", hint: "Frontend/docs agents will use fallback" },
-      { value: "yes", label: "Yes", hint: "Beautiful UI generation with Gemini 3 Pro" },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes", hint: "" },
     ],
     initialValue: initial.gemini,
   })
   if (!gemini) return null
 
   const copilot = await selectOrCancel({
-    message: "Do you have a GitHub Copilot subscription?",
+    message: "Will you use your GitHub Copilot subscription?",
     options: [
-      { value: "no", label: "No", hint: "Only native providers will be used" },
-      { value: "yes", label: "Yes", hint: "Fallback option when native providers unavailable" },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes", hint: "" },
     ],
     initialValue: initial.copilot,
   })
   if (!copilot) return null
 
   const opencodeZen = await selectOrCancel({
-    message: "Do you have access to OpenCode Zen (opencode/ models)?",
+    message: "Will you use OpenCode Zen (opencode/ models)?",
     options: [
-      { value: "no", label: "No", hint: "Will use other configured providers" },
-      { value: "yes", label: "Yes", hint: "opencode/claude-opus-4-6, opencode/gpt-5.4, etc." },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes", hint: "" },
     ],
     initialValue: initial.opencodeZen,
   })
   if (!opencodeZen) return null
 
   const zaiCodingPlan = await selectOrCancel({
-    message: "Do you have a Z.ai Coding Plan subscription?",
+    message: "Will you use your Z.ai Coding Plan subscription?",
     options: [
-      { value: "no", label: "No", hint: "Will use other configured providers" },
-      { value: "yes", label: "Yes", hint: "Fallback for Librarian and Multimodal Looker" },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes", hint: "" },
     ],
     initialValue: initial.zaiCodingPlan,
   })
   if (!zaiCodingPlan) return null
 
   const kimiForCoding = await selectOrCancel({
-    message: "Do you have a Kimi For Coding subscription?",
+    message: "Will you use your Kimi For Coding subscription?",
     options: [
-      { value: "no", label: "No", hint: "Will use other configured providers" },
-      { value: "yes", label: "Yes", hint: "Kimi K2.5 for Coder/Planner fallback" },
+      { value: "no", label: "No", hint: "" },
+      { value: "yes", label: "Yes", hint: "" },
     ],
     initialValue: initial.kimiForCoding,
   })

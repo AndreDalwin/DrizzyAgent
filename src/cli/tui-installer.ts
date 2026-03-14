@@ -98,19 +98,19 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
   }
   spinner.stop(`Config written to ${color.cyan(drizzyResult.configPath)}`)
 
-  if (!config.hasClaude) {
-    console.log()
-    console.log(color.bgRed(color.white(color.bold(" CRITICAL WARNING "))))
-    console.log()
-    console.log(color.red(color.bold("  Coder agent is STRONGLY optimized for Claude Opus 4.5.")))
-    console.log(color.red("  Without Claude, you may experience significantly degraded performance:"))
-    console.log(color.dim("    • Reduced orchestration quality"))
-    console.log(color.dim("    • Weaker tool selection and delegation"))
-    console.log(color.dim("    • Less reliable task completion"))
-    console.log()
-    console.log(color.yellow("  Consider subscribing to Claude Pro/Max for the best experience."))
-    console.log()
-  }
+  // if (!config.hasClaude) {
+  //   console.log()
+  //   console.log(color.bgRed(color.white(color.bold(" CRITICAL WARNING "))))
+  //   console.log()
+  //   console.log(color.red(color.bold("  Coder agent is STRONGLY optimized for Claude Opus 4.5.")))
+  //   console.log(color.red("  Without Claude, you may experience significantly degraded performance:"))
+  //   console.log(color.dim("    • Reduced orchestration quality"))
+  //   console.log(color.dim("    • Weaker tool selection and delegation"))
+  //   console.log(color.dim("    • Less reliable task completion"))
+  //   console.log()
+  //   console.log(color.yellow("  Consider subscribing to Claude Pro/Max for the best experience."))
+  //   console.log()
+  // }
 
   if (!config.hasClaude && !config.hasOpenAI && !config.hasGemini && !config.hasCopilot && !config.hasOpencodeZen) {
     p.log.warn("No model providers configured. Using opencode/big-pickle as fallback.")
