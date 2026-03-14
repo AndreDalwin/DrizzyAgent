@@ -46,12 +46,12 @@
  * | **coder** | claude-opus-4-6 → k2p5 → kimi-k2.5 → gpt-5.4 → glm-5 → big-pickle |
  * | **gptcoder** | gpt-5.4 (openai/venice/opencode) → gpt-5.4 (github-copilot) |
  * | **planner** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
- * | **oracle** | gpt-5.4 → gemini-3.1-pro → claude-opus-4-6 |
+ * | **oracle** | gpt-5.4 → kimi-k2.5 → gemini-3.1-pro → claude-opus-4-6 → big-pickle (free) |
  * | **librarian** | gemini-3-flash → glm-4.7 → claude-sonnet-4-5 → minimax → big-pickle → glm-4.7-free |
  * | **explore** | Custom resolver (Claude → Zen → Copilot → OpenAI) |
  * | **multimodal-looker** | gpt-5.4 → k2p5 → gemini-3-flash → glm-4.6v → gpt-5-nano |
  * | **plan-consultant** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
- * | **plan-reviewer** | gpt-5.4 → claude-opus-4-6 → gemini-3.1-pro |
+ * | **plan-reviewer** | gpt-5.4 → kimi-k2.5 → claude-opus-4-6 → gemini-3.1-pro → big-pickle (free) |
  * | **atlas** | k2p5 → claude-sonnet-4-6 → claude-sonnet-4-5 → gpt-5.4 → gemini-3.1-pro |
  * | **coder-junior** | claude-sonnet-4-6 → gpt-5.4 → gemini-3-flash (runtime only) |
  * 
@@ -60,11 +60,11 @@
  * | Category | Unified Chain |
  * |----------|---------------|
  * | **visual-engineering** | gemini-3.1-pro → glm-5 → claude-opus-4-6 → k2p5 |
- * | **ultrabrain** | gpt-5.4 → gemini-3.1-pro → claude-opus-4-6 |
- * | **deep** | gpt-5.4 → claude-opus-4-6 → gemini-3.1-pro |
- * | **artistry** | gemini-3.1-pro → claude-opus-4-6 → gpt-5.4 |
- * | **quick** | claude-haiku-4-5 → gemini-3-flash → gpt-5-nano |
- * | **unspecified-low** | claude-sonnet-4-6 → gpt-5.4 → gemini-3-flash |
+ * | **ultrabrain** | gpt-5.4 → gemini-3.1-pro → claude-opus-4-6 → kimi-k2.5 → big-pickle (free) |
+ * | **deep** | gpt-5.4 → claude-opus-4-6 → gemini-3.1-pro → kimi-k2.5 → big-pickle (free) |
+ * | **artistry** | gemini-3.1-pro → claude-opus-4-6 → gpt-5.4 → kimi-k2.5 → minimax-m2.5-free (free) |
+ * | **quick** | claude-haiku-4-5 → gemini-3-flash → gpt-5.1-codex-mini → gpt-5-nano (free) |
+ * | **unspecified-low** | claude-sonnet-4-6 → kimi-k2.5 → gpt-5.4 → gemini-3-flash → minimax-m2.5-free (free) |
  * | **unspecified-high** | claude-opus-4-6 → gpt-5.4 → glm-5 → k2p5 → kimi-k2.5 |
  * | **writing** | gemini-3-flash → k2p5 → claude-sonnet-4-6 |
  * 
@@ -151,7 +151,13 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     includeInInstall: true,
   },
   oracle: {
-    chain: [{ providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "high" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" }, { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }],
+    chain: [
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "high" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" },
+      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+    ],
     includeInInstall: true,
   },
   librarian: {
@@ -185,7 +191,13 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     includeInInstall: true,
   },
   planReviewer: {
-    chain: [{ providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "xhigh" }, { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" }],
+    chain: [
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "xhigh" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" },
+      { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" },
+      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+    ],
     includeInInstall: true,
   },
   atlas: {
@@ -210,25 +222,54 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "high" } },
   },
   ultrabrain: {
-    chain: [{ providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "xhigh" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" }, { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }],
+    chain: [
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "xhigh" },
+      { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+    ],
     includeInInstall: true,
   },
   deep: {
-    chain: [{ providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "medium" }, { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" }],
+    chain: [
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "medium" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" },
+      { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+    ],
     includeInInstall: true,
   },
   artistry: {
-    chain: [{ providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" }, { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.4" }],
+    chain: [
+      { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" },
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
+    ],
     includeInInstall: true,
     specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "xhigh" } },
   },
   quick: {
-    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-haiku-4-5" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }, { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true }],
+    chain: [
+      { providers: CLAUDE_PROVIDERS, model: "claude-haiku-4-5" },
+      { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.1-codex-mini", variant: "low" },
+      { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },
+    ],
     includeInInstall: true,
     specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "low" } },
   },
   "unspecified-low": {
-    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }, { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "medium" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }],
+    chain: [
+      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "medium" },
+      { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
+      { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
+    ],
     includeInInstall: true,
   },
   "unspecified-high": {
