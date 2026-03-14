@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { synthesizeComputedDefaultsConfig } from "./computed-install-defaults";
 import { DrizzyAgentConfigSchema, type DrizzyAgentConfig } from "./config";
+import { registerConfigProvenance } from "./shared/config-provenance"
 import {
   log,
   deepMerge,
@@ -227,18 +228,25 @@ export function loadPluginConfig(
 
   const rawUserConfig = loadConfigFromPath(userConfigPath, ctx) ?? {};
   const userConfig = stripInvalidUserInstallDefaults(rawUserConfig, userConfigPath);
-  let config = mergeConfigs(
-    synthesizeComputedDefaultsConfig(userConfig._install_defaults),
-    userConfig,
-  );
+  const computedDefaultsConfig = synthesizeComputedDefaultsConfig(userConfig._install_defaults)
+  let explicitConfig = userConfig
+  let config = mergeConfigs(computedDefaultsConfig, userConfig);
 
   const projectConfig = stripProjectInstallDefaults(
     loadConfigFromPath(projectConfigPath, ctx),
     projectConfigPath
   );
   if (projectConfig) {
+    explicitConfig = mergeConfigs(explicitConfig, projectConfig)
     config = mergeConfigs(config, projectConfig);
   }
+
+  registerConfigProvenance({
+    effectiveAgents: config.agents,
+    effectiveCategories: config.categories,
+    explicitAgents: explicitConfig.agents,
+    explicitCategories: explicitConfig.categories,
+  })
 
   config = {
     ...config,
