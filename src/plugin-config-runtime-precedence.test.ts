@@ -1,8 +1,10 @@
 /// <reference types="bun-types" />
 
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, spyOn, test } from "bun:test"
 
+import { createBuiltinAgents } from "./agents/builtin-agents"
 import { resolveCategoryConfig } from "./plugin-handlers/category-config-resolver"
+import { buildPlannerAgentConfig } from "./plugin-handlers/planner-agent-config-builder"
 import { resolveCategoryConfig as resolveDelegateCategoryConfig } from "./tools/delegate-task/categories"
 import { loadPluginConfig } from "./plugin-config"
 import {
@@ -10,6 +12,7 @@ import {
   PluginConfigFixture,
 } from "./plugin-config-test-fixture"
 import { clearConfigLoadErrors, getConfigLoadErrors } from "./shared"
+import * as shared from "./shared"
 
 class PluginConfigRuntimeFixture extends PluginConfigFixture {
   load() {
@@ -144,5 +147,76 @@ describe("loadPluginConfig runtime precedence", () => {
 
     expect(resolvedDeep).toBeNull()
     expect(config.categories?.deep?.model).toBe("google/gemini-3.1-pro-preview")
+  })
+
+  test("snapshot-derived primary agent defaults override ui-selected Claude models", async () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      _install_defaults: createInstallDefaultsSnapshot({
+        openai: true,
+        kimi_for_coding: true,
+      }),
+    })
+
+    const config = fixture.load()
+    const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
+      new Set([
+        "anthropic/claude-sonnet-4-6",
+        "openai/gpt-5.4",
+        "kimi-for-coding/k2p5",
+      ]),
+    )
+
+    try {
+      const agents = await createBuiltinAgents(
+        [],
+        config.agents,
+        undefined,
+        "anthropic/claude-sonnet-4-6",
+        config.categories,
+        undefined,
+        [],
+        undefined,
+        undefined,
+        "anthropic/claude-sonnet-4-6",
+      )
+
+      expect(agents.coder.model).toBe("kimi-for-coding/k2p5")
+      expect(agents.atlas.model).toBe("kimi-for-coding/k2p5")
+    } finally {
+      fetchSpy.mockRestore()
+    }
+  })
+
+  test("snapshot-derived planner defaults override current OpenCode model", async () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      _install_defaults: createInstallDefaultsSnapshot({
+        openai: true,
+        kimi_for_coding: true,
+      }),
+    })
+
+    const config = fixture.load()
+    const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
+      new Set([
+        "anthropic/claude-opus-4-6",
+        "openai/gpt-5.4",
+        "kimi-for-coding/k2p5",
+      ]),
+    )
+
+    try {
+      const plannerConfig = await buildPlannerAgentConfig({
+        configAgentPlan: undefined,
+        pluginPlannerOverride: config.agents?.planner as Record<string, unknown> | undefined,
+        userCategories: config.categories,
+        currentModel: "anthropic/claude-opus-4-6",
+      })
+
+      expect(plannerConfig.model).toBe("kimi-for-coding/k2p5")
+    } finally {
+      fetchSpy.mockRestore()
+    }
   })
 })
