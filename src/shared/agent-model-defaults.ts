@@ -87,6 +87,8 @@ export type FallbackEntry = {
   providers: string[];
   model: string;
   variant?: string;
+  /** If true, this model is always available as a last-resort fallback regardless of provider availability */
+  alwaysAvailable?: boolean;
 };
 
 export type AgentModelDefault = {
@@ -114,7 +116,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
       { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" },
       { providers: ["zai-coding-plan", "opencode"], model: "glm-5" },
-      { providers: ["opencode"], model: "big-pickle" },
+      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
     ],
     includeInInstall: true,
     requiresAnyProvider: [
@@ -157,9 +159,9 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
       { providers: ["opencode"], model: "glm-4.7" },
       { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-5" },
-      { providers: ["opencode"], model: "minimax-m2.5-free" },
-      { providers: ["opencode"], model: "big-pickle" },
-      { providers: ["opencode"], model: "glm-4.7-free" },
+      { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
+      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+      { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
     includeInInstall: true,
     specialCases: { zaiOverride: { model: "zai-coding-plan/glm-4.7" }, openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "medium" } },
@@ -167,9 +169,9 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   explore: {
     chain: [
       { providers: ["github-copilot"], model: "grok-code-fast-1" },
-      { providers: ["opencode"], model: "minimax-m2.5-free" },
+      { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
       { providers: ["anthropic", "opencode"], model: "claude-haiku-4-5" },
-      { providers: ["opencode"], model: "gpt-5-nano" },
+      { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },
     ],
     includeInInstall: true,
     specialCases: { customResolver: "explore-agent", openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "medium" } },
@@ -221,7 +223,7 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "xhigh" } },
   },
   quick: {
-    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-haiku-4-5" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }, { providers: ["opencode"], model: "gpt-5-nano" }],
+    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-haiku-4-5" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }, { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true }],
     includeInInstall: true,
     specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "low" } },
   },
