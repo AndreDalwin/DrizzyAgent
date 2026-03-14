@@ -9,6 +9,15 @@ export function resolveModelFromChain(
 	availability: ProviderAvailability
 ): { model: string; variant?: string } | null {
 	for (const entry of fallbackChain) {
+		// Always available entries are last-resort fallbacks that don't require provider auth
+		if (entry.alwaysAvailable) {
+			const provider = entry.providers[0]
+			const transformedModel = transformModelForProvider(provider, entry.model)
+			return {
+				model: `${provider}/${transformedModel}`,
+				variant: entry.variant,
+			}
+		}
 		for (const provider of entry.providers) {
 			if (isProviderAvailable(provider, availability)) {
 				const transformedModel = transformModelForProvider(provider, entry.model)
@@ -31,7 +40,7 @@ export function isAnyFallbackEntryAvailable(
 	availability: ProviderAvailability
 ): boolean {
 	return fallbackChain.some((entry) =>
-		entry.providers.some((provider) => isProviderAvailable(provider, availability))
+		entry.alwaysAvailable || entry.providers.some((provider) => isProviderAvailable(provider, availability))
 	)
 }
 
@@ -42,6 +51,8 @@ export function isRequiredModelAvailable(
 ): boolean {
 	const matchingEntry = fallbackChain.find((entry) => entry.model === requiresModel)
 	if (!matchingEntry) return false
+	// Always available models are considered available regardless of provider auth
+	if (matchingEntry.alwaysAvailable) return true
 	return matchingEntry.providers.some((provider) => isProviderAvailable(provider, availability))
 }
 
