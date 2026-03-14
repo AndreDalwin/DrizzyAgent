@@ -1,16 +1,25 @@
+import { AGENT_MODEL_DEFAULTS, CATEGORY_MODEL_DEFAULTS } from "../shared/agent-model-defaults"
 import type { AgentConfig, CategoryConfig, GeneratedOmoConfig, ProviderAvailability } from "./model-fallback-types"
 
-const OPENAI_ONLY_AGENT_OVERRIDES: Record<string, AgentConfig> = {
-  explore: { model: "openai/gpt-5.4", variant: "medium" },
-  librarian: { model: "openai/gpt-5.4", variant: "medium" },
-}
+const OPENAI_ONLY_AGENT_OVERRIDES: Record<string, AgentConfig> = Object.fromEntries(
+  Object.entries(AGENT_MODEL_DEFAULTS)
+    .filter(([, def]) => def.specialCases?.openAiOnlyOverride)
+    .map(([name, def]) => {
+      const override = def.specialCases!.openAiOnlyOverride!
 
-const OPENAI_ONLY_CATEGORY_OVERRIDES: Record<string, CategoryConfig> = {
-  artistry: { model: "openai/gpt-5.4", variant: "xhigh" },
-  quick: { model: "openai/gpt-5.4", variant: "low" },
-  "visual-engineering": { model: "openai/gpt-5.4", variant: "high" },
-  writing: { model: "openai/gpt-5.4", variant: "medium" },
-}
+      return [name, { model: override.model, variant: override.variant }]
+    }),
+)
+
+const OPENAI_ONLY_CATEGORY_OVERRIDES: Record<string, CategoryConfig> = Object.fromEntries(
+  Object.entries(CATEGORY_MODEL_DEFAULTS)
+    .filter(([, def]) => def.specialCases?.openAiOnlyOverride)
+    .map(([name, def]) => {
+      const override = def.specialCases!.openAiOnlyOverride!
+
+      return [name, { model: override.model, variant: override.variant }]
+    }),
+)
 
 export function isOpenAiOnlyAvailability(availability: ProviderAvailability): boolean {
   return (
