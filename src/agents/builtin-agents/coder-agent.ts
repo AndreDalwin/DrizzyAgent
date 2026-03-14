@@ -3,7 +3,11 @@ import type { AgentOverrides } from "../types"
 import type { CategoriesConfig, CategoryConfig } from "../../config/schema"
 import type { AvailableAgent, AvailableCategory, AvailableSkill } from "../dynamic-agent-prompt-builder"
 import { AGENT_MODEL_REQUIREMENTS, isAnyFallbackModelAvailable } from "../../shared"
-import { getExplicitAgentOverride, hasExplicitAgentOverride } from "../../shared/config-provenance"
+import {
+  getEffectiveAgentOverride,
+  getExplicitAgentOverride,
+  hasExplicitAgentOverride,
+} from "../../shared/config-provenance"
 import { applyEnvironmentContext } from "./environment-context"
 import { applyOverrides } from "./agent-overrides"
 import { applyModelResolution, getFirstFallbackModel } from "./model-resolution"
@@ -42,6 +46,7 @@ export function maybeCreateCoderConfig(input: {
   } = input
 
   const coderOverride = getExplicitAgentOverride(agentOverrides, "coder")
+  const effectiveCoderOverride = getEffectiveAgentOverride(agentOverrides, "coder")
   const coderRequirement = AGENT_MODEL_REQUIREMENTS["coder"]
   const hasCoderExplicitConfig = hasExplicitAgentOverride(agentOverrides, "coder")
   const meetsCoderAnyModelRequirement =
@@ -53,14 +58,14 @@ export function maybeCreateCoderConfig(input: {
   if (disabledAgents.includes("coder") || !meetsCoderAnyModelRequirement) return undefined
 
   let coderResolution = applyModelResolution({
-    uiSelectedModel: coderOverride?.model ? undefined : uiSelectedModel,
-    userModel: coderOverride?.model,
+    uiSelectedModel: effectiveCoderOverride?.model ? undefined : uiSelectedModel,
+    userModel: effectiveCoderOverride?.model,
     requirement: coderRequirement,
     availableModels,
     systemDefaultModel,
   })
 
-  if (isFirstRunNoCache && !coderOverride?.model && !uiSelectedModel) {
+  if (isFirstRunNoCache && !effectiveCoderOverride?.model && !uiSelectedModel) {
     coderResolution = getFirstFallbackModel(coderRequirement)
   }
 
@@ -76,8 +81,10 @@ export function maybeCreateCoderConfig(input: {
     useTaskSystem
   )
 
-  if (coderResolvedVariant) {
-    coderConfig = { ...coderConfig, variant: coderResolvedVariant }
+  const coderVariant =
+    coderOverride?.variant ?? effectiveCoderOverride?.variant ?? coderResolvedVariant
+  if (coderVariant) {
+    coderConfig = { ...coderConfig, variant: coderVariant }
   }
 
   coderConfig = applyOverrides(coderConfig, coderOverride, mergedCategories, directory)

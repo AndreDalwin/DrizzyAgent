@@ -148,6 +148,81 @@ describe("createBuiltinAgents with model overrides", () => {
     }
   })
 
+  test("snapshot-derived coder defaults take priority over uiSelectedModel", async () => {
+    // #given
+    const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
+      new Set(["anthropic/claude-opus-4-6", "kimi-for-coding/k2p5"])
+    )
+    const uiSelectedModel = "anthropic/claude-opus-4-6"
+    const effectiveOverrides = {
+      coder: { model: "kimi-for-coding/k2p5" },
+    }
+    registerConfigProvenance({
+      effectiveAgents: effectiveOverrides,
+      explicitAgents: {},
+    })
+
+    try {
+      // #when
+      const agents = await createBuiltinAgents(
+        [],
+        effectiveOverrides,
+        undefined,
+        TEST_DEFAULT_MODEL,
+        undefined,
+        undefined,
+        [],
+        undefined,
+        undefined,
+        uiSelectedModel,
+      )
+
+      // #then
+      expect(agents.coder).toBeDefined()
+      expect(agents.coder.model).toBe("kimi-for-coding/k2p5")
+    } finally {
+      fetchSpy.mockRestore()
+    }
+  })
+
+  test("snapshot-derived atlas defaults preserve variant and beat uiSelectedModel", async () => {
+    // #given
+    const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
+      new Set(["anthropic/claude-sonnet-4-6", "openai/gpt-5.4"])
+    )
+    const uiSelectedModel = "anthropic/claude-sonnet-4-6"
+    const effectiveOverrides = {
+      atlas: { model: "openai/gpt-5.4", variant: "medium" },
+    }
+    registerConfigProvenance({
+      effectiveAgents: effectiveOverrides,
+      explicitAgents: {},
+    })
+
+    try {
+      // #when
+      const agents = await createBuiltinAgents(
+        [],
+        effectiveOverrides,
+        undefined,
+        TEST_DEFAULT_MODEL,
+        undefined,
+        undefined,
+        [],
+        undefined,
+        undefined,
+        uiSelectedModel,
+      )
+
+      // #then
+      expect(agents.atlas).toBeDefined()
+      expect(agents.atlas.model).toBe("openai/gpt-5.4")
+      expect(agents.atlas.variant).toBe("medium")
+    } finally {
+      fetchSpy.mockRestore()
+    }
+  })
+
   test("Coder is created on first run when no availableModels or cache exist", async () => {
     // #given
     const systemDefaultModel = "anthropic/claude-opus-4-6"

@@ -3,7 +3,10 @@ import type { AgentOverrides } from "../types"
 import type { CategoriesConfig, CategoryConfig } from "../../config/schema"
 import type { AvailableAgent, AvailableSkill } from "../dynamic-agent-prompt-builder"
 import { AGENT_MODEL_REQUIREMENTS } from "../../shared"
-import { getExplicitAgentOverride } from "../../shared/config-provenance"
+import {
+  getEffectiveAgentOverride,
+  getExplicitAgentOverride,
+} from "../../shared/config-provenance"
 import { applyOverrides } from "./agent-overrides"
 import { applyModelResolution } from "./model-resolution"
 import { createAtlasAgent } from "../atlas"
@@ -37,11 +40,12 @@ export function maybeCreateAtlasConfig(input: {
   if (disabledAgents.includes("atlas")) return undefined
 
   const orchestratorOverride = getExplicitAgentOverride(agentOverrides, "atlas")
+  const effectiveOrchestratorOverride = getEffectiveAgentOverride(agentOverrides, "atlas")
   const atlasRequirement = AGENT_MODEL_REQUIREMENTS["atlas"]
 
   const atlasResolution = applyModelResolution({
-    uiSelectedModel: orchestratorOverride?.model ? undefined : uiSelectedModel,
-    userModel: orchestratorOverride?.model,
+    uiSelectedModel: effectiveOrchestratorOverride?.model ? undefined : uiSelectedModel,
+    userModel: effectiveOrchestratorOverride?.model,
     requirement: atlasRequirement,
     availableModels,
     systemDefaultModel,
@@ -57,8 +61,10 @@ export function maybeCreateAtlasConfig(input: {
     userCategories,
   })
 
-  if (atlasResolvedVariant) {
-    orchestratorConfig = { ...orchestratorConfig, variant: atlasResolvedVariant }
+  const atlasVariant =
+    orchestratorOverride?.variant ?? effectiveOrchestratorOverride?.variant ?? atlasResolvedVariant
+  if (atlasVariant) {
+    orchestratorConfig = { ...orchestratorConfig, variant: atlasVariant }
   }
 
   orchestratorConfig = applyOverrides(orchestratorConfig, orchestratorOverride, mergedCategories, directory)
