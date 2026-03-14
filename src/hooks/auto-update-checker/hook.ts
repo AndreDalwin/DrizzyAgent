@@ -15,8 +15,8 @@ export function createAutoUpdateCheckerHook(ctx: PluginInput, options: AutoUpdat
   const getToastMessage = (isUpdate: boolean, latestVersion?: string): string => {
     if (isCoderEnabled) {
       return isUpdate
-        ? `Coder on steroids is steering OpenCode.\nv${latestVersion} available. Restart to apply.`
-        : "Coder on steroids is steering OpenCode."
+        ? `Drizzy is taking the wheel.\nv${latestVersion} available. Restart to apply.`
+        : "Drizzy is taking the wheel.\n Keep your seatbelt on."
     }
     return isUpdate
       ? `DrizzyAgent is active.\nv${latestVersion} available. Restart OpenCode to apply.`

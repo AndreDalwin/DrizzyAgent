@@ -8,14 +8,19 @@ Built for those who want the power of multi-model AI agents without the complexi
 
 DrizzyAgent provides **discipline agents** that work together to complete coding tasks:
 
-| Agent | Purpose | Model |
-|-------|---------|-------|
-| **Coder** | Main orchestrator - plans, delegates, drives to completion | Claude Opus / Kimi K2.5 / GLM-5 |
-| **GPTCoder** | Deep autonomous worker - explores, researches, executes end-to-end | GPT-5.3 Codex |
-| **Planner** | Strategic planner - interviews, identifies scope, builds plans | Claude Opus / Kimi K2.5 / GLM-5 |
-| **Oracle** | Architecture consultant - debugging, complex logic decisions | High-IQ reasoning models |
-| **Librarian** | Documentation/code search - external references, OSS examples | Research models |
-| **Explore** | Fast codebase grep - pattern discovery, cross-layer search | Fast models |
+| Agent | Purpose | Default Model Chain |
+|-------|---------|---------------------|
+| **Coder** | Main orchestrator - plans, delegates, drives to completion | Claude Opus 4.6 / Kimi K2.5 / GPT-5.4 / GLM-5 |
+| **GPTCoder** | Deep autonomous worker - explores, researches, executes end-to-end | GPT-5.4 |
+| **Planner** | Strategic planner - interviews, identifies scope, builds plans | Claude Opus 4.6 / Kimi K2.5 / GPT-5.4 / Gemini 3.1 Pro |
+| **Oracle** | Architecture consultant - debugging, complex logic decisions | GPT-5.4 / Kimi K2.5 / Gemini 3.1 Pro / Claude Opus 4.6 |
+| **Librarian** | Documentation/code search - external references, OSS examples | Gemini 3 Flash / GLM-4.7 / Claude Sonnet 4.5 |
+| **Explore** | Fast codebase grep - pattern discovery, cross-layer search | Custom resolver (Claude / Copilot / OpenAI) |
+| **Atlas** | Plan executor - runs Planner-generated plans step by step | Kimi K2.5 / Claude Sonnet 4.6 / GPT-5.4 / Gemini 3.1 Pro |
+| **Coder Junior** | Delegated sub-tasks from Coder via category system | Claude Sonnet 4.6 / GPT-5.4 / Gemini 3 Flash |
+| **Plan Consultant** | Pre-planning analysis - scope clarification, ambiguity detection | Claude Opus 4.6 / Kimi K2.5 / GPT-5.4 / Gemini 3.1 Pro |
+| **Plan Reviewer** | Plan quality review - verifiability, completeness checks | GPT-5.4 / Kimi K2.5 / Claude Opus 4.6 / Gemini 3.1 Pro |
+| **Multimodal Looker** | Image and visual analysis | GPT-5.4 / Kimi K2.5 / Gemini 3 Flash |
 
 ## Key Features
 
@@ -27,14 +32,18 @@ Type `ultrawork` (or `ulw`). Every agent activates. Doesn't stop until done.
 
 When Coder delegates, it picks a **category**, not a model:
 
-| Category | For |
-|----------|-----|
-| `visual-engineering` | Frontend, UI/UX, design |
-| `deep` | Autonomous research + execution |
-| `quick` | Single-file changes, typos |
-| `ultrabrain` | Hard logic, architecture decisions |
+| Category | For | Default Model Chain |
+|----------|-----|---------------------|
+| `visual-engineering` | Frontend, UI/UX, design | Gemini 3.1 Pro / GLM-5 / Claude Opus 4.6 / Kimi K2.5 |
+| `ultrabrain` | Hard logic, architecture decisions | GPT-5.4 / Gemini 3.1 Pro / Claude Opus 4.6 / Kimi K2.5 |
+| `deep` | Autonomous research + execution | GPT-5.4 / Claude Opus 4.6 / Gemini 3.1 Pro / Kimi K2.5 |
+| `artistry` | Creative, unconventional approaches | Gemini 3.1 Pro / Claude Opus 4.6 / GPT-5.4 / Kimi K2.5 |
+| `quick` | Single-file changes, typos | Claude Haiku 4.5 / Gemini 3 Flash / GPT-5.1 Codex Mini |
+| `unspecified-low` | General tasks, low effort | Claude Sonnet 4.6 / Kimi K2.5 / GPT-5.4 / Gemini 3 Flash |
+| `unspecified-high` | General tasks, high effort | Claude Opus 4.6 / GPT-5.4 / GLM-5 / Kimi K2.5 |
+| `writing` | Documentation, prose, technical writing | Gemini 3 Flash / Kimi K2.5 / Claude Sonnet 4.6 |
 
-The harness maps categories to the right models automatically.
+The harness maps categories to the right models automatically based on provider availability.
 
 ### Built-in Tools
 
@@ -96,12 +105,12 @@ Create `.opencode/drizzy-agent.jsonc` or `~/.config/opencode/drizzy-agent.jsonc`
 {
   "agents": {
     "coder": {
-      "model": "anthropic/claude-opus-4-6"
+      "model": "claude-opus-4-6"
     }
   },
   "categories": {
     "visual-engineering": {
-      "model": "anthropic/claude-opus-4-6"
+      "model": "gemini-3.1-pro"
     }
   },
   "disabled_hooks": []
@@ -143,7 +152,7 @@ You can add explicit overrides on top of the computed defaults:
   "_install_defaults": { /* ... */ },
   "agents": {
     "coder": {
-      "model": "claude-opus-4"  // This overrides the computed default
+      "model": "claude-opus-4-6"  // This overrides the computed default
     }
   },
   "categories": {
@@ -169,10 +178,10 @@ Or manually override by editing `~/.config/opencode/drizzy-agent.jsonc`:
 ```jsonc
 {
   "agents": {
-    "coder": { "model": "claude-opus-4" }
+    "coder": { "model": "claude-opus-4-6" }
   },
   "categories": {
-    "deep": { "model": "o3-mini" }
+    "deep": { "model": "gpt-5.4" }
   }
 }
 ```
@@ -194,7 +203,7 @@ bun test
 
 ```
 src/
-├── agents/          # 11 agent implementations
+├── agents/          # 11 agents (Coder, GPTCoder, Oracle, Librarian, Explore, Atlas, Planner, Plan Consultant, Plan Reviewer, Coder Junior, Multimodal Looker)
 ├── hooks/           # 46 lifecycle hooks
 ├── tools/           # 26 built-in tools
 ├── features/        # Core feature modules
