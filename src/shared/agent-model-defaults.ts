@@ -1,3 +1,88 @@
+/**
+ * Unified Canonical Agent Model Defaults
+ * 
+ * This file is the SINGLE SOURCE OF TRUTH for agent model fallback chains.
+ * Both runtime and install use these unified chains, filtering by provider availability.
+ * 
+ * ## Design Principles
+ * 
+ * 1. **One Chain Per Agent**: No more runtime vs install drift. Each agent has exactly
+ *    one canonical fallback chain used by both runtime and install.
+ * 
+ * 2. **Provider-Driven Selection**: Both runtime and install filter the same unified chain
+ *    by provider availability from `_install_defaults` provider snapshots.
+ * 
+ * 3. **Dynamic Model Resolution**: Models are computed at runtime from provider snapshots,
+ *    not pinned at install time. If you add a provider later, you automatically get
+ *    better models on the next restart.
+ * 
+ * ## How It Works
+ * 
+ * Example with coder agent:
+ * ```
+ * Unified Chain:    [claude-opus-4-6, k2p5, kimi-k2.5, gpt-5.4, glm-5, big-pickle]
+ * Provider Snapshot: { kimi: true }  // Only Kimi available
+ * Filtered Chain:   [k2p5]           // First available entry
+ * Selected Model:   kimi-for-coding/k2p5
+ * ```
+ * 
+ * ## Modifying Chains
+ * 
+ * To add a new fallback for the coder agent:
+ * ```typescript
+ * coder: {
+ *   chain: [
+ *     ...existing entries,
+ *     { providers: ["new-provider"], model: "new-model" }
+ *   ],
+ *   includeInInstall: true
+ * }
+ * ```
+ * 
+ * ## Agent Model Chains
+ * 
+ * | Agent | Unified Chain |
+ * |-------|---------------|
+ * | **coder** | claude-opus-4-6 → k2p5 → kimi-k2.5 → gpt-5.4 → glm-5 → big-pickle |
+ * | **gptcoder** | gpt-5.4 (openai/venice/opencode) → gpt-5.4 (github-copilot) |
+ * | **planner** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
+ * | **oracle** | gpt-5.4 → gemini-3.1-pro → claude-opus-4-6 |
+ * | **librarian** | gemini-3-flash → glm-4.7 → claude-sonnet-4-5 → minimax → big-pickle → glm-4.7-free |
+ * | **explore** | Custom resolver (Claude → Zen → Copilot → OpenAI) |
+ * | **multimodal-looker** | gpt-5.4 → k2p5 → gemini-3-flash → glm-4.6v → gpt-5-nano |
+ * | **plan-consultant** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
+ * | **plan-reviewer** | gpt-5.4 → claude-opus-4-6 → gemini-3.1-pro |
+ * | **atlas** | k2p5 → claude-sonnet-4-6 → claude-sonnet-4-5 → gpt-5.4 → gemini-3.1-pro |
+ * | **coder-junior** | claude-sonnet-4-6 → gpt-5.4 → gemini-3-flash (runtime only) |
+ * 
+ * ## Category Model Chains
+ * 
+ * | Category | Unified Chain |
+ * |----------|---------------|
+ * | **visual-engineering** | gemini-3.1-pro → glm-5 → claude-opus-4-6 → k2p5 |
+ * | **ultrabrain** | gpt-5.4 → gemini-3.1-pro → claude-opus-4-6 |
+ * | **deep** | gpt-5.4 → claude-opus-4-6 → gemini-3.1-pro |
+ * | **artistry** | gemini-3.1-pro → claude-opus-4-6 → gpt-5.4 |
+ * | **quick** | claude-haiku-4-5 → gemini-3-flash → gpt-5-nano |
+ * | **unspecified-low** | claude-sonnet-4-6 → gpt-5.4 → gemini-3-flash |
+ * | **unspecified-high** | claude-opus-4-6 → gpt-5.4 → glm-5 → k2p5 → kimi-k2.5 |
+ * | **writing** | gemini-3-flash → k2p5 → claude-sonnet-4-6 |
+ * 
+ * ## Special Cases
+ * 
+ * - **ZAI Override**: librarian uses zai-coding-plan/glm-4.7 when ZAI provider available
+ * - **OpenAI-Only Mode**: Several agents/categories get gpt-5.4 overrides when only OpenAI available
+ * - **Custom Resolver**: explore agent uses custom logic (not chain-based)
+ * 
+ * ## Intentional Behavior Changes
+ * 
+ * The following changed from install-time defaults after unification:
+ * - **librarian**: Now uses gemini-3-flash first (was glm-4.7)
+ * - **atlas**: Now uses k2p5 first (was claude-sonnet-4-6)
+ * - **gptcoder**: Now allows github-copilot fallback (was OpenAI-only)
+ * 
+ * These simplifications achieve true single source of truth.
+ */
 export type FallbackEntry = {
   providers: string[];
   model: string;
