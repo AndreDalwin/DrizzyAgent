@@ -70,7 +70,51 @@ const createXXXAgent: AgentFactory = (model: string) => ({
 createXXXAgent.mode = "subagent" // or "primary" or "all"
 ```
 
-Model resolution: 4-step: override → category-default → provider-fallback → system-default. Defined in `shared/model-requirements.ts`.
+Model resolution: unified fallback chains. Defined in `src/shared/agent-model-defaults.ts`.
+
+## Model Resolution
+
+Agent models are determined by unified fallback chains defined in `src/shared/agent-model-defaults.ts`.
+
+### Unified Chain Approach
+
+Each agent has exactly **one canonical fallback chain** used by both runtime and install:
+
+1. **Install** writes only `_install_defaults` provider snapshot (no model pins)
+2. **Runtime** reads provider snapshot and filters unified chain
+3. **First available** model in chain is selected
+4. **Explicit user config** (`agents.{name}.model`) overrides computed default
+
+Example with coder agent:
+```
+Unified Chain:    [claude-opus-4-6, k2p5, kimi-k2.5, gpt-5.4, glm-5, big-pickle]
+Provider Snapshot: { kimi: true }
+Selected Model:   kimi-for-coding/k2p5
+```
+
+### Provider Prefixes
+
+All model identifiers include provider prefixes:
+- `anthropic/claude-opus-4-6`
+- `kimi-for-coding/k2p5`
+- `openai/gpt-5.4`
+
+### Custom Overrides
+
+Users can override any agent's model in their config:
+```json
+{
+  "agents": {
+    "coder": {
+      "model": "openai/gpt-5.4"
+    }
+  }
+}
+```
+
+### See Also
+
+- `src/shared/agent-model-defaults.ts` - Canonical model chains
 
 ## MODES
 
