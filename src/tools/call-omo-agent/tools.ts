@@ -6,6 +6,7 @@ import type { CategoriesConfig, AgentOverrides } from "../../config/schema"
 import type { FallbackEntry } from "../../shared/model-requirements"
 import { AGENT_MODEL_REQUIREMENTS } from "../../shared/model-requirements"
 import { getAgentConfigKey } from "../../shared/agent-display-names"
+import { getExplicitAgentOverride, getEffectiveCategoryConfig } from "../../shared/config-provenance"
 import { normalizeFallbackModels } from "../../shared/model-resolver"
 import { buildFallbackChainFromModels } from "../../shared/fallback-chain-from-models"
 import { log } from "../../shared"
@@ -21,14 +22,13 @@ function resolveFallbackChainForCallOmoAgent(args: {
   const agentConfigKey = getAgentConfigKey(subagentType)
   const agentRequirement = AGENT_MODEL_REQUIREMENTS[agentConfigKey]
 
-  const agentOverride = agentOverrides?.[agentConfigKey as keyof AgentOverrides]
-    ?? (agentOverrides
-      ? Object.entries(agentOverrides).find(([key]) => key.toLowerCase() === agentConfigKey)?.[1]
-      : undefined)
+  const agentOverride = getExplicitAgentOverride(agentOverrides, agentConfigKey)
 
   const normalizedFallbackModels = normalizeFallbackModels(
     agentOverride?.fallback_models
-    ?? (agentOverride?.category ? userCategories?.[agentOverride.category]?.fallback_models : undefined)
+    ?? (agentOverride?.category
+      ? getEffectiveCategoryConfig(userCategories, agentOverride.category)?.fallback_models
+      : undefined)
   )
   const defaultProviderID = agentRequirement?.fallbackChain?.[0]?.providers?.[0] ?? "opencode"
   const configuredFallbackChain = buildFallbackChainFromModels(normalizedFallbackModels, defaultProviderID)

@@ -6,6 +6,7 @@ import { AGENT_MODEL_REQUIREMENTS } from "../../shared/model-requirements"
 import { normalizeFallbackModels } from "../../shared/model-resolver"
 import { buildFallbackChainFromModels } from "../../shared/fallback-chain-from-models"
 import { getAgentDisplayName, getAgentConfigKey } from "../../shared/agent-display-names"
+import { getExplicitAgentOverride, getEffectiveCategoryConfig } from "../../shared/config-provenance"
 import { normalizeSDKResponse } from "../../shared"
 import { log } from "../../shared/logger"
 import { getAvailableModelsForDelegateTask } from "./available-models"
@@ -99,12 +100,11 @@ Create the work plan directly - that's your job as the planning agent.`,
     agentToUse = matchedAgent.name
 
     const agentConfigKey = getAgentConfigKey(agentToUse)
-    const agentOverride = agentOverrides?.[agentConfigKey as keyof typeof agentOverrides]
-      ?? (agentOverrides ? Object.entries(agentOverrides).find(([key]) => key.toLowerCase() === agentConfigKey)?.[1] : undefined)
+    const agentOverride = getExplicitAgentOverride(agentOverrides, agentConfigKey)
     const agentRequirement = AGENT_MODEL_REQUIREMENTS[agentConfigKey]
     const normalizedAgentFallbackModels = normalizeFallbackModels(
       agentOverride?.fallback_models
-      ?? (agentOverride?.category ? userCategories?.[agentOverride.category]?.fallback_models : undefined)
+      ?? (agentOverride?.category ? getEffectiveCategoryConfig(userCategories, agentOverride.category)?.fallback_models : undefined)
     )
 
     if (agentOverride?.model || agentRequirement || matchedAgent.model) {
