@@ -14,11 +14,15 @@ import type {
   CategoryConfig,
   ProviderAvailability,
 } from "../cli/model-fallback-types"
+import {
+  AGENT_MODEL_DEFAULTS,
+  CATEGORY_MODEL_DEFAULTS,
+} from "./agent-model-defaults"
 import type { InstallDefaultsProviders } from "./install-defaults-contract"
 import type { ModelRequirement } from "./model-requirements"
 
-const ZAI_MODEL = "zai-coding-plan/glm-4.7"
-const ULTIMATE_FALLBACK = "opencode/glm-4.7-free"
+const ZAI_MODEL = AGENT_MODEL_DEFAULTS.librarian.specialCases?.zaiOverride?.model ?? "zai-coding-plan/glm-4.7"
+const GLOBAL_ULTIMATE_FALLBACK = getFallbackModelFromChain(AGENT_MODEL_DEFAULTS.librarian.chain) ?? "opencode/glm-4.7-free"
 
 export interface ComputedInstallDefaults {
   agents: Record<string, AgentConfig>
@@ -58,10 +62,10 @@ export function computeDefaultsFromProviders(
       agents: Object.fromEntries(
         Object.entries(CLI_AGENT_MODEL_REQUIREMENTS)
           .filter(([role, requirement]) => !(role === "coder" && requirement.requiresAnyModel))
-          .map(([role]) => [role, { model: ULTIMATE_FALLBACK }]),
+          .map(([role]) => [role, { model: getUltimateFallback(role) }]),
       ),
       categories: Object.fromEntries(
-        Object.keys(CLI_CATEGORY_MODEL_REQUIREMENTS).map((category) => [category, { model: ULTIMATE_FALLBACK }]),
+        Object.keys(CLI_CATEGORY_MODEL_REQUIREMENTS).map((category) => [category, { model: GLOBAL_ULTIMATE_FALLBACK }]),
       ),
     }
   }
@@ -70,12 +74,12 @@ export function computeDefaultsFromProviders(
   const categories: Record<string, CategoryConfig> = {}
 
   for (const [role, requirement] of Object.entries(CLI_AGENT_MODEL_REQUIREMENTS)) {
-    if (role === "librarian" && availability.zai) {
+    if (role === "librarian" && availability.zai && AGENT_MODEL_DEFAULTS.librarian.specialCases?.zaiOverride) {
       agents[role] = { model: ZAI_MODEL }
       continue
     }
 
-    if (role === "explore") {
+    if (role === "explore" && AGENT_MODEL_DEFAULTS.explore.specialCases?.customResolver === "explore-agent") {
       agents[role] = resolveExploreAgent(availability)
       continue
     }
@@ -93,7 +97,12 @@ export function computeDefaultsFromProviders(
       continue
     }
 
-    const resolved = resolveRequirementDefault(requirement, availability)
+    const resolved = resolveRequirementDefault(
+      requirement,
+      availability,
+      requirement.fallbackChain,
+      getUltimateFallback(role),
+    )
     if (resolved) {
       agents[role] = resolved
     }
@@ -105,7 +114,12 @@ export function computeDefaultsFromProviders(
         ? CLI_CATEGORY_MODEL_REQUIREMENTS["unspecified-low"].fallbackChain
         : requirement.fallbackChain
 
-    const resolved = resolveRequirementDefault(requirement, availability, fallbackChain)
+    const resolved = resolveRequirementDefault(
+      requirement,
+      availability,
+      fallbackChain,
+      getCategoryUltimateFallback(category),
+    )
     if (resolved) {
       categories[category] = resolved
     }
@@ -146,6 +160,7 @@ function resolveRequirementDefault(
   requirement: ModelRequirement,
   availability: ProviderAvailability,
   fallbackChain = requirement.fallbackChain,
+  ultimateFallback = GLOBAL_ULTIMATE_FALLBACK,
 ): AgentConfig | CategoryConfig | undefined {
   if (requirement.requiresModel && !isRequiredModelAvailable(requirement.requiresModel, requirement.fallbackChain, availability)) {
     return undefined
@@ -157,10 +172,29 @@ function resolveRequirementDefault(
 
   const resolved = resolveModelFromChain(fallbackChain, availability)
   if (!resolved) {
-    return { model: ULTIMATE_FALLBACK }
+    return { model: ultimateFallback }
   }
 
   return withVariant(resolved.model, resolved.variant ?? requirement.variant)
+}
+
+function getUltimateFallback(agentName: string): string {
+  return getFallbackModelFromChain(AGENT_MODEL_DEFAULTS[agentName]?.chain) ?? GLOBAL_ULTIMATE_FALLBACK
+}
+
+function getCategoryUltimateFallback(categoryName: string): string {
+  return getFallbackModelFromChain(CATEGORY_MODEL_DEFAULTS[categoryName]?.chain) ?? GLOBAL_ULTIMATE_FALLBACK
+}
+
+function getFallbackModelFromChain(fallbackChain?: ModelRequirement["fallbackChain"]): string | undefined {
+  const lastEntry = fallbackChain?.[fallbackChain.length - 1]
+  const provider = lastEntry?.providers[0]
+
+  if (!provider) {
+    return undefined
+  }
+
+  return `${provider}/${lastEntry.model}`
 }
 
 function withVariant(model: string, variant?: string): AgentConfig | CategoryConfig {
