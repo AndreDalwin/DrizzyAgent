@@ -1,328 +1,85 @@
-export type FallbackEntry = {
-  providers: string[];
-  model: string;
-  variant?: string; // Entry-specific variant (e.g., GPT→high, Opus→max)
-};
+import {
+  AGENT_MODEL_DEFAULTS,
+  CATEGORY_MODEL_DEFAULTS,
+  type FallbackEntry as CanonicalFallbackEntry,
+} from "./agent-model-defaults"
+
+export type FallbackEntry = CanonicalFallbackEntry
 
 export type ModelRequirement = {
-  fallbackChain: FallbackEntry[];
-  variant?: string; // Default variant (used when entry doesn't specify one)
-  requiresModel?: string; // If set, only activates when this model is available (fuzzy match)
-  requiresAnyModel?: boolean; // If true, requires at least ONE model in fallbackChain to be available (or empty availability treated as unavailable)
-  requiresProvider?: string[]; // If set, only activates when any of these providers is connected
-};
+  fallbackChain: FallbackEntry[]
+  variant?: string
+  requiresModel?: string
+  requiresAnyModel?: boolean
+  requiresProvider?: string[]
+}
 
-export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
+type RequirementOverride = Partial<ModelRequirement>
+
+const LEGACY_AGENT_REQUIREMENT_OVERRIDES = {
   coder: {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
-      {
-        providers: [
-          "opencode",
-          "moonshotai",
-          "moonshotai-cn",
-          "firmware",
-          "ollama-cloud",
-          "aihubmix",
-        ],
-        model: "kimi-k2.5",
-      },
-      { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "medium" },
-      { providers: ["zai-coding-plan", "opencode"], model: "glm-5" },
-      { providers: ["opencode"], model: "big-pickle" },
-    ],
     requiresAnyModel: true,
   },
   gptcoder: {
-    fallbackChain: [
-      {
-        providers: ["openai", "venice", "opencode"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      { providers: ["github-copilot"], model: "gpt-5.4", variant: "medium" },
-    ],
-    requiresProvider: ["openai", "github-copilot", "venice", "opencode"],
-  },
-  oracle: {
-    fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "opencode"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-    ],
-  },
-  librarian: {
-    fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3-flash",
-      },
-      { providers: ["opencode"], model: "minimax-m2.5-free" },
-      { providers: ["opencode"], model: "big-pickle" },
-    ],
-  },
-  explore: {
-    fallbackChain: [
-      { providers: ["github-copilot"], model: "grok-code-fast-1" },
-      { providers: ["opencode"], model: "minimax-m2.5-free" },
-      { providers: ["anthropic", "opencode"], model: "claude-haiku-4-5" },
-      { providers: ["opencode"], model: "gpt-5-nano" },
-    ],
-  },
-  "multimodal-looker": {
-    fallbackChain: [
-      {
-        providers: ["openai", "opencode"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3-flash",
-      },
-      { providers: ["zai-coding-plan"], model: "glm-4.6v" },
-      {
-        providers: ["openai", "github-copilot", "opencode"],
-        model: "gpt-5-nano",
-      },
-    ],
-  },
-  planner: {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["openai", "github-copilot", "opencode"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-      },
-    ],
-  },
-  planConsultant: {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["openai", "github-copilot", "opencode"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-    ],
-  },
-  planReviewer: {
-    fallbackChain: [
-      {
-        providers: ["openai", "github-copilot", "opencode"],
-        model: "gpt-5.4",
-        variant: "xhigh",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-    ],
+    requiresProvider: AGENT_MODEL_DEFAULTS.gptcoder.requiresAnyProvider,
   },
   atlas: {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-sonnet-4-6",
-      },
-      { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "medium" },
-    ],
+    fallbackChain: pickFallbackEntries(AGENT_MODEL_DEFAULTS.atlas.chain, ["claude-sonnet-4-6", "gpt-5.4"]),
   },
-  "coder-junior": {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-sonnet-4-6",
-      },
-      { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "medium" },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3-flash",
-      },
-    ],
-  },
-};
+} satisfies Partial<Record<string, RequirementOverride>>
 
-export const CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = {
+const LEGACY_CATEGORY_REQUIREMENT_OVERRIDES = {
   "visual-engineering": {
-    fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      { providers: ["zai-coding-plan", "opencode"], model: "glm-5" },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-    ],
-  },
-  ultrabrain: {
-    fallbackChain: [
-      {
-        providers: ["openai", "opencode"],
-        model: "gpt-5.4",
-        variant: "xhigh",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-    ],
+    fallbackChain: excludeFallbackEntries(CATEGORY_MODEL_DEFAULTS["visual-engineering"].chain, ["k2p5"]),
   },
   deep: {
-    fallbackChain: [
-      {
-        providers: ["openai", "opencode"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-    ],
     requiresModel: "gpt-5.4",
   },
   artistry: {
-    fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3.1-pro",
-        variant: "high",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4" },
-    ],
     requiresModel: "gemini-3.1-pro",
   },
-  quick: {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-haiku-4-5",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3-flash",
-      },
-      { providers: ["opencode"], model: "gpt-5-nano" },
-    ],
-  },
-  "unspecified-low": {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-sonnet-4-6",
-      },
-      {
-        providers: ["openai", "opencode"],
-        model: "gpt-5.4",
-        variant: "medium",
-      },
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3-flash",
-      },
-    ],
-  },
-  "unspecified-high": {
-    fallbackChain: [
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-opus-4-6",
-        variant: "max",
-      },
-      {
-        providers: ["openai", "github-copilot", "opencode"],
-        model: "gpt-5.4",
-        variant: "high",
-      },
-      { providers: ["zai-coding-plan", "opencode"], model: "glm-5" },
-      { providers: ["kimi-for-coding"], model: "k2p5" },
-      {
-        providers: [
-          "opencode",
-          "moonshotai",
-          "moonshotai-cn",
-          "firmware",
-          "ollama-cloud",
-          "aihubmix",
-        ],
-        model: "kimi-k2.5",
-      },
-    ],
-  },
   writing: {
-    fallbackChain: [
-      {
-        providers: ["google", "github-copilot", "opencode"],
-        model: "gemini-3-flash",
-      },
-      {
-        providers: ["anthropic", "github-copilot", "opencode"],
-        model: "claude-sonnet-4-6",
-      },
-    ],
+    fallbackChain: excludeFallbackEntries(CATEGORY_MODEL_DEFAULTS.writing.chain, ["k2p5"]),
   },
-};
+} satisfies Partial<Record<string, RequirementOverride>>
+
+export const AGENT_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = toModelRequirements(
+  AGENT_MODEL_DEFAULTS,
+  LEGACY_AGENT_REQUIREMENT_OVERRIDES,
+)
+
+export const CATEGORY_MODEL_REQUIREMENTS: Record<string, ModelRequirement> = toModelRequirements(
+  CATEGORY_MODEL_DEFAULTS,
+  LEGACY_CATEGORY_REQUIREMENT_OVERRIDES,
+)
+
+function toModelRequirements(
+  defaults: Record<string, { chain: FallbackEntry[] }>,
+  overrides: Partial<Record<string, RequirementOverride>>,
+): Record<string, ModelRequirement> {
+  return Object.fromEntries(
+    Object.entries(defaults).map(([name, def]) => {
+      const override = overrides[name]
+
+      return [
+        name,
+        {
+          fallbackChain: def.chain,
+          ...override,
+        },
+      ]
+    }),
+  )
+}
+
+function pickFallbackEntries(chain: FallbackEntry[], models: string[]): FallbackEntry[] {
+  const allowedModels = new Set(models)
+
+  return chain.filter((entry) => allowedModels.has(entry.model))
+}
+
+function excludeFallbackEntries(chain: FallbackEntry[], models: string[]): FallbackEntry[] {
+  const excludedModels = new Set(models)
+
+  return chain.filter((entry) => !excludedModels.has(entry.model))
+}

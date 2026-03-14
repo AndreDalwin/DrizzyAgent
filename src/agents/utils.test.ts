@@ -5,6 +5,7 @@ import { createBuiltinAgents } from "./builtin-agents"
 import type { AgentConfig } from "@opencode-ai/sdk"
 import { clearSkillCache } from "../features/opencode-skill-loader/skill-content"
 import * as connectedProvidersCache from "../shared/connected-providers-cache"
+import { registerConfigProvenance } from "../shared/config-provenance"
 import * as modelAvailability from "../shared/model-availability"
 import * as shared from "../shared"
 
@@ -180,7 +181,7 @@ describe("createBuiltinAgents with model overrides", () => {
      cacheSpy.mockRestore?.()
    })
 
-   test("Oracle created without model field when no cache exists (first run scenario)", async () => {
+  test("Oracle created without model field when no cache exists (first run scenario)", async () => {
      // #given - no cache at all (first run)
      const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(null)
 
@@ -191,7 +192,34 @@ describe("createBuiltinAgents with model overrides", () => {
      expect(agents.oracle).toBeDefined()
      expect(agents.oracle.model).toBe(TEST_DEFAULT_MODEL)
      cacheSpy.mockRestore?.()
-   })
+    })
+
+  test("snapshot-derived gptcoder defaults do not count as explicit overrides", async () => {
+    // #given
+    const effectiveOverrides = {
+      gptcoder: { model: "github-copilot/gpt-5.4", variant: "medium" },
+    }
+    registerConfigProvenance({
+      effectiveAgents: effectiveOverrides,
+      explicitAgents: {},
+    })
+
+    const cacheSpy = spyOn(connectedProvidersCache, "readConnectedProvidersCache").mockReturnValue(["google"])
+    const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
+      new Set(["google/gemini-3.1-pro-preview"]),
+    )
+
+    try {
+      // #when
+      const agents = await createBuiltinAgents([], effectiveOverrides, undefined, TEST_DEFAULT_MODEL)
+
+      // #then
+      expect(agents.gptcoder).toBeUndefined()
+    } finally {
+      cacheSpy.mockRestore()
+      fetchSpy.mockRestore()
+    }
+  })
 
   test("Oracle with GPT model override has reasoningEffort, no thinking", async () => {
     // #given

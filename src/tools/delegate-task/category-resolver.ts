@@ -11,6 +11,7 @@ import { normalizeFallbackModels } from "../../shared/model-resolver"
 import { buildFallbackChainFromModels } from "../../shared/fallback-chain-from-models"
 import { getAvailableModelsForDelegateTask } from "./available-models"
 import { resolveModelForDelegateTask } from "./model-selection"
+import { getExplicitCategoryConfig } from "../../shared/config-provenance"
 
 export interface CategoryResolutionResult {
   agentToUse: string
@@ -87,7 +88,8 @@ Available categories: ${allCategoryNames}`,
   let categoryModel: { providerID: string; modelID: string; variant?: string } | undefined
 
   const overrideModel = coderJuniorModel
-  const explicitCategoryModel = userCategories?.[args.category!]?.model
+  const explicitCategoryConfig = getExplicitCategoryConfig(userCategories, args.category!)
+  const explicitCategoryModel = explicitCategoryConfig?.model
 
   if (!requirement) {
     // Precedence: explicit category model > coder-junior default > category resolved model
@@ -143,7 +145,7 @@ Available categories: ${allCategoryNames}`,
       modelInfo = { model: actualModel, type, source }
 
       const parsedModel = parseModelString(actualModel)
-      const variantToUse = userCategories?.[args.category!]?.variant ?? resolvedVariant ?? resolved.config.variant
+      const variantToUse = explicitCategoryConfig?.variant ?? resolvedVariant ?? resolved.config.variant
       categoryModel = parsedModel
         ? (variantToUse ? { ...parsedModel, variant: variantToUse } : parsedModel)
         : undefined

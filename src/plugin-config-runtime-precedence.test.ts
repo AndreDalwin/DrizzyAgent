@@ -3,6 +3,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 
 import { resolveCategoryConfig } from "./plugin-handlers/category-config-resolver"
+import { resolveCategoryConfig as resolveDelegateCategoryConfig } from "./tools/delegate-task/categories"
 import { loadPluginConfig } from "./plugin-config"
 import {
   createInstallDefaultsSnapshot,
@@ -127,5 +128,21 @@ describe("loadPluginConfig runtime precedence", () => {
       model: "anthropic/claude-haiku-4-5",
     })
     expect(getConfigLoadErrors()).toHaveLength(0)
+  })
+
+  test("snapshot-derived category defaults do not bypass requiresModel guards", () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      _install_defaults: createInstallDefaultsSnapshot({ gemini: true }),
+    })
+
+    const config = fixture.load()
+    const resolvedDeep = resolveDelegateCategoryConfig("deep", {
+      userCategories: config.categories,
+      availableModels: new Set(["google/gemini-3.1-pro-preview"]),
+    })
+
+    expect(resolvedDeep).toBeNull()
+    expect(config.categories?.deep?.model).toBe("google/gemini-3.1-pro-preview")
   })
 })

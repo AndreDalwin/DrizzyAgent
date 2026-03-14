@@ -423,15 +423,16 @@ describe("generateModelConfig", () => {
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
-    test("GPTCoder is NOT created when only Copilot is available (gpt-5.4 unavailable on github-copilot)", () => {
+    test("GPTCoder IS created when Copilot is available (unified chain allows github-copilot)", () => {
       // #given
       const config = createConfig({ hasCopilot: true })
 
       // #when
       const result = generateModelConfig(config)
 
-      // #then - gptcoder is omitted because gpt-5.4 is not available on github-copilot
-      expect(result.agents?.gptcoder).toBeUndefined()
+      // #then - gptcoder uses github-copilot with unified chain
+      expect(result.agents?.gptcoder?.model).toBe("github-copilot/gpt-5.4")
+      expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
     test("GPTCoder is created when OpenCode Zen is available (opencode provider connected)", () => {

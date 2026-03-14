@@ -8,6 +8,10 @@ import {
   resolveModelPipeline,
 } from "../shared";
 import { resolveCategoryConfig } from "./category-config-resolver";
+import {
+  getEffectiveCategoryConfig,
+  getExplicitCategoryConfig,
+} from "../shared/config-provenance"
 
 type PlannerOverride = Record<string, unknown> & {
   category?: string;
@@ -31,6 +35,12 @@ export async function buildPlannerAgentConfig(params: {
   const categoryConfig = params.pluginPlannerOverride?.category
     ? resolveCategoryConfig(params.pluginPlannerOverride.category, params.userCategories)
     : undefined;
+  const explicitCategoryConfig = params.pluginPlannerOverride?.category
+    ? getExplicitCategoryConfig(params.userCategories, params.pluginPlannerOverride.category)
+    : undefined
+  const effectiveCategoryConfig = params.pluginPlannerOverride?.category
+    ? getEffectiveCategoryConfig(params.userCategories, params.pluginPlannerOverride.category)
+    : undefined
 
   const requirement = AGENT_MODEL_REQUIREMENTS["planner"];
   const connectedProviders = readConnectedProvidersCache();
@@ -41,7 +51,8 @@ export async function buildPlannerAgentConfig(params: {
   const modelResolution = resolveModelPipeline({
     intent: {
       uiSelectedModel: params.currentModel,
-      userModel: params.pluginPlannerOverride?.model ?? categoryConfig?.model,
+      userModel: params.pluginPlannerOverride?.model ?? explicitCategoryConfig?.model,
+      categoryDefaultModel: effectiveCategoryConfig?.model,
     },
     constraints: { availableModels },
     policy: {
