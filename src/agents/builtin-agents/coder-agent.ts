@@ -3,6 +3,7 @@ import type { AgentOverrides } from "../types"
 import type { CategoriesConfig, CategoryConfig } from "../../config/schema"
 import type { AvailableAgent, AvailableCategory, AvailableSkill } from "../dynamic-agent-prompt-builder"
 import { AGENT_MODEL_REQUIREMENTS, isAnyFallbackModelAvailable } from "../../shared"
+import { getExplicitAgentOverride, hasExplicitAgentOverride } from "../../shared/config-provenance"
 import { applyEnvironmentContext } from "./environment-context"
 import { applyOverrides } from "./agent-overrides"
 import { applyModelResolution, getFirstFallbackModel } from "./model-resolution"
@@ -40,9 +41,9 @@ export function maybeCreateCoderConfig(input: {
     disableOmoEnv = false,
   } = input
 
-  const coderOverride = agentOverrides["coder"]
+  const coderOverride = getExplicitAgentOverride(agentOverrides, "coder")
   const coderRequirement = AGENT_MODEL_REQUIREMENTS["coder"]
-  const hasCoderExplicitConfig = coderOverride !== undefined
+  const hasCoderExplicitConfig = hasExplicitAgentOverride(agentOverrides, "coder")
   const meetsCoderAnyModelRequirement =
     !coderRequirement?.requiresAnyModel ||
     hasCoderExplicitConfig ||

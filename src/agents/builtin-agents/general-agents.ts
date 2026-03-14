@@ -5,6 +5,7 @@ import type { BrowserAutomationProvider } from "../../config/schema"
 import type { AvailableAgent } from "../dynamic-agent-prompt-builder"
 import { AGENT_MODEL_REQUIREMENTS, isModelAvailable } from "../../shared"
 import { getAgentConfigKey } from "../../shared/agent-display-names"
+import { getExplicitAgentOverride } from "../../shared/config-provenance"
 import { buildAgent, isFactory } from "../agent-builder"
 import { applyOverrides } from "./agent-overrides"
 import { applyEnvironmentContext } from "./environment-context"
@@ -57,8 +58,7 @@ export function collectPendingBuiltinAgents(input: {
     if (disabledAgents.some((name) => name.toLowerCase() === agentName.toLowerCase())) continue
 
     const agentConfigKey = getAgentConfigKey(agentName)
-    const override = agentOverrides[agentConfigKey as keyof AgentOverrides]
-      ?? Object.entries(agentOverrides).find(([key]) => key.toLowerCase() === agentConfigKey.toLowerCase())?.[1]
+    const override = getExplicitAgentOverride(agentOverrides, agentConfigKey)
     const requirement = AGENT_MODEL_REQUIREMENTS[agentConfigKey]
 
     // Check if agent requires a specific model
