@@ -19,12 +19,14 @@ function createProviders(
 }
 
 describe("computeDefaultsFromProviders", () => {
-  test("returns global fallback defaults when no providers are available", () => {
+  test("returns alwaysAvailable free fallbacks when no providers are available", () => {
     const result = computeDefaultsFromProviders(createProviders())
 
-    expect(result.agents.coder).toBeUndefined()
-    expect(result.agents.librarian).toEqual({ model: "opencode/glm-4.7-free" })
-    expect(result.categories["visual-engineering"]).toEqual({ model: "opencode/glm-4.7-free" })
+    // Free models (alwaysAvailable) should be used as last-resort fallbacks
+    expect(result.agents.coder).toEqual({ model: "opencode/big-pickle" })
+    // Librarian chain: minimax-m2.5-free comes before glm-4.7-free
+    expect(result.agents.librarian).toEqual({ model: "opencode/minimax-m2.5-free" })
+    expect(result.categories.quick).toEqual({ model: "opencode/gpt-5-nano" })
   })
 
   test("preserves the coder fallback chain selection", () => {
