@@ -7,26 +7,26 @@ exports[`generateModelConfig no providers available returns ULTIMATE_FALLBACK fo
     "atlas": {
       "model": "google/gemini-3.1-pro",
     },
+    "coder": {
+      "model": "opencode/big-pickle",
+    },
     "explore": {
       "model": "opencode/gpt-5-nano",
     },
-    "gptcoder": {
-      "model": "github-copilot/gpt-5.4",
-    },
     "librarian": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/minimax-m2.5-free",
     },
     "multimodal-looker": {
       "model": "openai/gpt-5-nano",
     },
     "oracle": {
-      "model": "anthropic/claude-opus-4-6",
+      "model": "opencode/big-pickle",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro",
     },
     "planReviewer": {
-      "model": "google/gemini-3.1-pro",
+      "model": "opencode/big-pickle",
     },
     "planner": {
       "model": "google/gemini-3.1-pro",
@@ -34,28 +34,28 @@ exports[`generateModelConfig no providers available returns ULTIMATE_FALLBACK fo
   },
   "categories": {
     "artistry": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/minimax-m2.5-free",
     },
     "deep": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/big-pickle",
     },
     "quick": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/gpt-5-nano",
     },
     "ultrabrain": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/big-pickle",
     },
     "unspecified-high": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/minimax-m2.5-free",
     },
     "unspecified-low": {
-      "model": "opencode/glm-4.7-free",
+      "model": "opencode/minimax-m2.5-free",
     },
     "visual-engineering": {
-      "model": "opencode/glm-4.7-free",
+      "model": "kimi-for-coding/k2p5",
     },
     "writing": {
-      "model": "opencode/glm-4.7-free",
+      "model": "anthropic/claude-sonnet-4-6",
     },
   },
 }
@@ -373,6 +373,9 @@ exports[`generateModelConfig single native provider uses Gemini models when only
     "atlas": {
       "model": "google/gemini-3.1-pro-preview",
     },
+    "coder": {
+      "model": "opencode/big-pickle",
+    },
     "explore": {
       "model": "opencode/gpt-5-nano",
     },
@@ -437,6 +440,9 @@ exports[`generateModelConfig single native provider uses Gemini models with isMa
   "agents": {
     "atlas": {
       "model": "google/gemini-3.1-pro-preview",
+    },
+    "coder": {
+      "model": "opencode/big-pickle",
     },
     "explore": {
       "model": "opencode/gpt-5-nano",
@@ -967,13 +973,13 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian whe
       "model": "zai-coding-plan/glm-4.6v",
     },
     "oracle": {
-      "model": "anthropic/claude-opus-4-6",
+      "model": "opencode/big-pickle",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro",
     },
     "planReviewer": {
-      "model": "google/gemini-3.1-pro",
+      "model": "opencode/big-pickle",
     },
     "planner": {
       "model": "google/gemini-3.1-pro",
@@ -981,22 +987,22 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian whe
   },
   "categories": {
     "artistry": {
-      "model": "openai/gpt-5.4",
+      "model": "opencode/minimax-m2.5-free",
     },
     "deep": {
-      "model": "google/gemini-3.1-pro",
+      "model": "opencode/big-pickle",
     },
     "quick": {
       "model": "opencode/gpt-5-nano",
     },
     "ultrabrain": {
-      "model": "anthropic/claude-opus-4-6",
+      "model": "opencode/big-pickle",
     },
     "unspecified-high": {
-      "model": "opencode/kimi-k2.5",
+      "model": "opencode/minimax-m2.5-free",
     },
     "unspecified-low": {
-      "model": "google/gemini-3-flash",
+      "model": "opencode/minimax-m2.5-free",
     },
     "visual-engineering": {
       "model": "zai-coding-plan/glm-5",
@@ -1028,13 +1034,13 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian wit
       "model": "zai-coding-plan/glm-4.6v",
     },
     "oracle": {
-      "model": "anthropic/claude-opus-4-6",
+      "model": "opencode/big-pickle",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro",
     },
     "planReviewer": {
-      "model": "google/gemini-3.1-pro",
+      "model": "opencode/big-pickle",
     },
     "planner": {
       "model": "google/gemini-3.1-pro",
@@ -1042,22 +1048,22 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian wit
   },
   "categories": {
     "artistry": {
-      "model": "openai/gpt-5.4",
+      "model": "opencode/minimax-m2.5-free",
     },
     "deep": {
-      "model": "google/gemini-3.1-pro",
+      "model": "opencode/big-pickle",
     },
     "quick": {
       "model": "opencode/gpt-5-nano",
     },
     "ultrabrain": {
-      "model": "anthropic/claude-opus-4-6",
+      "model": "opencode/big-pickle",
     },
     "unspecified-high": {
       "model": "zai-coding-plan/glm-5",
     },
     "unspecified-low": {
-      "model": "google/gemini-3-flash",
+      "model": "opencode/minimax-m2.5-free",
     },
     "visual-engineering": {
       "model": "zai-coding-plan/glm-5",

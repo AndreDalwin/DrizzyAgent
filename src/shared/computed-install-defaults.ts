@@ -5,6 +5,7 @@ import {
   isRequiredProviderAvailable,
   resolveModelFromChain,
 } from "../cli/fallback-chain-resolution"
+import { isProviderAvailable } from "../cli/provider-availability"
 import {
   CLI_AGENT_MODEL_REQUIREMENTS,
   CLI_CATEGORY_MODEL_REQUIREMENTS,
@@ -57,18 +58,13 @@ export function computeDefaultsFromProviders(
 ): ComputedInstallDefaults {
   const availability = toComputedProviderAvailability(providers, options)
 
-  if (!hasAnyProvider(availability)) {
-    return {
-      agents: Object.fromEntries(
-        Object.entries(CLI_AGENT_MODEL_REQUIREMENTS)
-          .filter(([role, requirement]) => !(role === "coder" && requirement.requiresAnyModel))
-          .map(([role]) => [role, { model: getUltimateFallback(role) }]),
-      ),
-      categories: Object.fromEntries(
-        Object.keys(CLI_CATEGORY_MODEL_REQUIREMENTS).map((category) => [category, { model: GLOBAL_ULTIMATE_FALLBACK }]),
-      ),
-    }
-  }
+  // Check if we have any usable fallback entries (either via providers or alwaysAvailable)
+  const hasAnyUsableFallback = (chain?: ModelRequirement["fallbackChain"]) =>
+    chain?.some((entry) => entry.alwaysAvailable || entry.providers.some((p) => isProviderAvailable(p, availability)))
+
+  // Even with no providers, alwaysAvailable entries can be used
+  const canUseCoder = !CLI_AGENT_MODEL_REQUIREMENTS.coder.requiresAnyModel ||
+    hasAnyUsableFallback(getCoderFallbackChain())
 
   const agents: Record<string, AgentConfig> = {}
   const categories: Record<string, CategoryConfig> = {}
@@ -86,7 +82,8 @@ export function computeDefaultsFromProviders(
 
     if (role === "coder") {
       const fallbackChain = getCoderFallbackChain()
-      if (requirement.requiresAnyModel && !isAnyFallbackEntryAvailable(fallbackChain, availability)) {
+      // Check if coder can be used (requiresAnyModel only if no usable fallbacks)
+      if (requirement.requiresAnyModel && !canUseCoder) {
         continue
       }
 
