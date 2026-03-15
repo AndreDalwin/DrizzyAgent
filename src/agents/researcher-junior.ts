@@ -1,5 +1,6 @@
 import type { AgentConfig } from "@opencode-ai/sdk"
 import type { AgentFactory, AgentPromptMetadata } from "./types"
+import { isGptModel } from "./types"
 import { createAgentToolRestrictions } from "../shared/permission-compat"
 
 export const RESEARCHER_JUNIOR_PROMPT_METADATA: AgentPromptMetadata = {
@@ -31,7 +32,10 @@ const RESEARCHER_JUNIOR_DEFAULT_PROMPT = `You are a focused web research special
    - HIGH: Confirmed by 3+ independent sources
    - MEDIUM: Supported by 1-2 sources
    - LOW: Single source or uncertain/conflicting information
-6. Write findings to: .drizzy/research/{topic}/findings/{sub-topic}-findings.md
+6. Write findings to: {run_directory}/findings/{sub-topic}-findings.md
+   - Researcher should pass you an exact run_directory in the prompt
+   - Use that exact run_directory so your findings land in the same timestamped folder as the final report
+   - If no explicit run_directory is provided, state the missing contract clearly before making assumptions
 7. Return brief summary in conversation
 </workflow>
 
@@ -65,7 +69,7 @@ Workflow:
 3. Deep-read 2-3 most promising URLs via webfetch for full content.
 4. Extract key findings with inline citations [source](url).
 5. Tag each finding with confidence: HIGH (3+ sources), MEDIUM (1-2 sources), LOW (single/uncertain).
-6. Write findings to .drizzy/research/{topic}/findings/{sub-topic}-findings.md using this format:
+6. Write findings to {run_directory}/findings/{sub-topic}-findings.md using this format:
 
 Findings File Format:
 - Title: "# {Sub-Topic}: Findings"
@@ -86,19 +90,38 @@ Quality Rules:
 export const createResearcherJuniorAgent: AgentFactory = (model: string) => {
   const restrictions = createAgentToolRestrictions([
     "apply_patch",
+    "ast_grep_replace",
     "call_omo_agent",
     "interactive_bash",
     "Bash",
+    "hashline_edit",
+    "lsp_rename",
     "task",
   ])
 
-  return {
+  const base: AgentConfig = {
     description:
       "Web research specialist -- focused sub-topic investigation",
+    mode: "subagent",
     model,
     temperature: 0.1,
+    color: "#818CF8",
     prompt: RESEARCHER_JUNIOR_DEFAULT_PROMPT,
     ...restrictions,
+  }
+
+  if (isGptModel(model)) {
+    return {
+      ...base,
+      prompt: RESEARCHER_JUNIOR_GPT_PROMPT,
+      reasoningEffort: "low",
+      textVerbosity: "high",
+    }
+  }
+
+  return {
+    ...base,
+    thinking: { type: "enabled", budgetTokens: 8000 },
   }
 }
 

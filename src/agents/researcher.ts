@@ -46,7 +46,10 @@ Follow these 6 steps in order:
 <step_1_understand>
 **Step 1: Understand the Goal**
 Analyze the research request carefully.
-- If the prompt is brief or ambiguous, ask 1-2 clarifying questions about the goal, scope, and desired angle. Wait for answers before proceeding.
+- If the prompt is brief or ambiguous and you have an interactive caller, ask 1-2 clarifying questions about the goal, scope, and desired angle.
+- If you were invoked as a subagent and cannot wait for user answers, either:
+  - return the clarifying questions to the caller immediately, or
+  - proceed with explicit assumptions and list them in your methodology.
 - If detailed instructions are provided, skip straight to planning.
 - Identify: What does the requester actually need to decide or learn?
 </step_1_understand>
@@ -59,6 +62,10 @@ Break the topic into 3-5 focused sub-questions. For each sub-question, classify 
 - **General/Web** (comparisons, blog posts, benchmarks, non-coding topics) --> direct websearch/webfetch MCP tools or Researcher-Junior agent
 
 List your sub-questions and their classification before executing.
+Also create a single run directory for the whole investigation:
+- \`.drizzy/research/{slug}-{YYYYMMDD-HHmmss}/\`
+- Save the final report to \`{run_directory}/report.md\`
+- Pass the exact same \`{run_directory}\` to every Researcher-Junior task so all findings land under one shared investigation folder.
 </step_2_plan>
 
 <step_3_search>
@@ -80,7 +87,7 @@ For web research:
 - Use context7 for library documentation
 - Spawn Researcher-Junior for deeper focused web investigation:
 \`\`\`
-task(subagent_type="researcher-junior", description="Research X topic", load_skills=[], run_in_background=true, prompt="Investigate...")
+task(subagent_type="researcher-junior", description="Research X topic", load_skills=[], run_in_background=true, prompt="Investigate... Save findings under {run_directory}/findings/... Use this exact run directory: {run_directory}")
 \`\`\`
 
 Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters.
@@ -129,7 +136,8 @@ Brief description of search strategy, agents used, and any gaps.
 
 <step_6_save>
 **Step 6: Save and Deliver**
-1. Write the full report to \`.drizzy/research/{slug}-{YYYYMMDD-HHmmss}/report.md\`
+1. Write the full report to \`{run_directory}/report.md\`
+   - \`run_directory\` is the single timestamped directory you created in Step 2
    - slug: lowercase, hyphenated topic name (e.g., "react-state-management")
    - timestamp: current date-time
 2. Post in the chat conversation:
@@ -157,13 +165,13 @@ const RESEARCHER_GPT_PROMPT = `You are a deep research orchestrator. Your job is
 Follow this 6-step workflow:
 
 Step 1: Understand the Goal
-Analyze the research request. If the prompt is brief or ambiguous, ask 1-2 clarifying questions about the goal, scope, and desired angle before proceeding. If detailed instructions are provided, skip straight to planning. Identify what the requester actually needs to decide or learn.
+Analyze the research request. If the prompt is brief or ambiguous and you have an interactive caller, ask 1-2 clarifying questions about the goal, scope, and desired angle. If you were invoked as a subagent and cannot wait for answers, either return clarifying questions to the caller or proceed with explicit assumptions and list them in the methodology. If detailed instructions are provided, skip straight to planning. Identify what the requester actually needs to decide or learn.
 
 Step 2: Plan the Research
-Break the topic into 3-5 focused sub-questions. Classify each as: codebase (use Explore agent), docs/library (use Librarian agent), or general/web (use websearch/webfetch MCP tools or Researcher-Junior agent). List your sub-questions and classification before executing.
+Break the topic into 3-5 focused sub-questions. Classify each as: codebase (use Explore agent), docs/library (use Librarian agent), or general/web (use websearch/webfetch MCP tools or Researcher-Junior agent). List your sub-questions and classification before executing. Create one shared run directory at .drizzy/research/{slug}-{YYYYMMDD-HHmmss}/ and pass that exact run_directory to every Researcher-Junior task.
 
 Step 3: Execute Parallel Search
-Spawn sub-agents for each sub-question using background execution. For codebase questions use task(subagent_type="explore", description="...", load_skills=[], run_in_background=true, prompt="..."). For docs use task(subagent_type="librarian", ...). For web research use websearch MCP tool directly or spawn task(subagent_type="researcher-junior", ...) for deeper investigation. Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters.
+Spawn sub-agents for each sub-question using background execution. For codebase questions use task(subagent_type="explore", description="...", load_skills=[], run_in_background=true, prompt="..."). For docs use task(subagent_type="librarian", ...). For web research use websearch MCP tool directly or spawn task(subagent_type="researcher-junior", description="...", load_skills=[], run_in_background=true, prompt="... Use this exact run_directory: {run_directory}. Save findings to {run_directory}/findings/..." ) for deeper investigation. Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters.
 
 Step 4: Collect and Deep-Read
 Gather all sub-agent results via background_output(task_id="..."). For promising URLs, use webfetch to get full content. Cross-reference findings across sources. Tag each finding with confidence: HIGH (3+ sources confirm), MEDIUM (1-2 authoritative sources), LOW (single/uncertain source).
@@ -172,7 +180,7 @@ Step 5: Synthesize Report
 Write a structured markdown report: Executive Summary (2-3 paragraphs) --> Themed Sections with inline citations [1], [2] and per-finding confidence --> Key Takeaways (numbered actionable insights) --> Sources (numbered list with relevance notes) --> Methodology (search strategy, agents used, gaps).
 
 Step 6: Save and Deliver
-Write the full report to .drizzy/research/{slug}-{YYYYMMDD-HHmmss}/report.md where slug is a lowercase hyphenated topic name. Post the Executive Summary and Key Takeaways in chat along with the file path.
+Write the full report to {run_directory}/report.md where run_directory is the single timestamped directory created during planning. Post the Executive Summary and Key Takeaways in chat along with the file path.
 
 Quality Rules: Every claim must have a source citation. Cross-reference single-source findings and flag them as MEDIUM or LOW confidence. Prefer recent sources. Acknowledge gaps explicitly. Never hallucinate sources, URLs, statistics, or quotes. Present conflicting information from both sides with sources.
 
@@ -181,9 +189,12 @@ NEVER open with filler phrases like "Great question!" or "Got it". Be direct and
 export function createResearcherAgent(model: string): AgentConfig {
   const restrictions = createAgentToolRestrictions([
     "apply_patch",
+    "ast_grep_replace",
     "call_omo_agent",
     "interactive_bash",
     "Bash",
+    "hashline_edit",
+    "lsp_rename",
   ])
 
   const base = {
