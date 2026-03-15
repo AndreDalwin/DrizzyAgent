@@ -105,16 +105,18 @@ export function isGeminiModel(model: string): boolean {
 }
 
 export type BuiltinAgentName =
-  | "coder"
-  | "gptcoder"
-  | "oracle"
-  | "librarian"
-  | "explore"
-  | "multimodal-looker"
-  | "plan-consultant"
-  | "plan-reviewer"
-  | "atlas"
-  | "coder-junior";
+   | "coder"
+   | "gptcoder"
+   | "oracle"
+   | "librarian"
+   | "explore"
+   | "multimodal-looker"
+   | "plan-consultant"
+   | "plan-reviewer"
+   | "atlas"
+   | "coder-junior"
+   | "researcher"
+   | "researcher-junior";
 
 export type OverridableAgentName = "build" | BuiltinAgentName;
 

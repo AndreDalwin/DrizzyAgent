@@ -102,6 +102,15 @@ export function applyToolConfig(params: {
       ...denyTodoTools,
     };
   }
+  const researcher = agentByKey(params.agentResult, "researcher");
+  if (researcher) {
+    researcher.permission = {
+      ...researcher.permission,
+      task: "allow",
+      "task_*": "allow",
+      ...denyTodoTools,
+    };
+  }
   const junior = agentByKey(params.agentResult, "coder-junior");
   if (junior) {
     junior.permission = {

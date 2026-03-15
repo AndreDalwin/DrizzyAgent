@@ -35,6 +35,7 @@ export { createAutoSlashCommandHook } from "./auto-slash-command";
 export { createEditErrorRecoveryHook } from "./edit-error-recovery";
 
 export { createPlannerMdOnlyHook } from "./planner-md-only";
+export { createResearcherResearchOnlyHook } from "./researcher-research-only";
 export { createCoderJuniorNotepadHook } from "./coder-junior-notepad";
 export { createTaskResumeInfoHook } from "./task-resume-info";
 export { createStartWorkHook } from "./start-work";

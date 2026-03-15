@@ -25,6 +25,7 @@ import {
   createQuestionLabelTruncatorHook,
   createPreemptiveCompactionHook,
   createRuntimeFallbackHook,
+  createResearcherResearchOnlyHook,
 } from "../../hooks"
 import { createAnthropicEffortHook } from "../../hooks/anthropic-effort"
 import {
@@ -53,6 +54,7 @@ export type SessionHooks = {
   delegateTaskRetry: ReturnType<typeof createDelegateTaskRetryHook> | null
   startWork: ReturnType<typeof createStartWorkHook> | null
   plannerMdOnly: ReturnType<typeof createPlannerMdOnlyHook> | null
+  researcherResearchOnly: ReturnType<typeof createResearcherResearchOnlyHook> | null
   coderJuniorNotepad: ReturnType<typeof createCoderJuniorNotepadHook> | null
   noCoderGpt: ReturnType<typeof createNoCoderGptHook> | null
   noGptcoderNonGpt: ReturnType<typeof createNoGptcoderNonGptHook> | null
@@ -223,6 +225,10 @@ export function createSessionHooks(args: {
     ? safeHook("planner-md-only", () => createPlannerMdOnlyHook(ctx))
     : null
 
+  const researcherResearchOnly = isHookEnabled("researcher-research-only")
+    ? safeHook("researcher-research-only", () => createResearcherResearchOnlyHook(ctx))
+    : null
+
   const coderJuniorNotepad = isHookEnabled("coder-junior-notepad")
     ? safeHook("coder-junior-notepad", () => createCoderJuniorNotepadHook(ctx))
     : null
@@ -278,6 +284,7 @@ export function createSessionHooks(args: {
     delegateTaskRetry,
     startWork,
     plannerMdOnly,
+    researcherResearchOnly,
     coderJuniorNotepad,
     noCoderGpt,
     noGptcoderNonGpt,
