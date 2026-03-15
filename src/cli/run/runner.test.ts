@@ -80,6 +80,30 @@ describe("resolveRunAgent", () => {
     // then
     expect(agent).toBe("Coder")
   })
+
+  it("resolves Researcher as a selectable main agent", () => {
+    // given
+    const config = createConfig({ default_run_agent: "Researcher" })
+
+    // when
+    const agent = resolveRunAgent({ message: "test" }, config, {})
+
+    // then
+    expect(agent).toBe("Researcher")
+  })
+
+  it("falls back to Researcher after other core agents are disabled", () => {
+    // given
+    const config = createConfig({
+      disabled_agents: ["coder", "gptcoder", "planner", "atlas"],
+    })
+
+    // when
+    const agent = resolveRunAgent({ message: "test" }, config, {})
+
+    // then
+    expect(agent).toBe("Researcher")
+  })
 })
 
 describe("waitForEventProcessorShutdown", () => {

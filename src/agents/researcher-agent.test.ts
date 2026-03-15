@@ -11,9 +11,9 @@ describe("createResearcherAgent", () => {
     const permission = agent.permission as Record<string, string>
     const prompt = agent.prompt as string
 
-    test("#then mode is subagent in both factory and config", () => {
-      expect(createResearcherAgent.mode).toBe("subagent")
-      expect(agent.mode).toBe("subagent")
+    test("#then mode is all in both factory and config", () => {
+      expect(createResearcherAgent.mode).toBe("all")
+      expect(agent.mode).toBe("all")
     })
 
     test("#then thinking is enabled with expected budget", () => {
