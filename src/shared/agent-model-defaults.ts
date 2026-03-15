@@ -210,20 +210,20 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   },
   researcher: {
     chain: [
-      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" },
-      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
-      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "low" },
       { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro" },
-      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6", variant: "medium" },
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" },
+      { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
     includeInInstall: false,
   },
   "researcher-junior": {
     chain: [
-      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" },
       { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
-      { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
-      { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
+      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6", variant: "medium" },
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "low" },
+      { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
     includeInInstall: false,
   },

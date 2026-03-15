@@ -138,7 +138,7 @@ describe("Agent Config Integration", () => {
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
 
       // when - checking key format
-      const expectedAgentKeys = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior"]
+      const expectedAgentKeys = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior", "researcher", "researcher-junior"]
 
       // then - keys match the canonical internal schema
       expect([...agentKeys].sort()).toEqual([...expectedAgentKeys].sort())
@@ -146,7 +146,7 @@ describe("Agent Config Integration", () => {
 
     test("model requirements include all builtin agents", () => {
       // given - expected builtin agents
-      const expectedAgents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior"]
+      const expectedAgents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior", "researcher", "researcher-junior"]
 
       // when - checking AGENT_MODEL_REQUIREMENTS
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
@@ -164,6 +164,23 @@ describe("Agent Config Integration", () => {
       // then - plan agents remain camelCase because getAgentConfigKey resolves to those keys
       expect(agentKeys).toContain("planConsultant")
       expect(agentKeys).toContain("planReviewer")
+    })
+
+    test("researcher model requirements preserve the intended fallback order and variants", () => {
+      expect(AGENT_MODEL_REQUIREMENTS.researcher.fallbackChain).toEqual([
+        { providers: ["google", "github-copilot", "opencode"], model: "gemini-3.1-pro" },
+        { providers: ["opencode", "moonshotai", "moonshotai-cn", "firmware", "ollama-cloud", "aihubmix"], model: "kimi-k2.5" },
+        { providers: ["anthropic", "github-copilot", "opencode"], model: "claude-sonnet-4-6", variant: "medium" },
+        { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "medium" },
+        { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
+      ])
+
+      expect(AGENT_MODEL_REQUIREMENTS["researcher-junior"].fallbackChain).toEqual([
+        { providers: ["opencode", "moonshotai", "moonshotai-cn", "firmware", "ollama-cloud", "aihubmix"], model: "kimi-k2.5" },
+        { providers: ["anthropic", "github-copilot", "opencode"], model: "claude-sonnet-4-6", variant: "medium" },
+        { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "low" },
+        { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
+      ])
     })
   })
 
