@@ -15,4 +15,10 @@ describe("isResearcherAgent", () => {
     expect(isResearcherAgent(undefined)).toBe(false)
     expect(isResearcherAgent("")).toBe(false)
   })
+
+  test("#given agent names containing researcher as substring #then they do not overmatch", () => {
+    expect(isResearcherAgent("my-researcher-custom")).toBe(false)
+    expect(isResearcherAgent("super-researcher")).toBe(false)
+    expect(isResearcherAgent("researcher-senior")).toBe(false)
+  })
 })
