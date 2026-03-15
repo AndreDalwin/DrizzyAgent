@@ -1,11 +1,11 @@
 import type { PluginInput } from "@opencode-ai/plugin"
 
-import { HOOK_NAME, BLOCKED_TOOLS } from "./constants"
+import { HOOK_NAME } from "./constants"
 import { log } from "../../shared/logger"
 import { getAgentDisplayName } from "../../shared/agent-display-names"
 import { getAgentFromSession } from "../planner-md-only/agent-resolution"
 import { isResearcherAgent } from "./agent-matcher"
-import { isAllowedResearcherFile } from "./path-policy"
+import { getResearcherMutationViolation } from "./mutation-guard"
 
 export function createResearcherResearchOnlyHook(ctx: PluginInput) {
   return {
@@ -21,34 +21,29 @@ export function createResearcherResearchOnlyHook(ctx: PluginInput) {
 
       const toolName = input.tool
 
-      if (!BLOCKED_TOOLS.includes(toolName)) {
-        return
-      }
+      const violation = getResearcherMutationViolation(
+        toolName,
+        output.args,
+        ctx.directory
+      )
 
-      const filePath = (output.args.filePath ?? output.args.path ?? output.args.file) as string | undefined
-      if (!filePath) {
-        return
-      }
-
-      if (!isAllowedResearcherFile(filePath, ctx.directory)) {
+      if (violation) {
         const displayName = getAgentDisplayName(agentName ?? "researcher")
-        log(`[${HOOK_NAME}] Blocked: Researcher can only write to .drizzy/research/**/*.md`, {
+        log(`[${HOOK_NAME}] Blocked researcher mutation`, {
           sessionID: input.sessionID,
           tool: toolName,
-          filePath,
+          args: output.args,
           agent: agentName,
         })
         throw new Error(
-          `[${HOOK_NAME}] ${displayName} can only write/edit .md files inside .drizzy/research/ directory. ` +
-          `Attempted to modify: ${filePath}. ` +
-          `Researchers are restricted to research output only.`
+          `[${HOOK_NAME}] ${displayName} is restricted to research output only. ${violation}`
         )
       }
 
-      log(`[${HOOK_NAME}] Allowed: .drizzy/research/*.md write permitted`, {
+      log(`[${HOOK_NAME}] Allowed researcher mutation within research directory`, {
         sessionID: input.sessionID,
         tool: toolName,
-        filePath,
+        args: output.args,
         agent: agentName,
       })
     },
