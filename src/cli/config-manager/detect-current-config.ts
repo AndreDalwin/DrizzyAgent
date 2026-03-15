@@ -51,25 +51,6 @@ type ProviderDetectionResult = {
   hasKimiForCoding: boolean
 }
 
-function detectProvidersFromString(configStr: string) {
-  return {
-    hasClaude: configStr.includes('"anthropic/'),
-    hasOpenAI: configStr.includes('"openai/'),
-    hasGemini: configStr.includes('"google/'),
-    hasCopilot: configStr.includes('"github-copilot/'),
-    hasOpencodeZen: configStr.includes('"opencode/'),
-    hasZaiCodingPlan: configStr.includes('"zai-coding-plan/'),
-    hasKimiForCoding: configStr.includes('"kimi-for-coding/'),
-  }
-}
-
-function mergeProviderDetection(
-  source: ReturnType<typeof detectProvidersFromString>,
-  isMax20: boolean,
-): ProviderDetectionResult {
-  return { ...source, isMax20 }
-}
-
 function detectProvidersFromDrizzyConfig(
   deps: DetectCurrentConfigDependencies,
 ): ProviderDetectionResult {

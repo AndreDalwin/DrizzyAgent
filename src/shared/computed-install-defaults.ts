@@ -1,6 +1,5 @@
 import {
   getCoderFallbackChain,
-  isAnyFallbackEntryAvailable,
   isRequiredModelAvailable,
   isRequiredProviderAvailable,
   resolveModelFromChain,
@@ -123,18 +122,6 @@ export function computeDefaultsFromProviders(
   }
 
   return { agents, categories }
-}
-
-function hasAnyProvider(availability: ProviderAvailability): boolean {
-  return (
-    availability.native.claude ||
-    availability.native.openai ||
-    availability.native.gemini ||
-    availability.opencodeZen ||
-    availability.copilot ||
-    availability.zai ||
-    availability.kimiForCoding
-  )
 }
 
 function resolveExploreAgent(availability: ProviderAvailability): AgentConfig {

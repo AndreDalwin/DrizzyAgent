@@ -14,7 +14,6 @@ type GuardArgs = {
 
 const MAX_TRACKED_SESSIONS = 256
 export const MAX_TRACKED_PATHS_PER_SESSION = 1024
-const BLOCK_MESSAGE = "File already exists. Use edit tool instead."
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
