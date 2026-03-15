@@ -107,7 +107,6 @@ export function applyToolConfig(params: {
     researcher.permission = {
       ...researcher.permission,
       task: "allow",
-      "task_*": "allow",
       ...denyTodoTools,
     };
   }
