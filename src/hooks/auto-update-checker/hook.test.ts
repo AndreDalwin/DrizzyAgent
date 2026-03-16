@@ -222,12 +222,12 @@ describe("createAutoUpdateCheckerHook", () => {
     runSessionCreatedEvent(hook)
     await flushScheduledWork()
 
-    //#then - startup toast includes coder wording
+    //#then - startup toast includes drizzy wording
     expect(mockShowVersionToast).toHaveBeenCalledTimes(1)
     expect(mockShowVersionToast).toHaveBeenCalledWith(
       expect.anything(),
       "3.6.0",
-      expect.stringContaining("Coder")
+      expect.stringContaining("Drizzy")
     )
   })
 })
