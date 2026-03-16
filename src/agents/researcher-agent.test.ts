@@ -32,7 +32,11 @@ describe("createResearcherAgent", () => {
 
     test("#then prompt includes the shared run_directory contract", () => {
       expect(prompt).toContain("run_directory")
-      expect(prompt).toContain("return the clarifying questions to the caller")
+      expect(prompt).toContain("coding task")
+      expect(prompt).toContain("Launch 1-3 Explore agents")
+      expect(prompt).toContain("If no relevant local code, patterns, or prior art exist")
+      expect(prompt).toContain("question tool first")
+      expect(prompt).toContain("return the clarifying questions to the caller and stop until they are answered")
       expect(prompt).toContain("{run_directory}/report.md")
       expect(prompt).toContain("{run_directory}/findings")
     })
@@ -59,6 +63,9 @@ describe("createResearcherAgent", () => {
     test("#then GPT prompt has no XML tags and keeps the run_directory contract", () => {
       expect(prompt).not.toMatch(/<\w+>/)
       expect(prompt).toContain("run_directory")
+      expect(prompt).toContain("question tool first")
+      expect(prompt).toContain("inspect the codebase first")
+      expect(prompt).toContain("lightweight grounding pass")
       expect(prompt).toContain("Executive Summary")
       expect(prompt).toContain("Methodology")
     })
