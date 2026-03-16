@@ -211,6 +211,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   researcher: {
     chain: [
       { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro" },
+      { providers: ["kimi-for-coding"], model: "k2p5" },
       { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
       { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6", variant: "medium" },
       { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" },
@@ -220,6 +221,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   },
   "researcher-junior": {
     chain: [
+      { providers: ["kimi-for-coding"], model: "k2p5" },
       { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
       { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6", variant: "medium" },
       { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "low" },

@@ -191,6 +191,37 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(secondary.variant).toBe("medium")
   })
 
+  test("researcher prefers kimi-for-coding before generic kimi-k2.5", () => {
+    const researcher = AGENT_MODEL_REQUIREMENTS["researcher"]
+
+    expect(researcher).toBeDefined()
+    expect(researcher.fallbackChain).toHaveLength(6)
+
+    const primary = researcher.fallbackChain[0]
+    expect(primary.model).toBe("gemini-3.1-pro")
+
+    const secondary = researcher.fallbackChain[1]
+    expect(secondary.providers).toEqual(["kimi-for-coding"])
+    expect(secondary.model).toBe("k2p5")
+
+    const tertiary = researcher.fallbackChain[2]
+    expect(tertiary.model).toBe("kimi-k2.5")
+  })
+
+  test("researcher-junior prefers kimi-for-coding before generic kimi-k2.5", () => {
+    const researcherJunior = AGENT_MODEL_REQUIREMENTS["researcher-junior"]
+
+    expect(researcherJunior).toBeDefined()
+    expect(researcherJunior.fallbackChain).toHaveLength(5)
+
+    const primary = researcherJunior.fallbackChain[0]
+    expect(primary.providers).toEqual(["kimi-for-coding"])
+    expect(primary.model).toBe("k2p5")
+
+    const secondary = researcherJunior.fallbackChain[1]
+    expect(secondary.model).toBe("kimi-k2.5")
+  })
+
   test("gptcoder supports openai, github-copilot, venice, and opencode providers", () => {
     const gptcoder = AGENT_MODEL_REQUIREMENTS["gptcoder"]
 
