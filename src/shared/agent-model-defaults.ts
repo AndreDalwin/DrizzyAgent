@@ -44,7 +44,7 @@
  * | Agent | Unified Chain |
  * |-------|---------------|
  * | **coder** | claude-opus-4-6 → k2p5 → kimi-k2.5 → gpt-5.4 → glm-5 → big-pickle |
- * | **gptcoder** | gpt-5.4 (openai/venice/opencode) → gpt-5.4 (github-copilot) |
+ * | **gptcoder** | gpt-5.3-codex (openai/venice/opencode) → gpt-5.3-codex (github-copilot) |
  * | **planner** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
  * | **oracle** | gpt-5.4 → kimi-k2.5 → gemini-3.1-pro → claude-opus-4-6 → big-pickle (free) |
  * | **librarian** | gemini-3-flash → glm-4.7 → claude-sonnet-4-5 → minimax → big-pickle → glm-4.7-free |
@@ -53,7 +53,7 @@
  * | **plan-consultant** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
  * | **plan-reviewer** | gpt-5.4 → kimi-k2.5 → claude-opus-4-6 → gemini-3.1-pro → big-pickle (free) |
  * | **atlas** | k2p5 → claude-sonnet-4-6 → claude-sonnet-4-5 → gpt-5.4 → gemini-3.1-pro |
- * | **coder-junior** | claude-sonnet-4-6 → gpt-5.4 → gemini-3-flash (runtime only) |
+ * | **coder-junior** | claude-sonnet-4-6 → gpt-5.3-codex → gemini-3-flash (runtime only) |
  * 
  * ## Category Model Chains
  * 
@@ -64,8 +64,8 @@
  * | **deep** | gpt-5.4 → claude-opus-4-6 → gemini-3.1-pro → kimi-k2.5 → big-pickle (free) |
  * | **artistry** | gemini-3.1-pro → claude-opus-4-6 → gpt-5.4 → kimi-k2.5 → minimax-m2.5-free (free) |
  * | **quick** | claude-haiku-4-5 → gemini-3-flash → gpt-5.1-codex-mini → gpt-5-nano (free) |
- * | **unspecified-low** | claude-sonnet-4-6 → kimi-k2.5 → gpt-5.4 → gemini-3-flash → minimax-m2.5-free (free) |
- * | **unspecified-high** | claude-opus-4-6 → gpt-5.4 → glm-5 → k2p5 → kimi-k2.5 |
+ * | **unspecified-low** | claude-sonnet-4-6 → kimi-k2.5 → gpt-5.3-codex → gemini-3-flash → minimax-m2.5-free (free) |
+ * | **unspecified-high** | claude-opus-4-6 → gpt-5.3-codex → glm-5 → k2p5 → kimi-k2.5 |
  * | **writing** | gemini-3-flash → k2p5 → claude-sonnet-4-6 |
  * 
  * ## Special Cases
@@ -135,8 +135,8 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   },
   gptcoder: {
     chain: [
-      { providers: ["openai", "venice", "opencode"], model: "gpt-5.4", variant: "medium" },
-      { providers: ["github-copilot"], model: "gpt-5.4", variant: "medium" },
+      { providers: ["openai", "venice", "opencode"], model: "gpt-5.3-codex", variant: "medium" },
+      { providers: ["github-copilot"], model: "gpt-5.3-codex", variant: "medium" },
     ],
     includeInInstall: true,
     requiresAnyProvider: ["openai", "github-copilot", "venice", "opencode"],
@@ -205,7 +205,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     includeInInstall: true,
   },
   "coder-junior": {
-    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }],
+    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.3-codex", variant: "medium" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }],
     includeInInstall: false,
   },
 };
@@ -266,14 +266,14 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     chain: [
       { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" },
       { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
-      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "medium" },
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.3-codex", variant: "medium" },
       { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
       { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
     ],
     includeInInstall: true,
   },
   "unspecified-high": {
-    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "high" }, { providers: ["zai-coding-plan", "opencode"], model: "glm-5" }, { providers: ["kimi-for-coding"], model: "k2p5" }, { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" }],
+    chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.3-codex", variant: "high" }, { providers: ["zai-coding-plan", "opencode"], model: "glm-5" }, { providers: ["kimi-for-coding"], model: "k2p5" }, { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" }],
     includeInInstall: true,
   },
   writing: {
