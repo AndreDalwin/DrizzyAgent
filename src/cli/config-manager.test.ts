@@ -4,117 +4,13 @@ import { getPluginNameWithVersion, fetchNpmDistTags, generateDrizzyConfig } from
 import type { InstallConfig } from "./types"
 
 describe("getPluginNameWithVersion", () => {
-  const originalFetch = globalThis.fetch
+  test("returns bare package name", () => {
+    // #given the function is called
+    // #when getting plugin name
+    const result = getPluginNameWithVersion()
 
-  afterEach(() => {
-    globalThis.fetch = originalFetch
-  })
-
-  test("returns @latest when current version matches latest tag", async () => {
-    // #given npm dist-tags with latest=2.14.0
-    globalThis.fetch = mock(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ latest: "2.14.0", beta: "3.0.0-beta.3" }),
-      } as Response)
-    ) as unknown as typeof fetch
-
-    // #when current version is 2.14.0
-    const result = await getPluginNameWithVersion("2.14.0")
-
-    // #then should use @latest tag
-    expect(result).toBe("drizzy-agent@latest")
-  })
-
-  test("returns @beta when current version matches beta tag", async () => {
-    // #given npm dist-tags with beta=3.0.0-beta.3
-    globalThis.fetch = mock(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ latest: "2.14.0", beta: "3.0.0-beta.3" }),
-      } as Response)
-    ) as unknown as typeof fetch
-
-    // #when current version is 3.0.0-beta.3
-    const result = await getPluginNameWithVersion("3.0.0-beta.3")
-
-    // #then should use @beta tag
-    expect(result).toBe("drizzy-agent@beta")
-  })
-
-  test("returns @next when current version matches next tag", async () => {
-    // #given npm dist-tags with next=3.1.0-next.1
-    globalThis.fetch = mock(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ latest: "2.14.0", beta: "3.0.0-beta.3", next: "3.1.0-next.1" }),
-      } as Response)
-    ) as unknown as typeof fetch
-
-    // #when current version is 3.1.0-next.1
-    const result = await getPluginNameWithVersion("3.1.0-next.1")
-
-    // #then should use @next tag
-    expect(result).toBe("drizzy-agent@next")
-  })
-
-  test("returns prerelease channel tag when no dist-tag matches prerelease version", async () => {
-    // #given npm dist-tags with beta=3.0.0-beta.3
-    globalThis.fetch = mock(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ latest: "2.14.0", beta: "3.0.0-beta.3" }),
-      } as Response)
-    ) as unknown as typeof fetch
-
-    // #when current version is old beta 3.0.0-beta.2
-    const result = await getPluginNameWithVersion("3.0.0-beta.2")
-
-    // #then should preserve prerelease channel
-    expect(result).toBe("drizzy-agent@beta")
-  })
-
-  test("returns prerelease channel tag when fetch fails", async () => {
-    // #given network failure
-    globalThis.fetch = mock(() => Promise.reject(new Error("Network error"))) as unknown as typeof fetch
-
-    // #when current version is 3.0.0-beta.3
-    const result = await getPluginNameWithVersion("3.0.0-beta.3")
-
-    // #then should preserve prerelease channel
-    expect(result).toBe("drizzy-agent@beta")
-  })
-
-  test("returns bare package name when npm returns non-ok response for stable version", async () => {
-    // #given npm returns 404
-    globalThis.fetch = mock(() =>
-      Promise.resolve({
-        ok: false,
-        status: 404,
-      } as Response)
-    ) as unknown as typeof fetch
-
-    // #when current version is 2.14.0
-    const result = await getPluginNameWithVersion("2.14.0")
-
-    // #then should fall back to bare package entry
+    // #then should return bare package name without version
     expect(result).toBe("drizzy-agent")
-  })
-
-  test("prioritizes latest over other tags when version matches multiple", async () => {
-    // #given version matches both latest and beta (during release promotion)
-    globalThis.fetch = mock(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ beta: "3.0.0", latest: "3.0.0", next: "3.1.0-alpha.1" }),
-      } as Response)
-    ) as unknown as typeof fetch
-
-    // #when current version matches both
-    const result = await getPluginNameWithVersion("3.0.0")
-
-    // #then should prioritize @latest
-    expect(result).toBe("drizzy-agent@latest")
   })
 })
 
