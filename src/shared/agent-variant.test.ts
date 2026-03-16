@@ -113,9 +113,9 @@ describe("resolveVariantForModel", () => {
   })
 
   test("returns correct variant for openai provider (gptcoder agent)", () => {
-    // #given gptcoder has openai/gpt-5.4 with variant "medium" in its chain
+    // #given gptcoder has openai/gpt-5.3-codex with variant "medium" in its chain
     const config = {} as DrizzyAgentConfig
-    const model = { providerID: "openai", modelID: "gpt-5.4" }
+    const model = { providerID: "openai", modelID: "gpt-5.3-codex" }
 
     // #when
     const variant = resolveVariantForModel(config, "gptcoder", model)

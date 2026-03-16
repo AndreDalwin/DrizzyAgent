@@ -324,12 +324,12 @@ describe("CATEGORY_MODEL_REQUIREMENTS", () => {
     expect(primary.providers[0]).toBe("anthropic")
   })
 
-  test("unspecified-high has claude-opus-4-6 as primary and gpt-5.4 as secondary", () => {
+  test("unspecified-high has claude-opus-4-6 as primary and gpt-5.3-codex as secondary", () => {
     // #given - unspecified-high category requirement
     const unspecifiedHigh = CATEGORY_MODEL_REQUIREMENTS["unspecified-high"]
 
     // #when - accessing unspecified-high requirement
-    // #then - claude-opus-4-6 is first and gpt-5.4 is second
+    // #then - claude-opus-4-6 is first and gpt-5.3-codex is second
     expect(unspecifiedHigh).toBeDefined()
     expect(unspecifiedHigh.fallbackChain).toBeArray()
     expect(unspecifiedHigh.fallbackChain.length).toBeGreaterThan(1)
@@ -340,7 +340,7 @@ describe("CATEGORY_MODEL_REQUIREMENTS", () => {
     expect(primary.providers).toEqual(["anthropic", "github-copilot", "opencode"])
 
     const secondary = unspecifiedHigh.fallbackChain[1]
-    expect(secondary.model).toBe("gpt-5.4")
+    expect(secondary.model).toBe("gpt-5.3-codex")
     expect(secondary.variant).toBe("high")
     expect(secondary.providers).toEqual(["openai", "github-copilot", "opencode"])
   })
@@ -524,8 +524,8 @@ describe("requiresModel field in categories", () => {
   })
 })
 
-describe("gpt-5.3-codex provider restrictions", () => {
-  test("no gpt-5.3-codex entry in AGENT_MODEL_REQUIREMENTS includes github-copilot as provider", () => {
+describe("gpt-5.3-codex provider coverage", () => {
+  test("AGENT_MODEL_REQUIREMENTS includes both native and github-copilot gpt-5.3-codex entries", () => {
     // given - all agent requirements
     const allAgentEntries = Object.values(AGENT_MODEL_REQUIREMENTS).flatMap(
       (req) => req.fallbackChain
@@ -534,13 +534,12 @@ describe("gpt-5.3-codex provider restrictions", () => {
     // when - filtering entries with gpt-5.3-codex model
     const codexEntries = allAgentEntries.filter((entry) => entry.model === "gpt-5.3-codex")
 
-    // then - none of them include github-copilot as a provider
-    for (const entry of codexEntries) {
-      expect(entry.providers).not.toContain("github-copilot")
-    }
+    // then - codex is available through both native and github-copilot paths
+    expect(codexEntries.some((entry) => entry.providers.includes("openai"))).toBe(true)
+    expect(codexEntries.some((entry) => entry.providers.includes("github-copilot"))).toBe(true)
   })
 
-  test("no gpt-5.3-codex entry in CATEGORY_MODEL_REQUIREMENTS includes github-copilot as provider", () => {
+  test("CATEGORY_MODEL_REQUIREMENTS includes both native and github-copilot-compatible gpt-5.3-codex entries", () => {
     // given - all category requirements
     const allCategoryEntries = Object.values(CATEGORY_MODEL_REQUIREMENTS).flatMap(
       (req) => req.fallbackChain
@@ -549,9 +548,9 @@ describe("gpt-5.3-codex provider restrictions", () => {
     // when - filtering entries with gpt-5.3-codex model
     const codexEntries = allCategoryEntries.filter((entry) => entry.model === "gpt-5.3-codex")
 
-    // then - none of them include github-copilot as a provider
-    for (const entry of codexEntries) {
-      expect(entry.providers).not.toContain("github-copilot")
-    }
+    // then - category codex fallbacks span both native and github-copilot-compatible chains
+    expect(codexEntries.length).toBeGreaterThan(0)
+    expect(codexEntries.some((entry) => entry.providers.includes("openai"))).toBe(true)
+    expect(codexEntries.some((entry) => entry.providers.includes("github-copilot"))).toBe(true)
   })
 })
