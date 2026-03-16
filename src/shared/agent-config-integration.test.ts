@@ -169,6 +169,7 @@ describe("Agent Config Integration", () => {
     test("researcher model requirements preserve the intended fallback order and variants", () => {
       expect(AGENT_MODEL_REQUIREMENTS.researcher.fallbackChain).toEqual([
         { providers: ["google", "github-copilot", "opencode"], model: "gemini-3.1-pro" },
+        { providers: ["kimi-for-coding"], model: "k2p5" },
         { providers: ["opencode", "moonshotai", "moonshotai-cn", "firmware", "ollama-cloud", "aihubmix"], model: "kimi-k2.5" },
         { providers: ["anthropic", "github-copilot", "opencode"], model: "claude-sonnet-4-6", variant: "medium" },
         { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "medium" },
@@ -176,6 +177,7 @@ describe("Agent Config Integration", () => {
       ])
 
       expect(AGENT_MODEL_REQUIREMENTS["researcher-junior"].fallbackChain).toEqual([
+        { providers: ["kimi-for-coding"], model: "k2p5" },
         { providers: ["opencode", "moonshotai", "moonshotai-cn", "firmware", "ollama-cloud", "aihubmix"], model: "kimi-k2.5" },
         { providers: ["anthropic", "github-copilot", "opencode"], model: "claude-sonnet-4-6", variant: "medium" },
         { providers: ["openai", "github-copilot", "opencode"], model: "gpt-5.4", variant: "low" },
