@@ -1,6 +1,6 @@
 {
   "name": "drizzy-agent-linux-x64",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "Platform-specific binary for DrizzyAgent (linux-x64)",
   "license": "MIT",
   "repository": {

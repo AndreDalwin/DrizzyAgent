@@ -1,6 +1,6 @@
 {
   "name": "drizzy-agent",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "DrizzyAgent - AI agent plugin for OpenCode",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -76,17 +76,17 @@
     "typescript": "^5.7.3"
   },
   "optionalDependencies": {
-    "drizzy-agent-darwin-arm64": "0.5.7",
-    "drizzy-agent-darwin-x64": "0.5.7",
-    "drizzy-agent-darwin-x64-baseline": "0.5.7",
-    "drizzy-agent-linux-arm64": "0.5.7",
-    "drizzy-agent-linux-arm64-musl": "0.5.7",
-    "drizzy-agent-linux-x64": "0.5.7",
-    "drizzy-agent-linux-x64-baseline": "0.5.7",
-    "drizzy-agent-linux-x64-musl": "0.5.7",
-    "drizzy-agent-linux-x64-musl-baseline": "0.5.7",
-    "drizzy-agent-windows-x64": "0.5.7",
-    "drizzy-agent-windows-x64-baseline": "0.5.7"
+    "drizzy-agent-darwin-arm64": "0.5.8",
+    "drizzy-agent-darwin-x64": "0.5.8",
+    "drizzy-agent-darwin-x64-baseline": "0.5.8",
+    "drizzy-agent-linux-arm64": "0.5.8",
+    "drizzy-agent-linux-arm64-musl": "0.5.8",
+    "drizzy-agent-linux-x64": "0.5.8",
+    "drizzy-agent-linux-x64-baseline": "0.5.8",
+    "drizzy-agent-linux-x64-musl": "0.5.8",
+    "drizzy-agent-linux-x64-musl-baseline": "0.5.8",
+    "drizzy-agent-windows-x64": "0.5.8",
+    "drizzy-agent-windows-x64-baseline": "0.5.8"
   },
   "overrides": {
     "@opencode-ai/sdk": "^1.2.24"
