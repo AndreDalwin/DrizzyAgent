@@ -77,7 +77,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     const explore = AGENT_MODEL_REQUIREMENTS["explore"]
 
     // when - accessing explore requirement
-    // then - fallbackChain: grok → minimax-free → haiku → nano
+    // then - fallbackChain: grok → haiku → minimax-free → nano
     expect(explore).toBeDefined()
     expect(explore.fallbackChain).toBeArray()
     expect(explore.fallbackChain).toHaveLength(4)
@@ -87,12 +87,12 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(primary.model).toBe("grok-code-fast-1")
 
     const secondary = explore.fallbackChain[1]
-    expect(secondary.providers).toContain("opencode")
-    expect(secondary.model).toBe("minimax-m2.5-free")
+    expect(secondary.providers).toContain("anthropic")
+    expect(secondary.model).toBe("claude-haiku-4-5")
 
     const tertiary = explore.fallbackChain[2]
-    expect(tertiary.providers).toContain("anthropic")
-    expect(tertiary.model).toBe("claude-haiku-4-5")
+    expect(tertiary.providers).toContain("opencode")
+    expect(tertiary.model).toBe("minimax-m2.5-free")
 
     const quaternary = explore.fallbackChain[3]
     expect(quaternary.providers).toContain("opencode")
