@@ -32,6 +32,8 @@ describe("createResearcherAgent", () => {
 
     test("#then prompt includes the shared run_directory contract", () => {
       expect(prompt).toContain("run_directory")
+      expect(prompt).toContain(".drizzy/research/{slug}/")
+      expect(prompt).not.toContain("{slug}-{YYYYMMDD-HHmmss}")
       expect(prompt).toContain("coding task")
       expect(prompt).toContain("Launch 1-3 Explore agents")
       expect(prompt).toContain("If no relevant local code, patterns, or prior art exist")
@@ -63,6 +65,8 @@ describe("createResearcherAgent", () => {
     test("#then GPT prompt has no XML tags and keeps the run_directory contract", () => {
       expect(prompt).not.toMatch(/<\w+>/)
       expect(prompt).toContain("run_directory")
+      expect(prompt).toContain(".drizzy/research/{slug}/")
+      expect(prompt).not.toContain("{slug}-{YYYYMMDD-HHmmss}")
       expect(prompt).toContain("question tool first")
       expect(prompt).toContain("inspect the codebase first")
       expect(prompt).toContain("lightweight grounding pass")

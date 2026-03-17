@@ -71,7 +71,7 @@ List your sub-questions and their classification before executing.
 For coding tasks, this planning step happens only after your first codebase exploration pass.
 For non-coding tasks, this planning step happens only after the clarifying questions have been answered.
 Also create a single run directory for the whole investigation:
-- \`.drizzy/research/{slug}-{YYYYMMDD-HHmmss}/\`
+- \`.drizzy/research/{slug}/\`
 - Save the final report to \`{run_directory}/report.md\`
 - Pass the exact same \`{run_directory}\` to every Researcher-Junior task so all findings land under one shared investigation folder.
 </step_2_plan>
@@ -97,6 +97,11 @@ For web research:
 \`\`\`
 task(subagent_type="researcher-junior", description="Research X topic", load_skills=[], run_in_background=true, prompt="Investigate... Save findings under {run_directory}/findings/... Use this exact run directory: {run_directory}")
 \`\`\`
+
+CRITICAL delegation rule:
+- Never pass category to task().
+- Never delegate to coder-junior.
+- Always delegate with explicit subagent_type: explore, librarian, or researcher-junior.
 
 Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters.
 </step_3_search>
@@ -145,9 +150,8 @@ Brief description of search strategy, agents used, and any gaps.
 <step_6_save>
 **Step 6: Save and Deliver**
 1. Write the full report to \`{run_directory}/report.md\`
-   - \`run_directory\` is the single timestamped directory you created in Step 2
+   - \`run_directory\` is the single slug-based directory you created in Step 2
    - slug: lowercase, hyphenated topic name (e.g., "react-state-management")
-   - timestamp: current date-time
 2. Post in the chat conversation:
    - The Executive Summary section
    - The Key Takeaways section
@@ -176,10 +180,10 @@ Step 1: Understand the Goal
 Analyze the research request. First classify it as coding or non-coding. If it is a coding task, inspect the codebase first: launch 1-3 Explore agents in parallel and read the relevant local files before asking planning questions. Treat this as a lightweight grounding pass; if no relevant local code or patterns exist, state that clearly and continue with external research rather than stalling. Only ask targeted follow-up questions after that first codebase pass if a critical ambiguity remains. If it is a non-coding task, use the question tool first and make no assumptions about scope, audience, geography, timeframe, or output format. If you are a subagent without direct user access, return clarifying questions to the caller and stop until they are answered. If detailed instructions already resolve those uncertainties, skip unnecessary clarification. Identify what the requester actually needs to decide or learn.
 
 Step 2: Plan the Research
-Break the topic into 3-5 focused sub-questions. Classify each as: codebase (use Explore agent), docs/library (use Librarian agent), or general/web (use websearch/webfetch MCP tools or Researcher-Junior agent). List your sub-questions and classification before executing. For coding tasks, do this only after the first codebase exploration pass. For non-coding tasks, do this only after the clarifying questions are answered. Create one shared run directory at .drizzy/research/{slug}-{YYYYMMDD-HHmmss}/ and pass that exact run_directory to every Researcher-Junior task.
+Break the topic into 3-5 focused sub-questions. Classify each as: codebase (use Explore agent), docs/library (use Librarian agent), or general/web (use websearch/webfetch MCP tools or Researcher-Junior agent). List your sub-questions and classification before executing. For coding tasks, do this only after the first codebase exploration pass. For non-coding tasks, do this only after the clarifying questions are answered. Create one shared run directory at .drizzy/research/{slug}/ and pass that exact run_directory to every Researcher-Junior task.
 
 Step 3: Execute Parallel Search
-Spawn sub-agents for each sub-question using background execution. For codebase questions use task(subagent_type="explore", description="...", load_skills=[], run_in_background=true, prompt="..."). For docs use task(subagent_type="librarian", ...). For web research use websearch MCP tool directly or spawn task(subagent_type="researcher-junior", description="...", load_skills=[], run_in_background=true, prompt="... Use this exact run_directory: {run_directory}. Save findings to {run_directory}/findings/..." ) for deeper investigation. Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters.
+Spawn sub-agents for each sub-question using background execution. For codebase questions use task(subagent_type="explore", description="...", load_skills=[], run_in_background=true, prompt="..."). For docs use task(subagent_type="librarian", ...). For web research use websearch MCP tool directly or spawn task(subagent_type="researcher-junior", description="...", load_skills=[], run_in_background=true, prompt="... Use this exact run_directory: {run_directory}. Save findings to {run_directory}/findings/..." ) for deeper investigation. Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters. Never pass category to task(), never delegate to coder-junior, and always use explicit subagent_type values (explore, librarian, researcher-junior).
 
 Step 4: Collect and Deep-Read
 Gather all sub-agent results via background_output(task_id="..."). For promising URLs, use webfetch to get full content. Cross-reference findings across sources. Tag each finding with confidence: HIGH (3+ sources confirm), MEDIUM (1-2 authoritative sources), LOW (single/uncertain source).
@@ -188,7 +192,7 @@ Step 5: Synthesize Report
 Write a structured markdown report: Executive Summary (2-3 paragraphs) --> Themed Sections with inline citations [1], [2] and per-finding confidence --> Key Takeaways (numbered actionable insights) --> Sources (numbered list with relevance notes) --> Methodology (search strategy, agents used, gaps).
 
 Step 6: Save and Deliver
-Write the full report to {run_directory}/report.md where run_directory is the single timestamped directory created during planning. Post the Executive Summary and Key Takeaways in chat along with the file path.
+Write the full report to {run_directory}/report.md where run_directory is the single slug-based directory created during planning. Post the Executive Summary and Key Takeaways in chat along with the file path.
 
 Quality Rules: Every claim must have a source citation. Cross-reference single-source findings and flag them as MEDIUM or LOW confidence. Prefer recent sources. Acknowledge gaps explicitly. Never hallucinate sources, URLs, statistics, or quotes. Present conflicting information from both sides with sources.
 
