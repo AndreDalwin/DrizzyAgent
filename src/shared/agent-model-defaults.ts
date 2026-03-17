@@ -217,7 +217,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" },
       { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
-    includeInInstall: false,
+    includeInInstall: true,
   },
   "researcher-junior": {
     chain: [
@@ -227,7 +227,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "low" },
       { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
-    includeInInstall: false,
+    includeInInstall: true,
   },
 };
 

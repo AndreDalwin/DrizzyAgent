@@ -100,6 +100,23 @@ describe("loadPluginConfig snapshot defaults", () => {
     expect(getConfigLoadErrors()).toHaveLength(0)
   })
 
+  test("applies researcher defaults from kimi-only snapshot", () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      _install_defaults: createInstallDefaultsSnapshot({ kimi_for_coding: true }),
+    })
+
+    const config = fixture.load()
+
+    expect(config.agents?.researcher).toEqual({
+      model: "kimi-for-coding/k2p5",
+    })
+    expect(config.agents?.["researcher-junior"]).toEqual({
+      model: "kimi-for-coding/k2p5",
+    })
+    expect(getConfigLoadErrors()).toHaveLength(0)
+  })
+
   test("falls back to built-in category defaults when no snapshot exists", () => {
     const fixture = createFixture()
     fixture.writeUserConfig({

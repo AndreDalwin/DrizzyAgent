@@ -80,6 +80,17 @@ describe("computeDefaultsFromProviders", () => {
     })
   })
 
+  test("includes researcher defaults from kimi provider snapshot", () => {
+    const result = computeDefaultsFromProviders(createProviders({ kimi_for_coding: true }))
+
+    expect(result.agents.researcher).toEqual({
+      model: "kimi-for-coding/k2p5",
+    })
+    expect(result.agents["researcher-junior"]).toEqual({
+      model: "kimi-for-coding/k2p5",
+    })
+  })
+
   test("downgrades unspecified-high to unspecified-low outside max plans", () => {
     const result = computeDefaultsFromProviders(createProviders({ openai: true }))
 
