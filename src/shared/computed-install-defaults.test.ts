@@ -52,6 +52,26 @@ describe("computeDefaultsFromProviders", () => {
     expect(result.agents.explore).toEqual({ model: "anthropic/claude-haiku-4-5" })
   })
 
+  describe("#given providers with claude=yes and no opencode_zen", () => {
+    describe("#when computing defaults", () => {
+      test("#then explore should resolve to anthropic/claude-haiku-4-5, NOT opencode/minimax-m2.5-free", () => {
+        const result = computeDefaultsFromProviders(createProviders({ claude: "yes" }))
+
+        expect(result.agents.explore).toEqual({ model: "anthropic/claude-haiku-4-5" })
+      })
+    })
+  })
+
+  describe("#given providers with claude=max20 and no opencode_zen", () => {
+    describe("#when computing defaults", () => {
+      test("#then explore should resolve to anthropic/claude-haiku-4-5, NOT opencode/minimax-m2.5-free", () => {
+        const result = computeDefaultsFromProviders(createProviders({ claude: "max20" }))
+
+        expect(result.agents.explore).toEqual({ model: "anthropic/claude-haiku-4-5" })
+      })
+    })
+  })
+
   test("preserves provider-specific model transforms", () => {
     const result = computeDefaultsFromProviders(createProviders({ gemini: true }))
 
