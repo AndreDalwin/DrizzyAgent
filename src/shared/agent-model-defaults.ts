@@ -48,7 +48,7 @@
  * | **planner** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
  * | **oracle** | gpt-5.4 → kimi-k2.5 → gemini-3.1-pro → claude-opus-4-6 → big-pickle (free) |
  * | **librarian** | gemini-3-flash → glm-4.7 → claude-sonnet-4-5 → minimax → big-pickle → glm-4.7-free |
- * | **explore** | Custom resolver (Claude → Zen → Copilot → OpenAI) |
+ * | **explore** | grok-code-fast-1 (copilot) → claude-haiku-4-5 → minimax-m2.5-free (free) → gpt-5-nano (free) |
  * | **multimodal-looker** | gpt-5.4 → k2p5 → gemini-3-flash → glm-4.6v → gpt-5-nano |
  * | **plan-consultant** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
  * | **plan-reviewer** | gpt-5.4 → kimi-k2.5 → claude-opus-4-6 → gemini-3.1-pro → big-pickle (free) |
@@ -175,8 +175,8 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   explore: {
     chain: [
       { providers: ["github-copilot"], model: "grok-code-fast-1" },
-      { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
       { providers: ["anthropic", "opencode"], model: "claude-haiku-4-5" },
+      { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
       { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },
     ],
     includeInInstall: true,

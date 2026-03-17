@@ -8,15 +8,19 @@ export function resolveModelFromChain(
 	fallbackChain: FallbackEntry[],
 	availability: ProviderAvailability
 ): { model: string; variant?: string } | null {
+	let lastResort: { model: string; variant?: string } | null = null
+
 	for (const entry of fallbackChain) {
-		// Always available entries are last-resort fallbacks that don't require provider auth
 		if (entry.alwaysAvailable) {
-			const provider = entry.providers[0]
-			const transformedModel = transformModelForProvider(provider, entry.model)
-			return {
-				model: `${provider}/${transformedModel}`,
-				variant: entry.variant,
+			if (!lastResort) {
+				const provider = entry.providers[0]
+				const transformedModel = transformModelForProvider(provider, entry.model)
+				lastResort = {
+					model: `${provider}/${transformedModel}`,
+					variant: entry.variant,
+				}
 			}
+			continue
 		}
 		for (const provider of entry.providers) {
 			if (isProviderAvailable(provider, availability)) {
@@ -28,7 +32,7 @@ export function resolveModelFromChain(
 			}
 		}
 	}
-	return null
+	return lastResort
 }
 
 export function getCoderFallbackChain(): FallbackEntry[] {
