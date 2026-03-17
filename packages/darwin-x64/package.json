@@ -1,6 +1,6 @@
 {
   "name": "drizzy-agent-darwin-x64",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Platform-specific binary for DrizzyAgent (darwin-x64)",
   "license": "MIT",
   "repository": {
