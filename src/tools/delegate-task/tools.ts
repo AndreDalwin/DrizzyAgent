@@ -4,6 +4,7 @@ import { CATEGORY_DESCRIPTIONS } from "./constants"
 import { CODER_JUNIOR_AGENT } from "./coder-junior-agent"
 import { mergeCategories } from "../../shared/merge-categories"
 import { log } from "../../shared/logger"
+import { getAgentConfigKey } from "../../shared/agent-display-names"
 import { buildSystemContent } from "./prompt-builder"
 import type {
   AvailableCategory,
@@ -108,6 +109,17 @@ export function createDelegateTask(options: DelegateTaskToolOptions): ToolDefini
     },
     async execute(args: DelegateTaskArgs, toolContext) {
       const ctx = toolContext as ToolContextWithMetadata
+      const parentContext = await resolveParentContext(ctx, options.client)
+      const parentAgentConfigKey = parentContext.agent
+        ? getAgentConfigKey(parentContext.agent)
+        : undefined
+      const isResearcherParent =
+        parentAgentConfigKey === "researcher"
+        || parentAgentConfigKey === "researcher-junior"
+
+      if (args.category && isResearcherParent) {
+        return `Invalid arguments: ${parentContext.agent ?? "Researcher"} cannot use category delegation. Use subagent_type explicitly (explore, librarian, researcher-junior) and do not call coder-junior.`
+      }
 
       if (args.category) {
         if (args.subagent_type && args.subagent_type !== CODER_JUNIOR_AGENT) {
@@ -155,8 +167,6 @@ export function createDelegateTask(options: DelegateTaskToolOptions): ToolDefini
       if (skillError) {
         return skillError
       }
-
-      const parentContext = await resolveParentContext(ctx, options.client)
 
       if (args.session_id) {
         if (runInBackground) {

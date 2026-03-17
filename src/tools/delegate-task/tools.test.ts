@@ -531,6 +531,69 @@ describe("coder-task", () => {
       expect(result).toContain("Background task launched")
     }, { timeout: 10000 })
 
+    test("rejects category delegation when parent agent is researcher", async () => {
+      // #given
+      const { createDelegateTask } = require("./tools")
+      let launchCalled = false
+
+      const mockManager = {
+        launch: async () => {
+          launchCalled = true
+          return {
+            id: "task-researcher",
+            status: "pending",
+            description: "Research delegation",
+            agent: "coder-junior",
+            sessionID: "test-session",
+          }
+        },
+      }
+
+      const mockClient = {
+        app: { agents: async () => ({ data: [] }) },
+        config: { get: async () => ({}) },
+        provider: { list: async () => ({ data: { connected: ["openai"] } }) },
+        model: { list: async () => ({ data: [{ provider: "openai", id: "gpt-5.3-codex" }] }) },
+        session: {
+          create: async () => ({ data: { id: "test-session" } }),
+          prompt: async () => ({ data: {} }),
+          promptAsync: async () => ({ data: {} }),
+          messages: async () => ({ data: [] }),
+          status: async () => ({ data: {} }),
+        },
+      }
+
+      const tool = createDelegateTask({
+        manager: mockManager,
+        client: mockClient,
+        connectedProvidersOverride: TEST_CONNECTED_PROVIDERS,
+        availableModelsOverride: createTestAvailableModels(),
+      })
+
+      const toolContext = {
+        sessionID: "parent-session",
+        messageID: "parent-message",
+        agent: "Researcher",
+        abort: new AbortController().signal,
+      }
+
+      // #when
+      const result = await tool.execute(
+        {
+          description: "Research category delegation",
+          prompt: "Delegate work",
+          category: "deep",
+          run_in_background: true,
+          load_skills: [],
+        },
+        toolContext,
+      )
+
+      // #then
+      expect(result).toContain("cannot use category delegation")
+      expect(launchCalled).toBe(false)
+    }, { timeout: 10000 })
+
     test("proceeds without error when systemDefaultModel is undefined", async () => {
       // given a mock client with no model in config
       const { createDelegateTask } = require("./tools")
