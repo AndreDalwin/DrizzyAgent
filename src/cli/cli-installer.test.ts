@@ -59,7 +59,7 @@ describe("runCliInstaller", () => {
     }
 
     //#when
-    const result = await runCliInstaller(args, "3.4.0")
+    const result = await runCliInstaller(args)
 
     //#then
     expect(result).toBe(0)

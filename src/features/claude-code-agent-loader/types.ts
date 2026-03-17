@@ -3,7 +3,7 @@ import type { AgentConfig } from "@opencode-ai/sdk"
 export type AgentScope = "user" | "project"
 
 export type ClaudeCodeAgentConfig = Omit<AgentConfig, "model"> & {
-  model?: string | { providerID: string; modelID: string }
+  model?: string
 }
 
 export interface AgentFrontmatter {

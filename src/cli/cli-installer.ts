@@ -25,7 +25,7 @@ import {
   validateNonTuiArgs,
 } from "./install-validators"
 
-export async function runCliInstaller(args: InstallArgs, version: string): Promise<number> {
+export async function runCliInstaller(args: InstallArgs): Promise<number> {
   const validation = validateNonTuiArgs(args)
   if (!validation.valid) {
     printHeader(false)
@@ -104,7 +104,7 @@ export async function runCliInstaller(args: InstallArgs, version: string): Promi
   const config = argsToConfig(args)
 
   printStep(step++, totalSteps + (omoDetected.isInstalled ? 1 : 0), "Adding drizzy-agent plugin...")
-  const pluginResult = await addPluginToOpenCodeConfig(version)
+  const pluginResult = await addPluginToOpenCodeConfig()
   if (!pluginResult.success) {
     printError(`Failed: ${pluginResult.error}`)
     return 1

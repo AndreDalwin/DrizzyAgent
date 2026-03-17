@@ -9,7 +9,7 @@ import { getPluginNameWithVersion } from "./plugin-name-with-version"
 
 const PACKAGE_NAME = "drizzy-agent"
 
-export async function addPluginToOpenCodeConfig(currentVersion: string): Promise<ConfigMergeResult> {
+export async function addPluginToOpenCodeConfig(): Promise<ConfigMergeResult> {
   try {
     ensureConfigDirectoryExists()
   } catch (err) {
@@ -21,7 +21,7 @@ export async function addPluginToOpenCodeConfig(currentVersion: string): Promise
   }
 
   const { format, path } = detectConfigFormat()
-  const pluginEntry = await getPluginNameWithVersion(currentVersion)
+  const pluginEntry = getPluginNameWithVersion()
 
   try {
     if (format === "none") {

@@ -5,7 +5,7 @@ import type { BrowserAutomationProvider } from "../../config/schema"
 import type { AvailableAgent } from "../dynamic-agent-prompt-builder"
 import { AGENT_MODEL_REQUIREMENTS, isModelAvailable } from "../../shared"
 import { getAgentConfigKey } from "../../shared/agent-display-names"
-import { getExplicitAgentOverride } from "../../shared/config-provenance"
+import { getExplicitAgentOverride, getEffectiveAgentOverride } from "../../shared/config-provenance"
 import { buildAgent, isFactory } from "../agent-builder"
 import { applyOverrides } from "./agent-overrides"
 import { applyEnvironmentContext } from "./environment-context"
@@ -59,6 +59,7 @@ export function collectPendingBuiltinAgents(input: {
 
     const agentConfigKey = getAgentConfigKey(agentName)
     const override = getExplicitAgentOverride(agentOverrides, agentConfigKey)
+    const effectiveOverride = getEffectiveAgentOverride(agentOverrides, agentConfigKey)
     const requirement = AGENT_MODEL_REQUIREMENTS[agentConfigKey]
 
     // Check if agent requires a specific model
@@ -73,6 +74,7 @@ export function collectPendingBuiltinAgents(input: {
     let resolution = applyModelResolution({
       uiSelectedModel: (isPrimaryAgent && !override?.model) ? uiSelectedModel : undefined,
       userModel: override?.model,
+      computedDefaultModel: effectiveOverride?.model,
       requirement,
       availableModels,
       systemDefaultModel,

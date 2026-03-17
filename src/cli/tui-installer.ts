@@ -14,7 +14,7 @@ import {
 import { detectedToInitialValues, formatBanner, formatConfigSummary, SYMBOLS } from "./install-validators"
 import { promptInstallConfig, promptOhMyOpencodeConfirmation } from "./tui-install-prompts"
 
-export async function runTuiInstaller(args: InstallArgs, version: string): Promise<number> {
+export async function runTuiInstaller(args: InstallArgs): Promise<number> {
   if (!process.stdin.isTTY || !process.stdout.isTTY) {
     console.error("Error: Interactive installer requires a TTY. Use --non-interactive or set environment variables directly.")
     return 1
@@ -81,7 +81,7 @@ export async function runTuiInstaller(args: InstallArgs, version: string): Promi
   if (!config) return 1
 
   spinner.start("Adding drizzy-agent to OpenCode config")
-  const pluginResult = await addPluginToOpenCodeConfig(version)
+  const pluginResult = await addPluginToOpenCodeConfig()
   if (!pluginResult.success) {
     spinner.stop(`Failed to add plugin: ${pluginResult.error}`)
     p.outro(color.red("Installation failed."))

@@ -419,7 +419,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.4")
+      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.3-codex")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
@@ -431,7 +431,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then - gptcoder uses github-copilot with unified chain
-      expect(result.agents?.gptcoder?.model).toBe("github-copilot/gpt-5.4")
+      expect(result.agents?.gptcoder?.model).toBe("github-copilot/gpt-5.3-codex")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
@@ -443,7 +443,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.4")
+      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.3-codex")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 

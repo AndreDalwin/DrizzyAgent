@@ -3,7 +3,7 @@ import type { AgentOverrides } from "../types"
 import type { CategoryConfig } from "../../config/schema"
 import type { AvailableAgent, AvailableCategory, AvailableSkill } from "../dynamic-agent-prompt-builder"
 import { AGENT_MODEL_REQUIREMENTS, isAnyProviderConnected } from "../../shared"
-import { getExplicitAgentOverride, hasExplicitAgentOverride } from "../../shared/config-provenance"
+import { getExplicitAgentOverride, getEffectiveAgentOverride, hasExplicitAgentOverride } from "../../shared/config-provenance"
 import { createGptcoderAgent } from "../gptcoder"
 import { applyEnvironmentContext } from "./environment-context"
 import { applyCategoryOverride, mergeAgentConfig } from "./agent-overrides"
@@ -41,6 +41,7 @@ export function maybeCreateGptcoderConfig(input: {
   if (disabledAgents.includes("gptcoder")) return undefined
 
   const gptcoderOverride = getExplicitAgentOverride(agentOverrides, "gptcoder")
+  const effectiveGptcoderOverride = getEffectiveAgentOverride(agentOverrides, "gptcoder")
   const gptcoderRequirement = AGENT_MODEL_REQUIREMENTS["gptcoder"]
   const hasGptcoderExplicitConfig = hasExplicitAgentOverride(agentOverrides, "gptcoder")
 
@@ -54,6 +55,7 @@ export function maybeCreateGptcoderConfig(input: {
 
   let gptcoderResolution = applyModelResolution({
     userModel: gptcoderOverride?.model,
+    computedDefaultModel: effectiveGptcoderOverride?.model,
     requirement: gptcoderRequirement,
     availableModels,
     systemDefaultModel,
