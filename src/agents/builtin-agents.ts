@@ -16,6 +16,8 @@ import {
 } from "./plan-reviewer"
 import { createGptcoderAgent } from "./gptcoder"
 import { createCoderJuniorAgentWithOverrides } from "./coder-junior"
+import { createResearcherAgent, RESEARCHER_PROMPT_METADATA } from "./researcher"
+import { createResearcherJuniorAgent, RESEARCHER_JUNIOR_PROMPT_METADATA } from "./researcher-junior"
 import type { AvailableCategory } from "./dynamic-agent-prompt-builder"
 import {
   fetchAvailableModels,
@@ -46,6 +48,8 @@ const agentSources: Record<BuiltinAgentName, AgentSource> = {
   // because it needs OrchestratorContext, not just a model string
   atlas: createAtlasAgent as AgentFactory,
   "coder-junior": createCoderJuniorAgentWithOverrides as unknown as AgentFactory,
+  researcher: createResearcherAgent,
+  "researcher-junior": createResearcherJuniorAgent,
 }
 
 /**
@@ -60,6 +64,8 @@ const agentMetadata: Partial<Record<BuiltinAgentName, AgentPromptMetadata>> = {
   "plan-consultant": planConsultantPromptMetadata,
   "plan-reviewer": planReviewerPromptMetadata,
   atlas: atlasPromptMetadata,
+  researcher: RESEARCHER_PROMPT_METADATA,
+  "researcher-junior": RESEARCHER_JUNIOR_PROMPT_METADATA,
 }
 
 export async function createBuiltinAgents(

@@ -39,6 +39,7 @@ describe("applyToolConfig", () => {
       "gptcoder",
       "planner",
       "coder-junior",
+      "researcher",
       ])("#then should deny todo tools for %s agent", (agentName) => {
         const params = createParams({
           taskSystem: true,
@@ -52,6 +53,21 @@ describe("applyToolConfig", () => {
         }
         expect(agent.permission.todowrite).toBe("deny")
         expect(agent.permission.todoread).toBe("deny")
+      })
+
+      it("#then researcher should NOT get task_* permission", () => {
+        const params = createParams({
+          taskSystem: true,
+          agents: ["researcher"],
+        })
+
+        applyToolConfig(params)
+
+        const agent = params.agentResult["researcher"] as {
+          permission: Record<string, unknown>
+        }
+        expect(agent.permission.task).toBe("allow")
+        expect(agent.permission["task_*"]).toBeUndefined()
       })
     })
   })
@@ -167,6 +183,7 @@ describe("applyToolConfig", () => {
         "gptcoder",
         "planner",
         "coder-junior",
+        "researcher",
       ])("#then should NOT deny todo tools for %s agent", (agentName) => {
         const params = createParams({
           taskSystem: false,

@@ -208,6 +208,27 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.3-codex", variant: "medium" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }],
     includeInInstall: false,
   },
+  researcher: {
+    chain: [
+      { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro" },
+      { providers: ["kimi-for-coding"], model: "k2p5" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6", variant: "medium" },
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" },
+      { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
+    ],
+    includeInInstall: false,
+  },
+  "researcher-junior": {
+    chain: [
+      { providers: ["kimi-for-coding"], model: "k2p5" },
+      { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" },
+      { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6", variant: "medium" },
+      { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "low" },
+      { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
+    ],
+    includeInInstall: false,
+  },
 };
 
 export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {

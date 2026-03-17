@@ -140,7 +140,20 @@ jobs:
         run: bun run clean && bun run build
 
       - name: Publish main package
-        run: npm publish --access public --provenance
+        run: |
+          VERSION="${{ needs.version.outputs.version }}"
+          DIST_TAG=""
+
+          if [[ "$VERSION" == *-* ]]; then
+            PRERELEASE="${VERSION#*-}"
+            DIST_TAG="${PRERELEASE%%.*}"
+          fi
+
+          if [[ -n "$DIST_TAG" ]]; then
+            npm publish --access public --provenance --tag "$DIST_TAG"
+          else
+            npm publish --access public --provenance
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

@@ -200,6 +200,8 @@ describe("AGENT_DISPLAY_NAMES", () => {
       planner: "Planner",
       atlas: "Atlas (Plan Executor)",
       "coder-junior": "Coder Junior",
+      researcher: "Researcher",
+      "researcher-junior": "Researcher Junior",
       planConsultant: "Plan Consultant",
       planReviewer: "Plan Reviewer",
       oracle: "oracle",

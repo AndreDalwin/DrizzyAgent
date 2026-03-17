@@ -162,7 +162,20 @@ jobs:
 
       - name: Publish platform package
         if: steps.check.outputs.skip != 'true'
-        run: npm publish --access public --provenance
+        run: |
+          VERSION="${{ inputs.version }}"
+          DIST_TAG=""
+
+          if [[ "$VERSION" == *-* ]]; then
+            PRERELEASE="${VERSION#*-}"
+            DIST_TAG="${PRERELEASE%%.*}"
+          fi
+
+          if [[ -n "$DIST_TAG" ]]; then
+            npm publish --access public --provenance --tag "$DIST_TAG"
+          else
+            npm publish --access public --provenance
+          fi
         working-directory: packages/${{ matrix.platform }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}

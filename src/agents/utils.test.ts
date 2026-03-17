@@ -476,10 +476,10 @@ describe("createBuiltinAgents with model overrides", () => {
       new Set(["anthropic/claude-opus-4-6", "openai/gpt-5.4"])
     )
 
-    const disabledAgents = ["ReSeArChEr"]
+    const disabledAgents = ["CuStOm-ReSeArChEr"]
     const customAgentSummaries = [
       {
-        name: "researcher",
+        name: "custom-researcher",
         description: "Should never show",
       },
     ]
@@ -498,9 +498,9 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.coder.prompt).not.toContain("researcher")
-      expect(agents.gptcoder.prompt).not.toContain("researcher")
-      expect(agents.atlas.prompt).not.toContain("researcher")
+      expect(agents.coder.prompt).not.toContain("custom-researcher")
+      expect(agents.gptcoder.prompt).not.toContain("custom-researcher")
+      expect(agents.atlas.prompt).not.toContain("custom-researcher")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -513,8 +513,8 @@ describe("createBuiltinAgents with model overrides", () => {
     )
 
     const customAgentSummaries = [
-      { name: "Researcher", description: "First" },
-      { name: "researcher", description: "Second" },
+      { name: "Custom Researcher", description: "First" },
+      { name: "custom researcher", description: "Second" },
     ]
 
     try {
@@ -531,7 +531,7 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      const matches = (agents.coder?.prompt ?? "").match(/Custom agent: researcher/gi) ?? []
+      const matches = (agents.coder?.prompt ?? "").match(/Custom agent: custom researcher/gi) ?? []
       expect(matches.length).toBe(1)
     } finally {
       fetchSpy.mockRestore()

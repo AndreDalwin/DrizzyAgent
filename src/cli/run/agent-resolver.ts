@@ -3,7 +3,7 @@ import type { RunOptions } from "./types"
 import type { DrizzyAgentConfig } from "../../config"
 import { getAgentConfigKey, getAgentDisplayName } from "../../shared/agent-display-names"
 
-const CORE_AGENT_ORDER = ["coder", "gptcoder", "planner", "atlas"] as const
+const CORE_AGENT_ORDER = ["coder", "gptcoder", "planner", "atlas", "researcher"] as const
 const DEFAULT_AGENT = "coder"
 
 type EnvVars = Record<string, string | undefined>

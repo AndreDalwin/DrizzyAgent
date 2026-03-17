@@ -17,10 +17,15 @@ DrizzyAgent provides **discipline agents** that work together to complete coding
 | **Librarian** | Documentation/code search - external references, OSS examples | Gemini 3 Flash / GLM-4.7 / Claude Sonnet 4.5 |
 | **Explore** | Fast codebase grep - pattern discovery, cross-layer search | Custom resolver (Claude / Copilot / OpenAI) |
 | **Atlas** | Plan executor - runs Planner-generated plans step by step | Kimi K2.5 / Claude Sonnet 4.6 / GPT-5.4 / Gemini 3.1 Pro |
+| **Researcher** | Deep research orchestrator - multi-source investigation with cited reports | Gemini 3.1 Pro / Kimi K2.5 / Claude Sonnet 4.6 / GPT-5.4 / GLM-4.7 Free |
 | **Coder Junior** | Delegated sub-tasks from Coder via category system | Claude Sonnet 4.6 / GPT-5.4 / Gemini 3 Flash |
+| **Researcher Junior** | Focused web research subagent for parallel sub-topic investigation | Kimi K2.5 / Claude Sonnet 4.6 / GPT-5.4 / GLM-4.7 Free |
 | **Plan Consultant** | Pre-planning analysis - scope clarification, ambiguity detection | Claude Opus 4.6 / Kimi K2.5 / GPT-5.4 / Gemini 3.1 Pro |
 | **Plan Reviewer** | Plan quality review - verifiability, completeness checks | GPT-5.4 / Kimi K2.5 / Claude Opus 4.6 / Gemini 3.1 Pro |
 | **Multimodal Looker** | Image and visual analysis | GPT-5.4 / Kimi K2.5 / Gemini 3 Flash |
+
+Main selectable agents: **Coder**, **GPTCoder**, **Planner**, **Atlas**, **Researcher**.
+Subagent-only specialists include **Researcher Junior**, **Oracle**, **Librarian**, **Explore**, and other focused helpers.
 
 ## Key Features
 
@@ -106,6 +111,9 @@ Create `.opencode/drizzy-agent.jsonc` or `~/.config/opencode/drizzy-agent.jsonc`
   "agents": {
     "coder": {
       "model": "claude-opus-4-6"
+    },
+    "researcher": {
+      "model": "gemini-3.1-pro"
     }
   },
   "categories": {
@@ -153,6 +161,9 @@ You can add explicit overrides on top of the computed defaults:
   "agents": {
     "coder": {
       "model": "claude-opus-4-6"  // This overrides the computed default
+    },
+    "researcher": {
+      "model": "gemini-3.1-pro"
     }
   },
   "categories": {
@@ -203,7 +214,7 @@ bun test
 
 ```
 src/
-├── agents/          # 11 agents (Coder, GPTCoder, Oracle, Librarian, Explore, Atlas, Planner, Plan Consultant, Plan Reviewer, Coder Junior, Multimodal Looker)
+├── agents/          # 13 agents (Coder, GPTCoder, Oracle, Librarian, Explore, Atlas, Planner, Researcher, Researcher Junior, Plan Consultant, Plan Reviewer, Coder Junior, Multimodal Looker)
 ├── hooks/           # 46 lifecycle hooks
 ├── tools/           # 26 built-in tools
 ├── features/        # Core feature modules
