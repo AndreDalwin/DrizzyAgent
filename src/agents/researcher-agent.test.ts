@@ -43,6 +43,14 @@ describe("createResearcherAgent", () => {
       expect(prompt).toContain("{run_directory}/findings")
     })
 
+    test("#then prompt mandates minimum 5 researcher-junior deployments", () => {
+      expect(prompt).toContain("at least 5 Researcher-Junior subagents")
+      expect(prompt).toContain("at least 5 focused sub-questions")
+      expect(prompt).toContain("do NOT count toward the minimum 5")
+      expect(prompt).toContain("conflicting findings")
+      expect(prompt).toContain("no upper limit")
+    })
+
     test("#then metadata is populated", () => {
       expect(RESEARCHER_PROMPT_METADATA.category).toBe("exploration")
       expect(RESEARCHER_PROMPT_METADATA.cost).toBe("CHEAP")
@@ -72,6 +80,14 @@ describe("createResearcherAgent", () => {
       expect(prompt).toContain("lightweight grounding pass")
       expect(prompt).toContain("Executive Summary")
       expect(prompt).toContain("Methodology")
+    })
+
+    test("#then GPT prompt mandates minimum 5 researcher-junior deployments", () => {
+      expect(prompt).toContain("at least 5 Researcher-Junior subagents")
+      expect(prompt).toContain("at least 5 focused sub-questions")
+      expect(prompt).toContain("do NOT count toward the minimum 5")
+      expect(prompt).toContain("conflicting findings")
+      expect(prompt).toContain("no upper limit")
     })
   })
 })

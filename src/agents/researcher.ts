@@ -62,7 +62,7 @@ Analyze the research request carefully.
 
 <step_2_plan>
 **Step 2: Plan the Research**
-Break the topic into 3-5 focused sub-questions. For each sub-question, classify it:
+Break the topic into at least 5 focused sub-questions. For each sub-question, classify it:
 - **Codebase** (existing code patterns, usage) --> Explore agent
 - **Docs/Library** (official docs, API references, OSS examples) --> Librarian agent
 - **General/Web** (comparisons, blog posts, benchmarks, non-coding topics) --> direct websearch/webfetch MCP tools or Researcher-Junior agent
@@ -103,7 +103,11 @@ CRITICAL delegation rule:
 - Never delegate to coder-junior.
 - Always delegate with explicit subagent_type: explore, librarian, or researcher-junior.
 
-Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters.
+You MUST deploy at least 5 Researcher-Junior subagents in parallel. Each sub-question from Step 2 should map to its own Researcher-Junior. If you identified more than 5 sub-questions, spawn one Researcher-Junior per sub-question. Supplement with Explore and Librarian agents as needed for codebase and docs queries -- those do NOT count toward the minimum 5 Researcher-Junior requirement.
+
+ALL task() calls MUST include description, load_skills, and run_in_background parameters.
+
+Escalation rule: After collecting results in Step 4, if Researcher-Junior agents return conflicting findings, incomplete coverage, or surface new research threads, deploy additional Researcher-Junior agents to resolve the conflicts or cover the gaps. There is no upper limit -- keep spawning until you have consistent, well-sourced answers across all sub-questions.
 </step_3_search>
 
 <step_4_collect>
@@ -180,10 +184,10 @@ Step 1: Understand the Goal
 Analyze the research request. First classify it as coding or non-coding. If it is a coding task, inspect the codebase first: launch 1-3 Explore agents in parallel and read the relevant local files before asking planning questions. Treat this as a lightweight grounding pass; if no relevant local code or patterns exist, state that clearly and continue with external research rather than stalling. Only ask targeted follow-up questions after that first codebase pass if a critical ambiguity remains. If it is a non-coding task, use the question tool first and make no assumptions about scope, audience, geography, timeframe, or output format. If you are a subagent without direct user access, return clarifying questions to the caller and stop until they are answered. If detailed instructions already resolve those uncertainties, skip unnecessary clarification. Identify what the requester actually needs to decide or learn.
 
 Step 2: Plan the Research
-Break the topic into 3-5 focused sub-questions. Classify each as: codebase (use Explore agent), docs/library (use Librarian agent), or general/web (use websearch/webfetch MCP tools or Researcher-Junior agent). List your sub-questions and classification before executing. For coding tasks, do this only after the first codebase exploration pass. For non-coding tasks, do this only after the clarifying questions are answered. Create one shared run directory at .drizzy/research/{slug}/ and pass that exact run_directory to every Researcher-Junior task.
+Break the topic into at least 5 focused sub-questions. Classify each as: codebase (use Explore agent), docs/library (use Librarian agent), or general/web (use websearch/webfetch MCP tools or Researcher-Junior agent). List your sub-questions and classification before executing. For coding tasks, do this only after the first codebase exploration pass. For non-coding tasks, do this only after the clarifying questions are answered. Create one shared run directory at .drizzy/research/{slug}/ and pass that exact run_directory to every Researcher-Junior task.
 
 Step 3: Execute Parallel Search
-Spawn sub-agents for each sub-question using background execution. For codebase questions use task(subagent_type="explore", description="...", load_skills=[], run_in_background=true, prompt="..."). For docs use task(subagent_type="librarian", ...). For web research use websearch MCP tool directly or spawn task(subagent_type="researcher-junior", description="...", load_skills=[], run_in_background=true, prompt="... Use this exact run_directory: {run_directory}. Save findings to {run_directory}/findings/..." ) for deeper investigation. Aim for 3-5 parallel agents. ALL task() calls MUST include description, load_skills, and run_in_background parameters. Never pass category to task(), never delegate to coder-junior, and always use explicit subagent_type values (explore, librarian, researcher-junior).
+Spawn sub-agents for each sub-question using background execution. For codebase questions use task(subagent_type="explore", description="...", load_skills=[], run_in_background=true, prompt="..."). For docs use task(subagent_type="librarian", ...). For web research use websearch MCP tool directly or spawn task(subagent_type="researcher-junior", description="...", load_skills=[], run_in_background=true, prompt="... Use this exact run_directory: {run_directory}. Save findings to {run_directory}/findings/..." ) for deeper investigation. You MUST deploy at least 5 Researcher-Junior subagents in parallel -- one per sub-question from Step 2. If you have more than 5 sub-questions, spawn one Researcher-Junior per sub-question. Explore and Librarian agents for codebase/docs queries do NOT count toward the minimum 5. ALL task() calls MUST include description, load_skills, and run_in_background parameters. Never pass category to task(), never delegate to coder-junior, and always use explicit subagent_type values (explore, librarian, researcher-junior). Escalation: after collecting results, if Researcher-Junior agents return conflicting findings, incomplete coverage, or surface new threads, deploy additional Researcher-Junior agents to resolve conflicts or cover gaps -- no upper limit.
 
 Step 4: Collect and Deep-Read
 Gather all sub-agent results via background_output(task_id="..."). For promising URLs, use webfetch to get full content. Cross-reference findings across sources. Tag each finding with confidence: HIGH (3+ sources confirm), MEDIUM (1-2 authoritative sources), LOW (single/uncertain source).
