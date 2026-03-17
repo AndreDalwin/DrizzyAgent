@@ -34,7 +34,7 @@ const RESEARCHER_JUNIOR_DEFAULT_PROMPT = `You are a focused web research special
    - LOW: Single source or uncertain/conflicting information
 6. Write findings to: {run_directory}/findings/{sub-topic}-findings.md
    - Researcher should pass you an exact run_directory in the prompt
-   - Use that exact run_directory so your findings land in the same timestamped folder as the final report
+   - Use that exact run_directory so your findings land in the same shared investigation folder as the final report
    - If no explicit run_directory is provided, state the missing contract clearly before making assumptions
 7. Return brief summary in conversation
 </workflow>

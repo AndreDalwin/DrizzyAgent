@@ -38,6 +38,8 @@ describe("createResearcherJuniorAgent", () => {
     test("#then prompt requires the shared run_directory contract", () => {
       expect(prompt).toContain("{run_directory}/findings/{sub-topic}-findings.md")
       expect(prompt).toContain("exact run_directory")
+      expect(prompt).toContain("shared investigation folder")
+      expect(prompt).not.toContain("timestamped folder")
       expect(prompt).toContain("missing contract")
     })
 
