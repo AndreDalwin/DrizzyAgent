@@ -1,3 +1,5 @@
+/// <reference types="bun-types" />
+
 import { describe, expect, test } from "bun:test"
 
 import { createResearcherAgent, RESEARCHER_PROMPT_METADATA } from "./researcher"
@@ -43,10 +45,29 @@ describe("createResearcherAgent", () => {
       expect(prompt).toContain("{run_directory}/findings")
     })
 
-    test("#then prompt mandates minimum 5 researcher-junior deployments", () => {
-      expect(prompt).toContain("at least 5 Researcher-Junior subagents")
-      expect(prompt).toContain("at least 5 focused sub-questions")
-      expect(prompt).toContain("do NOT count toward the minimum 5")
+    test("#then prompt uses phased reasoning and dynamic researcher-junior deployment", () => {
+      expect(prompt).toContain('<reasoning_phase name="planning">')
+      expect(prompt).toContain('<reasoning_phase name="execution">')
+      expect(prompt).toContain('<reasoning_phase name="verification">')
+      expect(prompt).toContain("Tree-of-Thoughts")
+      expect(prompt).toContain("<complexity_check>")
+      expect(prompt).toContain("STRAIGHTFORWARD")
+      expect(prompt).toContain("STANDARD")
+      expect(prompt).toContain("DEEP")
+      expect(prompt).toContain("3-4 Researcher-Junior agents")
+      expect(prompt).toContain("5-6 Researcher-Junior agents")
+      expect(prompt).toContain("7-10 Researcher-Junior agents")
+      expect(prompt).toContain("do NOT count toward the Researcher-Junior target range")
+      expect(prompt).not.toContain("at least 5 Researcher-Junior subagents")
+      expect(prompt).not.toContain("at least 5 focused sub-questions")
+    })
+
+    test("#then prompt includes explicit conflict resolution guidance", () => {
+      expect(prompt).toContain("<conflict_resolution>")
+      expect(prompt).toContain("Credibility")
+      expect(prompt).toContain("Recency")
+      expect(prompt).toContain("Confidence")
+      expect(prompt).toContain("Context")
       expect(prompt).toContain("conflicting findings")
       expect(prompt).toContain("no upper limit")
     })
@@ -82,10 +103,26 @@ describe("createResearcherAgent", () => {
       expect(prompt).toContain("Methodology")
     })
 
-    test("#then GPT prompt mandates minimum 5 researcher-junior deployments", () => {
-      expect(prompt).toContain("at least 5 Researcher-Junior subagents")
-      expect(prompt).toContain("at least 5 focused sub-questions")
-      expect(prompt).toContain("do NOT count toward the minimum 5")
+    test("#then GPT prompt mirrors phased reasoning and dynamic researcher-junior deployment", () => {
+      expect(prompt).toContain("Planning phase:")
+      expect(prompt).toContain("Execution phase:")
+      expect(prompt).toContain("Verification phase:")
+      expect(prompt).toContain("Tree-of-Thoughts")
+      expect(prompt).toContain("Complexity check:")
+      expect(prompt).toContain("STRAIGHTFORWARD")
+      expect(prompt).toContain("STANDARD")
+      expect(prompt).toContain("DEEP")
+      expect(prompt).toContain("3-4 Researcher-Junior agents")
+      expect(prompt).toContain("5-6 Researcher-Junior agents")
+      expect(prompt).toContain("7-10 Researcher-Junior agents")
+      expect(prompt).toContain("do not count toward the Researcher-Junior target range")
+      expect(prompt).not.toContain("at least 5 Researcher-Junior subagents")
+      expect(prompt).not.toContain("at least 5 focused sub-questions")
+    })
+
+    test("#then GPT prompt includes prose-only conflict resolution guidance", () => {
+      expect(prompt).toContain("Conflict resolution protocol:")
+      expect(prompt).toContain("credibility, recency, confidence, context")
       expect(prompt).toContain("conflicting findings")
       expect(prompt).toContain("no upper limit")
     })
