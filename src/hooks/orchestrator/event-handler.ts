@@ -2,12 +2,12 @@ import type { PluginInput } from "@opencode-ai/plugin"
 import { log } from "../../shared/logger"
 import { HOOK_NAME } from "./hook-name"
 import { isAbortError } from "./is-abort-error"
-import { handleAtlasSessionIdle } from "./idle-event"
-import type { AtlasHookOptions, SessionState } from "./types"
+import { handleOrchestratorSessionIdle } from "./idle-event"
+import type { OrchestratorHookOptions, SessionState } from "./types"
 
-export function createAtlasEventHandler(input: {
+export function createOrchestratorEventHandler(input: {
   ctx: PluginInput
-  options?: AtlasHookOptions
+  options?: OrchestratorHookOptions
   sessions: Map<string, SessionState>
   getState: (sessionID: string) => SessionState
 }): (arg: { event: { type: string; properties?: unknown } }) => Promise<void> {
@@ -31,7 +31,7 @@ export function createAtlasEventHandler(input: {
     if (event.type === "session.idle") {
       const sessionID = props?.sessionID as string | undefined
       if (!sessionID) return
-      await handleAtlasSessionIdle({ ctx, options, getState, sessionID })
+      await handleOrchestratorSessionIdle({ ctx, options, getState, sessionID })
       return
     }
 

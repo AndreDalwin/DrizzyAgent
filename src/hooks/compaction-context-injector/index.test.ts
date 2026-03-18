@@ -145,7 +145,7 @@ describe("createCompactionContextInjector", () => {
             {
               info: {
                 role: "user",
-                agent: "atlas",
+                agent: "orchestrator",
                 model: { providerID: "openai", modelID: "gpt-5" },
                 tools: { bash: "allow" },
               },
@@ -164,7 +164,7 @@ describe("createCompactionContextInjector", () => {
             {
               info: {
                 role: "user",
-                agent: "atlas",
+                agent: "orchestrator",
                 model: { providerID: "openai", modelID: "gpt-5" },
               },
             },
@@ -185,7 +185,7 @@ describe("createCompactionContextInjector", () => {
         path: { id: "ses_checkpoint" },
         body: {
           noReply: true,
-          agent: "atlas",
+          agent: "orchestrator",
           model: { providerID: "openai", modelID: "gpt-5" },
           tools: { bash: true },
           parts: [
@@ -208,7 +208,7 @@ describe("createCompactionContextInjector", () => {
             {
               info: {
                 role: "user",
-                agent: "atlas",
+                agent: "orchestrator",
                 model: { providerID: "openai", modelID: "gpt-5" },
               },
             },
@@ -217,7 +217,7 @@ describe("createCompactionContextInjector", () => {
             {
               info: {
                 role: "user",
-                agent: "atlas",
+                agent: "orchestrator",
                 model: { providerID: "openai", modelID: "gpt-5" },
               },
             },
@@ -226,7 +226,7 @@ describe("createCompactionContextInjector", () => {
             {
               info: {
                 role: "user",
-                agent: "atlas",
+                agent: "orchestrator",
                 model: { providerID: "openai", modelID: "gpt-5" },
               },
             },
@@ -267,7 +267,7 @@ describe("createCompactionContextInjector", () => {
           path: { id: "ses_no_text_tail" },
           body: expect.objectContaining({
             noReply: true,
-            agent: "atlas",
+            agent: "orchestrator",
           }),
         }),
       )

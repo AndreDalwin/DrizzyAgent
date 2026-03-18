@@ -57,7 +57,7 @@ ${REFACTOR_TEMPLATE}
   },
   "start-work": {
     description: "(builtin) Start Coder work session from Planner plan",
-    agent: "atlas",
+    agent: "orchestrator",
     template: `<command-instruction>
 ${START_WORK_TEMPLATE}
 </command-instruction>

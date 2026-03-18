@@ -486,20 +486,20 @@ describe("planner-md-only", () => {
       rmSync(BOULDER_DIR, { recursive: true, force: true })
     })
 
-    //#given session was started with planner (first message), but /start-work set boulder agent to atlas
+    //#given session was started with planner (first message), but /start-work set boulder agent to orchestrator
     //#when user types "continue" after interruption (memory cleared, falls back to message files)
-    //#then should use boulder state agent (atlas), not message file agent (planner)
+    //#then should use boulder state agent (orchestrator), not message file agent (planner)
     test("should prioritize boulder agent over message file agent", async () => {
       // given - planner in message files (from /plan)
       setupMessageStorage(TEST_SESSION_ID, "planner")
       
-      // given - atlas in boulder state (from /start-work)
+      // given - orchestrator in boulder state (from /start-work)
       writeFileSync(BOULDER_FILE, JSON.stringify({
         active_plan: "/test/plan.md",
         started_at: new Date().toISOString(),
         session_ids: [TEST_SESSION_ID],
         plan_name: "test-plan",
-        agent: "atlas"
+        agent: "orchestrator"
       }))
 
       const hook = createPlannerMdOnlyHook({
@@ -516,15 +516,15 @@ describe("planner-md-only", () => {
         args: { filePath: "/path/to/code.ts" },
       }
 
-      // when / then - should NOT block because boulder says atlas, not planner
+      // when / then - should NOT block because boulder says orchestrator, not planner
       await expect(
         hook["tool.execute.before"](input, output)
       ).resolves.toBeUndefined()
     })
 
     test("should use planner from boulder state when set", async () => {
-      // given - atlas in message files (from some other agent)
-      setupMessageStorage(TEST_SESSION_ID, "atlas")
+      // given - orchestrator in message files (from some other agent)
+      setupMessageStorage(TEST_SESSION_ID, "orchestrator")
       
       // given - planner in boulder state (edge case, but should honor it)
       writeFileSync(BOULDER_FILE, JSON.stringify({
@@ -565,7 +565,7 @@ describe("planner-md-only", () => {
         started_at: new Date().toISOString(),
         session_ids: ["ses_other_session_id"],
         plan_name: "test-plan",
-        agent: "atlas"
+        agent: "orchestrator"
       }))
 
       const hook = createPlannerMdOnlyHook({

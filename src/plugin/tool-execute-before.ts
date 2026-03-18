@@ -32,7 +32,7 @@ export function createToolExecuteBeforeHandler(args: {
     await hooks.tasksTodowriteDisabler?.["tool.execute.before"]?.(input, output)
     await hooks.plannerMdOnly?.["tool.execute.before"]?.(input, output)
     await hooks.coderJuniorNotepad?.["tool.execute.before"]?.(input, output)
-    await hooks.atlasHook?.["tool.execute.before"]?.(input, output)
+    await hooks.orchestratorHook?.["tool.execute.before"]?.(input, output)
 
     const normalizedToolName = input.tool.toLowerCase()
     if (

@@ -39,7 +39,7 @@ export { createResearcherResearchOnlyHook } from "./researcher-research-only";
 export { createCoderJuniorNotepadHook } from "./coder-junior-notepad";
 export { createTaskResumeInfoHook } from "./task-resume-info";
 export { createStartWorkHook } from "./start-work";
-export { createAtlasHook } from "./atlas";
+export { createOrchestratorHook } from "./orchestrator";
 export { createDelegateTaskRetryHook } from "./delegate-task-retry";
 export { createQuestionLabelTruncatorHook } from "./question-label-truncator";
 export { createStopContinuationGuardHook, type StopContinuationGuard } from "./stop-continuation-guard";

@@ -148,7 +148,7 @@ export const gptcoderPromptMetadata: AgentPromptMetadata = {
   avoidWhen: [
     "Simple single-step tasks",
     "Tasks requiring user confirmation at each step",
-    "When orchestration across multiple agents is needed (use Atlas)",
+    "When orchestration across multiple agents is needed (use Orchestrator)",
   ],
   keyTrigger: "Complex implementation task requiring autonomous deep work",
 };

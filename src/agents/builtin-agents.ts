@@ -9,7 +9,7 @@ import { createLibrarianAgent, LIBRARIAN_PROMPT_METADATA } from "./librarian"
 import { createExploreAgent, EXPLORE_PROMPT_METADATA } from "./explore"
 import { createMultimodalLookerAgent, MULTIMODAL_LOOKER_PROMPT_METADATA } from "./multimodal-looker"
 import { createPlanConsultantAgent, planConsultantPromptMetadata } from "./plan-consultant"
-import { createAtlasAgent, atlasPromptMetadata } from "./atlas"
+import { createOrchestratorAgent, orchestratorPromptMetadata } from "./orchestrator"
 import {
   createPlanReviewerAgent,
   planReviewerPromptMetadata,
@@ -30,7 +30,7 @@ import { buildAvailableSkills } from "./builtin-agents/available-skills"
 import { collectPendingBuiltinAgents } from "./builtin-agents/general-agents"
 import { maybeCreateCoderConfig } from "./builtin-agents/coder-agent"
 import { maybeCreateGptcoderConfig } from "./builtin-agents/gptcoder-agent"
-import { maybeCreateAtlasConfig } from "./builtin-agents/atlas-agent"
+import { maybeCreateOrchestratorConfig } from "./builtin-agents/orchestrator-agent"
 import { buildCustomAgentMetadata, parseRegisteredAgentSummaries } from "./custom-agent-summaries"
 
 type AgentSource = AgentFactory | AgentConfig
@@ -44,9 +44,9 @@ const agentSources: Record<BuiltinAgentName, AgentSource> = {
   "multimodal-looker": createMultimodalLookerAgent,
   "plan-consultant": createPlanConsultantAgent,
   "plan-reviewer": createPlanReviewerAgent,
-  // Note: Atlas is handled specially in createBuiltinAgents()
+  // Note: Orchestrator is handled specially in createBuiltinAgents()
   // because it needs OrchestratorContext, not just a model string
-  atlas: createAtlasAgent as AgentFactory,
+  orchestrator: createOrchestratorAgent as AgentFactory,
   "coder-junior": createCoderJuniorAgentWithOverrides as unknown as AgentFactory,
   researcher: createResearcherAgent,
   "researcher-junior": createResearcherJuniorAgent,
@@ -63,7 +63,7 @@ const agentMetadata: Partial<Record<BuiltinAgentName, AgentPromptMetadata>> = {
   "multimodal-looker": MULTIMODAL_LOOKER_PROMPT_METADATA,
   "plan-consultant": planConsultantPromptMetadata,
   "plan-reviewer": planReviewerPromptMetadata,
-  atlas: atlasPromptMetadata,
+  orchestrator: orchestratorPromptMetadata,
   researcher: RESEARCHER_PROMPT_METADATA,
   "researcher-junior": RESEARCHER_JUNIOR_PROMPT_METADATA,
 }
@@ -189,7 +189,7 @@ export async function createBuiltinAgents(
     result[name] = config
   }
 
-  const atlasConfig = maybeCreateAtlasConfig({
+  const orchestratorConfig = maybeCreateOrchestratorConfig({
     disabledAgents,
     agentOverrides,
     uiSelectedModel,
@@ -201,8 +201,8 @@ export async function createBuiltinAgents(
     directory,
     userCategories: categories,
   })
-  if (atlasConfig) {
-    result["atlas"] = atlasConfig
+  if (orchestratorConfig) {
+    result["orchestrator"] = orchestratorConfig
   }
 
   return result

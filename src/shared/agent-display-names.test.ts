@@ -36,15 +36,15 @@ describe("getAgentDisplayName", () => {
     expect(result).toBe("custom-agent")
   })
 
-  it("returns display name for atlas", () => {
-    // given config key "atlas"
-    const configKey = "atlas"
+  it("returns display name for orchestrator", () => {
+    // given config key "orchestrator"
+    const configKey = "orchestrator"
 
     // when getAgentDisplayName called
     const result = getAgentDisplayName(configKey)
 
-     // then returns "Atlas (Plan Executor)"
-    expect(result).toBe("Atlas (Plan Executor)")
+     // then returns "Orchestrator"
+    expect(result).toBe("Orchestrator")
   })
 
   it("returns display name for planner", () => {
@@ -147,8 +147,8 @@ describe("getAgentConfigKey", () => {
   it("resolves display name case-insensitively", () => {
     // given display name in different case
     // when getAgentConfigKey called
-    // then returns "atlas"
-    expect(getAgentConfigKey("atlas (plan executor)")).toBe("atlas")
+    // then returns "orchestrator"
+    expect(getAgentConfigKey("Orchestrator")).toBe("orchestrator")
   })
 
   it("passes through lowercase config keys unchanged", () => {
@@ -170,7 +170,7 @@ describe("getAgentConfigKey", () => {
     // when/then each resolves to its config key
     expect(getAgentConfigKey("GPTCoder")).toBe("gptcoder")
     expect(getAgentConfigKey("Planner")).toBe("planner")
-    expect(getAgentConfigKey("Atlas (Plan Executor)")).toBe("atlas")
+    expect(getAgentConfigKey("Orchestrator")).toBe("orchestrator")
     expect(getAgentConfigKey("Plan Consultant")).toBe("planConsultant")
     expect(getAgentConfigKey("Plan Reviewer")).toBe("planReviewer")
     expect(getAgentConfigKey("Coder Junior")).toBe("coder-junior")
@@ -198,7 +198,7 @@ describe("AGENT_DISPLAY_NAMES", () => {
       coder: "Coder",
       gptcoder: "GPTCoder",
       planner: "Planner",
-      atlas: "Atlas (Plan Executor)",
+      orchestrator: "Orchestrator",
       "coder-junior": "Coder Junior",
       researcher: "Researcher",
       "researcher-junior": "Researcher Junior",

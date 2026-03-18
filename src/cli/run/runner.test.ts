@@ -12,7 +12,7 @@ describe("resolveRunAgent", () => {
   it("uses CLI agent over env and config", () => {
     // given
     const config = createConfig({ default_run_agent: "planner" })
-    const env = { OPENCODE_DEFAULT_AGENT: "Atlas" }
+    const env = { OPENCODE_DEFAULT_AGENT: "Orchestrator" }
 
     // when
     const agent = resolveRunAgent(
@@ -28,13 +28,13 @@ describe("resolveRunAgent", () => {
   it("uses env agent over config", () => {
     // given
     const config = createConfig({ default_run_agent: "planner" })
-    const env = { OPENCODE_DEFAULT_AGENT: "Atlas" }
+    const env = { OPENCODE_DEFAULT_AGENT: "Orchestrator" }
 
     // when
     const agent = resolveRunAgent({ message: "test" }, config, env)
 
     // then
-    expect(agent).toBe("Atlas (Plan Executor)")
+    expect(agent).toBe("Orchestrator")
   })
 
   it("uses config agent over default", () => {
@@ -95,7 +95,7 @@ describe("resolveRunAgent", () => {
   it("falls back to Researcher after other core agents are disabled", () => {
     // given
     const config = createConfig({
-      disabled_agents: ["coder", "gptcoder", "planner", "atlas"],
+      disabled_agents: ["coder", "gptcoder", "planner", "orchestrator"],
     })
 
     // when

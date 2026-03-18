@@ -34,7 +34,7 @@ describe("applyToolConfig", () => {
       })
 
       it.each([
-      "atlas",
+      "orchestrator",
       "coder",
       "gptcoder",
       "planner",
@@ -178,7 +178,7 @@ describe("applyToolConfig", () => {
   describe("#given task_system is disabled", () => {
     describe("#when applying tool config", () => {
       it.each([
-        "atlas",
+        "orchestrator",
         "coder",
         "gptcoder",
         "planner",

@@ -53,7 +53,7 @@ export function collectPendingBuiltinAgents(input: {
 
     if (agentName === "coder") continue
     if (agentName === "gptcoder") continue
-    if (agentName === "atlas") continue
+    if (agentName === "orchestrator") continue
     if (agentName === "coder-junior") continue
     if (disabledAgents.some((name) => name.toLowerCase() === agentName.toLowerCase())) continue
 

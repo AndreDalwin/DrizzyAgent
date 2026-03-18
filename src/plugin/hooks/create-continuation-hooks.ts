@@ -9,7 +9,7 @@ import {
   createStopContinuationGuardHook,
   createCompactionContextInjector,
   createCompactionTodoPreserverHook,
-  createAtlasHook,
+  createOrchestratorHook,
 } from "../../hooks"
 import { safeCreateHook } from "../../shared/safe-create-hook"
 import { createUnstableAgentBabysitter } from "../unstable-agent-babysitter"
@@ -22,7 +22,7 @@ export type ContinuationHooks = {
   todoContinuationEnforcer: ReturnType<typeof createTodoContinuationEnforcer> | null
   unstableAgentBabysitter: ReturnType<typeof createUnstableAgentBabysitter> | null
   backgroundNotificationHook: ReturnType<typeof createBackgroundNotificationHook> | null
-  atlasHook: ReturnType<typeof createAtlasHook> | null
+  orchestratorHook: ReturnType<typeof createOrchestratorHook> | null
 }
 
 type SessionRecovery = {
@@ -115,9 +115,9 @@ export function createContinuationHooks(args: {
     ? safeHook("background-notification", () => createBackgroundNotificationHook(backgroundManager))
     : null
 
-  const atlasHook = isHookEnabled("atlas")
-    ? safeHook("atlas", () =>
-        createAtlasHook(ctx, {
+  const orchestratorHook = isHookEnabled("orchestrator")
+    ? safeHook("orchestrator", () =>
+        createOrchestratorHook(ctx, {
           directory: ctx.directory,
           backgroundManager,
           isContinuationStopped: (sessionID: string) =>
@@ -137,6 +137,6 @@ export function createContinuationHooks(args: {
     todoContinuationEnforcer,
     unstableAgentBabysitter,
     backgroundNotificationHook,
-    atlasHook,
+    orchestratorHook,
   }
 }

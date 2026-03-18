@@ -1,13 +1,13 @@
 import { describe, test, expect } from "bun:test"
-import { ATLAS_SYSTEM_PROMPT } from "./default"
-import { ATLAS_GPT_SYSTEM_PROMPT } from "./gpt"
-import { ATLAS_GEMINI_SYSTEM_PROMPT } from "./gemini"
+import { ORCHESTRATOR_SYSTEM_PROMPT } from "./default"
+import { ORCHESTRATOR_GPT_SYSTEM_PROMPT } from "./gpt"
+import { ORCHESTRATOR_GEMINI_SYSTEM_PROMPT } from "./gemini"
 
-describe("ATLAS prompt checkbox enforcement", () => {
+describe("ORCHESTRATOR prompt checkbox enforcement", () => {
   describe("default prompt", () => {
     test("plan should NOT be marked (READ ONLY)", () => {
       // given
-      const prompt = ATLAS_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_SYSTEM_PROMPT
 
       // when / then
       expect(prompt).not.toMatch(/\(READ ONLY\)/)
@@ -15,7 +15,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("plan description should include EDIT for checkboxes", () => {
       // given
-      const prompt = ATLAS_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -24,7 +24,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("boundaries should include exception for editing .drizzy/plans/*.md checkboxes", () => {
       // given
-      const prompt = ATLAS_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -34,7 +34,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("prompt should include POST-DELEGATION RULE", () => {
       // given
-      const prompt = ATLAS_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -43,7 +43,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("prompt should include MUST NOT call a new task() before", () => {
       // given
-      const prompt = ATLAS_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -52,7 +52,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("default prompt should NOT reference .drizzy/tasks/", () => {
       // given
-      const prompt = ATLAS_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_SYSTEM_PROMPT
 
       // when / then
       expect(prompt).not.toMatch(/\.drizzy\/tasks\//)
@@ -62,7 +62,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
   describe("GPT prompt", () => {
     test("plan should NOT be marked (READ ONLY)", () => {
       // given
-      const prompt = ATLAS_GPT_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
 
       // when / then
       expect(prompt).not.toMatch(/\(READ ONLY\)/)
@@ -70,7 +70,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("plan description should include EDIT for checkboxes", () => {
       // given
-      const prompt = ATLAS_GPT_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -79,7 +79,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("boundaries should include exception for editing .drizzy/plans/*.md checkboxes", () => {
       // given
-      const prompt = ATLAS_GPT_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -89,7 +89,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("prompt should include POST-DELEGATION RULE", () => {
       // given
-      const prompt = ATLAS_GPT_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -98,7 +98,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("prompt should include MUST NOT call a new task() before", () => {
       // given
-      const prompt = ATLAS_GPT_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -109,7 +109,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
   describe("Gemini prompt", () => {
     test("plan should NOT be marked (READ ONLY)", () => {
       // given
-      const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
 
       // when / then
       expect(prompt).not.toMatch(/\(READ ONLY\)/)
@@ -117,7 +117,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("plan description should include EDIT for checkboxes", () => {
       // given
-      const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -126,7 +126,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("boundaries should include exception for editing .drizzy/plans/*.md checkboxes", () => {
       // given
-      const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -136,7 +136,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("prompt should include POST-DELEGATION RULE", () => {
       // given
-      const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then
@@ -145,7 +145,7 @@ describe("ATLAS prompt checkbox enforcement", () => {
 
     test("prompt should include MUST NOT call a new task() before", () => {
       // given
-      const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+      const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
       const lowerPrompt = prompt.toLowerCase()
 
       // when / then

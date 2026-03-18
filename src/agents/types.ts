@@ -2,7 +2,7 @@ import type { AgentConfig } from "@opencode-ai/sdk";
 
 /**
  * Agent mode determines UI model selection behavior:
- * - "primary": Respects user's UI-selected model (coder, atlas)
+ * - "primary": Respects user's UI-selected model (coder, orchestrator)
  * - "subagent": Uses own fallback chain, ignores UI selection (oracle, explore, etc.)
  * - "all": Available in both contexts (OpenCode compatibility)
  */
@@ -113,7 +113,7 @@ export type BuiltinAgentName =
    | "multimodal-looker"
    | "plan-consultant"
    | "plan-reviewer"
-   | "atlas"
+   | "orchestrator"
    | "coder-junior"
    | "researcher"
    | "researcher-junior";

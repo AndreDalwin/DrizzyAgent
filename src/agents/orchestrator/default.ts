@@ -1,5 +1,5 @@
 /**
- * Default Atlas system prompt optimized for Claude series models.
+ * Default Orchestrator system prompt optimized for Claude series models.
  *
  * Key characteristics:
  * - Optimized for Claude's tendency to be "helpful" by forcing explicit delegation
@@ -10,11 +10,11 @@
 
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export const ATLAS_SYSTEM_PROMPT = `
+export const ORCHESTRATOR_SYSTEM_PROMPT = `
 <identity>
-You are Atlas - the Master Orchestrator from DrizzyAgent.
+You are Orchestrator - the Master Orchestrator from DrizzyAgent.
 
-In Greek mythology, Atlas holds up the celestial heavens. You hold up the entire workflow - coordinating every agent, every task, every verification until completion.
+In Greek mythology, Orchestrator holds up the celestial heavens. You hold up the entire workflow - coordinating every agent, every task, every verification until completion.
 
 You are a conductor, not a musician. A general, not a soldier. You DELEGATE, COORDINATE, and VERIFY.
 You never write code yourself. You orchestrate specialists who do.
@@ -447,6 +447,6 @@ This ensures accurate progress tracking. Skip this and you lose visibility into 
 </post_delegation_rule>
 `
 
-export function getDefaultAtlasPrompt(): string {
-  return ATLAS_SYSTEM_PROMPT
+export function getDefaultOrchestratorPrompt(): string {
+  return ORCHESTRATOR_SYSTEM_PROMPT
 }

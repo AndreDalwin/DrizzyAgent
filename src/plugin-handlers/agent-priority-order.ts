@@ -4,7 +4,7 @@ const CORE_AGENT_ORDER = [
   getAgentDisplayName("coder"),
   getAgentDisplayName("gptcoder"),
   getAgentDisplayName("planner"),
-  getAgentDisplayName("atlas"),
+  getAgentDisplayName("orchestrator"),
 ] as const;
 
 export function reorderAgentsByPriority(

@@ -41,7 +41,7 @@ export const START_WORK_TEMPLATE = `You are starting a Coder work session.
    }
    \`\`\`
 
-6. **Read the plan file** and start executing tasks according to atlas workflow
+6. **Read the plan file** and start executing tasks according to orchestrator workflow
 
 ## OUTPUT FORMAT
 
@@ -88,4 +88,4 @@ Reading plan and beginning execution...
 - Always update boulder.json BEFORE starting work
 - Always set worktree_path in boulder.json before executing any tasks
 - Read the FULL plan file before delegating any tasks
-- Follow atlas delegation protocols (7-section format)`
+- Follow orchestrator delegation protocols (7-section format)`

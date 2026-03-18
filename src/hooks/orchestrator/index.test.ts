@@ -11,7 +11,7 @@ import {
 import type { BoulderState } from "../../features/boulder-state"
 import { _resetForTesting, subagentSessions, updateSessionAgent } from "../../features/claude-code-session-state"
 
-const TEST_STORAGE_ROOT = join(tmpdir(), `atlas-message-storage-${randomUUID()}`)
+const TEST_STORAGE_ROOT = join(tmpdir(), `orchestrator-message-storage-${randomUUID()}`)
 const TEST_MESSAGE_STORAGE = join(TEST_STORAGE_ROOT, "message")
 const TEST_PART_STORAGE = join(TEST_STORAGE_ROOT, "part")
 
@@ -32,10 +32,10 @@ mock.module("../../shared/opencode-storage-detection", () => ({
   isSqliteBackend: () => false,
 }))
 
-const { createAtlasHook } = await import("./index")
+const { createOrchestratorHook } = await import("./index")
 const { MESSAGE_STORAGE } = await import("../../features/hook-message-injector")
 
-describe("atlas hook", () => {
+describe("orchestrator hook", () => {
   let TEST_DIR: string
   let CODER_DIR: string
 
@@ -50,7 +50,7 @@ describe("atlas hook", () => {
         },
       },
       _promptMock: promptMock,
-    } as unknown as Parameters<typeof createAtlasHook>[0] & { _promptMock: ReturnType<typeof mock> }
+    } as unknown as Parameters<typeof createOrchestratorHook>[0] & { _promptMock: ReturnType<typeof mock> }
   }
 
   function setupMessageStorage(sessionID: string, agent: string): void {
@@ -73,7 +73,7 @@ describe("atlas hook", () => {
   }
 
   beforeEach(() => {
-    TEST_DIR = join(tmpdir(), `atlas-test-${randomUUID()}`)
+    TEST_DIR = join(tmpdir(), `orchestrator-test-${randomUUID()}`)
     CODER_DIR = join(TEST_DIR, ".drizzy")
     if (!existsSync(TEST_DIR)) {
       mkdirSync(TEST_DIR, { recursive: true })
@@ -94,7 +94,7 @@ describe("atlas hook", () => {
   describe("tool.execute.after handler", () => {
     test("should handle undefined output gracefully (issue #1035)", async () => {
       // given - hook and undefined output (e.g., from /review command)
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
 
       // when - calling with undefined output
       const result = await hook["tool.execute.after"](
@@ -108,7 +108,7 @@ describe("atlas hook", () => {
 
     test("should ignore non-task tools", async () => {
       // given - hook and non-task tool
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Test Tool",
         output: "Original output",
@@ -125,8 +125,8 @@ describe("atlas hook", () => {
       expect(output.output).toBe("Original output")
     })
 
-     test("should not transform when caller is not Atlas", async () => {
-       // given - boulder state exists but caller agent in message storage is not Atlas
+     test("should not transform when caller is not Orchestrator", async () => {
+       // given - boulder state exists but caller agent in message storage is not Orchestrator
        const sessionID = "session-non-orchestrator-test"
        setupMessageStorage(sessionID, "other-agent")
       
@@ -141,7 +141,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task completed successfully",
@@ -160,12 +160,12 @@ describe("atlas hook", () => {
       cleanupMessageStorage(sessionID)
     })
 
-     test("should append standalone verification when no boulder state but caller is Atlas", async () => {
-       // given - no boulder state, but caller is Atlas
+     test("should append standalone verification when no boulder state but caller is Orchestrator", async () => {
+       // given - no boulder state, but caller is Orchestrator
        const sessionID = "session-no-boulder-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task completed successfully",
@@ -186,10 +186,10 @@ describe("atlas hook", () => {
       cleanupMessageStorage(sessionID)
     })
 
-     test("should transform output when caller is Atlas with boulder state", async () => {
-       // given - Atlas caller with boulder state
+     test("should transform output when caller is Orchestrator with boulder state", async () => {
+       // given - Orchestrator caller with boulder state
        const sessionID = "session-transform-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
@@ -202,7 +202,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task completed successfully",
@@ -226,9 +226,9 @@ describe("atlas hook", () => {
     })
 
      test("should still transform when plan is complete (shows progress)", async () => {
-       // given - boulder state with complete plan, Atlas caller
+       // given - boulder state with complete plan, Orchestrator caller
        const sessionID = "session-complete-plan-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
       const planPath = join(TEST_DIR, "complete-plan.md")
       writeFileSync(planPath, "# Plan\n- [x] Task 1\n- [x] Task 2")
@@ -241,7 +241,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Original output",
@@ -263,9 +263,9 @@ describe("atlas hook", () => {
     })
 
      test("should append session ID to boulder state if not present", async () => {
-       // given - boulder state without session-append-test, Atlas caller
+       // given - boulder state without session-append-test, Orchestrator caller
        const sessionID = "session-append-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
@@ -278,7 +278,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task output",
@@ -299,9 +299,9 @@ describe("atlas hook", () => {
     })
 
      test("should not duplicate existing session ID", async () => {
-       // given - boulder state already has session-dup-test, Atlas caller
+       // given - boulder state already has session-dup-test, Orchestrator caller
        const sessionID = "session-dup-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
@@ -314,7 +314,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task output",
@@ -336,9 +336,9 @@ describe("atlas hook", () => {
     })
 
      test("should include boulder.json path and notepad path in transformed output", async () => {
-       // given - boulder state, Atlas caller
+       // given - boulder state, Orchestrator caller
        const sessionID = "session-path-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
       const planPath = join(TEST_DIR, "my-feature.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2\n- [x] Task 3")
@@ -351,7 +351,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task completed",
@@ -373,9 +373,9 @@ describe("atlas hook", () => {
     })
 
      test("should include session_id and checkbox instructions in reminder", async () => {
-       // given - boulder state, Atlas caller
+       // given - boulder state, Orchestrator caller
        const sessionID = "session-resume-test"
-       setupMessageStorage(sessionID, "atlas")
+       setupMessageStorage(sessionID, "orchestrator")
       
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1")
@@ -388,7 +388,7 @@ describe("atlas hook", () => {
       }
       writeBoulderState(TEST_DIR, state)
 
-      const hook = createAtlasHook(createMockPluginInput())
+      const hook = createOrchestratorHook(createMockPluginInput())
       const output = {
         title: "Coder Task",
         output: "Task completed",
@@ -413,7 +413,7 @@ describe("atlas hook", () => {
       const COMPLETION_GATE_SESSION = "completion-gate-order-test"
 
       beforeEach(() => {
-        setupMessageStorage(COMPLETION_GATE_SESSION, "atlas")
+        setupMessageStorage(COMPLETION_GATE_SESSION, "orchestrator")
       })
 
       afterEach(() => {
@@ -421,7 +421,7 @@ describe("atlas hook", () => {
       })
 
       test("should include completion gate before Subagent Response in transformed boulder output", async () => {
-        // given - Atlas caller with boulder state
+        // given - Orchestrator caller with boulder state
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
@@ -433,7 +433,7 @@ describe("atlas hook", () => {
         }
         writeBoulderState(TEST_DIR, state)
 
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const output = {
           title: "Coder Task",
           output: "Task completed successfully",
@@ -456,7 +456,7 @@ describe("atlas hook", () => {
       })
 
       test("should include completion gate before verification phase text", async () => {
-        // given - Atlas caller with boulder state
+        // given - Orchestrator caller with boulder state
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
@@ -468,7 +468,7 @@ describe("atlas hook", () => {
         }
         writeBoulderState(TEST_DIR, state)
 
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const output = {
           title: "Coder Task",
           output: "Task completed successfully",
@@ -495,7 +495,7 @@ describe("atlas hook", () => {
       })
 
       test("should not contain old STEP 7 MARK COMPLETION IN PLAN FILE text", async () => {
-        // given - Atlas caller with boulder state
+        // given - Orchestrator caller with boulder state
         const planPath = join(TEST_DIR, "test-plan.md")
         writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [x] Task 2")
 
@@ -507,7 +507,7 @@ describe("atlas hook", () => {
         }
         writeBoulderState(TEST_DIR, state)
 
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const output = {
           title: "Coder Task",
           output: "Task completed successfully",
@@ -530,7 +530,7 @@ describe("atlas hook", () => {
       const ORCHESTRATOR_SESSION = "orchestrator-write-test"
 
        beforeEach(() => {
-         setupMessageStorage(ORCHESTRATOR_SESSION, "atlas")
+         setupMessageStorage(ORCHESTRATOR_SESSION, "orchestrator")
        })
 
       afterEach(() => {
@@ -539,7 +539,7 @@ describe("atlas hook", () => {
 
       test("should append delegation reminder when orchestrator writes outside .drizzy/", async () => {
         // given
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const output = {
           title: "Write",
           output: "File written successfully",
@@ -560,7 +560,7 @@ describe("atlas hook", () => {
 
       test("should append delegation reminder when orchestrator edits outside .drizzy/", async () => {
         // given
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const output = {
           title: "Edit",
           output: "File edited successfully",
@@ -579,7 +579,7 @@ describe("atlas hook", () => {
 
       test("should NOT append reminder when orchestrator writes inside .drizzy/", async () => {
         // given
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const originalOutput = "File written successfully"
         const output = {
           title: "Write",
@@ -603,7 +603,7 @@ describe("atlas hook", () => {
         const nonOrchestratorSession = "non-orchestrator-session"
         setupMessageStorage(nonOrchestratorSession, "coder-junior")
         
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const originalOutput = "File written successfully"
         const output = {
           title: "Write",
@@ -626,7 +626,7 @@ describe("atlas hook", () => {
 
       test("should NOT append reminder for read-only tools", async () => {
         // given
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const originalOutput = "File content"
         const output = {
           title: "Read",
@@ -646,7 +646,7 @@ describe("atlas hook", () => {
 
       test("should handle missing filePath gracefully", async () => {
         // given
-        const hook = createAtlasHook(createMockPluginInput())
+        const hook = createOrchestratorHook(createMockPluginInput())
         const originalOutput = "File written successfully"
         const output = {
           title: "Write",
@@ -667,7 +667,7 @@ describe("atlas hook", () => {
       describe("cross-platform path validation (Windows support)", () => {
         test("should NOT append reminder when orchestrator writes inside .drizzy\\ (Windows backslash)", async () => {
           // given
-          const hook = createAtlasHook(createMockPluginInput())
+          const hook = createOrchestratorHook(createMockPluginInput())
           const originalOutput = "File written successfully"
           const output = {
             title: "Write",
@@ -688,7 +688,7 @@ describe("atlas hook", () => {
 
         test("should NOT append reminder when orchestrator writes inside .drizzy with mixed separators", async () => {
           // given
-          const hook = createAtlasHook(createMockPluginInput())
+          const hook = createOrchestratorHook(createMockPluginInput())
           const originalOutput = "File written successfully"
           const output = {
             title: "Write",
@@ -709,7 +709,7 @@ describe("atlas hook", () => {
 
         test("should NOT append reminder for absolute Windows path inside .drizzy\\", async () => {
           // given
-          const hook = createAtlasHook(createMockPluginInput())
+          const hook = createOrchestratorHook(createMockPluginInput())
           const originalOutput = "File written successfully"
           const output = {
             title: "Write",
@@ -730,7 +730,7 @@ describe("atlas hook", () => {
 
         test("should append reminder for Windows path outside .drizzy\\", async () => {
           // given
-          const hook = createAtlasHook(createMockPluginInput())
+          const hook = createOrchestratorHook(createMockPluginInput())
           const output = {
             title: "Write",
             output: "File written successfully",
@@ -761,7 +761,7 @@ describe("atlas hook", () => {
      beforeEach(() => {
        _resetForTesting()
        subagentSessions.clear()
-       setupMessageStorage(MAIN_SESSION_ID, "atlas")
+       setupMessageStorage(MAIN_SESSION_ID, "orchestrator")
      })
 
     afterEach(() => {
@@ -783,7 +783,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when
       await hook.handler({
@@ -804,7 +804,7 @@ describe("atlas hook", () => {
     test("should not inject when no boulder state exists", async () => {
       // given - no boulder state
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when
       await hook.handler({
@@ -832,7 +832,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when - main session fires idle but is NOT in boulder's session_ids
       await hook.handler({
@@ -862,7 +862,7 @@ describe("atlas hook", () => {
       subagentSessions.add(subagentSessionID)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when - subagent session goes idle before parent task output appends it
       await hook.handler({
@@ -891,12 +891,12 @@ describe("atlas hook", () => {
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
-        agent: "atlas",
+        agent: "orchestrator",
       }
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       await hook.handler({
         event: {
@@ -925,7 +925,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when
       await hook.handler({
@@ -953,7 +953,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when - send abort error then idle
       await hook.handler({
@@ -994,7 +994,7 @@ describe("atlas hook", () => {
        }
 
        const mockInput = createMockPluginInput()
-       const hook = createAtlasHook(mockInput, {
+       const hook = createOrchestratorHook(mockInput, {
          directory: TEST_DIR,
          backgroundManager: mockBackgroundManager as any,
        })
@@ -1025,7 +1025,7 @@ describe("atlas hook", () => {
        writeBoulderState(TEST_DIR, state)
 
        const mockInput = createMockPluginInput()
-       const hook = createAtlasHook(mockInput, {
+       const hook = createOrchestratorHook(mockInput, {
          directory: TEST_DIR,
          isContinuationStopped: (sessionID: string) => sessionID === MAIN_SESSION_ID,
        })
@@ -1056,7 +1056,7 @@ describe("atlas hook", () => {
        writeBoulderState(TEST_DIR, state)
 
        const mockInput = createMockPluginInput()
-       const hook = createAtlasHook(mockInput, {
+       const hook = createOrchestratorHook(mockInput, {
          directory: TEST_DIR,
          shouldSkipContinuation: (sessionID: string) => sessionID === MAIN_SESSION_ID,
        })
@@ -1087,7 +1087,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when - abort error, then message update, then idle
       await hook.handler({
@@ -1130,7 +1130,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when
       await hook.handler({
@@ -1146,8 +1146,8 @@ describe("atlas hook", () => {
       expect(callArgs.body.parts[0].text).toContain("2 remaining")
     })
 
-    test("should inject when last agent is coder and boulder targets atlas explicitly", async () => {
-       // given - boulder explicitly set to atlas, but last agent is coder (initial state after /start-work)
+    test("should inject when last agent is coder and boulder targets orchestrator explicitly", async () => {
+       // given - boulder explicitly set to orchestrator, but last agent is coder (initial state after /start-work)
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
@@ -1156,7 +1156,7 @@ describe("atlas hook", () => {
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
-         agent: "atlas",
+         agent: "orchestrator",
        }
        writeBoulderState(TEST_DIR, state)
 
@@ -1165,7 +1165,7 @@ describe("atlas hook", () => {
        setupMessageStorage(MAIN_SESSION_ID, "coder")
 
        const mockInput = createMockPluginInput()
-       const hook = createAtlasHook(mockInput)
+       const hook = createOrchestratorHook(mockInput)
 
        // when
        await hook.handler({
@@ -1175,11 +1175,11 @@ describe("atlas hook", () => {
          },
        })
 
-       // then - should call prompt because coder is always allowed for atlas boulders
+       // then - should call prompt because coder is always allowed for orchestrator boulders
        expect(mockInput._promptMock).toHaveBeenCalled()
      })
 
-    test("should inject when registered atlas boulder session last agent does not match", async () => {
+    test("should inject when registered orchestrator boulder session last agent does not match", async () => {
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
@@ -1188,7 +1188,7 @@ describe("atlas hook", () => {
          started_at: "2026-01-02T10:00:00Z",
          session_ids: [MAIN_SESSION_ID],
          plan_name: "test-plan",
-         agent: "atlas",
+         agent: "orchestrator",
        }
        writeBoulderState(TEST_DIR, state)
 
@@ -1196,7 +1196,7 @@ describe("atlas hook", () => {
        setupMessageStorage(MAIN_SESSION_ID, "gptcoder")
 
        const mockInput = createMockPluginInput()
-       const hook = createAtlasHook(mockInput)
+       const hook = createOrchestratorHook(mockInput)
 
       await hook.handler({
         event: {
@@ -1208,7 +1208,7 @@ describe("atlas hook", () => {
       expect(mockInput._promptMock).toHaveBeenCalled()
     })
 
-     test("should inject when last agent matches boulder agent even if non-Atlas", async () => {
+     test("should inject when last agent matches boulder agent even if non-Orchestrator", async () => {
        // given - boulder state expects coder and last agent is coder
        const planPath = join(TEST_DIR, "test-plan.md")
        writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
@@ -1226,7 +1226,7 @@ describe("atlas hook", () => {
        setupMessageStorage(MAIN_SESSION_ID, "coder")
 
        const mockInput = createMockPluginInput()
-       const hook = createAtlasHook(mockInput)
+       const hook = createOrchestratorHook(mockInput)
 
        // when
        await hook.handler({
@@ -1256,7 +1256,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when - fire multiple idle events in rapid succession (simulating infinite loop bug)
       await hook.handler({
@@ -1297,7 +1297,7 @@ describe("atlas hook", () => {
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       const originalDateNow = Date.now
       let now = 0
@@ -1343,7 +1343,7 @@ describe("atlas hook", () => {
       promptMock.mockImplementationOnce(() => Promise.reject(new Error("Bad Request")))
 
       const mockInput = createMockPluginInput({ promptMock })
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       const originalDateNow = Date.now
       let now = 0
@@ -1379,7 +1379,7 @@ describe("atlas hook", () => {
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       const originalDateNow = Date.now
       let now = 0
@@ -1420,7 +1420,7 @@ describe("atlas hook", () => {
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       const originalDateNow = Date.now
       let now = 0
@@ -1464,7 +1464,7 @@ describe("atlas hook", () => {
       promptMock.mockImplementationOnce(() => Promise.reject(new Error("Bad Request")))
       promptMock.mockImplementationOnce(() => Promise.resolve(undefined))
       const mockInput = createMockPluginInput({ promptMock })
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       const originalDateNow = Date.now
       let now = 0
@@ -1517,7 +1517,7 @@ describe("atlas hook", () => {
 
       const promptMock = mock(() => Promise.reject(new Error("Bad Request")))
       const mockInput = createMockPluginInput({ promptMock })
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       const originalDateNow = Date.now
       let now = 0
@@ -1563,7 +1563,7 @@ describe("atlas hook", () => {
       writeBoulderState(TEST_DIR, state)
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when - create abort state then delete
       await hook.handler({
@@ -1597,8 +1597,8 @@ describe("atlas hook", () => {
       expect(mockInput._promptMock).toHaveBeenCalled()
     })
 
-    test("should inject when session agent was updated to atlas by start-work even if message storage agent differs", async () => {
-      // given - boulder targets atlas, but nearest stored message still says gptcoder
+    test("should inject when session agent was updated to orchestrator by start-work even if message storage agent differs", async () => {
+      // given - boulder targets orchestrator, but nearest stored message still says gptcoder
       const planPath = join(TEST_DIR, "test-plan.md")
       writeFileSync(planPath, "# Plan\n- [ ] Task 1\n- [ ] Task 2")
 
@@ -1607,16 +1607,16 @@ describe("atlas hook", () => {
         started_at: "2026-01-02T10:00:00Z",
         session_ids: [MAIN_SESSION_ID],
         plan_name: "test-plan",
-        agent: "atlas",
+        agent: "orchestrator",
       }
       writeBoulderState(TEST_DIR, state)
 
       cleanupMessageStorage(MAIN_SESSION_ID)
       setupMessageStorage(MAIN_SESSION_ID, "gptcoder")
-      updateSessionAgent(MAIN_SESSION_ID, "atlas")
+      updateSessionAgent(MAIN_SESSION_ID, "orchestrator")
 
       const mockInput = createMockPluginInput()
-      const hook = createAtlasHook(mockInput)
+      const hook = createOrchestratorHook(mockInput)
 
       // when
       await hook.handler({
@@ -1626,7 +1626,7 @@ describe("atlas hook", () => {
         },
       })
 
-      // then - should continue because start-work updated session agent to atlas
+      // then - should continue because start-work updated session agent to orchestrator
       expect(mockInput._promptMock).toHaveBeenCalled()
     })
 
@@ -1689,7 +1689,7 @@ describe("atlas hook", () => {
         writeBoulderState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
-        const hook = createAtlasHook(mockInput)
+        const hook = createOrchestratorHook(mockInput)
 
         // when - first idle injects, second idle within cooldown schedules retry timer
         await hook.handler({
@@ -1718,7 +1718,7 @@ describe("atlas hook", () => {
         writeBoulderState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
-        const hook = createAtlasHook(mockInput)
+        const hook = createOrchestratorHook(mockInput)
 
         // when - first idle injects, then 3 rapid idles within cooldown
         await hook.handler({
@@ -1753,7 +1753,7 @@ describe("atlas hook", () => {
         writeBoulderState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
-        const hook = createAtlasHook(mockInput)
+        const hook = createOrchestratorHook(mockInput)
 
         // when - first idle injects, second schedules retry, then plan completes before timer fires
         await hook.handler({
@@ -1784,7 +1784,7 @@ describe("atlas hook", () => {
         writeBoulderState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
-        const hook = createAtlasHook(mockInput)
+        const hook = createOrchestratorHook(mockInput)
 
         await hook.handler({
           event: { type: "session.idle", properties: { sessionID: MAIN_SESSION_ID } },
@@ -1817,7 +1817,7 @@ describe("atlas hook", () => {
         writeBoulderState(TEST_DIR, state)
 
         const mockInput = createMockPluginInput()
-        const hook = createAtlasHook(mockInput)
+        const hook = createOrchestratorHook(mockInput)
 
         await hook.handler({
           event: { type: "session.idle", properties: { sessionID: MAIN_SESSION_ID } },

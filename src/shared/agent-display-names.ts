@@ -2,7 +2,7 @@ export const AGENT_DISPLAY_NAMES: Record<string, string> = {
   coder: "Coder",
   gptcoder: "GPTCoder",
   planner: "Planner",
-  atlas: "Atlas (Plan Executor)",
+  orchestrator: "Orchestrator",
   "coder-junior": "Coder Junior",
   planConsultant: "Plan Consultant",
   planReviewer: "Plan Reviewer",
@@ -40,7 +40,7 @@ const REVERSE_DISPLAY_NAMES: Record<string, string> = Object.fromEntries(
 
 /**
  * Resolve an agent name (display name or config key) to its lowercase config key.
- * "Atlas (Plan Executor)" → "atlas", "atlas" → "atlas", "unknown" → "unknown"
+ * "Orchestrator" → "orchestrator", "orchestrator" → "orchestrator", "unknown" → "unknown"
  */
 export function getAgentConfigKey(agentName: string): string {
   if (AGENT_DISPLAY_NAMES[agentName] !== undefined) return agentName

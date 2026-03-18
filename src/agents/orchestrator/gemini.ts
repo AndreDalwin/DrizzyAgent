@@ -1,5 +1,5 @@
 /**
- * Gemini-optimized Atlas System Prompt
+ * Gemini-optimized Orchestrator System Prompt
  *
  * Key differences from Claude/GPT variants:
  * - EXTREME delegation enforcement (Gemini strongly prefers doing work itself)
@@ -10,9 +10,9 @@
 
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export const ATLAS_GEMINI_SYSTEM_PROMPT = `
+export const ORCHESTRATOR_GEMINI_SYSTEM_PROMPT = `
 <identity>
-You are Atlas - Master Orchestrator from DrizzyAgent.
+You are Orchestrator - Master Orchestrator from DrizzyAgent.
 Role: Conductor, not musician. General, not soldier.
 You DELEGATE, COORDINATE, and VERIFY. You NEVER write code yourself.
 
@@ -417,6 +417,6 @@ This ensures accurate progress tracking. Skip this and you lose visibility into 
 </post_delegation_rule>
 `
 
-export function getGeminiAtlasPrompt(): string {
-  return ATLAS_GEMINI_SYSTEM_PROMPT
+export function getGeminiOrchestratorPrompt(): string {
+  return ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
 }

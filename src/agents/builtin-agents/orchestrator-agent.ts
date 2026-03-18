@@ -9,9 +9,9 @@ import {
 } from "../../shared/config-provenance"
 import { applyOverrides } from "./agent-overrides"
 import { applyModelResolution } from "./model-resolution"
-import { createAtlasAgent } from "../atlas"
+import { createOrchestratorAgent } from "../orchestrator"
 
-export function maybeCreateAtlasConfig(input: {
+export function maybeCreateOrchestratorConfig(input: {
   disabledAgents: string[]
   agentOverrides: AgentOverrides
   uiSelectedModel?: string
@@ -37,34 +37,34 @@ export function maybeCreateAtlasConfig(input: {
     userCategories,
   } = input
 
-  if (disabledAgents.includes("atlas")) return undefined
+  if (disabledAgents.includes("orchestrator")) return undefined
 
-  const orchestratorOverride = getExplicitAgentOverride(agentOverrides, "atlas")
-  const effectiveOrchestratorOverride = getEffectiveAgentOverride(agentOverrides, "atlas")
-  const atlasRequirement = AGENT_MODEL_REQUIREMENTS["atlas"]
+  const orchestratorOverride = getExplicitAgentOverride(agentOverrides, "orchestrator")
+  const effectiveOrchestratorOverride = getEffectiveAgentOverride(agentOverrides, "orchestrator")
+  const orchestratorRequirement = AGENT_MODEL_REQUIREMENTS["orchestrator"]
 
-  const atlasResolution = applyModelResolution({
+  const orchestratorResolution = applyModelResolution({
     uiSelectedModel: effectiveOrchestratorOverride?.model ? undefined : uiSelectedModel,
     userModel: effectiveOrchestratorOverride?.model,
-    requirement: atlasRequirement,
+    requirement: orchestratorRequirement,
     availableModels,
     systemDefaultModel,
   })
 
-  if (!atlasResolution) return undefined
-  const { model: atlasModel, variant: atlasResolvedVariant } = atlasResolution
+  if (!orchestratorResolution) return undefined
+  const { model: orchestratorModel, variant: orchestratorResolvedVariant } = orchestratorResolution
 
-  let orchestratorConfig = createAtlasAgent({
-    model: atlasModel,
+  let orchestratorConfig = createOrchestratorAgent({
+    model: orchestratorModel,
     availableAgents,
     availableSkills,
     userCategories,
   })
 
-  const atlasVariant =
-    orchestratorOverride?.variant ?? effectiveOrchestratorOverride?.variant ?? atlasResolvedVariant
-  if (atlasVariant) {
-    orchestratorConfig = { ...orchestratorConfig, variant: atlasVariant }
+  const orchestratorVariant =
+    orchestratorOverride?.variant ?? effectiveOrchestratorOverride?.variant ?? orchestratorResolvedVariant
+  if (orchestratorVariant) {
+    orchestratorConfig = { ...orchestratorConfig, variant: orchestratorVariant }
   }
 
   orchestratorConfig = applyOverrides(orchestratorConfig, orchestratorOverride, mergedCategories, directory)

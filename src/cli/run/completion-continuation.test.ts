@@ -47,7 +47,7 @@ function writeBoulderStateFile(directory: string, activePlanPath: string, sessio
       started_at: new Date().toISOString(),
       session_ids: sessionIDs,
       plan_name: "test-plan",
-      agent: "atlas",
+      agent: "orchestrator",
     }),
     "utf-8",
   )

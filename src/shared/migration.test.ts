@@ -100,18 +100,18 @@ describe("migrateAgentNames", () => {
     expect(migrated["Plan Consultant"]).toBeUndefined()
   })
 
-  test("migrates lowercase atlas to atlas", () => {
-    // given: Config with lowercase atlas agent name
+  test("migrates lowercase orchestrator to orchestrator", () => {
+    // given: Config with lowercase orchestrator agent name
     const agents = {
-      atlas: { model: "anthropic/claude-opus-4-6" },
+      orchestrator: { model: "anthropic/claude-opus-4-6" },
     }
 
     // when: Migrate agent names
     const { migrated, changed } = migrateAgentNames(agents)
 
-    // then: lowercase atlas should remain atlas (no change needed)
+    // then: lowercase orchestrator should remain orchestrator (no change needed)
     expect(changed).toBe(false)
-    expect(migrated["atlas"]).toEqual({ model: "anthropic/claude-opus-4-6" })
+    expect(migrated["orchestrator"]).toEqual({ model: "anthropic/claude-opus-4-6" })
   })
 
   test("migrates Coder variants to lowercase", () => {
@@ -135,15 +135,15 @@ describe("migrateAgentNames", () => {
     expect(migrated["unknown-agent"]).toEqual({ model: "test" })
   })
 
-  test("migrates Atlas variants to lowercase", () => {
-    // given agents config with "Atlas" key
+  test("migrates Orchestrator variants to lowercase", () => {
+    // given agents config with "Orchestrator" key
     // when migrateAgentNames called
-    // then key becomes "atlas"
-    const agents = { "Atlas": { model: "test" } }
+    // then key becomes "orchestrator"
+    const agents = { "Orchestrator": { model: "test" } }
     const { migrated, changed } = migrateAgentNames(agents)
     expect(changed).toBe(true)
-    expect(migrated["atlas"]).toEqual({ model: "test" })
-    expect(migrated["Atlas"]).toBeUndefined()
+    expect(migrated["orchestrator"]).toEqual({ model: "test" })
+    expect(migrated["Orchestrator"]).toBeUndefined()
   })
 
   test("migrates Prometheus variants to planner", () => {
@@ -260,16 +260,16 @@ describe("migrateHookNames", () => {
     expect(migrated).toEqual(["anthropic-context-window-limit-recovery"])
   })
 
-  test("migrates coder-orchestrator to atlas", () => {
+  test("migrates coder-orchestrator to orchestrator", () => {
     // given: Config with legacy coder-orchestrator hook
     const hooks = ["coder-orchestrator", "comment-checker"]
 
     // when: Migrate hook names
     const { migrated, changed, removed } = migrateHookNames(hooks)
 
-    // then: coder-orchestrator should be migrated to atlas
+    // then: coder-orchestrator should be migrated to orchestrator
     expect(changed).toBe(true)
-    expect(migrated).toContain("atlas")
+    expect(migrated).toContain("orchestrator")
     expect(migrated).toContain("comment-checker")
     expect(migrated).not.toContain("coder-orchestrator")
     expect(removed).toEqual([])
@@ -299,7 +299,7 @@ describe("migrateHookNames", () => {
     // then: Legacy should be renamed, removed should be filtered
     expect(changed).toBe(true)
     expect(migrated).toContain("anthropic-context-window-limit-recovery")
-    expect(migrated).toContain("atlas")
+    expect(migrated).toContain("orchestrator")
     expect(migrated).toContain("preemptive-compaction")
     expect(removed).toEqual([])
   })

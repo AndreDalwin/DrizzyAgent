@@ -52,7 +52,7 @@
  * | **multimodal-looker** | gpt-5.4 → k2p5 → gemini-3-flash → glm-4.6v → gpt-5-nano |
  * | **plan-consultant** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
  * | **plan-reviewer** | gpt-5.4 → kimi-k2.5 → claude-opus-4-6 → gemini-3.1-pro → big-pickle (free) |
- * | **atlas** | k2p5 → claude-sonnet-4-6 → claude-sonnet-4-5 → gpt-5.4 → gemini-3.1-pro |
+ * | **orchestrator** | k2p5 → claude-sonnet-4-6 → claude-sonnet-4-5 → gpt-5.4 → gemini-3.1-pro |
  * | **coder-junior** | claude-sonnet-4-6 → gpt-5.3-codex → gemini-3-flash (runtime only) |
  * 
  * ## Category Model Chains
@@ -78,7 +78,7 @@
  * 
  * The following changed from install-time defaults after unification:
  * - **librarian**: Now uses gemini-3-flash first (was glm-4.7)
- * - **atlas**: Now uses k2p5 first (was claude-sonnet-4-6)
+ * - **orchestrator**: Now uses k2p5 first (was claude-sonnet-4-6)
  * - **gptcoder**: Now allows github-copilot fallback (was OpenAI-only)
  * 
  * These simplifications achieve true single source of truth.
@@ -200,7 +200,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     ],
     includeInInstall: true,
   },
-  atlas: {
+  orchestrator: {
     chain: [{ providers: ["kimi-for-coding"], model: "k2p5" }, { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }, { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-5" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro" }],
     includeInInstall: true,
   },

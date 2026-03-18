@@ -480,14 +480,14 @@ describe("Coder-Junior agent override", () => {
     }
   })
 
-  test("schema accepts lowercase agent names (coder, atlas, planner)", () => {
+  test("schema accepts lowercase agent names (coder, orchestrator, planner)", () => {
     // given
     const config = {
       agents: {
         coder: {
           temperature: 0.1,
         },
-        atlas: {
+        orchestrator: {
           temperature: 0.2,
         },
         planner: {
@@ -504,7 +504,7 @@ describe("Coder-Junior agent override", () => {
     if (result.success) {
       const namedAgents = result.data.agents as Record<string, { temperature?: number } | undefined>
       expect(namedAgents.coder?.temperature).toBe(0.1)
-      expect(result.data.agents?.atlas?.temperature).toBe(0.2)
+      expect(result.data.agents?.orchestrator?.temperature).toBe(0.2)
       expect(result.data.agents?.planner?.temperature).toBe(0.3)
     }
   })

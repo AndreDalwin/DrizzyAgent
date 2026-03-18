@@ -20,7 +20,7 @@ describe("getLastAgentFromSession sqlite branch", () => {
   test("should skip compaction and return the previous real agent from sqlite messages", async () => {
     // given
     const client = createMockClient([
-      { info: { agent: "atlas" } },
+      { info: { agent: "orchestrator" } },
       { info: { agent: "compaction" } },
     ])
 
@@ -28,7 +28,7 @@ describe("getLastAgentFromSession sqlite branch", () => {
     const result = await getLastAgentFromSession("ses_sqlite_compaction", client)
 
     // then
-    expect(result).toBe("atlas")
+    expect(result).toBe("orchestrator")
   })
 
   test("should return null when sqlite history contains only compaction", async () => {

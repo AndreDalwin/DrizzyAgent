@@ -52,7 +52,7 @@ describe("createBuiltinAgents with model overrides", () => {
     expect(agents.coder.thinking).toBeUndefined()
   })
 
-  test("Atlas uses uiSelectedModel", async () => {
+  test("Orchestrator uses uiSelectedModel", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["openai/gpt-5.4", "anthropic/claude-sonnet-4-6"])
@@ -75,8 +75,8 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.atlas).toBeDefined()
-      expect(agents.atlas.model).toBe("openai/gpt-5.4")
+      expect(agents.orchestrator).toBeDefined()
+      expect(agents.orchestrator.model).toBe("openai/gpt-5.4")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -115,14 +115,14 @@ describe("createBuiltinAgents with model overrides", () => {
     }
   })
 
-  test("user config model takes priority over uiSelectedModel for atlas", async () => {
+  test("user config model takes priority over uiSelectedModel for orchestrator", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["openai/gpt-5.4", "anthropic/claude-sonnet-4-6"])
     )
     const uiSelectedModel = "openai/gpt-5.4"
     const overrides = {
-      atlas: { model: "google/antigravity-claude-opus-4-5-thinking" },
+      orchestrator: { model: "google/antigravity-claude-opus-4-5-thinking" },
     }
 
     try {
@@ -141,8 +141,8 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.atlas).toBeDefined()
-      expect(agents.atlas.model).toBe("google/antigravity-claude-opus-4-5-thinking")
+      expect(agents.orchestrator).toBeDefined()
+      expect(agents.orchestrator.model).toBe("google/antigravity-claude-opus-4-5-thinking")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -185,14 +185,14 @@ describe("createBuiltinAgents with model overrides", () => {
     }
   })
 
-  test("snapshot-derived atlas defaults preserve variant and beat uiSelectedModel", async () => {
+  test("snapshot-derived orchestrator defaults preserve variant and beat uiSelectedModel", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set(["anthropic/claude-sonnet-4-6", "openai/gpt-5.4"])
     )
     const uiSelectedModel = "anthropic/claude-sonnet-4-6"
     const effectiveOverrides = {
-      atlas: { model: "openai/gpt-5.4", variant: "medium" },
+      orchestrator: { model: "openai/gpt-5.4", variant: "medium" },
     }
     registerConfigProvenance({
       effectiveAgents: effectiveOverrides,
@@ -215,9 +215,9 @@ describe("createBuiltinAgents with model overrides", () => {
       )
 
       // #then
-      expect(agents.atlas).toBeDefined()
-      expect(agents.atlas.model).toBe("openai/gpt-5.4")
-      expect(agents.atlas.variant).toBe("medium")
+      expect(agents.orchestrator).toBeDefined()
+      expect(agents.orchestrator.model).toBe("openai/gpt-5.4")
+      expect(agents.orchestrator.variant).toBe("medium")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -392,7 +392,7 @@ describe("createBuiltinAgents with model overrides", () => {
       // #then
       expect(agents.coder.prompt).toContain("researcher")
       expect(agents.gptcoder.prompt).toContain("researcher")
-      expect(agents.atlas.prompt).toContain("researcher")
+      expect(agents.orchestrator.prompt).toContain("researcher")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -428,7 +428,7 @@ describe("createBuiltinAgents with model overrides", () => {
       // #then
       expect(agents.coder.prompt).not.toContain("hidden-agent")
       expect(agents.gptcoder.prompt).not.toContain("hidden-agent")
-      expect(agents.atlas.prompt).not.toContain("hidden-agent")
+      expect(agents.orchestrator.prompt).not.toContain("hidden-agent")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -464,7 +464,7 @@ describe("createBuiltinAgents with model overrides", () => {
       // #then
       expect(agents.coder.prompt).not.toContain("disabled-agent")
       expect(agents.gptcoder.prompt).not.toContain("disabled-agent")
-      expect(agents.atlas.prompt).not.toContain("disabled-agent")
+      expect(agents.orchestrator.prompt).not.toContain("disabled-agent")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -500,7 +500,7 @@ describe("createBuiltinAgents with model overrides", () => {
       // #then
       expect(agents.coder.prompt).not.toContain("custom-researcher")
       expect(agents.gptcoder.prompt).not.toContain("custom-researcher")
-      expect(agents.atlas.prompt).not.toContain("custom-researcher")
+      expect(agents.orchestrator.prompt).not.toContain("custom-researcher")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -891,7 +891,7 @@ describe("Coder and Librarian environment context toggle", () => {
   })
 })
 
-describe("Atlas is unaffected by environment context toggle", () => {
+describe("Orchestrator is unaffected by environment context toggle", () => {
   let fetchSpy: ReturnType<typeof spyOn>
 
   beforeEach(() => {
@@ -904,7 +904,7 @@ describe("Atlas is unaffected by environment context toggle", () => {
     fetchSpy.mockRestore()
   })
 
-  test("atlas prompt is unchanged and never contains <omo-env>", async () => {
+  test("orchestrator prompt is unchanged and never contains <omo-env>", async () => {
     const agentsDefault = await createBuiltinAgents(
       [],
       {},
@@ -937,11 +937,11 @@ describe("Atlas is unaffected by environment context toggle", () => {
       true
     )
 
-    expect(agentsDefault.atlas).toBeDefined()
-    expect(agentsDisabled.atlas).toBeDefined()
-    expect(agentsDefault.atlas.prompt).not.toContain("<omo-env>")
-    expect(agentsDisabled.atlas.prompt).not.toContain("<omo-env>")
-    expect(agentsDisabled.atlas.prompt).toBe(agentsDefault.atlas.prompt)
+    expect(agentsDefault.orchestrator).toBeDefined()
+    expect(agentsDisabled.orchestrator).toBeDefined()
+    expect(agentsDefault.orchestrator.prompt).not.toContain("<omo-env>")
+    expect(agentsDisabled.orchestrator.prompt).not.toContain("<omo-env>")
+    expect(agentsDisabled.orchestrator.prompt).toBe(agentsDefault.orchestrator.prompt)
   })
 })
 
@@ -1407,19 +1407,19 @@ describe("override.category expansion in createBuiltinAgents", () => {
     expect(agents.coder.variant).toBe("xhigh")
   })
 
-  test("atlas override with category expands category properties", async () => {
+  test("orchestrator override with category expands category properties", async () => {
     // #given
     const overrides = {
-      atlas: { category: "ultrabrain" } as any,
+      orchestrator: { category: "ultrabrain" } as any,
     }
 
     // #when
     const agents = await createBuiltinAgents([], overrides, undefined, TEST_DEFAULT_MODEL)
 
     // #then - ultrabrain category: model=openai/gpt-5.4, variant=xhigh
-    expect(agents.atlas).toBeDefined()
-    expect(agents.atlas.model).toBe("openai/gpt-5.4")
-    expect(agents.atlas.variant).toBe("xhigh")
+    expect(agents.orchestrator).toBeDefined()
+    expect(agents.orchestrator.model).toBe("openai/gpt-5.4")
+    expect(agents.orchestrator.variant).toBe("xhigh")
   })
 
   test("override with non-existent category has no effect on config", async () => {

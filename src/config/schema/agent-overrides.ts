@@ -71,7 +71,7 @@ export const AgentOverridesSchema = z.object({
   librarian: AgentOverrideConfigSchema.optional(),
   explore: AgentOverrideConfigSchema.optional(),
   "multimodal-looker": AgentOverrideConfigSchema.optional(),
-  atlas: AgentOverrideConfigSchema.optional(),
+  orchestrator: AgentOverrideConfigSchema.optional(),
   researcher: AgentOverrideConfigSchema.optional(),
   "researcher-junior": AgentOverrideConfigSchema.optional(),
 })

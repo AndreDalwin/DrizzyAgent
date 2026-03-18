@@ -28,8 +28,8 @@ describe("BOULDER_CONTINUATION_PROMPT", () => {
       expect(checkboxMarkingMatch).not.toBeNull()
       expect(proceedMatch).not.toBeNull()
 
-      const checkboxPosition = checkboxMarkingMatch!.index
-      const proceedPosition = proceedMatch!.index
+      const checkboxPosition = checkboxMarkingMatch!.index ?? -1
+      const proceedPosition = proceedMatch!.index ?? -1
 
       expect(checkboxPosition).toBeLessThan(proceedPosition)
     })

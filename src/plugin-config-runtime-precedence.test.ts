@@ -182,7 +182,7 @@ describe("loadPluginConfig runtime precedence", () => {
       )
 
       expect(agents.coder.model).toBe("kimi-for-coding/k2p5")
-      expect(agents.atlas.model).toBe("kimi-for-coding/k2p5")
+      expect(agents.orchestrator.model).toBe("kimi-for-coding/k2p5")
     } finally {
       fetchSpy.mockRestore()
     }

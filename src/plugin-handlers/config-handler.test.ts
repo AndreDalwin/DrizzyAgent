@@ -163,7 +163,7 @@ describe("Coder-Junior model inheritance", () => {
 })
 
 describe("Plan agent demote behavior", () => {
-  test("orders core agents as coder -> gptcoder -> planner -> atlas", async () => {
+  test("orders core agents as coder -> gptcoder -> planner -> orchestrator", async () => {
     // #given
     const createBuiltinAgentsMock = agents.createBuiltinAgents as unknown as {
       mockResolvedValue: (value: Record<string, unknown>) => void
@@ -172,7 +172,7 @@ describe("Plan agent demote behavior", () => {
       coder: { name: "coder", prompt: "test", mode: "primary" },
       gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },
-      atlas: { name: "atlas", prompt: "test", mode: "primary" },
+      orchestrator: { name: "orchestrator", prompt: "test", mode: "primary" },
     })
     const pluginConfig: DrizzyAgentConfig = {
       coder_agent: {
@@ -201,7 +201,7 @@ describe("Plan agent demote behavior", () => {
       getAgentDisplayName("coder"),
       getAgentDisplayName("gptcoder"),
       getAgentDisplayName("planner"),
-      getAgentDisplayName("atlas"),
+      getAgentDisplayName("orchestrator"),
     ]
     const ordered = keys.filter((key) => coreAgents.includes(key))
     expect(ordered).toEqual(coreAgents)
@@ -1160,7 +1160,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
   const AGENTS_WITH_TODO_DENY = new Set([
     getAgentDisplayName("coder"),
     getAgentDisplayName("gptcoder"),
-    getAgentDisplayName("atlas"),
+    getAgentDisplayName("orchestrator"),
     getAgentDisplayName("planner"),
     getAgentDisplayName("coder-junior"),
   ])
@@ -1173,7 +1173,7 @@ describe("per-agent todowrite/todoread deny when task_system enabled", () => {
     createBuiltinAgentsMock.mockResolvedValue({
       coder: { name: "coder", prompt: "test", mode: "primary" },
       gptcoder: { name: "gptcoder", prompt: "test", mode: "primary" },
-      atlas: { name: "atlas", prompt: "test", mode: "primary" },
+      orchestrator: { name: "orchestrator", prompt: "test", mode: "primary" },
       planner: { name: "planner", prompt: "test", mode: "primary" },
       "coder-junior": { name: "coder-junior", prompt: "test", mode: "subagent" },
       oracle: { name: "oracle", prompt: "test", mode: "subagent" },

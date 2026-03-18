@@ -23,8 +23,8 @@ const LEGACY_AGENT_REQUIREMENT_OVERRIDES = {
   gptcoder: {
     requiresProvider: AGENT_MODEL_DEFAULTS.gptcoder.requiresAnyProvider,
   },
-  atlas: {
-    fallbackChain: pickFallbackEntries(AGENT_MODEL_DEFAULTS.atlas.chain, ["claude-sonnet-4-6", "gpt-5.4"]),
+  orchestrator: {
+    fallbackChain: pickFallbackEntries(AGENT_MODEL_DEFAULTS.orchestrator.chain, ["claude-sonnet-4-6", "gpt-5.4"]),
   },
 } satisfies Partial<Record<string, RequirementOverride>>
 

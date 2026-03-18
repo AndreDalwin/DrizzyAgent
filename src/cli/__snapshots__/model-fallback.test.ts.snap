@@ -4,9 +4,6 @@ exports[`generateModelConfig no providers available returns ULTIMATE_FALLBACK fo
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "google/gemini-3.1-pro",
-    },
     "coder": {
       "model": "opencode/big-pickle",
     },
@@ -21,6 +18,9 @@ exports[`generateModelConfig no providers available returns ULTIMATE_FALLBACK fo
     },
     "oracle": {
       "model": "opencode/big-pickle",
+    },
+    "orchestrator": {
+      "model": "google/gemini-3.1-pro",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro",
@@ -71,9 +71,6 @@ exports[`generateModelConfig single native provider uses Claude models when only
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -90,6 +87,9 @@ exports[`generateModelConfig single native provider uses Claude models when only
     "oracle": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -149,9 +149,6 @@ exports[`generateModelConfig single native provider uses Claude models with isMa
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -168,6 +165,9 @@ exports[`generateModelConfig single native provider uses Claude models with isMa
     "oracle": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -228,10 +228,6 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "openai/gpt-5.4",
-      "variant": "medium",
-    },
     "coder": {
       "model": "openai/gpt-5.4",
       "variant": "medium",
@@ -255,6 +251,10 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "openai/gpt-5.4",
+      "variant": "medium",
     },
     "planConsultant": {
       "model": "openai/gpt-5.4",
@@ -318,10 +318,6 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "openai/gpt-5.4",
-      "variant": "medium",
-    },
     "coder": {
       "model": "openai/gpt-5.4",
       "variant": "medium",
@@ -345,6 +341,10 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "openai/gpt-5.4",
+      "variant": "medium",
     },
     "planConsultant": {
       "model": "openai/gpt-5.4",
@@ -408,9 +408,6 @@ exports[`generateModelConfig single native provider uses Gemini models when only
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "google/gemini-3.1-pro-preview",
-    },
     "coder": {
       "model": "opencode/big-pickle",
     },
@@ -426,6 +423,9 @@ exports[`generateModelConfig single native provider uses Gemini models when only
     "oracle": {
       "model": "google/gemini-3.1-pro-preview",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "google/gemini-3.1-pro-preview",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro-preview",
@@ -482,9 +482,6 @@ exports[`generateModelConfig single native provider uses Gemini models with isMa
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "google/gemini-3.1-pro-preview",
-    },
     "coder": {
       "model": "opencode/big-pickle",
     },
@@ -500,6 +497,9 @@ exports[`generateModelConfig single native provider uses Gemini models with isMa
     "oracle": {
       "model": "google/gemini-3.1-pro-preview",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "google/gemini-3.1-pro-preview",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro-preview",
@@ -556,9 +556,6 @@ exports[`generateModelConfig all native providers uses preferred models from fal
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -580,6 +577,9 @@ exports[`generateModelConfig all native providers uses preferred models from fal
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -638,9 +638,6 @@ exports[`generateModelConfig all native providers uses preferred models with isM
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -662,6 +659,9 @@ exports[`generateModelConfig all native providers uses preferred models with isM
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -721,9 +721,6 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "opencode/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "opencode/claude-opus-4-6",
       "variant": "max",
@@ -745,6 +742,9 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
     "oracle": {
       "model": "opencode/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "opencode/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "opencode/claude-opus-4-6",
@@ -802,9 +802,6 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models with is
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "opencode/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "opencode/claude-opus-4-6",
       "variant": "max",
@@ -826,6 +823,9 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models with is
     "oracle": {
       "model": "opencode/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "opencode/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "opencode/claude-opus-4-6",
@@ -884,9 +884,6 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models when 
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "github-copilot/claude-sonnet-4.6",
-    },
     "coder": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
@@ -907,6 +904,9 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models when 
     "oracle": {
       "model": "github-copilot/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "github-copilot/claude-sonnet-4.6",
     },
     "planConsultant": {
       "model": "github-copilot/claude-opus-4.6",
@@ -965,9 +965,6 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models with 
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "github-copilot/claude-sonnet-4.6",
-    },
     "coder": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
@@ -988,6 +985,9 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models with 
     "oracle": {
       "model": "github-copilot/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "github-copilot/claude-sonnet-4.6",
     },
     "planConsultant": {
       "model": "github-copilot/claude-opus-4.6",
@@ -1047,9 +1047,6 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian whe
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "google/gemini-3.1-pro",
-    },
     "coder": {
       "model": "zai-coding-plan/glm-5",
     },
@@ -1064,6 +1061,9 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian whe
     },
     "oracle": {
       "model": "opencode/big-pickle",
+    },
+    "orchestrator": {
+      "model": "google/gemini-3.1-pro",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro",
@@ -1114,9 +1114,6 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian wit
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "google/gemini-3.1-pro",
-    },
     "coder": {
       "model": "zai-coding-plan/glm-5",
     },
@@ -1131,6 +1128,9 @@ exports[`generateModelConfig fallback providers uses ZAI model for librarian wit
     },
     "oracle": {
       "model": "opencode/big-pickle",
+    },
+    "orchestrator": {
+      "model": "google/gemini-3.1-pro",
     },
     "planConsultant": {
       "model": "google/gemini-3.1-pro",
@@ -1181,9 +1181,6 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + OpenCode Zen
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -1205,6 +1202,9 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + OpenCode Zen
     "oracle": {
       "model": "opencode/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -1262,9 +1262,6 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "github-copilot/claude-sonnet-4.6",
-    },
     "coder": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
@@ -1286,6 +1283,9 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "github-copilot/claude-sonnet-4.6",
     },
     "planConsultant": {
       "model": "github-copilot/claude-opus-4.6",
@@ -1344,9 +1344,6 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + ZAI combinat
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -1363,6 +1360,9 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + ZAI combinat
     "oracle": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -1421,9 +1421,6 @@ exports[`generateModelConfig mixed provider scenarios uses Gemini + Claude combi
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -1440,6 +1437,9 @@ exports[`generateModelConfig mixed provider scenarios uses Gemini + Claude combi
     "oracle": {
       "model": "google/gemini-3.1-pro-preview",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -1498,9 +1498,6 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "github-copilot/claude-sonnet-4.6",
-    },
     "coder": {
       "model": "github-copilot/claude-opus-4.6",
       "variant": "max",
@@ -1522,6 +1519,9 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
     "oracle": {
       "model": "github-copilot/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "github-copilot/claude-sonnet-4.6",
     },
     "planConsultant": {
       "model": "github-copilot/claude-opus-4.6",
@@ -1579,9 +1579,6 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -1603,6 +1600,9 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",
@@ -1660,9 +1660,6 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
 {
   "$schema": "https://raw.githubusercontent.com/AndreDalwin/DrizzyAgent/dev/assets/drizzy-agent.schema.json",
   "agents": {
-    "atlas": {
-      "model": "anthropic/claude-sonnet-4-6",
-    },
     "coder": {
       "model": "anthropic/claude-opus-4-6",
       "variant": "max",
@@ -1684,6 +1681,9 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
     "oracle": {
       "model": "openai/gpt-5.4",
       "variant": "high",
+    },
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
     },
     "planConsultant": {
       "model": "anthropic/claude-opus-4-6",

@@ -9,7 +9,7 @@ import { clearBoulderState, writeBoulderState } from "../../features/boulder-sta
 import { _resetForTesting } from "../../features/claude-code-session-state"
 import type { BoulderState } from "../../features/boulder-state"
 
-const TEST_STORAGE_ROOT = join(tmpdir(), `atlas-compaction-storage-${randomUUID()}`)
+const TEST_STORAGE_ROOT = join(tmpdir(), `orchestrator-compaction-storage-${randomUUID()}`)
 const TEST_MESSAGE_STORAGE = join(TEST_STORAGE_ROOT, "message")
 const TEST_PART_STORAGE = join(TEST_STORAGE_ROOT, "part")
 
@@ -30,9 +30,9 @@ mock.module("../../shared/opencode-storage-detection", () => ({
   isSqliteBackend: () => false,
 }))
 
-const { createAtlasHook } = await import("./index")
+const { createOrchestratorHook } = await import("./index")
 
-describe("atlas hook compaction agent filtering", () => {
+describe("orchestrator hook compaction agent filtering", () => {
   let testDirectory: string
 
   function createMockPluginInput() {
@@ -46,7 +46,7 @@ describe("atlas hook compaction agent filtering", () => {
         },
       },
       _promptMock: promptMock,
-    } as Parameters<typeof createAtlasHook>[0] & { _promptMock: ReturnType<typeof mock> }
+    } as Parameters<typeof createOrchestratorHook>[0] & { _promptMock: ReturnType<typeof mock> }
   }
 
   function writeMessage(sessionID: string, fileName: string, agent: string): void {
@@ -62,7 +62,7 @@ describe("atlas hook compaction agent filtering", () => {
   }
 
   beforeEach(() => {
-    testDirectory = join(tmpdir(), `atlas-compaction-test-${randomUUID()}`)
+    testDirectory = join(tmpdir(), `orchestrator-compaction-test-${randomUUID()}`)
     mkdirSync(testDirectory, { recursive: true })
     clearBoulderState(testDirectory)
     _resetForTesting()
@@ -74,7 +74,7 @@ describe("atlas hook compaction agent filtering", () => {
     _resetForTesting()
   })
 
-  test("should inject continuation when the latest message is compaction but the previous agent matches atlas", async () => {
+  test("should inject continuation when the latest message is compaction but the previous agent matches orchestrator", async () => {
     // given
     const sessionID = "main-session-after-compaction"
     const planPath = join(testDirectory, "test-plan.md")
@@ -85,14 +85,14 @@ describe("atlas hook compaction agent filtering", () => {
       started_at: "2026-01-02T10:00:00Z",
       session_ids: [sessionID],
       plan_name: "test-plan",
-      agent: "atlas",
+      agent: "orchestrator",
     }
     writeBoulderState(testDirectory, state)
-    writeMessage(sessionID, "msg_001.json", "atlas")
+    writeMessage(sessionID, "msg_001.json", "orchestrator")
     writeMessage(sessionID, "msg_002.json", "compaction")
 
     const mockInput = createMockPluginInput()
-    const hook = createAtlasHook(mockInput)
+    const hook = createOrchestratorHook(mockInput)
 
     // when
     await hook.handler({

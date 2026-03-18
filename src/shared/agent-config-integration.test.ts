@@ -10,7 +10,7 @@ describe("Agent Config Integration", () => {
       // given - config with old format keys
       const oldConfig = {
         Coder: { model: "anthropic/claude-opus-4-6" },
-        Atlas: { model: "anthropic/claude-opus-4-6" },
+        Orchestrator: { model: "anthropic/claude-opus-4-6" },
         "Prometheus (Planner)": { model: "anthropic/claude-opus-4-6" },
         "Plan Consultant": { model: "anthropic/claude-sonnet-4-6" },
         "Plan Reviewer": { model: "anthropic/claude-sonnet-4-6" },
@@ -21,21 +21,21 @@ describe("Agent Config Integration", () => {
 
       // then - keys are lowercase
       expect(result.migrated).toHaveProperty("coder")
-      expect(result.migrated).toHaveProperty("atlas")
+      expect(result.migrated).toHaveProperty("orchestrator")
       expect(result.migrated).toHaveProperty("planner")
       expect(result.migrated).toHaveProperty("plan-consultant")
       expect(result.migrated).toHaveProperty("plan-reviewer")
 
       // then - old keys are removed
       expect(result.migrated).not.toHaveProperty("Coder")
-      expect(result.migrated).not.toHaveProperty("Atlas")
+      expect(result.migrated).not.toHaveProperty("Orchestrator")
       expect(result.migrated).not.toHaveProperty("Prometheus (Planner)")
       expect(result.migrated).not.toHaveProperty("Plan Consultant")
       expect(result.migrated).not.toHaveProperty("Plan Reviewer")
 
       // then - values are preserved
       expect(result.migrated.coder).toEqual({ model: "anthropic/claude-opus-4-6" })
-      expect(result.migrated.atlas).toEqual({ model: "anthropic/claude-opus-4-6" })
+      expect(result.migrated.orchestrator).toEqual({ model: "anthropic/claude-opus-4-6" })
       expect(result.migrated.planner).toEqual({ model: "anthropic/claude-opus-4-6" })
       
       // then - changed flag is true
@@ -87,14 +87,14 @@ describe("Agent Config Integration", () => {
   describe("Display name resolution", () => {
     test("returns correct display names for all builtin agents", () => {
       // given - lowercase config keys
-      const agents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker"]
+      const agents = ["coder", "orchestrator", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker"]
 
       // when - display names are requested
       const displayNames = agents.map((agent) => getAgentDisplayName(agent))
 
       // then - display names are correct
       expect(displayNames).toContain("Coder")
-      expect(displayNames).toContain("Atlas (Plan Executor)")
+      expect(displayNames).toContain("Orchestrator")
       expect(displayNames).toContain("Planner")
       expect(displayNames).toContain("Plan Consultant")
       expect(displayNames).toContain("Plan Reviewer")
@@ -106,16 +106,16 @@ describe("Agent Config Integration", () => {
 
     test("handles lowercase keys case-insensitively", () => {
       // given - various case formats of lowercase keys
-      const keys = ["Coder", "Atlas", "CODER", "atlas", "planner", "PLANNER"]
+      const keys = ["Coder", "Orchestrator", "CODER", "orchestrator", "planner", "PLANNER"]
 
       // when - display names are requested
       const displayNames = keys.map((key) => getAgentDisplayName(key))
 
       // then - correct display names are returned
       expect(displayNames[0]).toBe("Coder")
-      expect(displayNames[1]).toBe("Atlas (Plan Executor)")
+      expect(displayNames[1]).toBe("Orchestrator")
       expect(displayNames[2]).toBe("Coder")
-      expect(displayNames[3]).toBe("Atlas (Plan Executor)")
+      expect(displayNames[3]).toBe("Orchestrator")
       expect(displayNames[4]).toBe("Planner")
       expect(displayNames[5]).toBe("Planner")
     })
@@ -138,7 +138,7 @@ describe("Agent Config Integration", () => {
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
 
       // when - checking key format
-      const expectedAgentKeys = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior", "researcher", "researcher-junior"]
+      const expectedAgentKeys = ["coder", "orchestrator", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior", "researcher", "researcher-junior"]
 
       // then - keys match the canonical internal schema
       expect([...agentKeys].sort()).toEqual([...expectedAgentKeys].sort())
@@ -146,7 +146,7 @@ describe("Agent Config Integration", () => {
 
     test("model requirements include all builtin agents", () => {
       // given - expected builtin agents
-      const expectedAgents = ["coder", "atlas", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior", "researcher", "researcher-junior"]
+      const expectedAgents = ["coder", "orchestrator", "planner", "planConsultant", "planReviewer", "oracle", "librarian", "explore", "multimodal-looker", "gptcoder", "coder-junior", "researcher", "researcher-junior"]
 
       // when - checking AGENT_MODEL_REQUIREMENTS
       const agentKeys = Object.keys(AGENT_MODEL_REQUIREMENTS)
@@ -218,7 +218,7 @@ describe("Agent Config Integration", () => {
       // given - new format config (already lowercase)
       const newConfig = {
         coder: { model: "anthropic/claude-opus-4-6" },
-        atlas: { model: "anthropic/claude-opus-4-6" },
+        orchestrator: { model: "anthropic/claude-opus-4-6" },
       }
 
       // when - migration is applied (should be no-op)
@@ -232,11 +232,11 @@ describe("Agent Config Integration", () => {
 
       // when - display names are retrieved
       const coderDisplay = getAgentDisplayName("coder")
-      const atlasDisplay = getAgentDisplayName("atlas")
+      const orchestratorDisplay = getAgentDisplayName("orchestrator")
 
       // then - display names are correct
       expect(coderDisplay).toBe("Coder")
-      expect(atlasDisplay).toBe("Atlas (Plan Executor)")
+      expect(orchestratorDisplay).toBe("Orchestrator")
     })
   })
 })

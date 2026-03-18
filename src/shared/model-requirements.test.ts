@@ -172,21 +172,21 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(primary.providers[0]).toBe("openai")
   })
 
-  test("atlas has valid fallbackChain with claude-sonnet-4-6 as primary", () => {
-    // given - atlas agent requirement
-    const atlas = AGENT_MODEL_REQUIREMENTS["atlas"]
+  test("orchestrator has valid fallbackChain with claude-sonnet-4-6 as primary", () => {
+    // given - orchestrator agent requirement
+    const orchestrator = AGENT_MODEL_REQUIREMENTS["orchestrator"]
 
-    // when - accessing Atlas requirement
+    // when - accessing Orchestrator requirement
     // then - fallbackChain exists with claude-sonnet-4-6 as first entry
-    expect(atlas).toBeDefined()
-    expect(atlas.fallbackChain).toBeArray()
-    expect(atlas.fallbackChain.length).toBeGreaterThan(0)
+    expect(orchestrator).toBeDefined()
+    expect(orchestrator.fallbackChain).toBeArray()
+    expect(orchestrator.fallbackChain.length).toBeGreaterThan(0)
 
-    const primary = atlas.fallbackChain[0]
+    const primary = orchestrator.fallbackChain[0]
     expect(primary.model).toBe("claude-sonnet-4-6")
     expect(primary.providers[0]).toBe("anthropic")
 
-    const secondary = atlas.fallbackChain[1]
+    const secondary = orchestrator.fallbackChain[1]
     expect(secondary.model).toBe("gpt-5.4")
     expect(secondary.variant).toBe("medium")
   })
@@ -242,7 +242,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
       "planner",
       "planConsultant",
       "planReviewer",
-      "atlas",
+      "orchestrator",
       "coder-junior",
       "researcher",
       "researcher-junior",

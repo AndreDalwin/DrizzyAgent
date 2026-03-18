@@ -6,7 +6,7 @@ export const AGENT_NAMES = [
   "librarian",
   "explore",
   "planner",
-  "atlas",
+  "orchestrator",
   "plan-consultant",
   "plan-reviewer",
   "gptcoder",

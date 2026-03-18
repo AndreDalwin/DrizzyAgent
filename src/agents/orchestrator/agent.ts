@@ -1,5 +1,5 @@
 /**
- * Atlas - Master Orchestrator Agent
+ * Orchestrator - Master Orchestrator Agent
  *
  * Orchestrates work via task() to complete ALL tasks in a todo list until fully done.
  * You are the conductor of a symphony of specialized agents.
@@ -18,9 +18,9 @@ import { buildCategorySkillsDelegationGuide } from "../dynamic-agent-prompt-buil
 import type { CategoryConfig } from "../../config/schema"
 import { mergeCategories } from "../../shared/merge-categories"
 
-import { getDefaultAtlasPrompt } from "./default"
-import { getGptAtlasPrompt } from "./gpt"
-import { getGeminiAtlasPrompt } from "./gemini"
+import { getDefaultOrchestratorPrompt } from "./default"
+import { getGptOrchestratorPrompt } from "./gpt"
+import { getGeminiOrchestratorPrompt } from "./gemini"
 import {
   getCategoryDescription,
   buildAgentSelectionSection,
@@ -31,12 +31,12 @@ import {
 
 const MODE: AgentMode = "all"
 
-export type AtlasPromptSource = "default" | "gpt" | "gemini"
+export type OrchestratorPromptSource = "default" | "gpt" | "gemini"
 
 /**
- * Determines which Atlas prompt to use based on model.
+ * Determines which Orchestrator prompt to use based on model.
  */
-export function getAtlasPromptSource(model?: string): AtlasPromptSource {
+export function getOrchestratorPromptSource(model?: string): OrchestratorPromptSource {
   if (model && isGptModel(model)) {
     return "gpt"
   }
@@ -54,19 +54,19 @@ export interface OrchestratorContext {
 }
 
 /**
- * Gets the appropriate Atlas prompt based on model.
+ * Gets the appropriate Orchestrator prompt based on model.
  */
-export function getAtlasPrompt(model?: string): string {
-  const source = getAtlasPromptSource(model)
+export function getOrchestratorPrompt(model?: string): string {
+  const source = getOrchestratorPromptSource(model)
 
   switch (source) {
     case "gpt":
-      return getGptAtlasPrompt()
+      return getGptOrchestratorPrompt()
     case "gemini":
-      return getGeminiAtlasPrompt()
+      return getGeminiOrchestratorPrompt()
     case "default":
     default:
-      return getDefaultAtlasPrompt()
+      return getDefaultOrchestratorPrompt()
   }
 }
 
@@ -88,7 +88,7 @@ function buildDynamicOrchestratorPrompt(ctx?: OrchestratorContext): string {
   const skillsSection = buildSkillsSection(skills)
   const categorySkillsGuide = buildCategorySkillsDelegationGuide(availableCategories, skills)
 
-  const basePrompt = getAtlasPrompt(model)
+  const basePrompt = getOrchestratorPrompt(model)
 
   return basePrompt
     .replace("{CATEGORY_SECTION}", categorySection)
@@ -98,10 +98,10 @@ function buildDynamicOrchestratorPrompt(ctx?: OrchestratorContext): string {
     .replace("{{CATEGORY_SKILLS_DELEGATION_GUIDE}}", categorySkillsGuide)
 }
 
-export function createAtlasAgent(ctx: OrchestratorContext): AgentConfig {
+export function createOrchestratorAgent(ctx: OrchestratorContext): AgentConfig {
   const baseConfig = {
     description:
-      "Orchestrates work via task() to complete ALL tasks in a todo list until fully done. (Atlas - DrizzyAgent)",
+      "Orchestrates work via task() to complete ALL tasks in a todo list until fully done. (Orchestrator - DrizzyAgent)",
     mode: MODE,
     ...(ctx.model ? { model: ctx.model } : {}),
     temperature: 0.1,
@@ -111,12 +111,12 @@ export function createAtlasAgent(ctx: OrchestratorContext): AgentConfig {
 
   return baseConfig as AgentConfig
 }
-createAtlasAgent.mode = MODE
+createOrchestratorAgent.mode = MODE
 
-export const atlasPromptMetadata: AgentPromptMetadata = {
+export const orchestratorPromptMetadata: AgentPromptMetadata = {
   category: "advisor",
   cost: "EXPENSIVE",
-  promptAlias: "Atlas",
+  promptAlias: "Orchestrator",
   triggers: [
     {
       domain: "Todo list orchestration",

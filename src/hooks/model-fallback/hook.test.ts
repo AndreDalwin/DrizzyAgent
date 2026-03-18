@@ -312,7 +312,7 @@ describe("model fallback hook", () => {
 
     const set = setPendingModelFallback(
       sessionID,
-      "Atlas (Plan Executor)",
+      "Orchestrator",
       "github-copilot",
       "claude-sonnet-4-5",
     )

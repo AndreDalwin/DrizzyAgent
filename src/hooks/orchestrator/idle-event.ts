@@ -5,13 +5,13 @@ import { subagentSessions } from "../../features/claude-code-session-state"
 import { log } from "../../shared/logger"
 import { injectBoulderContinuation } from "./boulder-continuation-injector"
 import { HOOK_NAME } from "./hook-name"
-import type { AtlasHookOptions, SessionState } from "./types"
+import type { OrchestratorHookOptions, SessionState } from "./types"
 
 const CONTINUATION_COOLDOWN_MS = 5000
 const FAILURE_BACKOFF_MS = 5 * 60 * 1000
 const RETRY_DELAY_MS = CONTINUATION_COOLDOWN_MS + 1000
 
-function hasRunningBackgroundTasks(sessionID: string, options?: AtlasHookOptions): boolean {
+function hasRunningBackgroundTasks(sessionID: string, options?: OrchestratorHookOptions): boolean {
   const backgroundManager = options?.backgroundManager
   return backgroundManager
     ? backgroundManager.getTasksByParentSession(sessionID).some((task: { status: string }) => task.status === "running")
@@ -60,7 +60,7 @@ async function injectContinuation(input: {
   ctx: PluginInput
   sessionID: string
   sessionState: SessionState
-  options?: AtlasHookOptions
+  options?: OrchestratorHookOptions
   planName: string
   progress: { total: number; completed: number }
   agent?: string
@@ -91,7 +91,7 @@ function scheduleRetry(input: {
   ctx: PluginInput
   sessionID: string
   sessionState: SessionState
-  options?: AtlasHookOptions
+  options?: OrchestratorHookOptions
 }): void {
   const { ctx, sessionID, sessionState, options } = input
   if (sessionState.pendingRetryTimer) {
@@ -126,9 +126,9 @@ function scheduleRetry(input: {
   }, RETRY_DELAY_MS)
 }
 
-export async function handleAtlasSessionIdle(input: {
+export async function handleOrchestratorSessionIdle(input: {
   ctx: PluginInput
-  options?: AtlasHookOptions
+  options?: OrchestratorHookOptions
   getState: (sessionID: string) => SessionState
   sessionID: string
 }): Promise<void> {

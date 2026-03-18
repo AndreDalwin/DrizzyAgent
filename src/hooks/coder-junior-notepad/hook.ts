@@ -16,7 +16,7 @@ export function createCoderJuniorNotepadHook(ctx: PluginInput) {
         return
       }
 
-      // 2. Check if caller is Atlas (orchestrator)
+      // 2. Check if caller is Orchestrator (orchestrator)
       if (!(await isCallerOrchestrator(input.sessionID, ctx.client))) {
         return
       }

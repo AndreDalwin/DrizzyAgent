@@ -13,7 +13,7 @@ drizzy-agent/
 ├── src/
 │   ├── index.ts              # Plugin entry: loadConfig → createManagers → createTools → createHooks → createPluginInterface
 │   ├── plugin-config.ts      # JSONC multi-level config: user → project → defaults (Zod v4)
-│   ├── agents/               # 11 agents (Coder, GPTCoder, Oracle, Librarian, Explore, Atlas, Planner, Plan Consultant, Momus, Multimodal-Looker, Coder-Junior)
+│   ├── agents/               # 11 agents (Coder, GPTCoder, Oracle, Librarian, Explore, Orchestrator, Planner, Plan Consultant, Momus, Multimodal-Looker, Coder-Junior)
 │   ├── hooks/                # 46 hooks across 45 directories + 11 standalone files
 │   ├── tools/                # 26 tools across 15 directories
 │   ├── features/             # 19 feature modules (background-agent, skill-loader, tmux, MCP-OAuth, etc.)
@@ -167,7 +167,7 @@ bunx drizzy-agent run     # Non-interactive session
   - `coder` → "Coder" (not "Coder (Ultraworker)")
   - `gptcoder` → "GPTCoder" (not "GPTCoder (Deep Agent)")
   - `planner` → "Planner"
-  - `atlas` → "Atlas (Plan Executor)"
+  - `orchestrator` → "Orchestrator"
   - `coder-junior` → "Coder Junior" (not "Coder-Junior")
   - `planConsultant` → "Plan Consultant"
   - `planReviewer` → "Plan Reviewer"

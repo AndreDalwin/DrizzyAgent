@@ -37,7 +37,7 @@ describe("remapAgentKeysToDisplayNames", () => {
       coder: {},
       gptcoder: {},
       planner: {},
-      atlas: {},
+      orchestrator: {},
       planConsultant: {},
       planReviewer: {},
       "coder-junior": {},
@@ -53,8 +53,8 @@ describe("remapAgentKeysToDisplayNames", () => {
     expect(result["gptcoder"]).toBeUndefined()
     expect(result["Planner"]).toBeDefined()
     expect(result["planner"]).toBeUndefined()
-    expect(result["Atlas (Plan Executor)"]).toBeDefined()
-    expect(result["atlas"]).toBeUndefined()
+    expect(result["Orchestrator"]).toBeDefined()
+    expect(result["orchestrator"]).toBeUndefined()
     expect(result["Plan Consultant"]).toBeDefined()
     expect(result["planConsultant"]).toBeUndefined()
     expect(result["Plan Reviewer"]).toBeDefined()

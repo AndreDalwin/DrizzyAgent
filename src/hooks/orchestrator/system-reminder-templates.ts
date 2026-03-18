@@ -170,7 +170,7 @@ ${createSystemDirective(SystemDirectiveTypes.DELEGATION_REQUIRED)}
 
 **STOP. YOU ARE VIOLATING ORCHESTRATOR PROTOCOL.**
 
-You (Atlas) are attempting to directly modify a file outside \`.drizzy/\`.
+You (Orchestrator) are attempting to directly modify a file outside \`.drizzy/\`.
 
 **Path attempted:** $FILE_PATH
 

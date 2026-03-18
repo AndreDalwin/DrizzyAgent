@@ -202,7 +202,7 @@ describe("findNearestMessageExcludingCompaction", () => {
         join(tempDir, "003.json"),
         JSON.stringify({ model: { providerID: "anthropic", modelID: "claude-opus-4-1" } }),
       )
-      writeFileSync(join(tempDir, "002.json"), JSON.stringify({ agent: "atlas" }))
+      writeFileSync(join(tempDir, "002.json"), JSON.stringify({ agent: "orchestrator" }))
       writeFileSync(join(tempDir, "001.json"), JSON.stringify({ tools: { bash: true } }))
 
       // when
@@ -210,7 +210,7 @@ describe("findNearestMessageExcludingCompaction", () => {
 
       // then
       expect(result).toEqual({
-        agent: "atlas",
+        agent: "orchestrator",
         model: { providerID: "anthropic", modelID: "claude-opus-4-1" },
         tools: { bash: true },
       })
@@ -241,7 +241,7 @@ describe("resolvePromptContextFromSessionMessages", () => {
   test("merges partial prompt context from recent SDK messages", () => {
     // given
     const messages = [
-      { info: { agent: "atlas" } },
+      { info: { agent: "orchestrator" } },
       { info: { model: { providerID: "anthropic", modelID: "claude-opus-4-1" } } },
       { info: { tools: { bash: true } } },
     ]
@@ -251,7 +251,7 @@ describe("resolvePromptContextFromSessionMessages", () => {
 
     // then
     expect(result).toEqual({
-      agent: "atlas",
+      agent: "orchestrator",
       model: { providerID: "anthropic", modelID: "claude-opus-4-1" },
       tools: { bash: true },
     })

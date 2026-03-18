@@ -57,10 +57,10 @@ export function applyToolConfig(params: {
   if (looker) {
     looker.permission = { ...looker.permission, task: "deny", look_at: "deny" };
   }
-  const atlas = agentByKey(params.agentResult, "atlas");
-  if (atlas) {
-    atlas.permission = {
-      ...atlas.permission,
+  const orchestrator = agentByKey(params.agentResult, "orchestrator");
+  if (orchestrator) {
+    orchestrator.permission = {
+      ...orchestrator.permission,
       task: "allow",
       call_omo_agent: "deny",
       "task_*": "allow",

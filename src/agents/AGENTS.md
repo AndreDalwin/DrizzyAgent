@@ -18,7 +18,7 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 | **Multimodal-Looker** | gpt-5.3-codex medium | 0.1 | subagent | k2p5 → gemini-3-flash → glm-4.6v → gpt-5-nano | PDF/image analysis |
 | **Plan Consultant** | claude-opus-4-6 max | **0.3** | subagent | gpt-5.4 high → gemini-3.1-pro high | Pre-planning consultant |
 | **Plan Reviewer** | gpt-5.4 xhigh | 0.1 | subagent | claude-opus-4-6 max → gemini-3.1-pro high | Plan reviewer |
-| **Atlas** | claude-sonnet-4-6 | 0.1 | primary | gpt-5.4 medium | Todo-list orchestrator |
+| **Orchestrator** | claude-sonnet-4-6 | 0.1 | primary | gpt-5.4 medium | Todo-list orchestrator |
 | **Planner** | claude-opus-4-6 max | 0.1 | — | gpt-5.4 high → gemini-3.1-pro | Strategic planner (internal) |
 | **Coder-Junior** | claude-sonnet-4-6 | 0.1 | all | user-configurable | Category-spawned executor |
 
@@ -30,7 +30,7 @@ Agent factories following `createXXXAgent(model) → AgentConfig` pattern. Each 
 | Librarian | write, edit, task, call_omo_agent |
 | Explore | write, edit, task, call_omo_agent |
 | Multimodal-Looker | ALL except read |
-| Atlas | task, call_omo_agent |
+| Orchestrator | task, call_omo_agent |
 | Plan Reviewer | write, edit, task |
 
 ## STRUCTURE
@@ -45,7 +45,7 @@ agents/
 ├── multimodal-looker.ts   # Vision/PDF
 ├── plan-consultant.ts               # Pre-planning
 ├── plan-reviewer.ts       # Plan review
-├── atlas/agent.ts         # Todo orchestrator
+├── orchestrator/agent.ts         # Todo orchestrator
 ├── types.ts               # AgentFactory, AgentMode
 ├── agent-builder.ts       # buildAgent() composition
 ├── utils.ts               # Agent utilities
@@ -53,7 +53,7 @@ agents/
 └── builtin-agents/        # maybeCreateXXXConfig conditional factories
     ├── coder-agent.ts
     ├── gptcoder-agent.ts
-    ├── atlas-agent.ts
+    ├── orchestrator-agent.ts
     ├── general-agents.ts  # collectPendingBuiltinAgents
     └── available-skills.ts
 ```

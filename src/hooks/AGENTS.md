@@ -12,7 +12,7 @@
 ## STRUCTURE
 ```
 hooks/
-├── atlas/                      # Main orchestration (757 lines)
+├── orchestrator/                      # Main orchestration (757 lines)
 ├── anthropic-context-window-limit-recovery/ # Auto-summarize
 ├── anthropic-effort/            # Reasoning effort level adjustment
 ├── anthropic-image-context/     # Image context handling for Anthropic
@@ -119,7 +119,7 @@ hooks/
 | todoContinuationEnforcer | session.idle | **Boulder**: force continuation on incomplete todos |
 | unstableAgentBabysitter | session.idle | Monitor unstable agent behavior |
 | backgroundNotificationHook | event | Background task completion notifications |
-| atlasHook | event | Master orchestrator for boulder/background sessions |
+| orchestratorHook | event | Master orchestrator for boulder/background sessions |
 
 ### Tier 5: Skill Hooks (2) — `create-skill-hooks.ts`
 
@@ -133,7 +133,7 @@ hooks/
 ### anthropic-context-window-limit-recovery (31 files, ~2232 LOC)
 Multi-strategy recovery when hitting context limits. Strategies: truncation, compaction, summarization.
 
-### atlas (17 files, ~1976 LOC)
+### orchestrator (17 files, ~1976 LOC)
 Master orchestrator for boulder sessions. Decision gates: session type → abort check → failure count → background tasks → agent match → plan completeness → cooldown (5s). Injects continuation prompts on session.idle.
 
 ### ralph-loop (14 files, ~1687 LOC)

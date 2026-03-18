@@ -1,14 +1,14 @@
-# src/hooks/atlas/ — Master Boulder Orchestrator
+# src/hooks/orchestrator/ — Master Boulder Orchestrator
 
 **Generated:** 2026-03-06
 
 ## OVERVIEW
 
-17 files (~1976 LOC). The `atlasHook` — Continuation Tier hook that monitors session.idle events and forces continuation when boulder sessions (ralph-loop, task-spawned agents) have incomplete work. Also enforces write/edit policies for subagent sessions.
+17 files (~1976 LOC). The `orchestratorHook` — Continuation Tier hook that monitors session.idle events and forces continuation when boulder sessions (ralph-loop, task-spawned agents) have incomplete work. Also enforces write/edit policies for subagent sessions.
 
-## WHAT ATLAS DOES
+## WHAT ORCHESTRATOR DOES
 
-Atlas is the "keeper of sessions" — it tracks every session and decides:
+Orchestrator is the "keeper of sessions" — it tracks every session and decides:
 1. Should this session be forced to continue? (if boulder session with incomplete todos)
 2. Should write/edit be blocked? (policy enforcement for certain session types)
 3. Should a verification reminder be injected? (after tool execution)
@@ -17,7 +17,7 @@ Atlas is the "keeper of sessions" — it tracks every session and decides:
 
 ```
 session.idle event
-  → Is this a boulder/ralph/atlas session? (session-last-agent.ts)
+  → Is this a boulder/ralph/orchestrator session? (session-last-agent.ts)
   → Is there an abort signal? (is-abort-error.ts)
   → Failure count < max? (state.promptFailureCount)
   → No running background tasks?
@@ -31,8 +31,8 @@ session.idle event
 
 | File | Purpose |
 |------|---------|
-| `atlas-hook.ts` | `createAtlasHook()` — composes event + tool handlers, maintains session state |
-| `event-handler.ts` | `createAtlasEventHandler()` — decision gate for session.idle events |
+| `orchestrator-hook.ts` | `createOrchestratorHook()` — composes event + tool handlers, maintains session state |
+| `event-handler.ts` | `createOrchestratorEventHandler()` — decision gate for session.idle events |
 | `boulder-continuation-injector.ts` | Build + inject continuation prompt into session |
 | `system-reminder-templates.ts` | Templates for continuation reminder messages |
 | `tool-execute-before.ts` | Block write/edit based on session policy |
@@ -44,7 +44,7 @@ session.idle event
 | `subagent-session-id.ts` | Detect if session is a subagent session |
 | `coder-path.ts` | Resolve `.drizzy/` directory path |
 | `is-abort-error.ts` | Detect abort signals in session output |
-| `types.ts` | `SessionState`, `AtlasHookOptions`, `AtlasContext` |
+| `types.ts` | `SessionState`, `OrchestratorHookOptions`, `OrchestratorContext` |
 
 ## STATE PER SESSION
 
@@ -59,6 +59,6 @@ Max consecutive failures before 5min pause: 5 (exponential backoff in todo-conti
 
 ## RELATIONSHIP TO OTHER HOOKS
 
-- **atlasHook** (Continuation Tier): Master orchestrator, handles boulder sessions
+- **orchestratorHook** (Continuation Tier): Master orchestrator, handles boulder sessions
 - **todoContinuationEnforcer** (Continuation Tier): "Boulder" mechanism for main Coder sessions
 - Both inject into session.idle but serve different session types

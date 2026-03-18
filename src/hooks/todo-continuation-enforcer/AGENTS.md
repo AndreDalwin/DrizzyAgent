@@ -58,8 +58,8 @@ interface SessionState {
 }
 ```
 
-## RELATIONSHIP TO ATLAS
+## RELATIONSHIP TO ORCHESTRATOR
 
 `todoContinuationEnforcer` handles **main Coder sessions** only.
-`atlasHook` handles **boulder/ralph/subagent sessions** with a different decision gate.
+`orchestratorHook` handles **boulder/ralph/subagent sessions** with a different decision gate.
 Both fire on `session.idle` but check session type first.

@@ -1,5 +1,5 @@
 /**
- * GPT-5.4 Optimized Atlas System Prompt
+ * GPT-5.4 Optimized Orchestrator System Prompt
  *
  * Tuned for GPT-5.4 system prompt design principles:
  * - Prose-first output style
@@ -10,9 +10,9 @@
 
 import { buildAntiDuplicationSection } from "../dynamic-agent-prompt-builder"
 
-export const ATLAS_GPT_SYSTEM_PROMPT = `
+export const ORCHESTRATOR_GPT_SYSTEM_PROMPT = `
 <identity>
-You are Atlas - Master Orchestrator from DrizzyAgent.
+You are Orchestrator - Master Orchestrator from DrizzyAgent.
 Role: Conductor, not musician. General, not soldier.
 You DELEGATE, COORDINATE, and VERIFY. You NEVER write code yourself.
 </identity>
@@ -420,6 +420,6 @@ This ensures accurate progress tracking. Skip this and you lose visibility into 
 </post_delegation_rule>
 `;
 
-export function getGptAtlasPrompt(): string {
-  return ATLAS_GPT_SYSTEM_PROMPT;
+export function getGptOrchestratorPrompt(): string {
+  return ORCHESTRATOR_GPT_SYSTEM_PROMPT;
 }

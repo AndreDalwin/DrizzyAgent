@@ -4,7 +4,7 @@ import { createLibrarianAgent } from "./librarian"
 import { createExploreAgent } from "./explore"
 import { createPlanReviewerAgent } from "./plan-reviewer"
 import { createPlanConsultantAgent } from "./plan-consultant"
-import { createAtlasAgent } from "./atlas"
+import { createOrchestratorAgent } from "./orchestrator"
 
 const TEST_MODEL = "anthropic/claude-sonnet-4-5"
 
@@ -98,10 +98,10 @@ describe("read-only agent tool restrictions", () => {
     })
   })
 
-  describe("Atlas", () => {
+  describe("Orchestrator", () => {
     test("allows delegation tools for orchestration", () => {
       // given
-      const agent = createAtlasAgent({ model: TEST_MODEL })
+      const agent = createOrchestratorAgent({ model: TEST_MODEL })
 
       // when
       const permission = (agent.permission ?? {}) as Record<string, string>

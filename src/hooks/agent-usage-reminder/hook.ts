@@ -36,7 +36,7 @@ interface EventInput {
 const ORCHESTRATOR_AGENTS = new Set([
   "coder",
   "coder-junior",
-  "atlas",
+  "orchestrator",
   "gptcoder",
   "planner",
 ]);

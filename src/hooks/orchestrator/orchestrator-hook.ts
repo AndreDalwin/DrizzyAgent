@@ -1,10 +1,10 @@
 import type { PluginInput } from "@opencode-ai/plugin"
-import { createAtlasEventHandler } from "./event-handler"
+import { createOrchestratorEventHandler } from "./event-handler"
 import { createToolExecuteAfterHandler } from "./tool-execute-after"
 import { createToolExecuteBeforeHandler } from "./tool-execute-before"
-import type { AtlasHookOptions, SessionState } from "./types"
+import type { OrchestratorHookOptions, SessionState } from "./types"
 
-export function createAtlasHook(ctx: PluginInput, options?: AtlasHookOptions) {
+export function createOrchestratorHook(ctx: PluginInput, options?: OrchestratorHookOptions) {
   const sessions = new Map<string, SessionState>()
   const pendingFilePaths = new Map<string, string>()
   const autoCommit = options?.autoCommit ?? true
@@ -19,7 +19,7 @@ export function createAtlasHook(ctx: PluginInput, options?: AtlasHookOptions) {
   }
 
   return {
-    handler: createAtlasEventHandler({ ctx, options, sessions, getState }),
+    handler: createOrchestratorEventHandler({ ctx, options, sessions, getState }),
     "tool.execute.before": createToolExecuteBeforeHandler({ ctx, pendingFilePaths }),
     "tool.execute.after": createToolExecuteAfterHandler({ ctx, pendingFilePaths, autoCommit }),
   }

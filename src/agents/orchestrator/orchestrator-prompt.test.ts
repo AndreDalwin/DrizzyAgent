@@ -1,12 +1,12 @@
 import { describe, test, expect } from "bun:test"
-import { ATLAS_SYSTEM_PROMPT } from "./default"
-import { ATLAS_GPT_SYSTEM_PROMPT } from "./gpt"
-import { ATLAS_GEMINI_SYSTEM_PROMPT } from "./gemini"
+import { ORCHESTRATOR_SYSTEM_PROMPT } from "./default"
+import { ORCHESTRATOR_GPT_SYSTEM_PROMPT } from "./gpt"
+import { ORCHESTRATOR_GEMINI_SYSTEM_PROMPT } from "./gemini"
 
-describe("Atlas prompts auto-continue policy", () => {
+describe("Orchestrator prompts auto-continue policy", () => {
   test("default variant should forbid asking user for continuation confirmation", () => {
     // given
-    const prompt = ATLAS_SYSTEM_PROMPT
+    const prompt = ORCHESTRATOR_SYSTEM_PROMPT
 
     // when
     const lowerPrompt = prompt.toLowerCase()
@@ -22,7 +22,7 @@ describe("Atlas prompts auto-continue policy", () => {
 
   test("gpt variant should forbid asking user for continuation confirmation", () => {
     // given
-    const prompt = ATLAS_GPT_SYSTEM_PROMPT
+    const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
 
     // when
     const lowerPrompt = prompt.toLowerCase()
@@ -38,7 +38,7 @@ describe("Atlas prompts auto-continue policy", () => {
 
   test("gemini variant should forbid asking user for continuation confirmation", () => {
     // given
-    const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+    const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
 
     // when
     const lowerPrompt = prompt.toLowerCase()
@@ -54,7 +54,7 @@ describe("Atlas prompts auto-continue policy", () => {
 
   test("all variants should require immediate continuation after verification passes", () => {
     // given
-    const prompts = [ATLAS_SYSTEM_PROMPT, ATLAS_GPT_SYSTEM_PROMPT, ATLAS_GEMINI_SYSTEM_PROMPT]
+    const prompts = [ORCHESTRATOR_SYSTEM_PROMPT, ORCHESTRATOR_GPT_SYSTEM_PROMPT, ORCHESTRATOR_GEMINI_SYSTEM_PROMPT]
 
     // when / then
     for (const prompt of prompts) {
@@ -66,7 +66,7 @@ describe("Atlas prompts auto-continue policy", () => {
 
   test("all variants should define when user interaction is actually needed", () => {
     // given
-    const prompts = [ATLAS_SYSTEM_PROMPT, ATLAS_GPT_SYSTEM_PROMPT, ATLAS_GEMINI_SYSTEM_PROMPT]
+    const prompts = [ORCHESTRATOR_SYSTEM_PROMPT, ORCHESTRATOR_GPT_SYSTEM_PROMPT, ORCHESTRATOR_GEMINI_SYSTEM_PROMPT]
 
     // when / then
     for (const prompt of prompts) {
@@ -77,10 +77,10 @@ describe("Atlas prompts auto-continue policy", () => {
   })
 })
 
-describe("Atlas prompts anti-duplication coverage", () => {
+describe("Orchestrator prompts anti-duplication coverage", () => {
   test("all variants should include anti-duplication rules for delegated exploration", () => {
     // given
-    const prompts = [ATLAS_SYSTEM_PROMPT, ATLAS_GPT_SYSTEM_PROMPT, ATLAS_GEMINI_SYSTEM_PROMPT]
+    const prompts = [ORCHESTRATOR_SYSTEM_PROMPT, ORCHESTRATOR_GPT_SYSTEM_PROMPT, ORCHESTRATOR_GEMINI_SYSTEM_PROMPT]
 
     // when / then
     for (const prompt of prompts) {
@@ -92,10 +92,10 @@ describe("Atlas prompts anti-duplication coverage", () => {
   })
 })
 
-describe("Atlas prompts plan path consistency", () => {
+describe("Orchestrator prompts plan path consistency", () => {
   test("default variant should use .drizzy/plans/{plan-name}.md path", () => {
     // given
-    const prompt = ATLAS_SYSTEM_PROMPT
+    const prompt = ORCHESTRATOR_SYSTEM_PROMPT
 
     // when / then
     expect(prompt).toContain(".drizzy/plans/{plan-name}.md")
@@ -105,7 +105,7 @@ describe("Atlas prompts plan path consistency", () => {
 
   test("gpt variant should use .drizzy/plans/{plan-name}.md path", () => {
     // given
-    const prompt = ATLAS_GPT_SYSTEM_PROMPT
+    const prompt = ORCHESTRATOR_GPT_SYSTEM_PROMPT
 
     // when / then
     expect(prompt).toContain(".drizzy/plans/{plan-name}.md")
@@ -114,7 +114,7 @@ describe("Atlas prompts plan path consistency", () => {
 
   test("gemini variant should use .drizzy/plans/{plan-name}.md path", () => {
     // given
-    const prompt = ATLAS_GEMINI_SYSTEM_PROMPT
+    const prompt = ORCHESTRATOR_GEMINI_SYSTEM_PROMPT
 
     // when / then
     expect(prompt).toContain(".drizzy/plans/{plan-name}.md")
@@ -123,7 +123,7 @@ describe("Atlas prompts plan path consistency", () => {
 
   test("all variants should read plan file after verification", () => {
     // given
-    const prompts = [ATLAS_SYSTEM_PROMPT, ATLAS_GPT_SYSTEM_PROMPT, ATLAS_GEMINI_SYSTEM_PROMPT]
+    const prompts = [ORCHESTRATOR_SYSTEM_PROMPT, ORCHESTRATOR_GPT_SYSTEM_PROMPT, ORCHESTRATOR_GEMINI_SYSTEM_PROMPT]
 
     // when / then
     for (const prompt of prompts) {
