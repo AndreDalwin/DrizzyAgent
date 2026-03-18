@@ -43,6 +43,25 @@ describe("createResearcherJuniorAgent", () => {
       expect(prompt).toContain("missing contract")
     })
 
+    test("#then prompt aligns with Researcher collection format", () => {
+      expect(prompt).toContain("<metadata>")
+      expect(prompt).toContain("parent_question")
+      expect(prompt).toContain("completion_status")
+      expect(prompt).toContain("related_sub_topics")
+      expect(prompt).toContain("## Source Credibility Summary")
+      expect(prompt).toContain("| Source | Authority | Recency | Bias Risk |")
+      expect(prompt).toContain("## Contradictions Detected")
+      expect(prompt).toContain("## Synthesis Notes for Parent Agent")
+    })
+
+    test("#then prompt requires source credibility pre-filtering", () => {
+      expect(prompt).toContain("Domain authority")
+      expect(prompt).toContain(".edu/.gov/.org")
+      expect(prompt).toContain("published or updated within the last 2 years for tech topics")
+      expect(prompt).toContain("Bias indicators")
+      expect(prompt).toContain("HIGH authority sources first")
+    })
+
     test("#then metadata is populated", () => {
       expect(RESEARCHER_JUNIOR_PROMPT_METADATA.category).toBe("exploration")
       expect(RESEARCHER_JUNIOR_PROMPT_METADATA.cost).toBe("CHEAP")
@@ -66,6 +85,15 @@ describe("createResearcherJuniorAgent", () => {
       expect(prompt).not.toMatch(/<\w+>/)
       expect(prompt).toContain("run_directory")
       expect(prompt).toContain("findings")
+      expect(prompt).toContain("parent_question")
+      expect(prompt).toContain("completion_status")
+      expect(prompt).toContain("Source Credibility Summary")
+      expect(prompt).toContain("Source, Authority, Recency, Bias Risk")
+      expect(prompt).toContain("Contradictions Detected")
+      expect(prompt).toContain("Synthesis Notes for Parent Agent")
+      expect(prompt).toContain(".edu, .gov, .org")
+      expect(prompt).toContain("last 2 years")
+      expect(prompt).toContain("marketing pages, sponsored posts, affiliate content")
     })
   })
 })
