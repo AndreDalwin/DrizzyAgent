@@ -1,6 +1,6 @@
 {
   "name": "drizzy-agent-linux-x64-baseline",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "Platform-specific binary for DrizzyAgent (linux-x64-baseline, no AVX2)",
   "license": "MIT",
   "repository": {
