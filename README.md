@@ -1,6 +1,8 @@
 # DrizzyAgent
 
-**DrizzyAgent** is an AI agent harness that extends OpenCode (oh-my-opencode fork) with multi-agent orchestration. It provides a powerful system for coding tasks with specialized agents for different types of work.
+**DrizzyAgent** is an AI agent harness that extends OpenCode with multi-agent orchestration. It provides a powerful system for coding tasks with specialized agents for different types of work.
+
+This project is a fork and reimagination of the oh-my-opencode project.
 
 Built for those who want the power of multi-model AI agents without the complexity of managing them manually.
 
