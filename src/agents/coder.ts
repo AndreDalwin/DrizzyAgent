@@ -475,7 +475,7 @@ export function createCoderAgent(
       color: "#00CED1",
       permission: {
         question: "allow",
-        call_omo_agent: "deny",
+        call_drizzy_agent: "deny",
       } as AgentConfig["permission"],
       reasoningEffort: "medium",
     };
@@ -514,7 +514,7 @@ export function createCoderAgent(
 
   const permission = {
     question: "allow",
-    call_omo_agent: "deny",
+    call_drizzy_agent: "deny",
   } as AgentConfig["permission"];
   const base = {
     description:

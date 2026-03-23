@@ -177,7 +177,7 @@ describe("createGptcoderAgent", () => {
     expect(config).toHaveProperty("color", "#D97706");
     expect(config).toHaveProperty("permission");
     expect(config.permission).toHaveProperty("question", "allow");
-    expect(config.permission).toHaveProperty("call_omo_agent", "deny");
+    expect(config.permission).toHaveProperty("call_drizzy_agent", "deny");
     expect(config).toHaveProperty("reasoningEffort", "medium");
   });
 

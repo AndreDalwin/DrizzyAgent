@@ -141,7 +141,7 @@ export async function startTask(
       system: input.skillContent,
       tools: {
         task: false,
-        call_omo_agent: true,
+        call_drizzy_agent: true,
         question: false,
         ...getAgentToolRestrictions(input.agent),
       },
@@ -225,7 +225,7 @@ export async function resumeTask(
       ...(resumeVariant ? { variant: resumeVariant } : {}),
       tools: {
         task: false,
-        call_omo_agent: true,
+        call_drizzy_agent: true,
         question: false,
         ...getAgentToolRestrictions(task.agent),
       },

@@ -1,7 +1,7 @@
 const { beforeEach, describe, test, expect, mock } = require("bun:test")
-const { createCallOmoAgent } = require("./tools")
+const { createCallDrizzyAgent } = require("./tools")
 
-describe("createCallOmoAgent", () => {
+describe("createCallDrizzyAgent", () => {
   const assertCanSpawnMock = mock(() => Promise.resolve(undefined))
   const reserveCommitMock = mock(() => 1)
   const reserveRollbackMock = mock(() => {})
@@ -37,7 +37,7 @@ describe("createCallOmoAgent", () => {
 
   test("should reject agent in disabled_agents list", async () => {
     //#given
-    const toolDef = createCallOmoAgent(mockCtx, mockBackgroundManager, ["explore"])
+    const toolDef = createCallDrizzyAgent(mockCtx, mockBackgroundManager, ["explore"])
     const executeFunc = toolDef.execute as Function
 
     //#when
@@ -57,7 +57,7 @@ describe("createCallOmoAgent", () => {
 
   test("should reject agent in disabled_agents list with case-insensitive matching", async () => {
     //#given
-    const toolDef = createCallOmoAgent(mockCtx, mockBackgroundManager, ["Explore"])
+    const toolDef = createCallDrizzyAgent(mockCtx, mockBackgroundManager, ["Explore"])
     const executeFunc = toolDef.execute as Function
 
     //#when
@@ -77,7 +77,7 @@ describe("createCallOmoAgent", () => {
 
   test("should allow agent not in disabled_agents list", async () => {
     //#given
-    const toolDef = createCallOmoAgent(mockCtx, mockBackgroundManager, ["librarian"])
+    const toolDef = createCallDrizzyAgent(mockCtx, mockBackgroundManager, ["librarian"])
     const executeFunc = toolDef.execute as Function
 
     //#when
@@ -98,7 +98,7 @@ describe("createCallOmoAgent", () => {
 
   test("should allow all agents when disabled_agents is empty", async () => {
     //#given
-    const toolDef = createCallOmoAgent(mockCtx, mockBackgroundManager, [])
+    const toolDef = createCallDrizzyAgent(mockCtx, mockBackgroundManager, [])
     const executeFunc = toolDef.execute as Function
 
     //#when
@@ -129,7 +129,7 @@ describe("createCallOmoAgent", () => {
       launch,
       getTask: mock(() => undefined),
     }
-    const toolDef = createCallOmoAgent(
+    const toolDef = createCallDrizzyAgent(
       mockCtx,
       managerWithLaunch,
       [],
@@ -168,7 +168,7 @@ describe("createCallOmoAgent", () => {
   test("should return a tool error when sync spawn depth validation fails", async () => {
     //#given
     reserveSubagentSpawnMock.mockRejectedValueOnce(new Error("Subagent spawn blocked: child depth 4 exceeds background_task.maxDepth=3."))
-    const toolDef = createCallOmoAgent(mockCtx, mockBackgroundManager, [])
+    const toolDef = createCallDrizzyAgent(mockCtx, mockBackgroundManager, [])
     const executeFunc = toolDef.execute as Function
 
     //#when

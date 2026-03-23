@@ -143,13 +143,13 @@ describe("createCoderJuniorAgentWithOverrides", () => {
     })
   })
 
-  describe("tool safety (task blocked, call_omo_agent allowed)", () => {
-    test("task remains blocked, call_omo_agent is allowed via tools format", () => {
+  describe("tool safety (task blocked, call_drizzy_agent allowed)", () => {
+    test("task remains blocked, call_drizzy_agent is allowed via tools format", () => {
       // given
       const override = {
         tools: {
           task: true,
-          call_omo_agent: true,
+          call_drizzy_agent: true,
           read: true,
         },
       }
@@ -162,14 +162,14 @@ describe("createCoderJuniorAgentWithOverrides", () => {
       const permission = result.permission as Record<string, string> | undefined
       if (tools) {
         expect(tools.task).toBe(false)
-        // call_omo_agent is NOW ALLOWED for subagents to spawn explore/librarian
-        expect(tools.call_omo_agent).toBe(true)
+        // call_drizzy_agent is NOW ALLOWED for subagents to spawn explore/librarian
+        expect(tools.call_drizzy_agent).toBe(true)
         expect(tools.read).toBe(true)
       }
       if (permission) {
         expect(permission.task).toBe("deny")
-        // call_omo_agent is NOW ALLOWED for subagents to spawn explore/librarian
-        expect(permission.call_omo_agent).toBe("allow")
+        // call_drizzy_agent is NOW ALLOWED for subagents to spawn explore/librarian
+        expect(permission.call_drizzy_agent).toBe("allow")
       }
     })
 
@@ -178,7 +178,7 @@ describe("createCoderJuniorAgentWithOverrides", () => {
       const override = {
         permission: {
           task: "allow",
-          call_omo_agent: "allow",
+          call_drizzy_agent: "allow",
           read: "allow",
         },
       } as { permission: Record<string, string> }
@@ -186,16 +186,16 @@ describe("createCoderJuniorAgentWithOverrides", () => {
       // when
       const result = createCoderJuniorAgentWithOverrides(override as Parameters<typeof createCoderJuniorAgentWithOverrides>[0])
 
-      // then - task blocked, but call_omo_agent allowed for explore/librarian spawning
+      // then - task blocked, but call_drizzy_agent allowed for explore/librarian spawning
       const tools = result.tools as Record<string, boolean> | undefined
       const permission = result.permission as Record<string, string> | undefined
       if (tools) {
         expect(tools.task).toBe(false)
-        expect(tools.call_omo_agent).toBe(true)
+        expect(tools.call_drizzy_agent).toBe(true)
       }
       if (permission) {
         expect(permission.task).toBe("deny")
-        expect(permission.call_omo_agent).toBe("allow")
+        expect(permission.call_drizzy_agent).toBe("allow")
       }
     })
   })

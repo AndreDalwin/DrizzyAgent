@@ -133,7 +133,7 @@ export const createResearcherJuniorAgent: AgentFactory = (model: string) => {
   const restrictions = createAgentToolRestrictions([
     "apply_patch",
     "ast_grep_replace",
-    "call_omo_agent",
+    "call_drizzy_agent",
     "interactive_bash",
     "Bash",
     "hashline_edit",

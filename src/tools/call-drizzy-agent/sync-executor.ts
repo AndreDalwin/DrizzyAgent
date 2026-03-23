@@ -1,4 +1,4 @@
-import type { CallOmoAgentArgs } from "./types"
+import type { CallDrizzyAgentArgs } from "./types"
 import type { PluginInput } from "@opencode-ai/plugin"
 import { subagentSessions, syncSubagentSessions } from "../../features/claude-code-session-state"
 import { clearSessionFallbackChain, setSessionFallbackChain } from "../../hooks/model-fallback/hook"
@@ -34,7 +34,7 @@ const defaultDeps: ExecuteSyncDeps = {
 }
 
 export async function executeSync(
-  args: CallOmoAgentArgs,
+  args: CallDrizzyAgentArgs,
   toolContext: {
     sessionID: string
     messageID: string
@@ -74,8 +74,8 @@ export async function executeSync(
       })
     )
 
-    log(`[call_omo_agent] Sending prompt to session ${sessionID}`)
-    log(`[call_omo_agent] Prompt text:`, args.prompt.substring(0, 100))
+    log(`[call_drizzy_agent] Sending prompt to session ${sessionID}`)
+    log(`[call_drizzy_agent] Prompt text:`, args.prompt.substring(0, 100))
 
     try {
       await (ctx.client.session as unknown as SessionWithPromptAsync).promptAsync({
@@ -92,7 +92,7 @@ export async function executeSync(
       })
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error)
-      log(`[call_omo_agent] Prompt error:`, errorMessage)
+        log(`[call_drizzy_agent] Prompt error:`, errorMessage)
       if (errorMessage.includes("agent.name") || errorMessage.includes("undefined")) {
         return `Error: Agent "${args.subagent_type}" not found. Make sure the agent is registered in your opencode.json or provided by a plugin.\n\n<task_metadata>\nsession_id: ${sessionID}\n</task_metadata>`
       }
