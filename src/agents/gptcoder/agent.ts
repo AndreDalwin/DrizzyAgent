@@ -119,7 +119,7 @@ export function createGptcoderAgent(
     color: "#D97706",
     permission: {
       question: "allow",
-      call_omo_agent: "deny",
+      call_drizzy_agent: "deny",
     } as AgentConfig["permission"],
     reasoningEffort: "medium",
   };

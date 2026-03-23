@@ -3,13 +3,13 @@ import type { PluginInput } from "@opencode-ai/plugin"
 import { resolveMessageContext } from "../../features/hook-message-injector"
 import { getSessionAgent } from "../../features/claude-code-session-state"
 import { log } from "../../shared"
-import type { CallOmoAgentArgs } from "./types"
+import type { CallDrizzyAgentArgs } from "./types"
 import type { ToolContextWithMetadata } from "./tool-context-with-metadata"
 import { getMessageDir } from "./message-storage-directory"
 import { getSessionTools } from "../../shared/session-tools-store"
 
 export async function executeBackgroundAgent(
-	args: CallOmoAgentArgs,
+	args: CallDrizzyAgentArgs,
 	toolContext: ToolContextWithMetadata,
 	manager: BackgroundManager,
 	client: PluginInput["client"],
@@ -26,7 +26,7 @@ export async function executeBackgroundAgent(
 		const parentAgent =
 			toolContext.agent ?? sessionAgent ?? firstMessageAgent ?? prevMessage?.agent
 
-		log("[call_omo_agent] parentAgent resolution", {
+		log("[call_drizzy_agent] parentAgent resolution", {
 			sessionID: toolContext.sessionID,
 			messageDir,
 			ctxAgent: toolContext.agent,
@@ -65,10 +65,12 @@ export async function executeBackgroundAgent(
 			sessionId = manager.getTask(task.id)?.sessionID
 		}
 
-		await toolContext.metadata?.({
-			title: args.description,
-			metadata: { sessionId: sessionId ?? "pending" },
-		})
+		await Promise.resolve(
+			toolContext.metadata?.({
+				title: args.description,
+				metadata: { sessionId: sessionId ?? "pending" },
+			})
+		)
 
 		return `Background agent task launched successfully.
 

@@ -371,7 +371,7 @@ export function createResearcherAgent(model: string): AgentConfig {
   const restrictions = createAgentToolRestrictions([
     "apply_patch",
     "ast_grep_replace",
-    "call_omo_agent",
+    "call_drizzy_agent",
     "interactive_bash",
     "Bash",
     "hashline_edit",

@@ -59,48 +59,48 @@ export function applyToolConfig(params: {
   }
   const orchestrator = agentByKey(params.agentResult, "orchestrator");
   if (orchestrator) {
-    orchestrator.permission = {
-      ...orchestrator.permission,
-      task: "allow",
-      call_omo_agent: "deny",
-      "task_*": "allow",
-      teammate: "allow",
-      ...denyTodoTools,
-    };
+      orchestrator.permission = {
+        ...orchestrator.permission,
+        task: "allow",
+        call_drizzy_agent: "deny",
+        "task_*": "allow",
+        teammate: "allow",
+        ...denyTodoTools,
+      };
   }
   const coder = agentByKey(params.agentResult, "coder");
   if (coder) {
-    coder.permission = {
-      ...coder.permission,
-      call_omo_agent: "deny",
-      task: "allow",
-      question: questionPermission,
-      "task_*": "allow",
-      teammate: "allow",
-      ...denyTodoTools,
-    };
+      coder.permission = {
+        ...coder.permission,
+        call_drizzy_agent: "deny",
+        task: "allow",
+        question: questionPermission,
+        "task_*": "allow",
+        teammate: "allow",
+        ...denyTodoTools,
+      };
   }
   const gptcoder = agentByKey(params.agentResult, "gptcoder");
   if (gptcoder) {
-    gptcoder.permission = {
-      ...gptcoder.permission,
-      call_omo_agent: "deny",
-      task: "allow",
-      question: questionPermission,
-      ...denyTodoTools,
-    };
+      gptcoder.permission = {
+        ...gptcoder.permission,
+        call_drizzy_agent: "deny",
+        task: "allow",
+        question: questionPermission,
+        ...denyTodoTools,
+      };
   }
   const planner = agentByKey(params.agentResult, "planner");
   if (planner) {
-    planner.permission = {
-      ...planner.permission,
-      call_omo_agent: "deny",
-      task: "allow",
-      question: questionPermission,
-      "task_*": "allow",
-      teammate: "allow",
-      ...denyTodoTools,
-    };
+      planner.permission = {
+        ...planner.permission,
+        call_drizzy_agent: "deny",
+        task: "allow",
+        question: questionPermission,
+        "task_*": "allow",
+        teammate: "allow",
+        ...denyTodoTools,
+      };
   }
   const researcher = agentByKey(params.agentResult, "researcher");
   if (researcher) {

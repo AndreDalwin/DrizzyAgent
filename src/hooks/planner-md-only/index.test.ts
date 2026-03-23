@@ -388,11 +388,11 @@ describe("planner-md-only", () => {
       expect(output.args.prompt).toContain(SYSTEM_DIRECTIVE_PREFIX)
     })
 
-    test("should inject read-only warning when Planner calls call_omo_agent", async () => {
+    test("should inject read-only warning when Planner calls call_drizzy_agent", async () => {
       // given
       const hook = createPlannerMdOnlyHook(createMockPluginInput())
       const input = {
-        tool: "call_omo_agent",
+        tool: "call_drizzy_agent",
         sessionID: TEST_SESSION_ID,
         callID: "call-1",
       }

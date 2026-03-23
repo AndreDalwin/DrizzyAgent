@@ -9,7 +9,7 @@ import type { PluginContext, ToolsRecord } from "./types"
 import {
   builtinTools,
   createBackgroundTools,
-  createCallOmoAgent,
+  createCallDrizzyAgent,
   createLookAt,
   createSkillMcpTool,
   createSkillTool,
@@ -49,7 +49,7 @@ export function createToolRegistry(args: {
   const { ctx, pluginConfig, managers, skillContext, availableCategories } = args
 
   const backgroundTools = createBackgroundTools(managers.backgroundManager, ctx.client)
-  const callOmoAgent = createCallOmoAgent(
+  const callDrizzyAgent = createCallDrizzyAgent(
     ctx,
     managers.backgroundManager,
     pluginConfig.disabled_agents ?? [],
@@ -136,7 +136,7 @@ export function createToolRegistry(args: {
     ...createAstGrepTools(ctx),
     ...createSessionManagerTools(ctx),
     ...backgroundTools,
-    call_omo_agent: callOmoAgent,
+    call_drizzy_agent: callDrizzyAgent,
     ...(lookAt ? { look_at: lookAt } : {}),
     task: delegateTask,
     skill_mcp: skillMcpTool,

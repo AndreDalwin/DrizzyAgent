@@ -7,7 +7,7 @@ import { getAgentFromSession } from "./agent-resolution"
 import { isPlannerAgent } from "./agent-matcher"
 import { isAllowedFile } from "./path-policy"
 
-const TASK_TOOLS = ["task", "call_omo_agent"]
+const TASK_TOOLS = ["task", "call_drizzy_agent"]
 
 export function createPlannerMdOnlyHook(ctx: PluginInput) {
   return {

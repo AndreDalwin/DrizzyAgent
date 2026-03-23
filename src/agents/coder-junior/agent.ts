@@ -28,7 +28,7 @@ import { buildGeminiCoderJuniorPrompt } from "./gemini"
 const MODE: AgentMode = "subagent"
 
 // Core tools that Coder-Junior must NEVER have access to
-// Note: call_omo_agent is ALLOWED so subagents can spawn explore/librarian
+// Note: call_drizzy_agent is ALLOWED so subagents can spawn explore/librarian
 const BLOCKED_TOOLS = ["task"]
 
 export const CODER_JUNIOR_DEFAULTS = {
@@ -100,7 +100,7 @@ export function createCoderJuniorAgentWithOverrides(
   for (const tool of BLOCKED_TOOLS) {
     merged[tool] = "deny"
   }
-  merged.call_omo_agent = "allow"
+  merged.call_drizzy_agent = "allow"
   const toolsConfig = { permission: { ...merged, ...basePermission } }
 
   const base: AgentConfig = {

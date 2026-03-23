@@ -2,7 +2,7 @@ import type { ALLOWED_AGENTS } from "./constants"
 
 export type AllowedAgentType = (typeof ALLOWED_AGENTS)[number]
 
-export interface CallOmoAgentArgs {
+export interface CallDrizzyAgentArgs {
   description: string
   prompt: string
   subagent_type: string
@@ -10,7 +10,7 @@ export interface CallOmoAgentArgs {
   session_id?: string
 }
 
-export interface CallOmoAgentSyncResult {
+export interface CallDrizzyAgentSyncResult {
   title: string
   metadata: {
     summary?: Array<{
@@ -30,5 +30,5 @@ export type ToolContextWithMetadata = {
   messageID: string
   agent: string
   abort: AbortSignal
-  metadata?: (input: { title?: string; metadata?: Record<string, unknown> }) => void
+  metadata?: (input: { title?: string; metadata?: Record<string, unknown> }) => void | Promise<void>
 }

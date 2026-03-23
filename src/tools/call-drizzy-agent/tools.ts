@@ -1,6 +1,6 @@
 import { tool, type PluginInput, type ToolDefinition } from "@opencode-ai/plugin"
-import { ALLOWED_AGENTS, CALL_OMO_AGENT_DESCRIPTION } from "./constants"
-import type { AllowedAgentType, CallOmoAgentArgs, ToolContextWithMetadata } from "./types"
+import { ALLOWED_AGENTS, CALL_DRIZZY_AGENT_DESCRIPTION } from "./constants"
+import type { AllowedAgentType, CallDrizzyAgentArgs, ToolContextWithMetadata } from "./types"
 import type { BackgroundManager } from "../../features/background-agent"
 import type { CategoriesConfig, AgentOverrides } from "../../config/schema"
 import type { FallbackEntry } from "../../shared/model-requirements"
@@ -13,7 +13,7 @@ import { log } from "../../shared"
 import { executeBackground } from "./background-executor"
 import { executeSync } from "./sync-executor"
 
-function resolveFallbackChainForCallOmoAgent(args: {
+function resolveFallbackChainForCallDrizzyAgent(args: {
   subagentType: string
   agentOverrides?: AgentOverrides
   userCategories?: CategoriesConfig
@@ -36,7 +36,7 @@ function resolveFallbackChainForCallOmoAgent(args: {
   return configuredFallbackChain ?? agentRequirement?.fallbackChain
 }
 
-export function createCallOmoAgent(
+export function createCallDrizzyAgent(
   ctx: PluginInput,
   backgroundManager: BackgroundManager,
   disabledAgents: string[] = [],
@@ -46,7 +46,7 @@ export function createCallOmoAgent(
   const agentDescriptions = ALLOWED_AGENTS.map(
     (name) => `- ${name}: Specialized agent for ${name} tasks`
   ).join("\n")
-  const description = CALL_OMO_AGENT_DESCRIPTION.replace("{agents}", agentDescriptions)
+  const description = CALL_DRIZZY_AGENT_DESCRIPTION.replace("{agents}", agentDescriptions)
 
   return tool({
     description,
@@ -61,9 +61,9 @@ export function createCallOmoAgent(
         .describe("REQUIRED. true: run asynchronously (use background_output to get results), false: run synchronously and wait for completion"),
       session_id: tool.schema.string().describe("Existing Task session to continue").optional(),
     },
-    async execute(args: CallOmoAgentArgs, toolContext) {
+    async execute(args: CallDrizzyAgentArgs, toolContext) {
       const toolCtx = toolContext as ToolContextWithMetadata
-      log(`[call_omo_agent] Starting with agent: ${args.subagent_type}, background: ${args.run_in_background}`)
+      log(`[call_drizzy_agent] Starting with agent: ${args.subagent_type}, background: ${args.run_in_background}`)
 
       // Case-insensitive agent validation - allows "Explore", "EXPLORE", "explore" etc.
       if (
@@ -82,7 +82,7 @@ export function createCallOmoAgent(
         return `Error: Agent "${normalizedAgent}" is disabled via disabled_agents configuration. Remove it from disabled_agents in your drizzy-agent.json to use it.`
       }
 
-      const fallbackChain = resolveFallbackChainForCallOmoAgent({
+      const fallbackChain = resolveFallbackChainForCallDrizzyAgent({
         subagentType: args.subagent_type,
         agentOverrides,
         userCategories,
