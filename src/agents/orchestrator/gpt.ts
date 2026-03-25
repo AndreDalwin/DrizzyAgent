@@ -68,13 +68,23 @@ ${buildAntiDuplicationSection()}
 <delegation_system>
 ## Delegation API
 
-Use \`task()\` with EITHER category OR agent (mutually exclusive):
+### Decision Table — Pick ONE Parameter
+
+| Task Type | Parameter | Spawns | When to Use |
+|---|---|---|---|
+| **Implementation** (code, fix, write) | \`category="[category-name]"\` | Coder-Junior with domain-optimized model | Writing code, fixing bugs, implementing features |
+| **Research/Exploration** (search codebase) | \`subagent_type="explore"\` | Contextual grep agent | Finding patterns, exploring unfamiliar code |
+| **Reference Search** (docs, OSS, web) | \`subagent_type="librarian"\` | External search agent | Official docs, GitHub examples, API references |
+| **Consultation** (architecture, debugging) | \`subagent_type="oracle"\` | Read-only expert | Complex decisions, failure recovery, design review |
+| **Planning** (complex multi-step) | \`subagent_type="plan-consultant"\` | Planning specialist | Breaking down ambiguous work before implementing |
+
+⚠️  **NEVER provide both category AND subagent_type — they are mutually exclusive.**
 
 \`\`\`typescript
-// Category + Skills (spawns Coder-Junior)
+// ✅ Implementation → use category
 task(category="[name]", load_skills=["skill-1"], run_in_background=false, prompt="...")
 
-// Specialized Agent
+// ✅ Research/Consultation → use subagent_type
 task(subagent_type="[agent]", load_skills=[], run_in_background=false, prompt="...")
 \`\`\`
 

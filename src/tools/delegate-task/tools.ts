@@ -55,45 +55,56 @@ export function createDelegateTask(options: DelegateTaskToolOptions): ToolDefini
   }).join("\n")
 
   const description = `Spawn agent task with category-based or direct agent selection.
-  
-  ⚠️  CRITICAL: You MUST provide EITHER category OR subagent_type. Omitting BOTH will FAIL.
-  
-  **COMMON MISTAKE (DO NOT DO THIS):**
-  \`\`\`
-  task(description="...", prompt="...", run_in_background=false)  // ❌ FAILS - missing category AND subagent_type
-  \`\`\`
-  
-  **CORRECT - Using category:**
-  \`\`\`
-  task(category="quick", load_skills=[], description="Fix type error", prompt="...", run_in_background=false)
-  \`\`\`
-  
-  **CORRECT - Using subagent_type:**
-  \`\`\`
-  task(subagent_type="explore", load_skills=[], description="Find patterns", prompt="...", run_in_background=true)
-  \`\`\`
-  
-  REQUIRED: Provide ONE of:
-  - category: For task delegation (uses Coder-Junior with category-optimized model)
-  - subagent_type: For direct agent invocation (explore, librarian, oracle, etc.)
-  
-  **DO NOT provide both.** If category is provided, subagent_type is ignored.
-  
-  - load_skills: ALWAYS REQUIRED. Pass [] if no skills needed, or ["skill-1", "skill-2"] for category tasks.
-  - category: Use predefined category → Spawns Coder-Junior with category config
-    Available categories:
-  ${categoryList}
-  - subagent_type: Use specific agent directly (explore, librarian, oracle, plan-consultant, plan-reviewer)
-  - run_in_background: true=async (returns task_id), false=sync (waits). Default: false. Use background=true ONLY for parallel exploration with 5+ independent queries.
-  - session_id: Existing Task session to continue (from previous task output). Continues agent with FULL CONTEXT PRESERVED - saves tokens, maintains continuity.
-  - command: The command that triggered this task (optional, for slash command tracking).
-  
-  **WHEN TO USE session_id:**
-  - Task failed/incomplete → session_id with "fix: [specific issue]"
-  - Need follow-up on previous result → session_id with additional question
-  - Multi-turn conversation with same agent → always session_id instead of new task
-  
-  Prompts MUST be in English.`
+
+⚠️  CRITICAL: You MUST provide EITHER category OR subagent_type. Omitting BOTH will FAIL.
+
+## Decision Table — Pick ONE Parameter
+
+| Task Type | Parameter | Spawns | When to Use |
+|---|---|---|---|
+| **Implementation** (code, fix, write) | \`category="quick\|visual-engineering\|..."\` | Coder-Junior with domain-optimized model | Writing code, fixing bugs, implementing features |
+| **Research/Exploration** (search codebase) | \`subagent_type="explore"\` | Contextual grep agent | Finding patterns, exploring unfamiliar code |
+| **Reference Search** (docs, OSS, web) | \`subagent_type="librarian"\` | External search agent | Official docs, GitHub examples, API references |
+| **Consultation** (architecture, debugging) | \`subagent_type="oracle"\` | Read-only expert | Complex decisions, failure recovery, design review |
+| **Planning** (complex multi-step) | \`subagent_type="plan-consultant"\` | Planning specialist | Breaking down ambiguous work before implementing |
+
+**Available Categories:**
+${categoryList}
+
+**Anti-Patterns (DO NOT):**
+\`\`\`
+// ❌ FAILS — missing both category AND subagent_type
+task(description="...", prompt="...")
+
+// ❌ Confusing — using subagent_type for implementation
+task(subagent_type="explore", prompt="Write the auth middleware...")
+
+// ❌ Redundant — both provided (category wins, subagent_type ignored)
+task(category="quick", subagent_type="explore", ...)
+\`\`\`
+
+**Correct Examples:**
+\`\`\`
+// ✅ Implementation → use category
+task(category="quick", load_skills=[], description="Fix type error", prompt="...")
+
+// ✅ Research → use subagent_type
+task(subagent_type="explore", load_skills=[], description="Find auth patterns", prompt="...", run_in_background=true)
+
+// ✅ Follow-up → use session_id
+task(session_id="ses_abc123", load_skills=[], description="Fix error", prompt="Fix: Type error on line 42")
+\`\`\`
+
+**Additional Parameters:**
+- \`load_skills\`: ALWAYS REQUIRED. Pass [] if none needed, or ["skill-1", "skill-2"] for domain expertise.
+- \`run_in_background\`: true=async (returns task_id), false=sync (waits). Default: false. Use background=true ONLY for parallel exploration with 5+ independent queries.
+- \`session_id\`: Continue existing session (saves 70%+ tokens vs starting fresh).
+  - Task failed → \`session_id\` with "fix: [specific error]"
+  - Follow-up question → \`session_id\` with additional context
+  - Multi-turn → always use \`session_id\` instead of new task
+- \`command\`: The slash command that triggered this task (optional, for tracking).
+
+Prompts MUST be in English.`
 
   return tool({
     description,
