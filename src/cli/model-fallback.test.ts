@@ -311,15 +311,15 @@ describe("generateModelConfig", () => {
   })
 
   describe("explore agent special cases", () => {
-    test("explore uses gpt-5-nano when only Gemini available (no Claude)", () => {
+    test("explore uses Gemini flash when only Gemini available", () => {
       // #given only Gemini is available (no Claude)
       const config = createConfig({ hasGemini: true })
 
       // #when generateModelConfig is called
       const result = generateModelConfig(config)
 
-      // #then explore should use gpt-5-nano (Claude haiku not available)
-      expect(result.agents?.explore?.model).toBe("opencode/gpt-5-nano")
+      // #then explore should use Gemini, not a free fallback
+      expect(result.agents?.explore?.model).toBe("google/gemini-3-flash-preview")
     })
 
     test("explore uses Claude haiku when Claude available", () => {
@@ -351,9 +351,9 @@ describe("generateModelConfig", () => {
       // #when generateModelConfig is called
       const result = generateModelConfig(config)
 
-      // #then explore should use native OpenAI model
-      expect(result.agents?.explore?.model).toBe("openai/gpt-5.4")
-      expect(result.agents?.explore?.variant).toBe("medium")
+      // #then explore should use the cheaper native OpenAI fast model
+      expect(result.agents?.explore?.model).toBe("openai/gpt-5.4-nano")
+      expect(result.agents?.explore?.variant).toBeUndefined()
     })
 
     test("explore uses gpt-5-mini when only Copilot available", () => {
@@ -505,6 +505,99 @@ describe("generateModelConfig", () => {
 
       // #then librarian should use generic chain result when chain providers are unavailable
       expect(result.agents?.librarian?.model).toBe("anthropic/claude-sonnet-4-5")
+    })
+
+    test("librarian uses gpt-5.4-mini when only OpenAI is available", () => {
+      const config = createConfig({ hasOpenAI: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.agents?.librarian).toEqual({
+        model: "openai/gpt-5.4-mini",
+      })
+    })
+  })
+
+  describe("paid-only reroutes", () => {
+    test("Kimi-only reroutes affected agents away from free fallbacks", () => {
+      const config = createConfig({ hasKimiForCoding: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.agents?.oracle).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.agents?.librarian).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.agents?.explore).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.agents?.planReviewer).toEqual({ model: "kimi-for-coding/k2p5" })
+    })
+
+    test("Kimi-only reroutes affected categories away from free fallbacks", () => {
+      const config = createConfig({ hasKimiForCoding: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.categories?.ultrabrain).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.categories?.deep).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.categories?.artistry).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.categories?.quick).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.categories?.["unspecified-low"]).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.categories?.["unspecified-high"]).toEqual({ model: "kimi-for-coding/k2p5" })
+    })
+
+    test("Claude-only reroutes multimodal-looker away from free fallback", () => {
+      const config = createConfig({ hasClaude: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.agents?.["multimodal-looker"]).toEqual({
+        model: "anthropic/claude-sonnet-4-6",
+      })
+    })
+
+    test("Gemini-only reroutes paid gaps away from free fallbacks", () => {
+      const config = createConfig({ hasGemini: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.agents?.coder).toEqual({
+        model: "google/gemini-3.1-pro-preview",
+      })
+      expect(result.agents?.explore).toEqual({
+        model: "google/gemini-3-flash-preview",
+      })
+      expect(result.agents?.["researcher-junior"]).toEqual({
+        model: "google/gemini-3-flash-preview",
+      })
+    })
+
+    test("OpenAI-only uses fast defaults for lower-cost task buckets", () => {
+      const config = createConfig({ hasOpenAI: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.agents?.librarian).toEqual({ model: "openai/gpt-5.4-mini" })
+      expect(result.agents?.["researcher-junior"]).toEqual({
+        model: "openai/gpt-5.4-mini",
+      })
+      expect(result.categories?.quick).toEqual({ model: "openai/gpt-5.4-mini" })
+      expect(result.categories?.["unspecified-low"]).toEqual({
+        model: "openai/gpt-5.4-mini",
+      })
+      expect(result.categories?.["unspecified-high"]).toEqual({
+        model: "openai/gpt-5.3-codex",
+        variant: "medium",
+      })
+    })
+
+    test("ZAI-only behavior remains unchanged in this pass", () => {
+      const config = createConfig({ hasZaiCodingPlan: true })
+
+      const result = generateModelConfig(config)
+
+      expect(result.agents?.librarian).toEqual({ model: "zai-coding-plan/glm-4.7" })
+      expect(result.agents?.oracle).toEqual({ model: "opencode/big-pickle" })
+      expect(result.agents?.explore).toEqual({ model: "opencode/gpt-5-nano" })
+      expect(result.categories?.quick).toEqual({ model: "opencode/gpt-5-nano" })
+      expect(result.categories?.artistry).toEqual({ model: "opencode/minimax-m2.5-free" })
     })
   })
 

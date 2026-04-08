@@ -1,7 +1,7 @@
 import type { InstallConfig } from "./types"
 
 import type { GeneratedOmoConfig } from "./model-fallback-types"
-import { applyOpenAiOnlyModelCatalog, isOpenAiOnlyAvailability } from "./openai-only-model-catalog"
+import { applyProviderSpecificModelCatalog } from "./openai-only-model-catalog"
 import { computeDefaultsFromProviders, toComputedProviderAvailability } from "../shared/computed-install-defaults"
 import { toInstallDefaultsProviders } from "./provider-availability"
 
@@ -22,9 +22,7 @@ export function generateModelConfig(config: InstallConfig): GeneratedOmoConfig {
     categories,
   }
 
-  return isOpenAiOnlyAvailability(availability)
-    ? applyOpenAiOnlyModelCatalog(generatedConfig)
-    : generatedConfig
+  return applyProviderSpecificModelCatalog(generatedConfig, availability)
 }
 
 export function shouldShowChatGPTOnlyWarning(config: InstallConfig): boolean {

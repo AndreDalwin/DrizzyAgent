@@ -71,7 +71,8 @@
  * ## Special Cases
  * 
  * - **ZAI Override**: librarian uses zai-coding-plan/glm-4.7 when ZAI provider available
- * - **OpenAI-Only Mode**: Several agents/categories get gpt-5.4 overrides when only OpenAI available
+ * - **OpenAI-Only Mode**: Several agents/categories get OpenAI-specific fast-model overrides
+ * - **Provider-Only Paid Reroutes**: Kimi-only, Gemini-only, and Claude-only installs avoid free fallbacks for a minimal set of roles
  * - **Custom Resolver**: explore agent uses custom logic (not chain-based)
  * 
  * ## Intentional Behavior Changes
@@ -98,6 +99,9 @@ export type AgentModelDefault = {
   specialCases?: {
     zaiOverride?: { model: string };
     openAiOnlyOverride?: { model: string; variant?: string };
+    kimiOnlyOverride?: { model: string; variant?: string };
+    geminiOnlyOverride?: { model: string; variant?: string };
+    claudeOnlyOverride?: { model: string; variant?: string };
     customResolver?: "explore-agent";
   };
 };
@@ -119,6 +123,9 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      geminiOnlyOverride: { model: "google/gemini-3.1-pro-preview" },
+    },
     requiresAnyProvider: [
       "anthropic",
       "github-copilot",
@@ -159,6 +166,9 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   librarian: {
     chain: [
@@ -170,7 +180,11 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
     includeInInstall: true,
-    specialCases: { zaiOverride: { model: "zai-coding-plan/glm-4.7" }, openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "medium" } },
+    specialCases: {
+      zaiOverride: { model: "zai-coding-plan/glm-4.7" },
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   explore: {
     chain: [
@@ -180,11 +194,19 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },
     ],
     includeInInstall: true,
-    specialCases: { customResolver: "explore-agent", openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "medium" } },
+    specialCases: {
+      customResolver: "explore-agent",
+      openAiOnlyOverride: { model: "openai/gpt-5.4-nano" },
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+      geminiOnlyOverride: { model: "google/gemini-3-flash-preview" },
+    },
   },
   "multimodal-looker": {
     chain: [{ providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4", variant: "medium" }, { providers: ["kimi-for-coding"], model: "k2p5" }, { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }, { providers: ["zai-coding-plan"], model: "glm-4.6v" }, { providers: OPENAI_PROVIDERS, model: "gpt-5-nano" }],
     includeInInstall: true,
+    specialCases: {
+      claudeOnlyOverride: { model: "anthropic/claude-sonnet-4-6" },
+    },
   },
   planConsultant: {
     chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: ["kimi-for-coding"], model: "k2p5" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "high" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro", variant: "high" }],
@@ -199,6 +221,9 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   orchestrator: {
     chain: [{ providers: ["kimi-for-coding"], model: "k2p5" }, { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }, { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-5" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.4", variant: "medium" }, { providers: GEMINI_PROVIDERS, model: "gemini-3.1-pro" }],
@@ -228,6 +253,10 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "glm-4.7-free", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      geminiOnlyOverride: { model: "google/gemini-3-flash-preview" },
+    },
   },
 };
 
@@ -251,6 +280,9 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   deep: {
     chain: [
@@ -261,6 +293,9 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "big-pickle", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   artistry: {
     chain: [
@@ -271,7 +306,10 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
     ],
     includeInInstall: true,
-    specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "xhigh" } },
+    specialCases: {
+      openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "xhigh" },
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   quick: {
     chain: [
@@ -281,7 +319,10 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },
     ],
     includeInInstall: true,
-    specialCases: { openAiOnlyOverride: { model: "openai/gpt-5.4", variant: "low" } },
+    specialCases: {
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   "unspecified-low": {
     chain: [
@@ -292,10 +333,17 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
       { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
     ],
     includeInInstall: true,
+    specialCases: {
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   "unspecified-high": {
     chain: [{ providers: CLAUDE_PROVIDERS, model: "claude-opus-4-6", variant: "max" }, { providers: OPENAI_PROVIDERS, model: "gpt-5.3-codex", variant: "high" }, { providers: ["zai-coding-plan", "opencode"], model: "glm-5" }, { providers: ["kimi-for-coding"], model: "k2p5" }, { providers: KIMI_K25_PROVIDERS, model: "kimi-k2.5" }],
     includeInInstall: true,
+    specialCases: {
+      kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
+    },
   },
   writing: {
     chain: [{ providers: GEMINI_PROVIDERS, model: "gemini-3-flash" }, { providers: ["kimi-for-coding"], model: "k2p5" }, { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-6" }],
