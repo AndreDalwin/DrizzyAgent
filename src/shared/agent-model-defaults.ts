@@ -315,7 +315,7 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     chain: [
       { providers: CLAUDE_PROVIDERS, model: "claude-haiku-4-5" },
       { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
-      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.1-codex-mini", variant: "low" },
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4-mini", variant: "low" },
       { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },
     ],
     includeInInstall: true,
