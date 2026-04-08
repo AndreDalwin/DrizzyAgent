@@ -136,8 +136,14 @@ export async function startTask(
     path: { id: sessionID },
     body: {
       agent: input.agent,
-      ...(launchModel ? { model: launchModel } : {}),
-      ...(launchVariant ? { variant: launchVariant } : {}),
+      ...(launchModel || launchVariant
+        ? {
+            model: {
+              ...(launchModel ?? {}),
+              ...(launchVariant ? { variant: launchVariant } : {}),
+            },
+          }
+        : {}),
       system: input.skillContent,
       tools: {
         task: false,
@@ -217,12 +223,18 @@ export async function resumeTask(
     : undefined
   const resumeVariant = task.model?.variant
 
-  client.session.promptAsync({
+  promptWithModelSuggestionRetry(client, {
     path: { id: task.sessionID },
     body: {
       agent: task.agent,
-      ...(resumeModel ? { model: resumeModel } : {}),
-      ...(resumeVariant ? { variant: resumeVariant } : {}),
+      ...(resumeModel || resumeVariant
+        ? {
+            model: {
+              ...(resumeModel ?? {}),
+              ...(resumeVariant ? { variant: resumeVariant } : {}),
+            },
+          }
+        : {}),
       tools: {
         task: false,
         call_drizzy_agent: true,

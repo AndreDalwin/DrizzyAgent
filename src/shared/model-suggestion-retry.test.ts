@@ -319,15 +319,15 @@ describe("promptWithModelSuggestionRetry", () => {
       },
     })
 
-    // then call should pass all fields through unchanged
+    // then call should normalize variant under model
     const call = promptMock.mock.calls[0][0]
     expect(call.body.agent).toBe("explore")
     expect(call.body.system).toBe("You are a helpful agent")
     expect(call.body.tools).toEqual({ task: false })
-    expect(call.body.variant).toBe("max")
     expect(call.body.model).toEqual({
       providerID: "anthropic",
       modelID: "claude-sonnet-4",
+      variant: "max",
     })
   })
 
@@ -532,10 +532,14 @@ describe("promptSyncWithModelSuggestionRetry", () => {
       },
     })
 
-    // then call should pass all fields through unchanged
+    // then call should normalize variant under model
     const call = promptMock.mock.calls[0][0]
     expect(call.body.agent).toBe("multimodal-looker")
     expect(call.body.tools).toEqual({ task: false })
-    expect(call.body.variant).toBe("max")
+    expect(call.body.model).toEqual({
+      providerID: "google",
+      modelID: "gemini-3-flash",
+      variant: "max",
+    })
   })
 })

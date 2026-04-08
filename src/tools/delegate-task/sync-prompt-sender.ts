@@ -61,9 +61,14 @@ export async function sendSyncPrompt(
       tools,
       parts: [createInternalAgentTextPart(effectivePrompt)],
       ...(input.categoryModel
-        ? { model: { providerID: input.categoryModel.providerID, modelID: input.categoryModel.modelID } }
+        ? {
+            model: {
+              providerID: input.categoryModel.providerID,
+              modelID: input.categoryModel.modelID,
+              ...(input.categoryModel.variant ? { variant: input.categoryModel.variant } : {}),
+            },
+          }
         : {}),
-      ...(input.categoryModel?.variant ? { variant: input.categoryModel.variant } : {}),
     },
   }
 

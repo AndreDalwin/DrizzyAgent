@@ -11,6 +11,7 @@ type SessionMessage = {
       modelID?: string
       variant?: string
     }
+    variant?: string
     providerID?: string
     modelID?: string
     tools?: StoredMessage["tools"]
@@ -42,6 +43,7 @@ function convertSessionMessageToStoredMessage(message: SessionMessage): StoredMe
 
   const providerID = info.model?.providerID ?? info.providerID
   const modelID = info.model?.modelID ?? info.modelID
+  const variant = info.model?.variant ?? info.variant
 
   return {
     ...(info.agent ? { agent: info.agent } : {}),
@@ -50,7 +52,7 @@ function convertSessionMessageToStoredMessage(message: SessionMessage): StoredMe
           model: {
             providerID,
             modelID,
-            ...(info.model?.variant ? { variant: info.model.variant } : {}),
+            ...(variant ? { variant } : {}),
           },
         }
       : {}),
