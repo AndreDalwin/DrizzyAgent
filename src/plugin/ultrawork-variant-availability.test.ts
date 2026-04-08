@@ -126,7 +126,7 @@ describe("applyUltraworkModelOverrideOnMessage variant guard", () => {
     )
 
     // then
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
     expect(output.message["thinking"]).toBeUndefined()
     expect(dbOverrideSpy).toHaveBeenCalledWith(
       "msg_123",
@@ -177,7 +177,7 @@ describe("applyUltraworkModelOverrideOnMessage variant guard", () => {
     )
 
     // then
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
     expect(output.message["thinking"]).toBeUndefined()
     expect(dbOverrideSpy).not.toHaveBeenCalled()
     expect(output.message.model).toEqual({ providerID: "anthropic", modelID: "claude-sonnet-4-6" })

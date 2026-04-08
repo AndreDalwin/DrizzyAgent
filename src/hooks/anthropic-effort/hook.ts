@@ -18,7 +18,7 @@ interface ChatParamsInput {
   agent: { name?: string }
   model: { providerID: string; modelID: string }
   provider: { id: string }
-  message: { variant?: string }
+  message: { model?: { variant?: string } }
 }
 
 interface ChatParamsOutput {
@@ -36,7 +36,7 @@ export function createAnthropicEffortHook() {
     ): Promise<void> => {
       const { model, message } = input
       if (!model?.modelID || !model?.providerID) return
-      if (message.variant !== "max") return
+      if (message.model?.variant !== "max") return
       if (!isClaudeProvider(model.providerID, model.modelID)) return
       if (!isOpus46(model.modelID)) return
       if (output.options.effort !== undefined) return

@@ -41,7 +41,7 @@ function createMockInput(agent?: string, model?: { providerID: string; modelID: 
 function createMockOutput(variant?: string): ChatMessageHandlerOutput {
   const message: Record<string, unknown> = {}
   if (variant !== undefined) {
-    message["variant"] = variant
+    message["model"] = { variant }
   }
   return { message, parts: [] }
 }
@@ -58,7 +58,7 @@ describe("createChatMessageHandler - TUI variant passthrough", () => {
     await handler(input, output)
 
     //#then - TUI sent undefined, should stay undefined (no config override)
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
   })
 
   test("first message: preserves user-selected variant when already set", async () => {
@@ -72,7 +72,7 @@ describe("createChatMessageHandler - TUI variant passthrough", () => {
     await handler(input, output)
 
     //#then - user's xhigh must be preserved
-    expect(output.message["variant"]).toBe("xhigh")
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBe("xhigh")
   })
 
   test("subsequent message: preserves TUI variant", async () => {
@@ -86,7 +86,7 @@ describe("createChatMessageHandler - TUI variant passthrough", () => {
     await handler(input, output)
 
     //#then
-    expect(output.message["variant"]).toBe("xhigh")
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBe("xhigh")
   })
 
   test("subsequent message: does not inject variant when TUI sends none", async () => {
@@ -100,7 +100,7 @@ describe("createChatMessageHandler - TUI variant passthrough", () => {
     await handler(input, output)
 
     //#then - should stay undefined, not auto-resolved from config
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
   })
 
   test("first message: marks gate as applied regardless of variant presence", async () => {

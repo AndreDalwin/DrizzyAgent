@@ -80,7 +80,7 @@ export async function processWithCli(
 
 export interface ApplyPatchEdit {
   filePath: string
-  before: string
+  before?: string
   after: string
 }
 
@@ -104,7 +104,7 @@ export async function processApplyPatchEditsWithCli(
         hook_event_name: "PostToolUse",
         tool_input: {
           file_path: edit.filePath,
-          old_string: edit.before,
+          ...(edit.before !== undefined ? { old_string: edit.before } : {}),
           new_string: edit.after,
         },
       }

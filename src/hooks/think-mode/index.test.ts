@@ -31,7 +31,7 @@ function createHookInput(args: {
 
 function createHookOutput(promptText: string, variant?: string): ThinkModeHookOutput {
   return {
-    message: variant ? { variant } : {},
+    message: variant ? { model: { variant } } : {},
     parts: [{ type: "text", text: promptText }],
   }
 }
@@ -57,8 +57,7 @@ describe("createThinkModeHook", () => {
     await hook["chat.message"](input, output)
 
     // then
-    expect(output.message.variant).toBe("high")
-    expect(output.message.model).toBeUndefined()
+    expect((output.message.model as { variant?: string }).variant).toBe("high")
   })
 
   it("sets high variant for dotted model IDs", async () => {
@@ -75,8 +74,7 @@ describe("createThinkModeHook", () => {
     await hook["chat.message"](input, output)
 
     // then
-    expect(output.message.variant).toBe("high")
-    expect(output.message.model).toBeUndefined()
+    expect((output.message.model as { variant?: string }).variant).toBe("high")
   })
 
   it("skips when message variant is already set", async () => {
@@ -93,8 +91,7 @@ describe("createThinkModeHook", () => {
     await hook["chat.message"](input, output)
 
     // then
-    expect(output.message.variant).toBe("max")
-    expect(output.message.model).toBeUndefined()
+    expect((output.message.model as { variant?: string }).variant).toBe("max")
   })
 
   it("does nothing when think keyword is absent", async () => {
@@ -111,7 +108,7 @@ describe("createThinkModeHook", () => {
     await hook["chat.message"](input, output)
 
     // then
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(output.message.model).toBeUndefined()
   })
 
@@ -129,7 +126,7 @@ describe("createThinkModeHook", () => {
     await hook["chat.message"](input, output)
 
     // then
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(output.message.model).toBeUndefined()
   })
 
@@ -143,7 +140,7 @@ describe("createThinkModeHook", () => {
     await expect(hook["chat.message"](input, output)).resolves.toBeUndefined()
 
     // then
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(output.message.model).toBeUndefined()
   })
 })

@@ -286,7 +286,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
       variant: "extended",
     })
     const output = createOutput("ultrawork do something", { messageId: "msg_123" })
-    output.message["variant"] = "max"
+    output.message["model"] = { variant: "max" }
     output.message["thinking"] = "max"
     const tui = createMockTui()
 
@@ -299,7 +299,7 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
       { providerID: "anthropic", modelID: "claude-opus-4-6" },
       "extended",
     )
-    expect(output.message["variant"]).toBe("extended")
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBe("extended")
     expect(output.message["thinking"]).toBe("extended")
   })
 
@@ -330,8 +330,12 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
-    expect(output.message.model).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6" })
-    expect(output.message["variant"]).toBe("max")
+    expect(output.message.model).toEqual({
+      providerID: "anthropic",
+      modelID: "claude-opus-4-6",
+      variant: "max",
+    })
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBe("max")
     expect(dbOverrideSpy).not.toHaveBeenCalled()
   })
 
@@ -345,8 +349,8 @@ describe("applyUltraworkModelOverrideOnMessage", () => {
     applyUltraworkModelOverrideOnMessage(config, "coder", output, tui)
 
     //#then
-    expect(output.message.model).toBeUndefined()
-    expect(output.message["variant"]).toBe("high")
+    expect(output.message.model).toEqual({ variant: "high" })
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBe("high")
     expect(dbOverrideSpy).not.toHaveBeenCalled()
   })
 

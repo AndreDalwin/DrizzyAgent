@@ -60,14 +60,12 @@ describe("scheduleDeferredModelOverride", () => {
     const db = new Database(dbPath)
     db.run(
       `INSERT INTO message (id, session_id, data) VALUES (?, ?, ?)`,
-      id,
-      "ses_test",
-      JSON.stringify({ model }),
+      [id, "ses_test", JSON.stringify({ model })],
     )
     db.close()
   }
 
-  function readMessageModel(id: string): { providerID: string; modelID: string } | null {
+  function readMessageModel(id: string): { providerID: string; modelID: string; variant?: string } | null {
     const db = new Database(dbPath)
     const row = db.query(`SELECT data FROM message WHERE id = ?`).get(id) as
       | { data: string }
@@ -119,7 +117,11 @@ describe("scheduleDeferredModelOverride", () => {
     await flushMicrotasks(5)
 
     //#then
-    expect(readMessageField("msg_002", "variant")).toBe("max")
+    expect(readMessageModel("msg_002")).toEqual({
+      providerID: "anthropic",
+      modelID: "claude-opus-4-6",
+      variant: "max",
+    })
     expect(readMessageField("msg_002", "thinking")).toBe("max")
   })
 
@@ -157,6 +159,10 @@ describe("scheduleDeferredModelOverride", () => {
     const model = readMessageModel("msg_003")
     expect(model).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6" })
     expect(readMessageField("msg_003", "variant")).toBeNull()
+    expect(readMessageModel("msg_003")).toEqual({
+      providerID: "anthropic",
+      modelID: "claude-opus-4-6",
+    })
     expect(readMessageField("msg_003", "thinking")).toBeNull()
   })
 

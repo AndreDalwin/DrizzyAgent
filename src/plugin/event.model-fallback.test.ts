@@ -226,7 +226,7 @@ describe("createEventHandler - model fallback", () => {
       providerID: "kimi-for-coding",
       modelID: "k2p5",
     })
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
   })
 
   test("does not spam abort/prompt when session.status retry countdown updates", async () => {
@@ -437,7 +437,7 @@ describe("createEventHandler - model fallback", () => {
       providerID: "quotio",
       modelID: "gpt-5.2",
     })
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
   })
 
   test("advances main-session fallback chain across repeated session.error retries end-to-end", async () => {
@@ -558,7 +558,7 @@ describe("createEventHandler - model fallback", () => {
       providerID: "kimi-for-coding",
       modelID: "k2p5",
     })
-    expect(first.message["variant"]).toBeUndefined()
+    expect((first.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
 
     //#when - second retry cycle
     const second = await triggerRetryCycle()
@@ -568,7 +568,7 @@ describe("createEventHandler - model fallback", () => {
       modelID: "kimi-k2.5",
     })
     expect((second.message["model"] as { providerID?: string })?.providerID).toBeTruthy()
-    expect(second.message["variant"]).toBeUndefined()
+    expect((second.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
     expect(abortCalls).toEqual([sessionID, sessionID])
     expect(promptCalls).toEqual([sessionID, sessionID])
     expect(toastCalls.length).toBeGreaterThanOrEqual(0)

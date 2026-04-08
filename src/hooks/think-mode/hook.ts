@@ -1,7 +1,7 @@
 import { detectThinkKeyword, extractPromptText } from "./detector"
 import { isAlreadyHighVariant } from "./switcher"
 import type { ThinkModeState } from "./types"
-import { log } from "../../shared"
+import { getUserMessageVariant, log, setUserMessageVariant } from "../../shared"
 
 const thinkModeState = new Map<string, ThinkModeState>()
 
@@ -37,7 +37,7 @@ export function createThinkModeHook() {
 
       state.requested = true
 
-      if (typeof output.message.variant === "string") {
+      if (getUserMessageVariant(output.message) !== undefined) {
         thinkModeState.set(sessionID, state)
         return
       }
@@ -56,7 +56,7 @@ export function createThinkModeHook() {
         return
       }
 
-      output.message.variant = "high"
+      setUserMessageVariant(output.message, "high")
       state.modelSwitched = false
       state.variantSet = true
       log("Think mode: variant set to high", { sessionID })

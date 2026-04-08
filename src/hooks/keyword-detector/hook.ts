@@ -12,14 +12,14 @@ import {
   subagentSessions,
 } from "../../features/claude-code-session-state"
 import type { ContextCollector } from "../../features/context-injector"
+import { getInputVariant, getUserMessageVariant } from "../../shared"
 
 export function createKeywordDetectorHook(ctx: PluginInput, _collector?: ContextCollector) {
-  function getRuntimeVariant(input: { variant?: string }, message: Record<string, unknown>): string | undefined {
-    if (typeof message["variant"] === "string") {
-      return message["variant"]
-    }
-
-    return typeof input.variant === "string" ? input.variant : undefined
+  function getRuntimeVariant(
+    input: { model?: { variant?: string }; variant?: string },
+    message: Record<string, unknown>
+  ): string | undefined {
+    return getUserMessageVariant(message) ?? getInputVariant(input)
   }
 
   return {
@@ -27,7 +27,7 @@ export function createKeywordDetectorHook(ctx: PluginInput, _collector?: Context
       input: {
         sessionID: string
         agent?: string
-        model?: { providerID: string; modelID: string }
+        model?: { providerID: string; modelID: string; variant?: string }
         messageID?: string
         variant?: string
       },

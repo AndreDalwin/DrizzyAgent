@@ -6,7 +6,7 @@ interface ChatParamsInput {
   agent: { name?: string }
   model: { providerID: string; modelID: string; id?: string; api?: { npm?: string } }
   provider: { id: string }
-  message: { variant?: string }
+  message: { model?: { variant?: string } }
 }
 
 interface ChatParamsOutput {
@@ -35,7 +35,7 @@ function createMockParams(overrides: {
       agent: { name: agentName },
       model: { providerID, modelID },
       provider: { id: providerID },
-      message: { variant },
+      message: typeof variant === "string" ? { model: { variant } } : {},
     },
     output: {
       temperature: 0.1,
@@ -180,9 +180,9 @@ describe("createAnthropicEffortHook", () => {
         agent: { name: "coder" },
         model: { providerID: "anthropic", modelID: undefined as unknown as string },
         provider: { id: "anthropic" },
-        message: { variant: "max" as const },
+        message: { model: { variant: "max" as const } },
       }
-      const output = { temperature: 0.1, options: {} }
+      const output: ChatParamsOutput = { temperature: 0.1, options: {} }
 
       //#when chat.params hook is called with undefined modelID
       await hook["chat.params"](input, output)

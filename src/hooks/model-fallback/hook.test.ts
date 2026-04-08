@@ -69,8 +69,7 @@ describe("model fallback hook", () => {
 
     const output = {
       message: {
-        model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
-        variant: "max",
+        model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking", variant: "max" },
       },
       parts: [{ type: "text", text: "continue" }],
     }
@@ -85,6 +84,7 @@ describe("model fallback hook", () => {
     expect(output.message["model"]).toEqual({
       providerID: "anthropic",
       modelID: "claude-opus-4-6",
+      variant: "max",
     })
   })
 
@@ -104,8 +104,7 @@ describe("model fallback hook", () => {
 
     const firstOutput = {
       message: {
-        model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking" },
-        variant: "max",
+        model: { providerID: "anthropic", modelID: "claude-opus-4-6-thinking", variant: "max" },
       },
       parts: [{ type: "text", text: "continue" }],
     }
@@ -117,6 +116,7 @@ describe("model fallback hook", () => {
     expect(firstOutput.message["model"]).toEqual({
       providerID: "anthropic",
       modelID: "claude-opus-4-6",
+      variant: "max",
     })
 
     //#when - second error re-arms fallback and should advance to next entry
@@ -137,7 +137,7 @@ describe("model fallback hook", () => {
       providerID: "kimi-for-coding",
       modelID: "k2p5",
     })
-    expect(secondOutput.message["variant"]).toBeUndefined()
+    expect((secondOutput.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
   })
 
   test("does not re-arm fallback when one is already pending", () => {
@@ -237,8 +237,7 @@ describe("model fallback hook", () => {
 
     const output = {
       message: {
-        model: { providerID: "quotio", modelID: "claude-opus-4-6" },
-        variant: "max",
+        model: { providerID: "quotio", modelID: "claude-opus-4-6", variant: "max" },
       },
       parts: [{ type: "text", text: "continue" }],
     }
@@ -251,7 +250,7 @@ describe("model fallback hook", () => {
       providerID: "quotio",
       modelID: "gpt-5.2",
     })
-    expect(output.message["variant"]).toBeUndefined()
+    expect((output.message["model"] as { variant?: string } | undefined)?.variant).toBeUndefined()
     clearPendingModelFallback(sessionID)
   })
 

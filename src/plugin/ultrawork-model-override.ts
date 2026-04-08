@@ -1,7 +1,7 @@
 import type { DrizzyAgentConfig } from "../config"
 import type { AgentOverrides } from "../config/schema/agent-overrides"
 import { getSessionAgent } from "../features/claude-code-session-state"
-import { log } from "../shared"
+import { log, setUserMessageVariant } from "../shared"
 import { getAgentConfigKey } from "../shared/agent-display-names"
 import { scheduleDeferredModelOverride } from "./ultrawork-db-model-override"
 import { resolveValidUltraworkVariant } from "./ultrawork-variant-availability"
@@ -103,7 +103,7 @@ function applyResolvedUltraworkOverride(args: {
 }): void {
   const { override, validatedVariant, output, inputAgentName, tui } = args
   if (validatedVariant) {
-    output.message["variant"] = validatedVariant
+    setUserMessageVariant(output.message, validatedVariant)
     output.message["thinking"] = validatedVariant
   }
 
@@ -118,7 +118,9 @@ function applyResolvedUltraworkOverride(args: {
   const messageId = output.message["id"] as string | undefined
   if (!messageId) {
     log("[ultrawork-model-override] No message ID found, falling back to direct mutation")
-    output.message.model = targetModel
+    output.message.model = validatedVariant
+      ? { ...targetModel, variant: validatedVariant }
+      : targetModel
     return
   }
 
