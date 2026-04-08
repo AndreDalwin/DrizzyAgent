@@ -94,8 +94,7 @@ describe("loadPluginConfig snapshot defaults", () => {
       createInstallDefaultsSnapshot({ openai: true }),
     )
     expect(resolvedQuick).toEqual({
-      model: "openai/gpt-5.4",
-      variant: "low",
+      model: "openai/gpt-5.4-mini",
     })
     expect(getConfigLoadErrors()).toHaveLength(0)
   })
@@ -115,6 +114,25 @@ describe("loadPluginConfig snapshot defaults", () => {
       model: "kimi-for-coding/k2p5",
     })
     expect(getConfigLoadErrors()).toHaveLength(0)
+  })
+
+  test("applies paid-only Gemini reroutes from snapshot defaults", () => {
+    const fixture = createFixture()
+    fixture.writeUserConfig({
+      _install_defaults: createInstallDefaultsSnapshot({ gemini: true }),
+    })
+
+    const config = fixture.load()
+
+    expect(config.agents?.coder).toEqual({
+      model: "google/gemini-3.1-pro-preview",
+    })
+    expect(config.agents?.explore).toEqual({
+      model: "google/gemini-3-flash-preview",
+    })
+    expect(config.agents?.["researcher-junior"]).toEqual({
+      model: "google/gemini-3-flash-preview",
+    })
   })
 
   test("falls back to built-in category defaults when no snapshot exists", () => {
