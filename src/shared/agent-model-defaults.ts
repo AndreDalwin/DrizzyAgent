@@ -173,6 +173,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   librarian: {
     chain: [
       { providers: GEMINI_PROVIDERS, model: "gemini-3-flash" },
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4-mini", variant: "low" },
       { providers: ["opencode"], model: "glm-4.7" },
       { providers: CLAUDE_PROVIDERS, model: "claude-sonnet-4-5" },
       { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
@@ -189,6 +190,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   explore: {
     chain: [
       { providers: ["github-copilot"], model: "grok-code-fast-1" },
+      { providers: OPENAI_NATIVE_PROVIDERS, model: "gpt-5.4-mini", variant: "low" },
       { providers: ["anthropic", "opencode"], model: "claude-haiku-4-5" },
       { providers: ["opencode"], model: "minimax-m2.5-free", alwaysAvailable: true },
       { providers: ["opencode"], model: "gpt-5-nano", alwaysAvailable: true },

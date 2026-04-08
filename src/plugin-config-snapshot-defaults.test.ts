@@ -95,6 +95,7 @@ describe("loadPluginConfig snapshot defaults", () => {
     )
     expect(resolvedQuick).toEqual({
       model: "openai/gpt-5.4-mini",
+      variant: "low",
     })
     expect(getConfigLoadErrors()).toHaveLength(0)
   })

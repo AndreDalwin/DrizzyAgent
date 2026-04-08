@@ -70,6 +70,11 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     const primary = librarian.fallbackChain[0]
     expect(primary.providers[0]).toBe("google")
     expect(primary.model).toBe("gemini-3-flash")
+
+    const secondary = librarian.fallbackChain[1]
+    expect(secondary.providers).toEqual(["openai", "opencode"])
+    expect(secondary.model).toBe("gpt-5.4-mini")
+    expect(secondary.variant).toBe("low")
   })
 
   test("explore has valid fallbackChain with grok-code-fast-1 as primary", () => {
@@ -77,26 +82,31 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     const explore = AGENT_MODEL_REQUIREMENTS["explore"]
 
     // when - accessing explore requirement
-    // then - fallbackChain: grok → haiku → minimax-free → nano
+    // then - fallbackChain: grok → gpt-5.4-mini → haiku → minimax-free → nano
     expect(explore).toBeDefined()
     expect(explore.fallbackChain).toBeArray()
-    expect(explore.fallbackChain).toHaveLength(4)
+    expect(explore.fallbackChain).toHaveLength(5)
 
     const primary = explore.fallbackChain[0]
     expect(primary.providers).toContain("github-copilot")
     expect(primary.model).toBe("grok-code-fast-1")
 
     const secondary = explore.fallbackChain[1]
-    expect(secondary.providers).toContain("anthropic")
-    expect(secondary.model).toBe("claude-haiku-4-5")
+    expect(secondary.providers).toEqual(["openai", "opencode"])
+    expect(secondary.model).toBe("gpt-5.4-mini")
+    expect(secondary.variant).toBe("low")
 
     const tertiary = explore.fallbackChain[2]
-    expect(tertiary.providers).toContain("opencode")
-    expect(tertiary.model).toBe("minimax-m2.5-free")
+    expect(tertiary.providers).toContain("anthropic")
+    expect(tertiary.model).toBe("claude-haiku-4-5")
 
     const quaternary = explore.fallbackChain[3]
     expect(quaternary.providers).toContain("opencode")
-    expect(quaternary.model).toBe("gpt-5-nano")
+    expect(quaternary.model).toBe("minimax-m2.5-free")
+
+    const quinary = explore.fallbackChain[4]
+    expect(quinary.providers).toContain("opencode")
+    expect(quinary.model).toBe("gpt-5-nano")
   })
 
   test("multimodal-looker has valid fallbackChain with gpt-5.4 as primary", () => {

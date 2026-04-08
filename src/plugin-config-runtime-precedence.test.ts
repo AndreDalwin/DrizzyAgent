@@ -65,7 +65,7 @@ describe("loadPluginConfig runtime precedence", () => {
       variant: "high",
     })
     expect(resolvedQuick).toEqual({
-      model: "openai/gpt-5.4",
+      model: "openai/gpt-5.4-mini",
       variant: "low",
     })
     expect(resolvedQuick?.model).not.toBe("anthropic/claude-haiku-4-5")
