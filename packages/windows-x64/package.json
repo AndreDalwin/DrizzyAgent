@@ -1,6 +1,6 @@
 {
   "name": "drizzy-agent-windows-x64",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Platform-specific binary for DrizzyAgent (windows-x64)",
   "license": "MIT",
   "repository": {
