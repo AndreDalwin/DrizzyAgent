@@ -44,7 +44,7 @@
  * | Agent | Unified Chain |
  * |-------|---------------|
  * | **coder** | claude-opus-4-6 → k2p5 → kimi-k2.5 → gpt-5.4 → glm-5 → big-pickle |
- * | **gptcoder** | gpt-5.3-codex (openai/venice/opencode) → gpt-5.3-codex (github-copilot) |
+ * | **gptcoder** | gpt-5.4 (openai/venice/opencode) → gpt-5.4 (github-copilot) |
  * | **planner** | claude-opus-4-6 → k2p5 → gpt-5.4 → gemini-3.1-pro |
  * | **oracle** | gpt-5.4 → kimi-k2.5 → gemini-3.1-pro → claude-opus-4-6 → big-pickle (free) |
  * | **librarian** | gemini-3-flash → glm-4.7 → claude-sonnet-4-5 → minimax → big-pickle → glm-4.7-free |
@@ -142,8 +142,8 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
   },
   gptcoder: {
     chain: [
-      { providers: ["openai", "venice", "opencode"], model: "gpt-5.3-codex", variant: "medium" },
-      { providers: ["github-copilot"], model: "gpt-5.3-codex", variant: "medium" },
+      { providers: ["openai", "venice", "opencode"], model: "gpt-5.4", variant: "medium" },
+      { providers: ["github-copilot"], model: "gpt-5.4", variant: "medium" },
     ],
     includeInInstall: true,
     requiresAnyProvider: ["openai", "github-copilot", "venice", "opencode"],
@@ -182,7 +182,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     includeInInstall: true,
     specialCases: {
       zaiOverride: { model: "zai-coding-plan/glm-4.7" },
-      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini", variant: "low" },
       kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
     },
   },
@@ -196,7 +196,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     includeInInstall: true,
     specialCases: {
       customResolver: "explore-agent",
-      openAiOnlyOverride: { model: "openai/gpt-5.4-nano" },
+      openAiOnlyOverride: { model: "openai/gpt-5.4-nano", variant: "low" },
       kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
       geminiOnlyOverride: { model: "google/gemini-3-flash-preview" },
     },
@@ -254,7 +254,7 @@ export const AGENT_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     ],
     includeInInstall: true,
     specialCases: {
-      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini", variant: "low" },
       geminiOnlyOverride: { model: "google/gemini-3-flash-preview" },
     },
   },
@@ -320,7 +320,7 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     ],
     includeInInstall: true,
     specialCases: {
-      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini", variant: "low" },
       kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
     },
   },
@@ -334,7 +334,7 @@ export const CATEGORY_MODEL_DEFAULTS: Record<string, AgentModelDefault> = {
     ],
     includeInInstall: true,
     specialCases: {
-      openAiOnlyOverride: { model: "openai/gpt-5.4-mini" },
+      openAiOnlyOverride: { model: "openai/gpt-5.4-mini", variant: "medium" },
       kimiOnlyOverride: { model: "kimi-for-coding/k2p5" },
     },
   },

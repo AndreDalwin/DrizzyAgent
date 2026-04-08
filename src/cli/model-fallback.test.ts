@@ -353,7 +353,7 @@ describe("generateModelConfig", () => {
 
       // #then explore should use the cheaper native OpenAI fast model
       expect(result.agents?.explore?.model).toBe("openai/gpt-5.4-nano")
-      expect(result.agents?.explore?.variant).toBeUndefined()
+      expect(result.agents?.explore?.variant).toBe("low")
     })
 
     test("explore uses gpt-5-mini when only Copilot available", () => {
@@ -419,7 +419,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.model).toBe("openai/gpt-5.4")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
@@ -431,7 +431,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then - gptcoder uses github-copilot with unified chain
-      expect(result.agents?.gptcoder?.model).toBe("github-copilot/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.model).toBe("github-copilot/gpt-5.4")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
@@ -443,7 +443,7 @@ describe("generateModelConfig", () => {
       const result = generateModelConfig(config)
 
       // #then
-      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.3-codex")
+      expect(result.agents?.gptcoder?.model).toBe("opencode/gpt-5.4")
       expect(result.agents?.gptcoder?.variant).toBe("medium")
     })
 
@@ -514,6 +514,7 @@ describe("generateModelConfig", () => {
 
       expect(result.agents?.librarian).toEqual({
         model: "openai/gpt-5.4-mini",
+        variant: "low",
       })
     })
   })
@@ -574,13 +575,21 @@ describe("generateModelConfig", () => {
 
       const result = generateModelConfig(config)
 
-      expect(result.agents?.librarian).toEqual({ model: "openai/gpt-5.4-mini" })
+      expect(result.agents?.librarian).toEqual({
+        model: "openai/gpt-5.4-mini",
+        variant: "low",
+      })
       expect(result.agents?.["researcher-junior"]).toEqual({
         model: "openai/gpt-5.4-mini",
+        variant: "low",
       })
-      expect(result.categories?.quick).toEqual({ model: "openai/gpt-5.4-mini" })
+      expect(result.categories?.quick).toEqual({
+        model: "openai/gpt-5.4-mini",
+        variant: "low",
+      })
       expect(result.categories?.["unspecified-low"]).toEqual({
         model: "openai/gpt-5.4-mini",
+        variant: "medium",
       })
       expect(result.categories?.["unspecified-high"]).toEqual({
         model: "openai/gpt-5.3-codex",

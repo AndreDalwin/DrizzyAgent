@@ -234,13 +234,15 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
     },
     "explore": {
       "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "multimodal-looker": {
       "model": "openai/gpt-5.4",
@@ -272,6 +274,7 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
     },
     "researcher-junior": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
   },
   "categories": {
@@ -285,6 +288,7 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
     },
     "quick": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
@@ -296,6 +300,7 @@ exports[`generateModelConfig single native provider uses OpenAI models when only
     },
     "unspecified-low": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "openai/gpt-5.4",
@@ -319,13 +324,15 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
     },
     "explore": {
       "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "multimodal-looker": {
       "model": "openai/gpt-5.4",
@@ -357,6 +364,7 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
     },
     "researcher-junior": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
   },
   "categories": {
@@ -370,6 +378,7 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
     },
     "quick": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
@@ -381,6 +390,7 @@ exports[`generateModelConfig single native provider uses OpenAI models with isMa
     },
     "unspecified-low": {
       "model": "openai/gpt-5.4-mini",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "openai/gpt-5.4",
@@ -554,7 +564,7 @@ exports[`generateModelConfig all native providers uses preferred models from fal
       "model": "anthropic/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -636,7 +646,7 @@ exports[`generateModelConfig all native providers uses preferred models with isM
       "model": "anthropic/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -719,7 +729,7 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
       "model": "opencode/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "opencode/gpt-5.3-codex",
+      "model": "opencode/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -800,7 +810,7 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models with is
       "model": "opencode/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "opencode/gpt-5.3-codex",
+      "model": "opencode/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -882,7 +892,7 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models when 
       "model": "github-copilot/gpt-5-mini",
     },
     "gptcoder": {
-      "model": "github-copilot/gpt-5.3-codex",
+      "model": "github-copilot/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -963,7 +973,7 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models with 
       "model": "github-copilot/gpt-5-mini",
     },
     "gptcoder": {
-      "model": "github-copilot/gpt-5.3-codex",
+      "model": "github-copilot/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -1179,7 +1189,7 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + OpenCode Zen
       "model": "anthropic/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "opencode/gpt-5.3-codex",
+      "model": "opencode/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -1260,7 +1270,7 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
       "model": "github-copilot/gpt-5-mini",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -1496,7 +1506,7 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
       "model": "opencode/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "opencode/gpt-5.3-codex",
+      "model": "opencode/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -1577,7 +1587,7 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
       "model": "anthropic/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
@@ -1658,7 +1668,7 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
       "model": "anthropic/claude-haiku-4-5",
     },
     "gptcoder": {
-      "model": "openai/gpt-5.3-codex",
+      "model": "openai/gpt-5.4",
       "variant": "medium",
     },
     "librarian": {
