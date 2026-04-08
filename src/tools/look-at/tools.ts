@@ -204,8 +204,16 @@ Original error: ${createResult.error}`
               { type: "text", text: prompt },
               filePart,
             ],
-            ...(agentModel ? { model: { providerID: agentModel.providerID, modelID: agentModel.modelID } } : {}),
-            ...(agentVariant ? { variant: agentVariant } : {}),
+            ...(agentModel || agentVariant
+              ? {
+                  model: {
+                    ...(agentModel
+                      ? { providerID: agentModel.providerID, modelID: agentModel.modelID }
+                      : {}),
+                    ...(agentVariant ? { variant: agentVariant } : {}),
+                  },
+                }
+              : {}),
           },
         })
       } catch (promptError) {

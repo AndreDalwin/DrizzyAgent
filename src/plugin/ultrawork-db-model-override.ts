@@ -23,7 +23,7 @@ function tryUpdateMessageModel(
   if (result.changes === 0) return false
   if (variant) {
     db.prepare(
-      `UPDATE message SET data = json_set(data, '$.variant', ?, '$.thinking', ?) WHERE id = ?`,
+      `UPDATE message SET data = json_remove(json_set(data, '$.model.variant', ?, '$.thinking', ?), '$.variant') WHERE id = ?`,
     ).run(variant, variant, messageId)
   }
   return true

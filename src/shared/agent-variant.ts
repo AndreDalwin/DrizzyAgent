@@ -1,6 +1,7 @@
 import type { DrizzyAgentConfig } from "../config"
 import { getAgentConfigKey } from "./agent-display-names"
 import { AGENT_MODEL_REQUIREMENTS, CATEGORY_MODEL_REQUIREMENTS } from "./model-requirements"
+import { getUserMessageVariant, setUserMessageVariant } from "./user-message-variant"
 
 export function resolveAgentVariant(
   config: DrizzyAgentConfig,
@@ -92,10 +93,10 @@ function findVariantInChain(
 export function applyAgentVariant(
   config: DrizzyAgentConfig,
   agentName: string | undefined,
-  message: { variant?: string }
+  message: Record<string, unknown>
 ): void {
   const variant = resolveAgentVariant(config, agentName)
-  if (variant !== undefined && message.variant === undefined) {
-    message.variant = variant
+  if (variant !== undefined && getUserMessageVariant(message) === undefined) {
+    setUserMessageVariant(message, variant)
   }
 }

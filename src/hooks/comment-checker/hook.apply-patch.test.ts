@@ -1,4 +1,7 @@
 import { describe, it, expect, mock, beforeEach } from "bun:test"
+import { mkdirSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 
 const processApplyPatchEditsWithCli = mock(async () => {})
 
@@ -79,5 +82,50 @@ describe("comment-checker apply_patch integration", () => {
 
     // then
     expect(processApplyPatchEditsWithCli).toHaveBeenCalledTimes(0)
+  })
+
+  it("supports patch-only apply_patch metadata by reading the updated file", async () => {
+    const hooks = createCommentCheckerHooks()
+    const directory = join(tmpdir(), `comment-checker-${Date.now()}`)
+    mkdirSync(directory, { recursive: true })
+    const filePath = join(directory, "a.ts")
+    writeFileSync(filePath, "// comment\nconst a = 2\n")
+
+    try {
+      const input = { tool: "apply_patch", sessionID: "ses_test", callID: "call_test" }
+      const output = {
+        title: "ok",
+        output: "Success. Updated the following files:\nM a.ts",
+        metadata: {
+          files: [
+            {
+              filePath,
+              patch: `Index: ${filePath}\n===================================================================\n--- ${filePath}\n+++ ${filePath}\n@@ -1,1 +1,2 @@\n-const a = 1\n+// comment\n+const a = 2\n`,
+              type: "update",
+            },
+          ],
+        },
+      }
+
+      await hooks["tool.execute.after"](input, output)
+
+      expect(processApplyPatchEditsWithCli).toHaveBeenCalledTimes(1)
+      expect(processApplyPatchEditsWithCli).toHaveBeenCalledWith(
+        "ses_test",
+        [
+          {
+            filePath,
+            before: "const a = 1\n",
+            after: "// comment\nconst a = 2\n",
+          },
+        ],
+        expect.any(Object),
+        "/tmp/fake-comment-checker",
+        undefined,
+        expect.any(Function),
+      )
+    } finally {
+      rmSync(directory, { recursive: true, force: true })
+    }
   })
 })

@@ -22,15 +22,15 @@ describe("keyword-detector ultrawork runtime variant gating", () => {
     const toastMessages: string[] = []
     const hook = createKeywordDetectorHook(createMockPluginInput(toastMessages))
     const output = {
-      message: { variant: "max" } as Record<string, unknown>,
+      message: { model: { variant: "max" } } as Record<string, unknown>,
       parts: [{ type: "text", text: "ultrawork do it" }],
     }
 
     // when
-    await hook["chat.message"]({ sessionID: "main-session", variant: "max" }, output)
+    await hook["chat.message"]({ sessionID: "main-session", model: { providerID: "openai", modelID: "gpt-5.4", variant: "max" } }, output)
 
     // then
-    expect(output.message.variant).toBe("max")
+    expect((output.message.model as { variant?: string }).variant).toBe("max")
     expect(toastMessages).toEqual(["Maximum precision engaged. All agents at your disposal."])
     _resetForTesting()
   })
@@ -42,15 +42,15 @@ describe("keyword-detector ultrawork runtime variant gating", () => {
     const toastMessages: string[] = []
     const hook = createKeywordDetectorHook(createMockPluginInput(toastMessages))
     const output = {
-      message: { variant: "medium" } as Record<string, unknown>,
+      message: { model: { variant: "medium" } } as Record<string, unknown>,
       parts: [{ type: "text", text: "ultrawork do it" }],
     }
 
     // when
-    await hook["chat.message"]({ sessionID: "main-session", variant: "medium" }, output)
+    await hook["chat.message"]({ sessionID: "main-session", model: { providerID: "openai", modelID: "gpt-5.4", variant: "medium" } }, output)
 
     // then
-    expect(output.message.variant).toBe("medium")
+    expect((output.message.model as { variant?: string }).variant).toBe("medium")
     expect(toastMessages).toEqual(["Runtime variant preserved. All agents at your disposal."])
     _resetForTesting()
   })

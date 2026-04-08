@@ -24,6 +24,7 @@ interface SDKMessage {
       modelID?: string
       variant?: string
     }
+    variant?: string
     providerID?: string
     modelID?: string
     tools?: Record<string, ToolPermission>
@@ -40,7 +41,7 @@ function convertSDKMessageToStoredMessage(msg: SDKMessage): StoredMessage | null
 
   const providerID = info.model?.providerID ?? info.providerID
   const modelID = info.model?.modelID ?? info.modelID
-  const variant = info.model?.variant
+  const variant = info.model?.variant ?? info.variant
 
   if (!info.agent && !providerID && !modelID) {
     return null

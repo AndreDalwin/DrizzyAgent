@@ -10,6 +10,7 @@ import {
   processWithCli,
   processApplyPatchEditsWithCli,
 } from "./cli-runner"
+import { resolveApplyPatchEdits } from "./apply-patch-edits"
 import { registerPendingCall, startPendingCallCleanup, takePendingCall } from "./pending-calls"
 
 import * as fs from "fs"
@@ -107,10 +108,11 @@ export function createCommentCheckerHooks(config?: CommentCheckerConfig) {
       const ApplyPatchMetadataSchema = z.object({
         files: z.array(
           z.object({
-            filePath: z.string(),
+            filePath: z.string().optional(),
             movePath: z.string().optional(),
-            before: z.string(),
-            after: z.string(),
+            before: z.string().optional(),
+            after: z.string().optional(),
+            patch: z.string().optional(),
             type: z.string().optional(),
           }),
         ),
@@ -123,13 +125,7 @@ export function createCommentCheckerHooks(config?: CommentCheckerConfig) {
           return
         }
 
-        const edits = parsed.data.files
-          .filter((f) => f.type !== "delete")
-          .map((f) => ({
-            filePath: f.movePath ?? f.filePath,
-            before: f.before,
-            after: f.after,
-          }))
+        const edits = resolveApplyPatchEdits(parsed.data.files, debugLog)
 
         if (edits.length === 0) {
           debugLog("apply_patch had no editable files, skipping")

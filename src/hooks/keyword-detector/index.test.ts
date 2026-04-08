@@ -218,7 +218,7 @@ describe("keyword-detector session filtering", () => {
     )
 
     // then - ultrawork should still work without forcing a new variant
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(toastCalls).toContain("Ultrawork Mode Activated")
   })
 
@@ -242,7 +242,7 @@ describe("keyword-detector session filtering", () => {
     // then - search keyword should be detected (output unchanged but detection happens)
     // Note: search keywords don't set variant, they inject messages via context-injector
     // This test verifies the detection logic runs without filtering
-    expect(output.message.variant).toBeUndefined() // search doesn't set variant
+    expect(output.message.model).toBeUndefined() // search doesn't set variant
   })
 
   test("should allow all keywords when mainSessionID is not set", async () => {
@@ -263,7 +263,7 @@ describe("keyword-detector session filtering", () => {
     )
 
     // then - all keywords should work without forcing a new variant
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(toastCalls).toContain("Ultrawork Mode Activated")
   })
 
@@ -274,7 +274,7 @@ describe("keyword-detector session filtering", () => {
     const toastCalls: string[] = []
     const hook = createKeywordDetectorHook(createMockPluginInput({ toastCalls }))
     const output = {
-      message: { variant: "low" } as Record<string, unknown>,
+      message: { model: { variant: "low" } } as Record<string, unknown>,
       parts: [{ type: "text", text: "ultrawork mode" }],
     }
 
@@ -285,7 +285,7 @@ describe("keyword-detector session filtering", () => {
     )
 
     // then - ultrawork should preserve the already resolved runtime variant
-    expect(output.message.variant).toBe("low")
+    expect((output.message.model as { variant?: string }).variant).toBe("low")
     expect(toastCalls).toContain("Ultrawork Mode Activated")
   })
 })
@@ -338,7 +338,7 @@ describe("keyword-detector word boundary", () => {
     )
 
     // then - ultrawork should NOT be triggered
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(toastCalls).not.toContain("Ultrawork Mode Activated")
   })
 
@@ -360,7 +360,7 @@ describe("keyword-detector word boundary", () => {
     )
 
     // then - ultrawork should be triggered without forcing max
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(toastCalls).toContain("Ultrawork Mode Activated")
   })
 
@@ -382,7 +382,7 @@ describe("keyword-detector word boundary", () => {
     )
 
     // then - ultrawork should NOT be triggered
-    expect(output.message.variant).toBeUndefined()
+    expect(output.message.model).toBeUndefined()
     expect(toastCalls).not.toContain("Ultrawork Mode Activated")
   })
 })

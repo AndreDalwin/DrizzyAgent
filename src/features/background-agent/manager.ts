@@ -440,10 +440,6 @@ export class BackgroundManager {
       promptLength: input.prompt.length,
     })
 
-    // Fire-and-forget prompt via promptAsync (no response body needed)
-    // Include model if caller provided one (e.g., from Coder category configs)
-    // IMPORTANT: variant must be a top-level field in the body, NOT nested inside model
-    // OpenCode's PromptInput schema expects: { model: { providerID, modelID }, variant: "max" }
     const launchModel = input.model
       ? { providerID: input.model.providerID, modelID: input.model.modelID }
       : undefined
@@ -453,8 +449,14 @@ export class BackgroundManager {
       path: { id: sessionID },
       body: {
         agent: input.agent,
-        ...(launchModel ? { model: launchModel } : {}),
-        ...(launchVariant ? { variant: launchVariant } : {}),
+        ...(launchModel || launchVariant
+          ? {
+              model: {
+                ...(launchModel ?? {}),
+                ...(launchVariant ? { variant: launchVariant } : {}),
+              },
+            }
+          : {}),
         system: input.skillContent,
         tools: (() => {
           const tools = {
@@ -716,20 +718,23 @@ export class BackgroundManager {
       promptLength: input.prompt.length,
     })
 
-    // Fire-and-forget prompt via promptAsync (no response body needed)
-    // Include model if task has one (preserved from original launch with category config)
-    // variant must be top-level in body, not nested inside model (OpenCode PromptInput schema)
     const resumeModel = existingTask.model
       ? { providerID: existingTask.model.providerID, modelID: existingTask.model.modelID }
       : undefined
     const resumeVariant = existingTask.model?.variant
 
-    this.client.session.promptAsync({
+    promptWithModelSuggestionRetry(this.client, {
       path: { id: existingTask.sessionID },
       body: {
         agent: existingTask.agent,
-        ...(resumeModel ? { model: resumeModel } : {}),
-        ...(resumeVariant ? { variant: resumeVariant } : {}),
+        ...(resumeModel || resumeVariant
+          ? {
+              model: {
+                ...(resumeModel ?? {}),
+                ...(resumeVariant ? { variant: resumeVariant } : {}),
+              },
+            }
+          : {}),
         tools: (() => {
           const tools = {
             task: false,

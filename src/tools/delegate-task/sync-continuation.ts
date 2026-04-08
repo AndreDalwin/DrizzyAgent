@@ -96,8 +96,14 @@ export async function executeSyncContinuation(
       path: { id: args.session_id! },
       body: {
         ...(resumeAgent !== undefined ? { agent: resumeAgent } : {}),
-        ...(resumeModel !== undefined ? { model: resumeModel } : {}),
-        ...(resumeVariant !== undefined ? { variant: resumeVariant } : {}),
+        ...(resumeModel !== undefined || resumeVariant !== undefined
+          ? {
+              model: {
+                ...(resumeModel ?? {}),
+                ...(resumeVariant !== undefined ? { variant: resumeVariant } : {}),
+              },
+            }
+          : {}),
         tools,
         parts: [{ type: "text", text: effectivePrompt }],
       },

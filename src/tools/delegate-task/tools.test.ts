@@ -1176,8 +1176,8 @@ describe("coder-task", () => {
       expect(promptBody.model).toEqual({
         providerID: "anthropic",
         modelID: "claude-opus-4-6",
+        variant: "max",
       })
-      expect(promptBody.variant).toBe("max")
     }, { timeout: 20000 })
   })
 
@@ -1517,9 +1517,12 @@ describe("coder-task", () => {
     //#then prompt should include variant from previous message
     expect(promptMock).toHaveBeenCalled()
     const callArgs = promptMock.mock.calls[0][0]
-    expect(callArgs.body.variant).toBe("max")
     expect(callArgs.body.agent).toBe("coder-junior")
-    expect(callArgs.body.model).toEqual({ providerID: "anthropic", modelID: "claude-opus-4-6" })
+    expect(callArgs.body.model).toEqual({
+      providerID: "anthropic",
+      modelID: "claude-opus-4-6",
+      variant: "max",
+    })
   }, { timeout: 10000 })
 
   test("session_id with background=true should return immediately without waiting", async () => {
@@ -3551,7 +3554,11 @@ describe("coder-task", () => {
       )
 
       // then - user-configured variant should be applied
-      expect(promptBody.variant).toBe("max")
+      expect(promptBody.model).toEqual({
+        providerID: promptBody.model.providerID,
+        modelID: promptBody.model.modelID,
+        variant: "max",
+      })
     }, { timeout: 20000 })
 
     test("fallback chain resolves model when no override and no matchedAgent.model (#1357)", async () => {

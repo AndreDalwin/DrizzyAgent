@@ -5,6 +5,7 @@ import { readConnectedProvidersCache, readProviderModelsCache } from "../../shar
 import { selectFallbackProvider } from "../../shared/model-error-classifier"
 import { transformModelForProvider } from "../../shared/provider-model-id-transform"
 import { log } from "../../shared/logger"
+import { clearUserMessageVariant, setUserMessageVariant } from "../../shared/user-message-variant"
 import { getTaskToastManager } from "../../features/task-toast-manager"
 import type { ChatMessageInput, ChatMessageHandlerOutput } from "../../plugin/chat-message"
 
@@ -225,9 +226,9 @@ export function createModelFallbackHook(args?: { toast?: FallbackToast; onApplie
         modelID: fallback.modelID,
       }
       if (fallback.variant !== undefined) {
-        output.message["variant"] = fallback.variant
+        setUserMessageVariant(output.message, fallback.variant)
       } else {
-        delete output.message["variant"]
+        clearUserMessageVariant(output.message)
       }
       if (toast) {
         const key = `${sessionID}:${fallback.providerID}/${fallback.modelID}:${fallback.variant ?? ""}`

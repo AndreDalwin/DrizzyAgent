@@ -1,9 +1,11 @@
+import { getUserMessageVariant } from "../shared"
+
 export type ChatParamsInput = {
   sessionID: string
   agent: { name?: string }
   model: { providerID: string; modelID: string }
   provider: { id: string }
-  message: { variant?: string }
+  message: { model?: { variant?: string } }
 }
 
 export type ChatParamsOutput = {
@@ -45,7 +47,7 @@ function buildChatParamsInput(raw: unknown): ChatParamsInput | null {
   const providerID = model.providerID
   const modelID = model.modelID
   const providerId = provider.id
-  const variant = message.variant
+  const variant = getUserMessageVariant(message)
 
   if (typeof providerID !== "string") return null
   if (typeof modelID !== "string") return null
@@ -56,7 +58,7 @@ function buildChatParamsInput(raw: unknown): ChatParamsInput | null {
     agent: { name: agentName },
     model: { providerID, modelID },
     provider: { id: providerId },
-    message: typeof variant === "string" ? { variant } : {},
+    message: typeof variant === "string" ? { model: { variant } } : {},
   }
 }
 

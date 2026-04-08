@@ -75,7 +75,8 @@ export function parseModelSuggestion(error: unknown): ModelSuggestionInfo | null
 }
 
 interface PromptBody {
-  model?: { providerID: string; modelID: string }
+  model?: { providerID?: string; modelID?: string; variant?: string }
+  variant?: string
   [key: string]: unknown
 }
 
@@ -86,17 +87,40 @@ interface PromptArgs {
   [key: string]: unknown
 }
 
+function normalizePromptBody(body: PromptBody): PromptBody {
+  if (typeof body.variant !== "string") {
+    return body
+  }
+
+  const { variant, model, ...rest } = body
+  return {
+    ...rest,
+    model: {
+      ...(model ?? {}),
+      variant,
+    },
+  }
+}
+
+function normalizePromptArgs(args: PromptArgs): PromptArgs {
+  return {
+    ...args,
+    body: normalizePromptBody(args.body),
+  }
+}
+
 export async function promptWithModelSuggestionRetry(
   client: Client,
   args: PromptArgs,
   options: PromptRetryOptions = {},
 ): Promise<void> {
+  const normalizedArgs = normalizePromptArgs(args)
   const timeoutMs = options.timeoutMs ?? PROMPT_TIMEOUT_MS
-  const timeoutContext = createPromptTimeoutContext(args, timeoutMs)
+  const timeoutContext = createPromptTimeoutContext(normalizedArgs, timeoutMs)
   // NOTE: Model suggestion retry removed — promptAsync returns 204 immediately,
   // model errors happen asynchronously server-side and cannot be caught here
   const promptPromise = client.session.promptAsync({
-    ...args,
+    ...normalizedArgs,
     signal: timeoutContext.signal,
   } as Parameters<typeof client.session.promptAsync>[0])
 
@@ -129,13 +153,14 @@ export async function promptSyncWithModelSuggestionRetry(
   args: PromptArgs,
   options: PromptRetryOptions = {},
 ): Promise<void> {
+  const normalizedArgs = normalizePromptArgs(args)
   const timeoutMs = options.timeoutMs ?? PROMPT_TIMEOUT_MS
 
   try {
-    const timeoutContext = createPromptTimeoutContext(args, timeoutMs)
+    const timeoutContext = createPromptTimeoutContext(normalizedArgs, timeoutMs)
     try {
       await client.session.prompt({
-        ...args,
+        ...normalizedArgs,
         signal: timeoutContext.signal,
       } as Parameters<typeof client.session.prompt>[0])
       if (timeoutContext.wasTimedOut()) {
@@ -151,7 +176,7 @@ export async function promptSyncWithModelSuggestionRetry(
     }
   } catch (error) {
     const suggestion = parseModelSuggestion(error)
-    if (!suggestion || !args.body.model) {
+    if (!suggestion || !normalizedArgs.body.model) {
       throw error
     }
 
@@ -161,12 +186,13 @@ export async function promptSyncWithModelSuggestionRetry(
     })
 
     const retryArgs: PromptArgs = {
-      ...args,
+      ...normalizedArgs,
       body: {
-        ...args.body,
+        ...normalizedArgs.body,
         model: {
           providerID: suggestion.providerID,
           modelID: suggestion.suggestion,
+          ...(normalizedArgs.body.model.variant ? { variant: normalizedArgs.body.model.variant } : {}),
         },
       },
     }

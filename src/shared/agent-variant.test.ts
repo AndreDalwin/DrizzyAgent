@@ -56,13 +56,13 @@ describe("applyAgentVariant", () => {
         coder: { variant: "low" },
       },
     } as DrizzyAgentConfig
-    const message: { variant?: string } = {}
+    const message: Record<string, unknown> = {}
 
     // when
     applyAgentVariant(config, "coder", message)
 
     // then
-    expect(message.variant).toBe("low")
+    expect((message.model as { variant?: string }).variant).toBe("low")
   })
 
   test("does not override existing variant", () => {
@@ -72,13 +72,13 @@ describe("applyAgentVariant", () => {
         coder: { variant: "low" },
       },
     } as DrizzyAgentConfig
-    const message = { variant: "max" }
+    const message: Record<string, unknown> = { model: { variant: "max" } }
 
     // when
     applyAgentVariant(config, "coder", message)
 
     // then
-    expect(message.variant).toBe("max")
+    expect((message.model as { variant?: string }).variant).toBe("max")
   })
 })
 
