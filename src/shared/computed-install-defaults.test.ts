@@ -44,12 +44,12 @@ describe("computeDefaultsFromProviders", () => {
     expect(result.agents.librarian).toEqual({ model: "zai-coding-plan/glm-4.7" })
   })
 
-  test("preserves explore provider preference order", () => {
+  test("prefers OpenAI for explore when OpenAI and Claude are both available", () => {
     const result = computeDefaultsFromProviders(
-      createProviders({ claude: "yes", copilot: true, opencode_zen: true }),
+      createProviders({ claude: "yes", openai: true, copilot: true, opencode_zen: true }),
     )
 
-    expect(result.agents.explore).toEqual({ model: "anthropic/claude-haiku-4-5" })
+    expect(result.agents.explore).toEqual({ model: "openai/gpt-5.4-nano", variant: "low" })
   })
 
   describe("#given providers with claude=yes and no opencode_zen", () => {
@@ -94,6 +94,33 @@ describe("computeDefaultsFromProviders", () => {
   test("downgrades unspecified-high to unspecified-low outside max plans", () => {
     const result = computeDefaultsFromProviders(createProviders({ openai: true }))
 
+    expect(result.categories["unspecified-high"]).toEqual({
+      model: "openai/gpt-5.3-codex",
+      variant: "medium",
+    })
+  })
+
+  test("prefers OpenAI over Claude and Kimi for the requested mixed-provider defaults", () => {
+    const result = computeDefaultsFromProviders(
+      createProviders({ claude: "yes", openai: true, kimi_for_coding: true }),
+    )
+
+    expect(result.agents.planner).toEqual({
+      model: "openai/gpt-5.4",
+      variant: "high",
+    })
+    expect(result.agents.explore).toEqual({
+      model: "openai/gpt-5.4-nano",
+      variant: "low",
+    })
+    expect(result.categories.quick).toEqual({
+      model: "openai/gpt-5.4-mini",
+      variant: "low",
+    })
+    expect(result.categories["unspecified-low"]).toEqual({
+      model: "openai/gpt-5.3-codex",
+      variant: "medium",
+    })
     expect(result.categories["unspecified-high"]).toEqual({
       model: "openai/gpt-5.3-codex",
       variant: "medium",

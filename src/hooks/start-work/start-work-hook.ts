@@ -3,7 +3,7 @@ import type { PluginInput } from "@opencode-ai/plugin"
 import {
   readBoulderState,
   writeBoulderState,
-  appendSessionId,
+  registerBoulderSession,
   findPlannerPlans,
   getPlanProgress,
   createBoulderState,
@@ -164,7 +164,7 @@ No incomplete plans available. Create a new plan with: /plan "your task"`
               session_ids: updatedSessions,
             })
           } else {
-            appendSessionId(ctx.directory, sessionId)
+            registerBoulderSession(ctx.directory, sessionId)
           }
 
           const worktreeDisplay = effectiveWorktree ? createWorktreeActiveBlock(effectiveWorktree) : worktreeBlock

@@ -45,7 +45,6 @@
       "items": {
         "type": "string",
         "enum": [
-          "gpt-permission-continuation",
           "todo-continuation-enforcer",
           "context-window-monitor",
           "session-recovery",

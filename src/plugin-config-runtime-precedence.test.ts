@@ -188,7 +188,7 @@ describe("loadPluginConfig runtime precedence", () => {
     }
   })
 
-  test("snapshot-derived planner defaults override current OpenCode model", async () => {
+  test("snapshot-derived planner defaults prefer OpenAI over Claude when available", async () => {
     const fixture = createFixture()
     fixture.writeUserConfig({
       _install_defaults: createInstallDefaultsSnapshot({
@@ -214,7 +214,7 @@ describe("loadPluginConfig runtime precedence", () => {
         currentModel: "anthropic/claude-opus-4-6",
       })
 
-      expect(plannerConfig.model).toBe("kimi-for-coding/k2p5")
+      expect(plannerConfig.model).toBe("openai/gpt-5.4")
     } finally {
       fetchSpy.mockRestore()
     }

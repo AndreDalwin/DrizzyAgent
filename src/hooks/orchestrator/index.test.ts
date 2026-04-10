@@ -293,7 +293,7 @@ describe("orchestrator hook", () => {
 
       // then - sessionID should be appended
       const updatedState = readBoulderState(TEST_DIR)
-      expect(updatedState?.session_ids).toContain(sessionID)
+      expect(updatedState?.session_ids).not.toContain(sessionID)
       
       cleanupMessageStorage(sessionID)
     })
@@ -872,11 +872,10 @@ describe("orchestrator hook", () => {
         },
       })
 
-      // then - session is registered into boulder and continuation is injected
-      expect(readBoulderState(TEST_DIR)?.session_ids).toContain(subagentSessionID)
-      expect(mockInput._promptMock).toHaveBeenCalled()
-      const callArgs = mockInput._promptMock.mock.calls[0][0]
-      expect(callArgs.path.id).toBe(subagentSessionID)
+
+      // then - unregistered session does NOT get continuation (explicit registration only)
+      expect(readBoulderState(TEST_DIR)?.session_ids).not.toContain(subagentSessionID)
+      expect(mockInput._promptMock).not.toHaveBeenCalled()
     })
 
     test("should inject when registered boulder session has incomplete tasks even if last agent differs", async () => {

@@ -1,6 +1,6 @@
 import type { createOpencodeClient } from "@opencode-ai/sdk"
 import type { MessageData, ResumeConfig } from "./types"
-import { createInternalAgentTextPart, resolveInheritedPromptTools } from "../../shared"
+import { createInternalAgentTextPart, resolveInheritedPromptTools, resolvePromptReplayAgent } from "../../shared"
 
 const RECOVERY_RESUME_TEXT = "[session recovered - continuing previous task]"
 
@@ -18,7 +18,7 @@ export function findLastUserMessage(messages: MessageData[]): MessageData | unde
 export function extractResumeConfig(userMessage: MessageData | undefined, sessionID: string): ResumeConfig {
   return {
     sessionID,
-    agent: userMessage?.info?.agent,
+    agent: resolvePromptReplayAgent(userMessage?.info?.agent),
     model: userMessage?.info?.model,
     tools: userMessage?.info?.tools,
   }

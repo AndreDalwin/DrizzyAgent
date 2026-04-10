@@ -125,6 +125,10 @@ export function computeDefaultsFromProviders(
 }
 
 function resolveExploreAgent(availability: ProviderAvailability): AgentConfig {
+  if (availability.native.openai) {
+    return { model: "openai/gpt-5.4-nano", variant: "low" }
+  }
+
   if (availability.native.claude) {
     return { model: "anthropic/claude-haiku-4-5" }
   }

@@ -68,6 +68,29 @@ export function appendSessionId(directory: string, sessionId: string): BoulderSt
   return state
 }
 
+export function registerBoulderSession(directory: string, sessionId: string): BoulderState | null {
+  const state = readBoulderState(directory)
+  if (!state) return null
+
+  if (!state.session_ids?.includes(sessionId)) {
+    if (!Array.isArray(state.session_ids)) {
+      state.session_ids = []
+    }
+    state.session_ids.push(sessionId)
+    if (writeBoulderState(directory, state)) {
+      return state
+    }
+  }
+
+  return state
+}
+
+export function isBoulderSessionRegistered(directory: string, sessionId: string): boolean {
+  const state = readBoulderState(directory)
+  if (!state) return false
+  return state.session_ids?.includes(sessionId) ?? false
+}
+
 export function clearBoulderState(directory: string): boolean {
   const filePath = getBoulderFilePath(directory)
 

@@ -1,5 +1,5 @@
 import type { PluginInput } from "@opencode-ai/plugin"
-import { appendSessionId, getPlanProgress, readBoulderState } from "../../features/boulder-state"
+import { getPlanProgress, readBoulderState } from "../../features/boulder-state"
 import { log } from "../../shared/logger"
 import { isCallerOrchestrator } from "../../shared/session-utils"
 import { collectGitDiffStats, formatFileChanges } from "../../shared/git-worktree"
@@ -66,7 +66,6 @@ export function createToolExecuteAfterHandler(input: {
         const progress = getPlanProgress(boulderState.active_plan)
 
         if (toolInput.sessionID && !boulderState.session_ids?.includes(toolInput.sessionID)) {
-          appendSessionId(ctx.directory, toolInput.sessionID)
           log(`[${HOOK_NAME}] Appended session to boulder`, {
             sessionID: toolInput.sessionID,
             plan: boulderState.plan_name,

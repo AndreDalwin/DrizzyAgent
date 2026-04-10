@@ -561,7 +561,8 @@ exports[`generateModelConfig all native providers uses preferred models from fal
       "variant": "max",
     },
     "explore": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
       "model": "openai/gpt-5.4",
@@ -590,8 +591,8 @@ exports[`generateModelConfig all native providers uses preferred models from fal
       "variant": "xhigh",
     },
     "planner": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "openai/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "google/gemini-3.1-pro-preview",
@@ -611,17 +612,20 @@ exports[`generateModelConfig all native providers uses preferred models from fal
       "variant": "medium",
     },
     "quick": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "unspecified-low": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "google/gemini-3.1-pro-preview",
@@ -643,7 +647,8 @@ exports[`generateModelConfig all native providers uses preferred models with isM
       "variant": "max",
     },
     "explore": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
       "model": "openai/gpt-5.4",
@@ -672,8 +677,8 @@ exports[`generateModelConfig all native providers uses preferred models with isM
       "variant": "xhigh",
     },
     "planner": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "openai/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "google/gemini-3.1-pro-preview",
@@ -693,18 +698,20 @@ exports[`generateModelConfig all native providers uses preferred models with isM
       "variant": "medium",
     },
     "quick": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high",
     },
     "unspecified-low": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "google/gemini-3.1-pro-preview",
@@ -755,8 +762,8 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
       "variant": "xhigh",
     },
     "planner": {
-      "model": "opencode/claude-opus-4-6",
-      "variant": "max",
+      "model": "opencode/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "opencode/gemini-3.1-pro",
@@ -775,17 +782,20 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models when on
       "variant": "medium",
     },
     "quick": {
-      "model": "opencode/claude-haiku-4-5",
+      "model": "opencode/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "opencode/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "opencode/claude-sonnet-4-6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "unspecified-low": {
-      "model": "opencode/claude-sonnet-4-6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "opencode/gemini-3.1-pro",
@@ -836,8 +846,8 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models with is
       "variant": "xhigh",
     },
     "planner": {
-      "model": "opencode/claude-opus-4-6",
-      "variant": "max",
+      "model": "opencode/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "opencode/gemini-3.1-pro",
@@ -856,18 +866,20 @@ exports[`generateModelConfig fallback providers uses OpenCode Zen models with is
       "variant": "medium",
     },
     "quick": {
-      "model": "opencode/claude-haiku-4-5",
+      "model": "opencode/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "opencode/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "opencode/claude-opus-4-6",
-      "variant": "max",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "high",
     },
     "unspecified-low": {
-      "model": "opencode/claude-sonnet-4-6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "opencode/gemini-3.1-pro",
@@ -917,8 +929,8 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models when 
       "variant": "xhigh",
     },
     "planner": {
-      "model": "github-copilot/claude-opus-4.6",
-      "variant": "max",
+      "model": "github-copilot/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "github-copilot/gemini-3.1-pro-preview",
@@ -998,8 +1010,8 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models with 
       "variant": "xhigh",
     },
     "planner": {
-      "model": "github-copilot/claude-opus-4.6",
-      "variant": "max",
+      "model": "github-copilot/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "github-copilot/gemini-3.1-pro-preview",
@@ -1026,8 +1038,8 @@ exports[`generateModelConfig fallback providers uses GitHub Copilot models with 
       "variant": "high",
     },
     "unspecified-high": {
-      "model": "github-copilot/claude-opus-4.6",
-      "variant": "max",
+      "model": "github-copilot/gpt-5.3-codex",
+      "variant": "high",
     },
     "unspecified-low": {
       "model": "github-copilot/claude-sonnet-4.6",
@@ -1215,8 +1227,8 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + OpenCode Zen
       "variant": "xhigh",
     },
     "planner": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "opencode/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "opencode/gemini-3.1-pro",
@@ -1235,17 +1247,20 @@ exports[`generateModelConfig mixed provider scenarios uses Claude + OpenCode Zen
       "variant": "medium",
     },
     "quick": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "opencode/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "opencode/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "unspecified-low": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "opencode/gemini-3.1-pro",
@@ -1267,7 +1282,8 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
       "variant": "max",
     },
     "explore": {
-      "model": "github-copilot/gpt-5-mini",
+      "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
       "model": "openai/gpt-5.4",
@@ -1296,8 +1312,8 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
       "variant": "xhigh",
     },
     "planner": {
-      "model": "github-copilot/claude-opus-4.6",
-      "variant": "max",
+      "model": "openai/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "github-copilot/gemini-3.1-pro-preview",
@@ -1317,17 +1333,20 @@ exports[`generateModelConfig mixed provider scenarios uses OpenAI + Copilot comb
       "variant": "medium",
     },
     "quick": {
-      "model": "github-copilot/claude-haiku-4.5",
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "github-copilot/claude-sonnet-4.6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "unspecified-low": {
-      "model": "github-copilot/claude-sonnet-4.6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "github-copilot/gemini-3.1-pro-preview",
@@ -1532,8 +1551,8 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
       "variant": "xhigh",
     },
     "planner": {
-      "model": "github-copilot/claude-opus-4.6",
-      "variant": "max",
+      "model": "github-copilot/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "github-copilot/gemini-3.1-pro-preview",
@@ -1552,17 +1571,20 @@ exports[`generateModelConfig mixed provider scenarios uses all fallback provider
       "variant": "medium",
     },
     "quick": {
-      "model": "github-copilot/claude-haiku-4.5",
+      "model": "opencode/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "opencode/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "github-copilot/claude-sonnet-4.6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "unspecified-low": {
-      "model": "github-copilot/claude-sonnet-4.6",
+      "model": "opencode/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "github-copilot/gemini-3.1-pro-preview",
@@ -1584,7 +1606,8 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
       "variant": "max",
     },
     "explore": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
       "model": "openai/gpt-5.4",
@@ -1613,8 +1636,8 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
       "variant": "xhigh",
     },
     "planner": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "openai/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "google/gemini-3.1-pro-preview",
@@ -1633,17 +1656,20 @@ exports[`generateModelConfig mixed provider scenarios uses all providers togethe
       "variant": "medium",
     },
     "quick": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "unspecified-low": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "google/gemini-3.1-pro-preview",
@@ -1665,7 +1691,8 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
       "variant": "max",
     },
     "explore": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-nano",
+      "variant": "low",
     },
     "gptcoder": {
       "model": "openai/gpt-5.4",
@@ -1694,8 +1721,8 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
       "variant": "xhigh",
     },
     "planner": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "openai/gpt-5.4",
+      "variant": "high",
     },
     "researcher": {
       "model": "google/gemini-3.1-pro-preview",
@@ -1714,18 +1741,20 @@ exports[`generateModelConfig mixed provider scenarios uses all providers with is
       "variant": "medium",
     },
     "quick": {
-      "model": "anthropic/claude-haiku-4-5",
+      "model": "openai/gpt-5.4-mini",
+      "variant": "low",
     },
     "ultrabrain": {
       "model": "openai/gpt-5.4",
       "variant": "xhigh",
     },
     "unspecified-high": {
-      "model": "anthropic/claude-opus-4-6",
-      "variant": "max",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "high",
     },
     "unspecified-low": {
-      "model": "anthropic/claude-sonnet-4-6",
+      "model": "openai/gpt-5.3-codex",
+      "variant": "medium",
     },
     "visual-engineering": {
       "model": "google/gemini-3.1-pro-preview",

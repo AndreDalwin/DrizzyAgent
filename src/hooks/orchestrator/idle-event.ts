@@ -1,7 +1,6 @@
 import type { PluginInput } from "@opencode-ai/plugin"
-import { appendSessionId, getPlanProgress, readBoulderState } from "../../features/boulder-state"
+import { getPlanProgress, readBoulderState } from "../../features/boulder-state"
 import type { BoulderState, PlanProgress } from "../../features/boulder-state"
-import { subagentSessions } from "../../features/claude-code-session-state"
 import { log } from "../../shared/logger"
 import { injectBoulderContinuation } from "./boulder-continuation-injector"
 import { HOOK_NAME } from "./hook-name"
@@ -24,7 +23,6 @@ function resolveActiveBoulderSession(input: {
 }): {
   boulderState: BoulderState
   progress: PlanProgress
-  appendedSession: boolean
 } | null {
   const boulderState = readBoulderState(input.directory)
   if (!boulderState) {
@@ -33,27 +31,15 @@ function resolveActiveBoulderSession(input: {
 
   const progress = getPlanProgress(boulderState.active_plan)
   if (progress.isComplete) {
-    return { boulderState, progress, appendedSession: false }
+    return { boulderState, progress }
   }
 
-  if (boulderState.session_ids.includes(input.sessionID)) {
-    return { boulderState, progress, appendedSession: false }
-  }
-
-  if (!subagentSessions.has(input.sessionID)) {
+  // Only continue if session is explicitly registered - no auto-append
+  if (!boulderState.session_ids.includes(input.sessionID)) {
     return null
   }
 
-  const updatedBoulderState = appendSessionId(input.directory, input.sessionID)
-  if (!updatedBoulderState?.session_ids.includes(input.sessionID)) {
-    return null
-  }
-
-  return {
-    boulderState: updatedBoulderState,
-    progress,
-    appendedSession: true,
-  }
+  return { boulderState, progress }
 }
 
 async function injectContinuation(input: {
@@ -145,17 +131,10 @@ export async function handleOrchestratorSessionIdle(input: {
     return
   }
 
-  const { boulderState, progress, appendedSession } = activeBoulderSession
+  const { boulderState, progress } = activeBoulderSession
   if (progress.isComplete) {
     log(`[${HOOK_NAME}] Boulder complete`, { sessionID, plan: boulderState.plan_name })
     return
-  }
-
-  if (appendedSession) {
-    log(`[${HOOK_NAME}] Appended subagent session to boulder during idle`, {
-      sessionID,
-      plan: boulderState.plan_name,
-    })
   }
 
   const sessionState = getState(sessionID)

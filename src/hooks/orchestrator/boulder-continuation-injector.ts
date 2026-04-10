@@ -1,7 +1,7 @@
 import type { PluginInput } from "@opencode-ai/plugin"
 import type { BackgroundManager } from "../../features/background-agent"
 import { log } from "../../shared/logger"
-import { createInternalAgentTextPart, resolveInheritedPromptTools } from "../../shared"
+import { createInternalAgentTextPart, resolveInheritedPromptTools, resolvePromptReplayAgent } from "../../shared"
 import { HOOK_NAME } from "./hook-name"
 import { BOULDER_CONTINUATION_PROMPT } from "./system-reminder-templates"
 import { resolveRecentPromptContextForSession } from "./recent-model-resolver"
@@ -54,7 +54,7 @@ export async function injectBoulderContinuation(input: {
     await ctx.client.session.promptAsync({
       path: { id: sessionID },
       body: {
-        agent: agent ?? "orchestrator",
+        agent: resolvePromptReplayAgent(agent) ?? "orchestrator",
         ...(promptContext.model !== undefined ? { model: promptContext.model } : {}),
         ...(inheritedTools ? { tools: inheritedTools } : {}),
         parts: [createInternalAgentTextPart(prompt)],

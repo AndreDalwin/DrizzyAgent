@@ -22,6 +22,51 @@ describe("session-recovery resume", () => {
     expect(config.tools).toEqual({ question: false, bash: true })
   })
 
+  test("extractResumeConfig canonicalizes built-in agent names", () => {
+    // given
+    const userMessage: MessageData = {
+      info: {
+        agent: "GPTCoder",
+      },
+    }
+
+    // when
+    const config = extractResumeConfig(userMessage, "ses_resume_canonical")
+
+    // then
+    expect(config.agent).toBe("gptcoder")
+  })
+
+  test("extractResumeConfig preserves custom agent names", () => {
+    // given
+    const userMessage: MessageData = {
+      info: {
+        agent: "custom-agent-123",
+      },
+    }
+
+    // when
+    const config = extractResumeConfig(userMessage, "ses_resume_custom")
+
+    // then
+    expect(config.agent).toBe("custom-agent-123")
+  })
+
+  test("extractResumeConfig returns undefined for compaction agent", () => {
+    // given
+    const userMessage: MessageData = {
+      info: {
+        agent: "compaction",
+      },
+    }
+
+    // when
+    const config = extractResumeConfig(userMessage, "ses_resume_compaction")
+
+    // then
+    expect(config.agent).toBeUndefined()
+  })
+
   test("resumeSession sends inherited tools with continuation prompt", async () => {
     // given
     let promptBody: Record<string, unknown> | undefined
