@@ -109,10 +109,10 @@ describe("loadPluginConfig snapshot defaults", () => {
     const config = fixture.load()
 
     expect(config.agents?.researcher).toEqual({
-      model: "kimi-for-coding/k2p5",
+      model: "kimi-for-coding/k2p6",
     })
     expect(config.agents?.["researcher-junior"]).toEqual({
-      model: "kimi-for-coding/k2p5",
+      model: "kimi-for-coding/k2p6",
     })
     expect(getConfigLoadErrors()).toHaveLength(0)
   })

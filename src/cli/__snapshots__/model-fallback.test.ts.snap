@@ -58,7 +58,7 @@ exports[`generateModelConfig no providers available returns ULTIMATE_FALLBACK fo
       "model": "opencode/minimax-m2.5-free",
     },
     "visual-engineering": {
-      "model": "kimi-for-coding/k2p5",
+      "model": "kimi-for-coding/k2p6",
     },
     "writing": {
       "model": "anthropic/claude-sonnet-4-6",

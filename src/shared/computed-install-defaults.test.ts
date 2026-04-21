@@ -84,10 +84,10 @@ describe("computeDefaultsFromProviders", () => {
     const result = computeDefaultsFromProviders(createProviders({ kimi_for_coding: true }))
 
     expect(result.agents.researcher).toEqual({
-      model: "kimi-for-coding/k2p5",
+      model: "kimi-for-coding/k2p6",
     })
     expect(result.agents["researcher-junior"]).toEqual({
-      model: "kimi-for-coding/k2p5",
+      model: "kimi-for-coding/k2p6",
     })
   })
 

@@ -30,7 +30,7 @@ const LEGACY_AGENT_REQUIREMENT_OVERRIDES = {
 
 const LEGACY_CATEGORY_REQUIREMENT_OVERRIDES = {
   "visual-engineering": {
-    fallbackChain: excludeFallbackEntries(CATEGORY_MODEL_DEFAULTS["visual-engineering"].chain, ["k2p5"]),
+    fallbackChain: excludeFallbackEntries(CATEGORY_MODEL_DEFAULTS["visual-engineering"].chain, ["k2p6"]),
   },
   deep: {
     requiresModel: "gpt-5.4",
@@ -39,7 +39,7 @@ const LEGACY_CATEGORY_REQUIREMENT_OVERRIDES = {
     requiresModel: "gemini-3.1-pro",
   },
   writing: {
-    fallbackChain: excludeFallbackEntries(CATEGORY_MODEL_DEFAULTS.writing.chain, ["k2p5"]),
+    fallbackChain: excludeFallbackEntries(CATEGORY_MODEL_DEFAULTS.writing.chain, ["k2p6"]),
   },
 } satisfies Partial<Record<string, RequirementOverride>>
 

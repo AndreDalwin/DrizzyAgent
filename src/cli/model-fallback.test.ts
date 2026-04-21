@@ -525,10 +525,10 @@ describe("generateModelConfig", () => {
 
       const result = generateModelConfig(config)
 
-      expect(result.agents?.oracle).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.agents?.librarian).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.agents?.explore).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.agents?.planReviewer).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.agents?.oracle).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.agents?.librarian).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.agents?.explore).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.agents?.planReviewer).toEqual({ model: "kimi-for-coding/k2p6" })
     })
 
     test("Kimi-only reroutes affected categories away from free fallbacks", () => {
@@ -536,12 +536,12 @@ describe("generateModelConfig", () => {
 
       const result = generateModelConfig(config)
 
-      expect(result.categories?.ultrabrain).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.categories?.deep).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.categories?.artistry).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.categories?.quick).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.categories?.["unspecified-low"]).toEqual({ model: "kimi-for-coding/k2p5" })
-      expect(result.categories?.["unspecified-high"]).toEqual({ model: "kimi-for-coding/k2p5" })
+      expect(result.categories?.ultrabrain).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.categories?.deep).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.categories?.artistry).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.categories?.quick).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.categories?.["unspecified-low"]).toEqual({ model: "kimi-for-coding/k2p6" })
+      expect(result.categories?.["unspecified-high"]).toEqual({ model: "kimi-for-coding/k2p6" })
     })
 
     test("Claude-only reroutes multimodal-looker away from free fallback", () => {

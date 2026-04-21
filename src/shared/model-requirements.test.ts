@@ -24,7 +24,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(primary.variant).toBe("high")
   })
 
-  test("coder has claude-opus-4-6 as primary with k2p5, kimi-k2.5, gpt-5.4 medium fallbacks", () => {
+  test("coder has claude-opus-4-6 as primary with k2p6, kimi-k2.5, gpt-5.4 medium fallbacks", () => {
     // #given - coder agent requirement
     const coder = AGENT_MODEL_REQUIREMENTS["coder"]
 
@@ -42,7 +42,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
 
     const second = coder.fallbackChain[1]
     expect(second.providers).toEqual(["kimi-for-coding"])
-    expect(second.model).toBe("k2p5")
+    expect(second.model).toBe("k2p6")
 
     const third = coder.fallbackChain[2]
     expect(third.model).toBe("kimi-k2.5")
@@ -114,7 +114,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     const multimodalLooker = AGENT_MODEL_REQUIREMENTS["multimodal-looker"]
 
     // when - accessing multimodal-looker requirement
-    // then - fallbackChain: gpt-5.4 -> k2p5 -> gemini-3-flash -> glm-4.6v -> gpt-5-nano
+    // then - fallbackChain: gpt-5.4 -> k2p6 -> gemini-3-flash -> glm-4.6v -> gpt-5-nano
     expect(multimodalLooker).toBeDefined()
     expect(multimodalLooker.fallbackChain).toBeArray()
     expect(multimodalLooker.fallbackChain).toHaveLength(5)
@@ -125,7 +125,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
     expect(primary.variant).toBe("medium")
     const secondary = multimodalLooker.fallbackChain[1]
     expect(secondary.providers).toEqual(["kimi-for-coding"])
-    expect(secondary.model).toBe("k2p5")
+    expect(secondary.model).toBe("k2p6")
 
     const tertiary = multimodalLooker.fallbackChain[2]
     expect(tertiary.model).toBe("gemini-3-flash")
@@ -212,7 +212,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
 
     const secondary = researcher.fallbackChain[1]
     expect(secondary.providers).toEqual(["kimi-for-coding"])
-    expect(secondary.model).toBe("k2p5")
+    expect(secondary.model).toBe("k2p6")
 
     const tertiary = researcher.fallbackChain[2]
     expect(tertiary.model).toBe("kimi-k2.5")
@@ -226,7 +226,7 @@ describe("AGENT_MODEL_REQUIREMENTS", () => {
 
     const primary = researcherJunior.fallbackChain[0]
     expect(primary.providers).toEqual(["kimi-for-coding"])
-    expect(primary.model).toBe("k2p5")
+    expect(primary.model).toBe("k2p6")
 
     const secondary = researcherJunior.fallbackChain[1]
     expect(secondary.model).toBe("kimi-k2.5")

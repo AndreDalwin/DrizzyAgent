@@ -2152,7 +2152,7 @@ describe("coder-task", () => {
     }, { timeout: 20000 })
 
     test("writing category (kimi) with run_in_background=false should force background but wait for result", async () => {
-      // given - writing uses kimi-for-coding/k2p5
+      // given - writing uses kimi-for-coding/k2p6
       const { createDelegateTask } = require("./tools")
       let launchCalled = false
       
@@ -2919,7 +2919,7 @@ describe("coder-task", () => {
         {
           name: "writing",
           description: "Documentation, prose, technical writing",
-          model: "kimi-for-coding/k2p5",
+          model: "kimi-for-coding/k2p6",
         },
       ]
       const availableSkills = [

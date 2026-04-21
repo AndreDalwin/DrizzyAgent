@@ -17,7 +17,7 @@ describe("createBuiltinAgents with model overrides", () => {
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set([
         "anthropic/claude-opus-4-6",
-        "kimi-for-coding/k2p5",
+        "kimi-for-coding/k2p6",
         "opencode/kimi-k2.5-free",
         "zai-coding-plan/glm-5",
         "opencode/big-pickle",
@@ -151,11 +151,11 @@ describe("createBuiltinAgents with model overrides", () => {
   test("snapshot-derived coder defaults take priority over uiSelectedModel", async () => {
     // #given
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
-      new Set(["anthropic/claude-opus-4-6", "kimi-for-coding/k2p5"])
+      new Set(["anthropic/claude-opus-4-6", "kimi-for-coding/k2p6"])
     )
     const uiSelectedModel = "anthropic/claude-opus-4-6"
     const effectiveOverrides = {
-      coder: { model: "kimi-for-coding/k2p5" },
+      coder: { model: "kimi-for-coding/k2p6" },
     }
     registerConfigProvenance({
       effectiveAgents: effectiveOverrides,
@@ -179,7 +179,7 @@ describe("createBuiltinAgents with model overrides", () => {
 
       // #then
       expect(agents.coder).toBeDefined()
-      expect(agents.coder.model).toBe("kimi-for-coding/k2p5")
+      expect(agents.coder.model).toBe("kimi-for-coding/k2p6")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -360,7 +360,7 @@ describe("createBuiltinAgents with model overrides", () => {
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set([
         "anthropic/claude-opus-4-6",
-        "kimi-for-coding/k2p5",
+        "kimi-for-coding/k2p6",
         "opencode/kimi-k2.5-free",
         "zai-coding-plan/glm-5",
         "opencode/big-pickle",
@@ -612,7 +612,7 @@ describe("createBuiltinAgents without systemDefaultModel", () => {
     const fetchSpy = spyOn(shared, "fetchAvailableModels").mockResolvedValue(
       new Set([
         "anthropic/claude-opus-4-6",
-        "kimi-for-coding/k2p5",
+        "kimi-for-coding/k2p6",
         "opencode/kimi-k2.5-free",
         "zai-coding-plan/glm-5",
         "opencode/big-pickle",

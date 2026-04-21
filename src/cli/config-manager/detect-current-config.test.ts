@@ -46,7 +46,7 @@ describe("detectCurrentConfig", () => {
     writeFileSync(drizzyConfigPath, JSON.stringify({
       agents: {
         coder: { model: "openai/gpt-5.4", variant: "medium" },
-        planner: { model: "kimi-for-coding/k2p5" },
+        planner: { model: "kimi-for-coding/k2p6" },
       },
       categories: {
         quick: { model: "opencode/glm-4.7-free" },

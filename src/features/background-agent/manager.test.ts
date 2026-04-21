@@ -3361,7 +3361,7 @@ describe("BackgroundManager.handleEvent - session.error", () => {
         sessionID,
         error: {
           name: "UnknownError",
-          data: { message: "Model not found: kimi-for-coding/k2p5." },
+          data: { message: "Model not found: kimi-for-coding/k2p6." },
         },
       },
     })
@@ -3370,7 +3370,7 @@ describe("BackgroundManager.handleEvent - session.error", () => {
 
     //#then
     expect(task.status).toBe("error")
-    expect(task.error).toBe("Model not found: kimi-for-coding/k2p5.")
+    expect(task.error).toBe("Model not found: kimi-for-coding/k2p6.")
     expect(task.completedAt).toBeInstanceOf(Date)
     expect(concurrencyManager.getCount(concurrencyKey)).toBe(0)
     expect(getTaskMap(manager).has(task.id)).toBe(true)

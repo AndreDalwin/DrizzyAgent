@@ -45,7 +45,7 @@ Model Providers (Priority: Native > Copilot > OpenCode Zen > Z.ai > Kimi):
   Copilot       github-copilot/ models (fallback)
   OpenCode Zen  opencode/ models (opencode/claude-opus-4-6, etc.)
    Z.ai          zai-coding-plan/glm-5 (visual-engineering fallback)
-   Kimi          kimi-for-coding/k2p5 (Coder/Planner fallback)
+   Kimi          kimi-for-coding/k2p6 (Coder/Planner fallback)
 `)
   .action(async (options) => {
     const args: InstallArgs = {

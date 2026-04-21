@@ -290,7 +290,7 @@ export const DEFAULT_CATEGORIES: Record<string, CategoryConfig> = {
   quick: { model: "anthropic/claude-haiku-4-5" },
   "unspecified-low": { model: "anthropic/claude-sonnet-4-6" },
   "unspecified-high": { model: "anthropic/claude-opus-4-6", variant: "max" },
-  writing: { model: "kimi-for-coding/k2p5" },
+  writing: { model: "kimi-for-coding/k2p6" },
 }
 
 export const CATEGORY_PROMPT_APPENDS: Record<string, string> = {

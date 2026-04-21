@@ -98,7 +98,7 @@
 | quick | claude-haiku-4-5 | Trivial tasks |
 | unspecified-low | claude-sonnet-4-6 | Moderate effort |
 | unspecified-high | claude-opus-4-6 max | High effort |
-| writing | kimi-k2p5 | Documentation |
+| writing | kimi-k2p6 | Documentation |
 
 ## HOW TO ADD A TOOL
 

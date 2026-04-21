@@ -163,7 +163,7 @@ describe("loadPluginConfig runtime precedence", () => {
       new Set([
         "anthropic/claude-sonnet-4-6",
         "openai/gpt-5.4",
-        "kimi-for-coding/k2p5",
+        "kimi-for-coding/k2p6",
       ]),
     )
 
@@ -181,8 +181,8 @@ describe("loadPluginConfig runtime precedence", () => {
         "anthropic/claude-sonnet-4-6",
       )
 
-      expect(agents.coder.model).toBe("kimi-for-coding/k2p5")
-      expect(agents.orchestrator.model).toBe("kimi-for-coding/k2p5")
+      expect(agents.coder.model).toBe("kimi-for-coding/k2p6")
+      expect(agents.orchestrator.model).toBe("kimi-for-coding/k2p6")
     } finally {
       fetchSpy.mockRestore()
     }
@@ -202,7 +202,7 @@ describe("loadPluginConfig runtime precedence", () => {
       new Set([
         "anthropic/claude-opus-4-6",
         "openai/gpt-5.4",
-        "kimi-for-coding/k2p5",
+        "kimi-for-coding/k2p6",
       ]),
     )
 
